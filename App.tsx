@@ -1,5 +1,10 @@
 import React from "react";
-import { Text, Image, View, StyleSheet } from "react-native";
+import {
+  Text,
+  Image,
+  View,
+  StyleSheet,
+} from "react-native";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,22 +18,22 @@ export interface AppState {
 
 const data = [
   {
-    title: "Title 1",
-    text: "Description.\nSay something cool",
+    title: "ยินดีต้อนรับเข้าสู่ SellCoda",
+    text: "สั่งซื้อสินค้าได้ง่ายๆจาก ICPL, ICP Ferzt, ICP Inter",
     image: require("./onboard.png"),
-    bg: "#59b2ab",
+    bg: "#FFFFFF",
   },
   {
-    title: "Title 2",
-    text: "Other cool stuff",
+    title: "สั่งซื้อออนไลน์",
+    text: "สั่งซื้อสินค้าได้ง่ายๆจาก ICPL, ICP Ferzt, ICP Inter",
     image: require("./onboard.png"),
-    bg: "#febe29",
+    bg: "#FFFFFF",
   },
   {
-    title: "Rocket guy",
-    text: "I'm already out of descriptions\n\nLorem ipsum bla bla bla",
+    title: "โปรโมชั่น & สิทธิพิเศษ",
+    text: "สั่งซื้อสินค้าได้ง่ายๆจาก ICPL, ICP Ferzt, ICP Inter",
     image: require("./onboard.png"),
-    bg: "#22bcb5",
+    bg: "#FFFFFF",
   },
 ];
 
@@ -44,7 +49,7 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   slider: AppIntroSlider | undefined;
-  _renderItem = ({item}: {item: Item}) => {
+  _renderItem = ({ item }: { item: Item }) => {
     return (
       <View
         style={[
@@ -52,9 +57,10 @@ export default class App extends React.Component<{}, AppState> {
           {
             backgroundColor: item.bg,
           },
-        ]}>
-        <Text style={this.styles.title}>{item.title}</Text>
+        ]}
+      >
         <Image source={item.image} style={this.styles.image} />
+        <Text style={this.styles.title}>{item.title}</Text>
         <Text style={this.styles.text}>{item.text}</Text>
       </View>
     );
@@ -69,6 +75,29 @@ export default class App extends React.Component<{}, AppState> {
     this.setState({ isReady: true });
   }
 
+  _renderDoneButton = () => {
+    return (
+      <View style={this.styles.button}>
+        <Text style={{ color: "#FFFFFF" }}>เริ่มต้นใช้งาน</Text>
+      </View>
+    );
+  };
+
+  _renderNextButton = () => {
+    return (
+      <View style={this.styles.button}>
+        <Text style={{ color: "#FFFFFF" }}>ต่อไป</Text>
+      </View>
+    );
+  };
+
+  _renderSkipButton = () => {
+    return (
+      <View style={this.styles.buttonSkip}>
+        <Text style={{ color: "#000000" }}>ข้าม</Text>
+      </View>
+    );
+  };
 
   _keyExtractor = (item: Item) => item.title;
 
@@ -91,6 +120,14 @@ export default class App extends React.Component<{}, AppState> {
             renderItem={this._renderItem}
             data={data}
             onDone={this._onDone}
+            showSkipButton
+            renderDoneButton={this._renderDoneButton}
+            renderNextButton={this._renderNextButton}
+            renderSkipButton={this._renderSkipButton}
+            nextLabel="ต่อไป"
+            skipLabel="ข้าม"
+            bottomButton
+            activeDotStyle={this.styles.dot}
           />
         );
       }
@@ -100,8 +137,7 @@ export default class App extends React.Component<{}, AppState> {
     slide: {
       flex: 1,
       alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "blue",
+      marginTop: 100,
     },
     image: {
       width: 320,
@@ -109,48 +145,38 @@ export default class App extends React.Component<{}, AppState> {
       marginVertical: 32,
     },
     text: {
-      color: "rgba(255, 255, 255, 0.8)",
+      marginTop: 10,
+      color: "#616A7B",
       textAlign: "center",
     },
     title: {
       fontSize: 22,
-      color: "white",
+      color: "#000000",
       textAlign: "center",
     },
-    paginationContainer: {
-      position: "absolute",
-      bottom: 16,
-      left: 16,
-      right: 16,
-    },
-    paginationDots: {
-      height: 16,
-      margin: 16,
-      flexDirection: "row",
+    button: {
+      height: 48,
+      backgroundColor: "#4C95FF",
       justifyContent: "center",
       alignItems: "center",
+      borderRadius: 8,
+      color: "#FFFFFF",
     },
+    buttonSkip: {
+      height: 48,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 8,
+      color: "#FFFFFF",
+      margin: 5,
+    },
+  
     dot: {
-      width: 10,
+      width: 20,
       height: 10,
       borderRadius: 5,
       marginHorizontal: 4,
-    },
-    buttonContainer: {
-      flexDirection: "row",
-      marginHorizontal: 24,
-    },
-    button: {
-      flex: 1,
-      paddingVertical: 20,
-      marginHorizontal: 8,
-      borderRadius: 24,
-      backgroundColor: "#1cb278",
-    },
-    buttonText: {
-      color: "white",
-      fontWeight: "600",
-      textAlign: "center",
+      backgroundColor: "#4C95FF",
     },
   });
 }
