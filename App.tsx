@@ -24,7 +24,35 @@ export default class App extends React.Component<{}, AppState> {
     };
   }
 
+  render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    } else {
+      if (this.state.isShowRealApp) {
+        return <AppNavigator />;
+      } else {
+        return (
+          <AppIntroSlider
+            keyExtractor={this._keyExtractor}
+            renderItem={this._renderItem}
+            data={data}
+            onDone={this._onDone}
+            showSkipButton
+            renderDoneButton={this._renderDoneButton}
+            renderNextButton={this._renderNextButton}
+            renderSkipButton={this._renderSkipButton}
+            nextLabel="ต่อไป"
+            skipLabel="ข้าม"
+            bottomButton
+            activeDotStyle={this.styles.dot}
+          />
+        );
+      }
+    }
+  }
+
   slider: AppIntroSlider | undefined;
+
   _renderItem = ({ item }: { item: IntroductionSliderItem }) => {
     return (
       <View
@@ -81,32 +109,6 @@ export default class App extends React.Component<{}, AppState> {
     this.setState({ isShowRealApp: true });
   };
 
-  render() {
-    if (!this.state.isReady) {
-      return <AppLoading />;
-    } else {
-      if (this.state.isShowRealApp) {
-        return <AppNavigator />;
-      } else {
-        return (
-          <AppIntroSlider
-            keyExtractor={this._keyExtractor}
-            renderItem={this._renderItem}
-            data={data}
-            onDone={this._onDone}
-            showSkipButton
-            renderDoneButton={this._renderDoneButton}
-            renderNextButton={this._renderNextButton}
-            renderSkipButton={this._renderSkipButton}
-            nextLabel="ต่อไป"
-            skipLabel="ข้าม"
-            bottomButton
-            activeDotStyle={this.styles.dot}
-          />
-        );
-      }
-    }
-  }
   styles = StyleSheet.create({
     slide: {
       flex: 1,
