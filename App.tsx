@@ -12,13 +12,10 @@ import AppNavigator from "./src/navigations/app-navigator";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { IntroductionSliderItem } from "./src/models/IntroductionSliderItem"
 import { data } from "./src/definitions/IntroductionSliderItem"
-
-export interface AppState {
-  isReady: Boolean;
-  isShowRealApp: Boolean;
-}
+import { AppState } from "./src/models/AppState"
 
 export default class App extends React.Component<{}, AppState> {
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -81,8 +78,6 @@ export default class App extends React.Component<{}, AppState> {
   _keyExtractor = (item: IntroductionSliderItem) => item.title;
 
   _onDone = () => {
-    // User finished the introduction. Show real app through
-    // navigation or simply by controlling state
     this.setState({ isShowRealApp: true });
   };
 
