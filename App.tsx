@@ -10,34 +10,13 @@ import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import AppNavigator from "./src/navigations/app-navigator";
 import AppIntroSlider from "react-native-app-intro-slider";
+import { IntroductionSliderItem } from "./src/models/IntroductionSliderItem"
+import { data } from "./src/definitions/IntroductionSliderItem"
 
 export interface AppState {
   isReady: Boolean;
   isShowRealApp: Boolean;
 }
-
-const data = [
-  {
-    title: "ยินดีต้อนรับเข้าสู่ SellCoda",
-    text: "สั่งซื้อสินค้าได้ง่ายๆจาก ICPL, ICP Ferzt, ICP Inter",
-    image: require("./onboard.png"),
-    bg: "#FFFFFF",
-  },
-  {
-    title: "สั่งซื้อออนไลน์",
-    text: "สั่งซื้อสินค้าได้ง่ายๆจาก ICPL, ICP Ferzt, ICP Inter",
-    image: require("./onboard.png"),
-    bg: "#FFFFFF",
-  },
-  {
-    title: "โปรโมชั่น & สิทธิพิเศษ",
-    text: "สั่งซื้อสินค้าได้ง่ายๆจาก ICPL, ICP Ferzt, ICP Inter",
-    image: require("./onboard.png"),
-    bg: "#FFFFFF",
-  },
-];
-
-type Item = typeof data[0];
 
 export default class App extends React.Component<{}, AppState> {
   constructor(props: any) {
@@ -49,7 +28,7 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   slider: AppIntroSlider | undefined;
-  _renderItem = ({ item }: { item: Item }) => {
+  _renderItem = ({ item }: { item: IntroductionSliderItem }) => {
     return (
       <View
         style={[
@@ -99,7 +78,7 @@ export default class App extends React.Component<{}, AppState> {
     );
   };
 
-  _keyExtractor = (item: Item) => item.title;
+  _keyExtractor = (item: IntroductionSliderItem) => item.title;
 
   _onDone = () => {
     // User finished the introduction. Show real app through
