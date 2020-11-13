@@ -8,7 +8,7 @@ import {
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
-import AppNavigator from "./src/navigations/app-navigator";
+import AppNavigator from "./src/navigations/AppNavigator";
 import AppIntroSlider from "react-native-app-intro-slider";
 
 export interface AppState {

@@ -3,9 +3,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import InputTelNumberScreen from "../scenes/InputTelNumber/index";
 import InputOtp from "../scenes/InputOtp/index"
-const Stack = createStackNavigator();
 
 function App() {
+  const Stack = createStackNavigator();
+
   return (
     <NavigationContainer>
       <Stack.Navigator
