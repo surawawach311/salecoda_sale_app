@@ -1,8 +1,8 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import InputTelNumberScreen from "../scenes/InputTelNumber/index";
-import InputOtp from "../scenes/InputOtp/index"
+import InputTelNumberScreen from "../screens/InputTelNumber/InputTelNumberScreen";
+import InputOtp from "../screens/InputOtpScreen/InputOtpScreen"
 
 function App() {
   const Stack = createStackNavigator();
