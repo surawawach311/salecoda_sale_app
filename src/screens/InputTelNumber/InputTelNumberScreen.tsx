@@ -6,6 +6,11 @@ import {
   StyleSheet,
   View,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Image,
 } from "react-native";
 import { InputPhone } from "../../components/InputPhone";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
@@ -30,63 +35,83 @@ type Props = {
 
 const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
   const [value, setValue] = React.useState<string>("");
-  const [valid, setValid] = React.useState(false);
-  const [showMessage, setShowMessage] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
 
   const verifyPhoneNo = (tel: string) => {
     VerifiesDataSource.verifyPhoneNo(tel).then((res) => {
-      navigation.navigate("InputOtp", { telephone: res.telephone });
+      if (res == undefined) {
+        setIsError(true);
+      } else {
+        setIsError(false);
+        navigation.navigate("InputOtp", { telephone: res.telephone });
+      }
     });
   };
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        style={styles.backgroundImage}
-        source={require("../../../assets/bgOtp.png")}
-      >
-        <View style={styles.wrapText}>
-          <Text style={styles.title}>ลงทะเบียนสินค้า</Text>
-          <Text style={styles.text}>
-            ใส่หมายเลขโทรศัพท์ของคุณเพื่อรับ รหัส OTP ยืนยันการลงทะเบียน
-          </Text>
-          <InputPhone
-            value={value}
-            onChangeText={(e: string) => setValue(e)}
-            maxLength={10}
-            autoFocus={true}
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <Image
+            style={styles.backgroundImage}
+            source={require("../../../assets/bgOtp.png")}
           />
+          <View style={styles.wrapText}>
+            <Text style={styles.title}>ลงทะเบียนร้านค้า</Text>
+            <Text style={styles.text}>
+              ใส่หมายเลขโทรศัพท์ของคุณเพื่อรับ รหัส OTP ยืนยันการลงทะเบียน
+            </Text>
+            <InputPhone
+              value={value}
+              onChangeText={(e: string) => setValue(e)}
+              maxLength={10}
+              autoFocus={true}
+              onError={isError}
+            />
+          </View>
+          <View style={styles.btnContainer}>
+            <Button
+              style={styles.button}
+              onPress={() => {
+                Keyboard.dismiss()
+                verifyPhoneNo(value);
+                // navigation.navigate("InputOtp", { telephone: '0938355808' });
+              }}
+            >
+              <Text style={styles.textButton}>ขอรหัสOTP</Text>
+            </Button>
+          </View>
+
         </View>
-        <View style={styles.wrapButton}>
-          <Button
-            style={styles.button}
-            onPress={() => {
-              verifyPhoneNo(value);
-              // navigation.navigate("InputOtp", { telephone: '0938355808' });
-            }}
-          >
-            <Text style={styles.textButton}>ขอรหัสOTP</Text>
-          </Button>
-        </View>
-      </ImageBackground>
-    </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
+  },
+  inner: {
+    flex: 1,
+    justifyContent: "space-around",
+    backgroundColor: "#FBFBFB",
   },
   backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
+    backgroundColor: "#FBFBFB",
+    width: "100%",
+    // height:undefined,
+    resizeMode: "contain",
+    position: "absolute",
   },
-  wrapText: { flex: 1, padding: 20, marginTop: 190 },
-  wrapButton: {
-    flex: 1,
+  wrapText: { flex: 1, padding: 20, marginTop: "30%" },
+  btnContainer: {
+    flex: 0.01,
     flexDirection: "row",
+    alignItems: "flex-end",
   },
   title: {
     color: "#000000",

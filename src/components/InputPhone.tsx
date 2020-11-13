@@ -1,6 +1,13 @@
-import { Input } from "native-base";
 import React from "react";
-import { View, Text, Image, StyleSheet, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface InputPhoneProps {
   value: string;
@@ -14,10 +21,9 @@ export const InputPhone: React.FC<InputPhoneProps> = ({
   maxLength,
   autoFocus,
   onChangeText,
+  onError,
 }) => {
   const [number, setNumber] = React.useState(value ? value : "");
-  const [isError, setIsError] = React.useState(false);
-
   const onTextChange = (text: string) => {
     setNumber(text);
     if (onChangeText) {
@@ -27,32 +33,54 @@ export const InputPhone: React.FC<InputPhoneProps> = ({
 
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/nation-flag/TH.png")} />
-      <Text style={styles.countryCode}> +66 </Text>
-      <View style={styles.pipe} />
-      <TextInput
-        style={styles.numberText}
-        keyboardType="number-pad"
-        editable={true}
-        value={number}
-        onChangeText={onTextChange}
-        maxLength={maxLength}
-        autoFocus={autoFocus}
-      />
+      <View style={!onError ? styles.boder : styles.boderError}>
+        <Image source={require("../../assets/nation-flag/TH.png")} />
+        <Text style={styles.countryCode}> +66 </Text>
+        <View style={styles.pipe} />
+        <TextInput
+          style={styles.numberText}
+          keyboardType="number-pad"
+          editable={true}
+          value={number}
+          onChangeText={onTextChange}
+          maxLength={maxLength}
+          autoFocus={autoFocus}
+        />
+        <TouchableOpacity style={styles.clearBtn} onPress={() => setNumber("")}>
+          <Image  source={require("../../assets/x.png")} />
+        </TouchableOpacity>
+      </View>
+      {!onError ? null : (
+        <Text style={styles.textError}>ไม่พบหมายเลขโทรศัพท์ในระบบ</Text>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: 44,
-    borderColor: "#EBEFF2",
-    borderWidth: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 15,
-    borderRadius: 6,
+    flex: 1,
+    flexDirection: "column",
+  },
+  boder: {
+    padding: 10,
     marginTop: 30,
+    alignItems: "center",
+    height: 44,
+    flexDirection: "row",
+    borderColor: "#E8E8E8",
+    borderRadius: 6,
+    borderWidth: 1,
+  },
+  boderError: {
+    padding: 10,
+    marginTop: 30,
+    alignItems: "center",
+    height: 44,
+    flexDirection: "row",
+    borderColor: "#EB2C21",
+    borderRadius: 6,
+    borderWidth: 1,
   },
   flag: {
     flex: 1,
@@ -61,6 +89,7 @@ const styles = StyleSheet.create({
   },
   countryCode: {
     fontSize: 16,
+    lineHeight: 15,
   },
   pipe: {
     width: 1,
@@ -70,8 +99,17 @@ const styles = StyleSheet.create({
   },
   numberText: {
     marginLeft: 5,
-    height: 50,
+    height: 40,
     justifyContent: "center",
+    lineHeight: 19,
     fontSize: 16,
+    flex: 1,
   },
+  textError: {
+    color: "#EB2C21",
+    alignSelf: "center",
+    marginTop: 15,
+    fontSize: 12,
+  },
+  clearBtn: { flex:0.1, height: 40,justifyContent:"center",alignItems:"center" },
 });
