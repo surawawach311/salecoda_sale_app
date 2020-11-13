@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Text,
-  Image,
-  View,
-  StyleSheet,
-} from "react-native";
+import { Text, Image, View, StyleSheet } from "react-native";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -146,7 +141,7 @@ export default class App extends React.Component<{}, AppState> {
       color: "#FFFFFF",
       margin: 5,
     },
-  
+
     dot: {
       width: 20,
       height: 10,

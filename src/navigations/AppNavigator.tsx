@@ -16,6 +16,7 @@ function App() {
       >
         <Stack.Screen name="InputTelNumber" component={InputTelNumberScreen} />
         <Stack.Screen name="InputOtp" component={InputOtp} />
+        <Stack.Screen name="LoginSuccess" component={LoginSuccess} />
       </Stack.Navigator>
     </NavigationContainer>
   );

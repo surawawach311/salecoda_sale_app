@@ -14,7 +14,7 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 type RootStackParamList = {
-  InputOtp: { customer_id: string; telephone: string };
+  InputOtp: { telephone: string };
 };
 
 type InputOtpScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
@@ -34,10 +34,8 @@ const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
   const [showMessage, setShowMessage] = React.useState(false);
 
   const verifyPhoneNo = (tel: string) => {
-    const status = VerifiesDataSource.verifiesPhoneNo(tel).then((res) => {
-      console.log(res);
-      
-      // navigation.navigate("InputOtp",{res.data});
+    VerifiesDataSource.verifyPhoneNo(tel).then((res) => {
+      navigation.navigate("InputOtp", { telephone: res.telephone });
     });
   };
 
@@ -64,6 +62,7 @@ const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
             style={styles.button}
             onPress={() => {
               verifyPhoneNo(value);
+              // navigation.navigate("InputOtp", { telephone: '0938355808' });
             }}
           >
             <Text style={styles.textButton}>ขอรหัสOTP</Text>
@@ -100,11 +99,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "left",
-  },
-  inputTel: {
-    borderWidth: 0.1,
-    borderColor: "#20232a",
-    borderRadius: 6,
   },
   textButton: {
     color: "#FFFFFF",

@@ -7,10 +7,16 @@ interface InputPhoneProps {
   onChangeText?: (text: string) => void;
   maxLength: number;
   autoFocus?: boolean;
-
+  onError?: boolean;
 }
-export const InputPhone: React.FC<InputPhoneProps> = ({ value, maxLength,autoFocus ,onChangeText}) => {
+export const InputPhone: React.FC<InputPhoneProps> = ({
+  value,
+  maxLength,
+  autoFocus,
+  onChangeText,
+}) => {
   const [number, setNumber] = React.useState(value ? value : "");
+  const [isError, setIsError] = React.useState(false);
 
   const onTextChange = (text: string) => {
     setNumber(text);
@@ -18,7 +24,7 @@ export const InputPhone: React.FC<InputPhoneProps> = ({ value, maxLength,autoFoc
       onChangeText(text);
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/nation-flag/TH.png")} />
