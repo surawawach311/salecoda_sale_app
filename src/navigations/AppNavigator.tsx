@@ -1,9 +1,9 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import InputTelNumberScreen from "../screens/InputTelNumber/InputTelNumberScreen";
-import InputOtp from "../screens/InputOtpScreen/InputOtpScreen";
-import LoginSuccess from "../screens/LoginSuccess/LoginSuccess";
+import InputTelNumberScreen from "../screens/InputTelNumberScreen/InputTelNumberScreen";
+import InputOtpScreen from "../screens/InputOtpScreen/InputOtpScreen";
+import LoginSuccessScreen from "../screens/LoginSuccessScreen/LoginSuccessScreen";
 
 function App() {
   const Stack = createStackNavigator();
@@ -16,8 +16,8 @@ function App() {
         }}
       >
         <Stack.Screen name="InputTelNumber" component={InputTelNumberScreen} />
-        <Stack.Screen name="InputOtp" component={InputOtp} />
-        <Stack.Screen name="LoginSuccess" component={LoginSuccess} />
+        <Stack.Screen name="InputOtp" component={InputOtpScreen} />
+        <Stack.Screen name="LoginSuccess" component={LoginSuccessScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

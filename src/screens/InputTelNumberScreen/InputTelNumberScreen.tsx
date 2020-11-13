@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { Button } from "native-base";
 import {
-  SafeAreaView,
   Text,
   StyleSheet,
   View,
