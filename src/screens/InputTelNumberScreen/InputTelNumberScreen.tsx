@@ -8,29 +8,13 @@ import {
 } from "react-native";
 import { InputPhone } from "../../components/InputPhone";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
+import { RootParamList } from "../../navigations/AppNavigator"
+import { StackScreenProps } from '@react-navigation/stack'
 
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+type InputOtpScreenRouteProp = StackScreenProps<RootParamList, "InputOtp">;
 
-type RootStackParamList = {
-  InputOtp: { telephone: string };
-};
-
-type InputOtpScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
-
-type InputOtpScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "InputOtp"
->;
-type Props = {
-  route: InputOtpScreenRouteProp;
-  navigation: InputOtpScreenNavigationProp;
-};
-
-const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
+const InputTelNumberScreen = ({ navigation, route }: InputOtpScreenRouteProp) => {
   const [value, setValue] = React.useState<string>("");
-  const [valid, setValid] = React.useState(false);
-  const [showMessage, setShowMessage] = React.useState(false);
 
   const verifyPhoneNo = (tel: string) => {
     VerifiesDataSource.verifyPhoneNo(tel).then((res) => {

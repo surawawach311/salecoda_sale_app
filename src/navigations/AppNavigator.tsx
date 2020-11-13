@@ -5,8 +5,14 @@ import InputTelNumberScreen from "../screens/InputTelNumberScreen/InputTelNumber
 import InputOtpScreen from "../screens/InputOtpScreen/InputOtpScreen";
 import LoginSuccessScreen from "../screens/LoginSuccessScreen/LoginSuccessScreen";
 
+export type RootParamList = {
+  InputTelNumber: undefined
+  InputOtp: { telephone: string }
+  LoginSuccess: undefined
+}
+
 function App() {
-  const Stack = createStackNavigator();
+  const Stack = createStackNavigator<RootParamList>();
 
   return (
     <NavigationContainer>
