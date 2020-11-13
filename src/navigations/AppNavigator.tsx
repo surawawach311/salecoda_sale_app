@@ -2,7 +2,8 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import InputTelNumberScreen from "../screens/InputTelNumber/InputTelNumberScreen";
-import InputOtp from "../screens/InputOtpScreen/InputOtpScreen"
+import InputOtp from "../screens/InputOtpScreen/InputOtpScreen";
+import LoginSuccess from "../screens/LoginSuccess/LoginSuccess";
 
 function App() {
   const Stack = createStackNavigator();
