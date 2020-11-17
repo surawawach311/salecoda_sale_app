@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import InputTelNumberScreen from "../screens/InputTelNumber/InputTelNumberScreen";
 import InputOtp from "../screens/InputOtpScreen/InputOtpScreen";
 import LoginSuccess from "../screens/LoginSuccess/LoginSuccess";
+import Home from "../screens/HomeSceen/HomeSceen";
 
 function App() {
   const Stack = createStackNavigator();
@@ -14,10 +15,12 @@ function App() {
         screenOptions={{
           headerShown: false,
         }}
-      >
+      > 
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="InputTelNumber" component={InputTelNumberScreen} />
         <Stack.Screen name="InputOtp" component={InputOtp} />
         <Stack.Screen name="LoginSuccess" component={LoginSuccess} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
