@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, ImageBackground, StyleSheet } from "react-native";
-import { VerifyCode } from "../../components/InputOtp";
 import {
   CodeField,
   Cursor,
@@ -11,9 +10,6 @@ import { useState } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
-
-
-
 
 type RootStackParamList = {
   InputOtp: { telephone: string };
@@ -35,6 +31,7 @@ const CELL_COUNT = 6;
 
 const InputOTPScreen: React.FC<Props> = ({ navigation, route }) => {
   const [value, setValue] = useState("");
+  const [isError, setIsError] = useState(false);
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -44,9 +41,15 @@ const InputOTPScreen: React.FC<Props> = ({ navigation, route }) => {
   const onFufill = (value: string) => {
     setValue(value);
     if (value.length >= CELL_COUNT) {
-      VerifiesDataSource.verifyOtp(route.params.telephone, value).then(() => {
-        navigation.navigate("LoginSuccess");
-      });
+      VerifiesDataSource.verifyOtp(route.params.telephone, value).then(
+        (response) => {
+          if (response == undefined) {
+            setIsError(true);
+          } else {
+            navigation.navigate("LoginSuccess");
+          }
+        }
+      );
     }
   };
 
@@ -74,16 +77,27 @@ const InputOTPScreen: React.FC<Props> = ({ navigation, route }) => {
             rootStyle={styles.codeFieldRoot}
             keyboardType="number-pad"
             textContentType="oneTimeCode"
+            onFocus={() => {
+              setIsError(false);
+            }}
             renderCell={({ index, symbol, isFocused }) => (
               <Text
                 key={index}
-                style={[styles.cell, isFocused && styles.focusCell]}
+                style={[
+                  !isError ? styles.cell : styles.cellError,
+                  isFocused && styles.focusCell,
+                ]}
                 onLayout={getCellOnLayoutHandler(index)}
               >
                 {symbol || (isFocused ? <Cursor /> : null)}
               </Text>
             )}
           />
+          {isError ? (
+            <Text style={styles.textError}>
+              รหัส OTP ไม่ถูกต้องลองใหม่อีกครั้ง
+            </Text>
+          ) : null}
         </View>
       </ImageBackground>
     </View>
@@ -128,8 +142,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     borderRadius: 8,
   },
+  cellError: {
+    marginTop: 30,
+    width: 48,
+    height: 52,
+    lineHeight: 50,
+    fontSize: 24,
+    borderWidth: 1,
+    borderColor: "#EB2C21",
+    textAlign: "center",
+    borderRadius: 8,
+  },
   focusCell: {
     borderColor: "#E8E8E8",
     borderRadius: 8,
+  },
+  textError: {
+    color: "#EB2C21",
+    alignSelf: "center",
+    marginTop: 15,
+    fontSize: 12,
   },
 });
