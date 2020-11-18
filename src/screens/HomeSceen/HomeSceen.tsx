@@ -30,26 +30,28 @@ type Props = {
 const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.profileWarp}>
+      <View style={styles.profileWarp}>
         <Image
           style={styles.bgImage}
           source={require("../../../assets/bgHome.png")}
         />
-        {/* <SafeAreaView> */}
         <View style={styles.innerTextContainer}>
           <Text style={styles.WelcomeHeader}>Hello, Boom</Text>
           <Text style={styles.positionText}>Sale, Marketing executive</Text>
         </View>
-        <View style={styles.innerImgContainer}> 
-        <Image
-          style={styles.imageProfile}
-          source={require("../../../assets/image-profile-default.png")}
-        />
+        <View style={styles.innerImgContainer}>
+          <Image
+            style={styles.imageProfile}
+            source={require("../../../assets/image-profile-default.png")}
+          />
         </View>
-        {/* </SafeAreaView> */}
-
-      </SafeAreaView>
-      <View style={styles.menuWarp}></View>
+      </View>
+      <View style={styles.menuWarp}>
+        <Image
+          style={styles.menuIcon}
+          source={require("../../../assets/menu-icon/order.png")}
+        />
+      </View>
     </View>
   );
 };
@@ -68,13 +70,12 @@ const styles = StyleSheet.create({
   innerImgContainer: {
     flex: 1,
     alignItems: "flex-end",
-    paddingRight:20,
-
+    paddingRight: 20,
   },
   innerTextContainer: {
     flex: 1,
     alignItems: "flex-start",
-    paddingLeft:20,
+    paddingLeft: 20,
   },
 
   WelcomeHeader: {
@@ -100,6 +101,22 @@ const styles = StyleSheet.create({
   },
   menuWarp: {
     flex: 1,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
     backgroundColor: "#FBFBFB",
+    position: "absolute",
+    flexDirection: "row",
+    width: "100%",
+    top: 200,
+    height: "20%",
+    left: 0,
+    justifyContent: "center",
+    paddingTop: 25,
+  },
+  menuIcon: {
+    width: 64,
+    height: 64,
+    padding: 50,
+    margin: 10,
   },
 });
