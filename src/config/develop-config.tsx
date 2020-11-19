@@ -14,3 +14,6 @@ export const instanceSohee = axios.create({
 export const instanceNpc = axios.create({
   baseURL: BASE_URL_NPC
 });
+export const instanceKeyOfUnderground = axios.create({
+  baseURL: baseURL_key_of_underground_v1
+});

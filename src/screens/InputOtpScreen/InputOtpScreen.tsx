@@ -10,10 +10,12 @@ import { useState } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
+import { UserEntity } from "../../entities/userEntity";
 
 type RootStackParamList = {
-  InputOtp: { telephone: string };
-  LoginSuccess: undefined;
+  InputOtp: { userProfile: UserEntity };
+  LoginSuccess: { userProfile: UserEntity };
+  Home: undefined;
 };
 
 type InputOtpScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
@@ -41,15 +43,18 @@ const InputOTPScreen: React.FC<Props> = ({ navigation, route }) => {
   const onFufill = (value: string) => {
     setValue(value);
     if (value.length >= CELL_COUNT) {
-      VerifiesDataSource.verifyOtp(route.params.telephone, value).then(
-        (response) => {
-          if (response == undefined) {
-            setIsError(true);
-          } else {
-            navigation.navigate("LoginSuccess");
-          }
+      VerifiesDataSource.verifyOtp(
+        route.params.userProfile.telephone,
+        value
+      ).then((response) => {
+        if (response == undefined) {
+          setIsError(true);
+        } else {
+          navigation.navigate("LoginSuccess", {
+            userProfile: route.params.userProfile,
+          });
         }
-      );
+      });
     }
   };
 
@@ -63,7 +68,7 @@ const InputOTPScreen: React.FC<Props> = ({ navigation, route }) => {
           <Text style={styles.title}>ใส่รหัส OTP</Text>
           <Text style={styles.text}>
             กรุณาใส่รหัสยืนยันตัวตนที่ถูกส่งไปยัง {"\n"}หมายเลข{" "}
-            {route.params.telephone}
+            {route.params.userProfile.telephone}
           </Text>
           <CodeField
             ref={ref}
