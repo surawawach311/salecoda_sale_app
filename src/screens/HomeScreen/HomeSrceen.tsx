@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { UserLocalStorageService } from "../../services/UserLocalStorageService";
 
 type RootStackParamList = {
   InputOtp: { telephone: string };
@@ -47,10 +49,12 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.menuWarp}>
+        <TouchableOpacity onPress={()=>{UserLocalStorageService.deleteAccessToken()}}>
         <Image
           style={styles.menuIcon}
           source={require("../../../assets/menu-icon/order.png")}
         />
+        </TouchableOpacity>
       </View>
     </View>
   );
