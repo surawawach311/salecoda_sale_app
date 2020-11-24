@@ -1,13 +1,37 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import InputTelNumberScreen from "../screens/InputTelNumber/InputTelNumberScreen";
-import InputOtp from "../screens/InputOtpScreen/InputOtpScreen";
-import LoginSuccess from "../screens/LoginSuccess/LoginSuccess";
-import Home from "../screens/HomeSceen/HomeSceen";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Image, StyleSheet } from "react-native";
+
+import HomeScreen from "../screens/HomeScreen/HomeSrceen";
+import HistoryScreen from "../screens/HistoryScreen/HistoryScreen";
+import OrderScreen from "../screens/OrderScreen/OrderScreen";
+import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
+import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
+
+import { UserLocalStorageService } from "../services/UserLocalStorageService";
+import AppAuthNavigator from "./AppAuthNavigator";
+import HomeNavigator from "./HomeNavigator";
 
 function App() {
   const Stack = createStackNavigator();
+  const Tab = createBottomTabNavigator();
+
+  const [isLogin, setIsLogin] = React.useState(false);
+
+  React.useEffect(() => {
+    checkAuthToken();
+  }, [isLogin]);
+
+  const checkAuthToken = async () => {
+    const auth = await UserLocalStorageService.haveAccessToken().then((res) => {
+      return res;
+    });
+    if (auth) {
+      setIsLogin(true);
+    }
+  };
 
   return (
     <NavigationContainer>
@@ -15,12 +39,12 @@ function App() {
         screenOptions={{
           headerShown: false,
         }}
-      > 
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="InputTelNumber" component={InputTelNumberScreen} />
-        <Stack.Screen name="InputOtp" component={InputOtp} />
-        <Stack.Screen name="LoginSuccess" component={LoginSuccess} />
-
+      >
+        {isLogin ? (
+          <Tab.Screen name="HomeNavigator" component={HomeNavigator} />
+        ) : (
+          <Stack.Screen name="Auth" component={AppAuthNavigator} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
