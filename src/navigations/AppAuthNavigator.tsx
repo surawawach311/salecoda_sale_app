@@ -8,7 +8,7 @@ import { UserEntity } from "../entities/userEntity";
 export type AppAuthParamList = {
   InputTelNumber: undefined
   InputOtp: { userProfile: UserEntity }
-  LoginSuccess: undefined
+  LoginSuccess: { userProfile: UserEntity }
 }
 
 const AppAuthNavigator: React.FC = () => {

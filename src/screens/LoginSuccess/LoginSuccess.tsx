@@ -1,28 +1,13 @@
 import React, { useEffect } from "react";
 import { SafeAreaView, Text, StyleSheet, View, Image } from "react-native";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { UserEntity } from "../../entities/userEntity";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackScreenProps } from '@react-navigation/stack'
+import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
 
-type RootStackParamList = {
-  Home: undefined;
-  LoginSuccess: { userProfile: UserEntity };
-};
+type LoginSuccessScreenNavigationProp = StackScreenProps<AppAuthParamList, "LoginSuccess">
 
-type LoginSuccessRouteProp = RouteProp<RootStackParamList, "LoginSuccess">;
-
-type LoginSuccessNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "LoginSuccess"
->;
-type Props = {
-  route: LoginSuccessRouteProp;
-  navigation: LoginSuccessNavigationProp;
-};
-
-const LoginSuccessScreen: React.FC<Props> = ({ route }) => {
+const LoginSuccessScreen = ({ navigation, route }: LoginSuccessScreenNavigationProp) => {
   useEffect(() => {
     Login();
   });
