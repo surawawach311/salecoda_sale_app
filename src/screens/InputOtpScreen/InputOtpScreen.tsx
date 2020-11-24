@@ -6,32 +6,15 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
+import { StackScreenProps } from '@react-navigation/stack'
 import { useState } from "react";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
-import { UserEntity } from "../../entities/userEntity";
+import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
 
-type RootStackParamList = {
-  InputOtp: { userProfile: UserEntity };
-  LoginSuccess: { userProfile: UserEntity };
-  Home: undefined;
-};
+type InputOtpScreenRouteProp = StackScreenProps<AppAuthParamList, "InputOtp">;
 
-type InputOtpScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
-
-type InputOtpScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "LoginSuccess"
->;
-type Props = {
-  route: InputOtpScreenRouteProp;
-  navigation: InputOtpScreenNavigationProp;
-};
-
-const CELL_COUNT = 6;
-
-const InputOTPScreen: React.FC<Props> = ({ navigation, route }) => {
+const InputOTPScreen = ({ navigation, route }: InputOtpScreenRouteProp) => {
+  const CELL_COUNT = 6;
   const [value, setValue] = useState("");
   const [isError, setIsError] = useState(false);
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
