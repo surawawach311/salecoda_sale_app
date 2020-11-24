@@ -3,9 +3,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import InputTelNumberScreen from "../screens/InputTelNumber/InputTelNumberScreen";
 import InputOtp from "../screens/InputOtpScreen/InputOtpScreen";
 import LoginSuccess from "../screens/LoginSuccess/LoginSuccess";
+import { UserEntity } from "../entities/userEntity";
+
+export type AppAuthParamList = {
+  InputTelNumber: undefined
+  InputOtp: { userProfile: UserEntity }
+  LoginSuccess: { userProfile: UserEntity }
+}
 
 const AppAuthNavigator: React.FC = () => {
-  // const Tab = createBottomTabNavigator();
   const Stack = createStackNavigator();
 
   return (
