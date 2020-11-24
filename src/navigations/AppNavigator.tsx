@@ -12,7 +12,11 @@ export default function App() {
   const Tab = createBottomTabNavigator();
 
   const skipContext = React.useContext(CTX);
-  const { skip} = skipContext;
+  const { skip } = skipContext;
+
+  const authContext = React.useContext(CTX);
+  const { token, _authenticate, _logout } = authContext;
+
   // const [isLogin] = React.useState(false);
 
   // React.useEffect(() => {
@@ -29,6 +33,20 @@ export default function App() {
   // }
   // };
 
+  // function _bootstrapAsync() {
+  //   firebase.auth().onAuthStateChanged(user => {
+  //     console.log(user);
+  //     if (user) {
+  //       user.getIdToken().then(function(idToken) {
+  //         // console.log(idToken);
+  //         _authenticate(idToken);
+  //       });
+  //     } else {
+  //       _logout();
+  //     }
+  //   });
+  // }
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -36,7 +54,7 @@ export default function App() {
           headerShown: false,
         }}
       >
-        {isLogin ? (
+        {token ? (
           <Tab.Screen name="HomeNavigator" component={HomeNavigator} />
         ) : (
           <Stack.Screen name="Auth" component={AppAuthNavigator} />
