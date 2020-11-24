@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import { Button } from "native-base";
+import React, { useEffect } from "react";
 import { SafeAreaView, Text, StyleSheet, View, Image } from "react-native";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
 import { RouteProp } from "@react-navigation/native";
@@ -23,15 +22,13 @@ type Props = {
   navigation: LoginSuccessNavigationProp;
 };
 
-const LoginSuccessScreen: React.FC<Props> = ({ route, navigation }) => {
+const LoginSuccessScreen: React.FC<Props> = ({ route }) => {
   useEffect(() => {
     Login();
   });
-
   const Login = () => {
     VerifiesDataSource.login(route.params.userProfile).then((res) => {
       AsyncStorage.setItem("access_token", res);
-      navigation.navigate("Home");
     });
   };
 
