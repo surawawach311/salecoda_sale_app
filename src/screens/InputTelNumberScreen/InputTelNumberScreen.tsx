@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { Button } from "native-base";
 import {
-  SafeAreaView,
   Text,
   StyleSheet,
   View,
@@ -14,29 +13,15 @@ import {
 } from "react-native";
 import { InputPhone } from "../../components/InputPhone";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
+import { RootParamList } from "../../navigations/AppAuthNavigator"
+import { StackScreenProps } from '@react-navigation/stack'
 
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { UserEntity } from "../../entities/userEntity";
+type InputOtpScreenRouteProp = StackScreenProps<RootParamList, "InputOtp">;
 
-type RootStackParamList = {
-  InputOtp: { userProfile: UserEntity };
-};
-
-type InputOtpScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
-
-type InputOtpScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "InputOtp"
->;
-type Props = {
-  route: InputOtpScreenRouteProp;
-  navigation: InputOtpScreenNavigationProp;
-};
-
-const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
+const InputTelNumberScreen = ({ navigation, route }: InputOtpScreenRouteProp) => {
   const [value, setValue] = React.useState<string>("");
   const [isError, setIsError] = React.useState(false);
+
 
   const verifyPhoneNo = (tel: string) => {
     VerifiesDataSource.verifyPhoneNo(tel).then((res) => {
