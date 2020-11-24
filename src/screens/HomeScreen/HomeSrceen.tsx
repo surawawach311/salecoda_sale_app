@@ -15,7 +15,7 @@ import { UserLocalStorageService } from "../../services/UserLocalStorageService"
 type RootStackParamList = {
   InputOtp: { telephone: string };
   LoginSuccess: undefined;
-  Home: undefined;
+  HomeScreen: undefined;
 };
 
 type HomeScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
@@ -49,11 +49,41 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.menuWarp}>
-        <TouchableOpacity onPress={()=>{UserLocalStorageService.deleteAccessToken()}}>
-        <Image
-          style={styles.menuIcon}
-          source={require("../../../assets/menu-icon/order.png")}
-        />
+        <TouchableOpacity
+          // style={{ justifyContent: "center", backgroundColor: "red" }}
+          onPress={() => {
+            UserLocalStorageService.deleteAccessToken();
+          }}
+        >
+          <Image
+            style={styles.menuIcon}
+            source={require("../../../assets/menu-icon/order.png")}
+          />
+          <Text style={styles.textMenu}>สั่งสินค้า</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          // style={{ justifyContent: "center", backgroundColor: "red" }}
+          onPress={() => {
+            UserLocalStorageService.deleteAccessToken();
+          }}
+        >
+          <Image
+            style={styles.menuIcon}
+            source={require("../../../assets/menu-icon/promotion.png")}
+          />
+          <Text style={styles.textMenu}>โปรโมชั่น</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          // style={{ justifyContent: "center", backgroundColor: "red" }}
+          onPress={() => {
+            UserLocalStorageService.deleteAccessToken();
+          }}
+        >
+          <Image
+            style={styles.menuIcon}
+            source={require("../../../assets/menu-icon/shop.png")}
+          />
+          <Text style={styles.textMenu}>ร้านค้า</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -115,12 +145,18 @@ const styles = StyleSheet.create({
     height: "20%",
     left: 0,
     justifyContent: "center",
-    paddingTop: 25,
+    paddingTop: 15,
   },
   menuIcon: {
     width: 64,
     height: 64,
     padding: 50,
     margin: 10,
+  },
+  textMenu: {
+    color: "#616A7B",
+    marginTop:-20,
+    alignSelf:'center',
+    fontSize:16
   },
 });
