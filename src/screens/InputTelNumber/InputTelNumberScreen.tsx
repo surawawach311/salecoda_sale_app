@@ -1,11 +1,9 @@
 import React, { useRef } from "react";
 import { Button } from "native-base";
 import {
-  SafeAreaView,
   Text,
   StyleSheet,
   View,
-  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
@@ -14,27 +12,12 @@ import {
 } from "react-native";
 import { InputPhone } from "../../components/InputPhone";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
+import { StackScreenProps } from '@react-navigation/stack'
+import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
 
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { UserEntity } from "../../entities/userEntity";
+type InputOtpScreenNavigationProp = StackScreenProps<AppAuthParamList, "InputTelNumber">
 
-type RootStackParamList = {
-  InputOtp: { userProfile: UserEntity };
-};
-
-type InputOtpScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
-
-type InputOtpScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "InputOtp"
->;
-type Props = {
-  route: InputOtpScreenRouteProp;
-  navigation: InputOtpScreenNavigationProp;
-};
-
-const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
+const InputTelNumberScreen = ({ navigation, route }: InputOtpScreenNavigationProp) => {
   const [value, setValue] = React.useState<string>("");
   const [isError, setIsError] = React.useState(false);
 

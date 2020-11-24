@@ -2,13 +2,6 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image, StyleSheet } from "react-native";
-
-import HomeScreen from "../screens/HomeScreen/HomeSrceen";
-import HistoryScreen from "../screens/HistoryScreen/HistoryScreen";
-import OrderScreen from "../screens/OrderScreen/OrderScreen";
-import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
-import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 
 import { UserLocalStorageService } from "../services/UserLocalStorageService";
 import AppAuthNavigator from "./AppAuthNavigator";
@@ -28,6 +21,7 @@ function App() {
     const auth = await UserLocalStorageService.haveAccessToken().then((res) => {
       return res;
     });
+
     if (auth) {
       setIsLogin(true);
     }
