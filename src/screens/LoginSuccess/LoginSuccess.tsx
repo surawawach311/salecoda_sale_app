@@ -1,8 +1,37 @@
-import React, { useRef } from "react";
-import { Button } from "native-base";
+import React, { useEffect } from "react";
 import { SafeAreaView, Text, StyleSheet, View, Image } from "react-native";
+import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { UserEntity } from "../../entities/userEntity";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const LoginSuccessScreen: React.FC = () => {
+type RootStackParamList = {
+  Home: undefined;
+  LoginSuccess: { userProfile: UserEntity };
+};
+
+type LoginSuccessRouteProp = RouteProp<RootStackParamList, "LoginSuccess">;
+
+type LoginSuccessNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "LoginSuccess"
+>;
+type Props = {
+  route: LoginSuccessRouteProp;
+  navigation: LoginSuccessNavigationProp;
+};
+
+const LoginSuccessScreen: React.FC<Props> = ({ route }) => {
+  useEffect(() => {
+    Login();
+  });
+  const Login = () => {
+    VerifiesDataSource.login(route.params.userProfile).then((res) => {
+      AsyncStorage.setItem("access_token", res);
+    });
+  };
+
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -26,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  text: { fontSize: 24, alignSelf: "center"},
+  text: { fontSize: 24, alignSelf: "center" },
   containerImg: {
     width: 300,
     height: 320,
@@ -35,7 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    resizeMode: "contain"
+    resizeMode: "contain",
   },
 });
 

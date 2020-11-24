@@ -17,9 +17,10 @@ import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
 
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { UserEntity } from "../../entities/userEntity";
 
 type RootStackParamList = {
-  InputOtp: { telephone: string };
+  InputOtp: { userProfile: UserEntity };
 };
 
 type InputOtpScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
@@ -43,7 +44,7 @@ const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
         setIsError(true);
       } else {
         setIsError(false);
-        navigation.navigate("InputOtp", { telephone: res.telephone });
+        navigation.navigate("InputOtp", { userProfile: res });
       }
     });
   };
@@ -76,7 +77,7 @@ const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
             <Button
               style={styles.button}
               onPress={() => {
-                Keyboard.dismiss()
+                Keyboard.dismiss();
                 verifyPhoneNo(value);
                 // navigation.navigate("InputOtp", { telephone: '0938355808' });
               }}
@@ -84,7 +85,6 @@ const InputTelNumberScreen: React.FC<Props> = ({ navigation }) => {
               <Text style={styles.textButton}>ขอรหัสOTP</Text>
             </Button>
           </View>
-
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
