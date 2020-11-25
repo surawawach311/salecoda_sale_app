@@ -2,7 +2,8 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { CTX, IContextProps } from "../services/UserLocalStorageService";
+import { UserLocalStorageService } from "../services/UserLocalStorageService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import AppAuthNavigator from "./AppAuthNavigator";
 import HomeNavigator from "./HomeNavigator";
@@ -11,41 +12,22 @@ export default function App() {
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  const skipContext = React.useContext(CTX);
-  const { skip } = skipContext;
+  const [isLogin, setIsLogin] = React.useState(false);
 
-  const authContext = React.useContext(CTX);
-  const { token, _authenticate, _logout } = authContext;
+  React.useEffect(() => {
+    checkAuthToken();
+  }, [isLogin]);
 
-  // const [isLogin] = React.useState(false);
-
-  // React.useEffect(() => {
-  //   checkAuthToken();
-  // }, [isLogin]);
-
-  // const checkAuthToken = async () => {
-  // const auth = await UserLocalStorageService.
-  // .haveAccessToken().then((res: any) => {
-  //   return res;
-  // });
-  // if (auth) {
-  //   setIsLogin(true);
-  // }
-  // };
-
-  // function _bootstrapAsync() {
-  //   firebase.auth().onAuthStateChanged(user => {
-  //     console.log(user);
-  //     if (user) {
-  //       user.getIdToken().then(function(idToken) {
-  //         // console.log(idToken);
-  //         _authenticate(idToken);
-  //       });
-  //     } else {
-  //       _logout();
-  //     }
-  //   });
-  // }
+  const checkAuthToken = async () => {
+    const auth = await UserLocalStorageService.haveAccessToken().then(
+      (res: any) => {
+        return res;
+      }
+    );
+    if (auth) {
+      setIsLogin(true);
+    }
+  };
 
   return (
     <NavigationContainer>
@@ -54,7 +36,7 @@ export default function App() {
           headerShown: false,
         }}
       >
-        {token ? (
+        {isLogin ? (
           <Tab.Screen name="HomeNavigator" component={HomeNavigator} />
         ) : (
           <Stack.Screen name="Auth" component={AppAuthNavigator} />
