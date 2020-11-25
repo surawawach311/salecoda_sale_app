@@ -3,7 +3,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { UserLocalStorageService } from "../services/UserLocalStorageService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import AppAuthNavigator from "./AppAuthNavigator";
 import HomeNavigator from "./HomeNavigator";
