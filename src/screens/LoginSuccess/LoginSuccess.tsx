@@ -14,6 +14,7 @@ const LoginSuccessScreen = ({ navigation, route }: LoginSuccessScreenNavigationP
   const Login = () => {
     VerifiesDataSource.login(route.params.userProfile).then((res) => {
       AsyncStorage.setItem("access_token", res);
+      navigation.navigate("App")
     });
   };
 

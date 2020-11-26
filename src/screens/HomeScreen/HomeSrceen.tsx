@@ -11,18 +11,14 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserLocalStorageService } from "../../services/UserLocalStorageService";
+import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
+import { HomeStackParamList } from "../../navigations/HomeNavigator";
 
-type RootStackParamList = {
-  InputOtp: { telephone: string };
-  LoginSuccess: undefined;
-  HomeScreen: undefined;
-};
-
-type HomeScreenRouteProp = RouteProp<RootStackParamList, "InputOtp">;
+type HomeScreenRouteProp = RouteProp<HomeStackParamList, "Purchase">;
 
 type HomeScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  "LoginSuccess"
+  HomeStackParamList,
+  "Purchase"
 >;
 type Props = {
   route: HomeScreenRouteProp;
@@ -52,7 +48,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
         <TouchableOpacity
           // style={{ justifyContent: "center", backgroundColor: "red" }}
           onPress={() => {
-            UserLocalStorageService.deleteAccessToken();
+            navigation.navigate("Purchase");
           }}
         >
           <Image
@@ -155,8 +151,8 @@ const styles = StyleSheet.create({
   },
   textMenu: {
     color: "#616A7B",
-    marginTop:-20,
-    alignSelf:'center',
-    fontSize:16
+    marginTop: -20,
+    alignSelf: "center",
+    fontSize: 16,
   },
 });
