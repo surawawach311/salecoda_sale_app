@@ -4,7 +4,6 @@ import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import AppNavigator from "./src/navigations/AppNavigator";
 import { AppState } from "./src/models/AppState";
-import { UserLocalStorageService } from "./src/services/UserLocalStorageService";
 import { NavigationContainer } from "@react-navigation/native";
 
 export default class App extends React.Component<{}, AppState> {
@@ -23,16 +22,6 @@ export default class App extends React.Component<{}, AppState> {
       ...Ionicons.font,
     });
     this.setState({ isReady: true });
-    this.checkLogin();
-  }
-
-  async checkLogin() {
-    const auth = await UserLocalStorageService.haveAccessToken().then((res) => {
-      return res;
-    });
-    if (auth) {
-      this.setState({ isLogin: true });
-    }
   }
 
   render() {

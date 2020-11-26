@@ -1,7 +1,6 @@
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 import HistoryScreen from "../screens/HistoryScreen/HistoryScreen";
-import HomeScreen from "../screens/HomeScreen/HomeSrceen";
 import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
 import OrderScreen from "../screens/OrderScreen/OrderScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";

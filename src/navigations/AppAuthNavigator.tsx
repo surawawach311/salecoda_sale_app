@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import InputTelNumberScreen from "../screens/InputTelNumber/InputTelNumberScreen";
+import InputTelNumberScreen from "../screens/InputTelNumberScreen/InputTelNumberScreen";
 import InputOtp from "../screens/InputOtpScreen/InputOtpScreen";
-import LoginSuccess from "../screens/LoginSuccess/LoginSuccess";
+import LoginSuccessScreen from "../screens/LoginSuccessScreen/LoginSuccessScreen";
 import AppNavigator from "../navigations/AppNavigator";
 import { UserEntity } from "../entities/userEntity";
 
@@ -24,7 +24,7 @@ const AppAuthNavigator: React.FC = () => {
     >
       <Stack.Screen name="InputTelNumber" component={InputTelNumberScreen} />
       <Stack.Screen name="InputOtp" component={InputOtp} />
-      <Stack.Screen name="LoginSuccess" component={LoginSuccess} />
+      <Stack.Screen name="LoginSuccess" component={LoginSuccessScreen} />
       <Stack.Screen name="App" component={AppNavigator} />
     </Stack.Navigator>
   );
