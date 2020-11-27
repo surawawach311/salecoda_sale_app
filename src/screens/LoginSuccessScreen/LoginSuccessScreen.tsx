@@ -2,19 +2,27 @@ import React, { useEffect } from "react";
 import { SafeAreaView, Text, StyleSheet, View, Image } from "react-native";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from "@react-navigation/stack";
 import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
 
-type LoginSuccessScreenNavigationProp = StackScreenProps<AppAuthParamList, "LoginSuccess">
+type LoginSuccessScreenNavigationProp = StackScreenProps<
+  AppAuthParamList,
+  "LoginSuccess"
+>;
 
-const LoginSuccessScreen = ({ navigation, route }: LoginSuccessScreenNavigationProp) => {
+const LoginSuccessScreen = ({
+  navigation,
+  route,
+}: LoginSuccessScreenNavigationProp) => {
   useEffect(() => {
     Login();
   });
   const Login = () => {
     VerifiesDataSource.login(route.params.userProfile).then((res) => {
-      AsyncStorage.setItem("access_token", res);
-      navigation.navigate("App")
+      AsyncStorage.setItem("access_token", res.access_token);
+      setTimeout(() => {
+        navigation.navigate("App");
+      }, 3000);
     });
   };
 
