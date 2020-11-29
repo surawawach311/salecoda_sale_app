@@ -13,9 +13,19 @@ const HomeNavigator: React.FC = () => {
 
   return (
     <>
-      <HomeStack.Navigator initialRouteName="Home">
+      <HomeStack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerShown: false,
+          headerBackTitleVisible: false
+        }}
+      >
         <HomeStack.Screen name="Home" component={HomeScreen} />
-        <HomeStack.Screen name="Purchase" component={PurchaseNavigator} options={{ title: 'เลือกร้านค้า' }} />
+        <HomeStack.Screen
+          name="Purchase"
+          component={PurchaseNavigator}
+          
+        />
       </HomeStack.Navigator>
     </>
   );
