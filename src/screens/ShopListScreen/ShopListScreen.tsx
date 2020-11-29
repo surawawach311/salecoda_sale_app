@@ -6,8 +6,19 @@ import { ShopFacade } from "../../facade/Shopfacade";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
 import { AppLoading } from "expo";
+import { StackScreenProps } from "@react-navigation/stack";
+import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
+import Search from "../../components/Search";
 
-const ShopListScreen: React.FC = () => {
+type ShopListScreenRouteProp = StackScreenProps<
+  PurchaseStackParamList,
+  "ShopList"
+>;
+
+const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
+  navigation,
+  route,
+}) => {
   const [] = useState(false);
   const [shopData, setShopData] = useState<
     _.Object<_.Dictionary<ShopEntity[]>>
@@ -19,29 +30,33 @@ const ShopListScreen: React.FC = () => {
 
   const renderList: () => JSX.Element[] = () => {
     const list: JSX.Element[] = [];
-    console.log(shopData);
-
     if (shopData !== undefined) {
       shopData.forEach((shops, territory) => {
         list.push(
           <>
             <ListItem itemHeader>
               <Text
+                key={territory}
                 style={styles.textHeader}
               >{`ร้านค้าในเขต ${territory}`}</Text>
             </ListItem>
           </>
         );
-        shops.map((shop) =>
+        shops.map((shop: ShopEntity) =>
           list.push(
-            <ListItem>
-              <Text>{shop.name}</Text>
+            <ListItem
+              key={shop.name}
+              onPress={() => {
+                navigation.navigate("Shop", { shop: shop });
+              }}
+            >
+              <Text key={shop.name}>{shop.name}</Text>
             </ListItem>
           )
         );
       });
     } else {
-      <AppLoading/>
+      <AppLoading />;
     }
     return list;
   };
@@ -49,7 +64,7 @@ const ShopListScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <List>{renderList()}</List>
+        <List key={"1"}>{renderList()}</List>
       </ScrollView>
     </View>
   );
@@ -57,9 +72,7 @@ const ShopListScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // You should only need this
-    height: "100%", // But these wouldn't hurt.
-    width: "100%",
+    flex: 1,
   },
   textHeader: {
     fontWeight: "bold",
