@@ -5,6 +5,7 @@ import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import { StackScreenProps } from "@react-navigation/stack";
 import Search from "../../components/Search";
 import ButtonShop from "../../components/ButtonShop";
+import ProductCard from "../../components/ProductCard";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Shop">;
 
@@ -39,7 +40,22 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       <View style={styles.warpChangeShop}>
         <ButtonShop onPress={() => navigation.navigate("ShopList")} />
       </View>
-      <View style={styles.wrapProduct}></View>
+      <View style={styles.wrapProduct}>
+        <ProductCard
+          thName="ไฮซีส"
+          enName="EMAMECTIN BENZ..."
+          productInfo="20*1 L | ฿7,600/ลัง"
+          imagePath={require("../../../assets/mock-product/hiseed.png")}
+          price="190"
+        />
+        <ProductCard
+          thName="ไซม๊อกซิเมท"
+          enName="CYMOXANIL+MAN..."
+          productInfo="20*1 kg| ฿7,000/ลัง"
+          imagePath={require("../../../assets/mock-product/cymox.png")}
+          price="350"
+        />
+      </View>
     </Container>
   );
 };
@@ -56,6 +72,9 @@ const styles = StyleSheet.create({
   shopInfo: { padding: 20 },
   wrapProduct: {
     flex: 1,
+    marginTop: 50,
+    marginLeft: 35,
+    flexDirection: "row",
   },
   warpChangeShop: {
     padding: 25,
