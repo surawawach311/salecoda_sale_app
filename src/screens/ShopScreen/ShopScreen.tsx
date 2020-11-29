@@ -20,7 +20,21 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           style={styles.bgImage}
           source={require("../../../assets/bgShop.png")}
         />
-        <Text style={styles.textShopName}>{route.params.shop.name}</Text>
+        <View style={styles.shopInfo}>
+          <Text style={styles.textShopName}>{route.params.shop.name}</Text>
+          <Image
+            style={styles.skyRocket}
+            source={require("../../../assets/skyrocket.png")}
+          />
+          <View style={styles.shopPoint}>
+            <Image
+              style={styles.coin}
+              source={require("../../../assets/coin.png")}
+            />
+
+            <Text style={styles.textPoint}>0 คะแนน</Text>
+          </View>
+        </View>
       </View>
       <View style={styles.warpChangeShop}>
         <ButtonShop onPress={() => navigation.navigate("ShopList")} />
@@ -38,6 +52,8 @@ const styles = StyleSheet.create({
   warpShopHeader: {
     flex: 0.5,
   },
+
+  shopInfo: { padding: 20 },
   wrapProduct: {
     flex: 1,
   },
@@ -57,7 +73,25 @@ const styles = StyleSheet.create({
   textShopName: {
     color: "#FFFFFF",
     fontSize: 20,
-    padding: 20,
+  },
+  shopPoint: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  skyRocket: {
+    width: 130,
+    height: 50,
+    resizeMode: "contain",
+    marginTop: 15,
+  },
+  coin: {
+    width: 30,
+    height: 30,
+  },
+  textPoint: {
+    color: "#FFFFFF",
+    fontSize: 24,
+    marginLeft: 10,
   },
 });
 
