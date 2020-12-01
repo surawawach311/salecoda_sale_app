@@ -1,15 +1,12 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
 import { UserLocalStorageService } from "../services/UserLocalStorageService";
-import AppAuthNavigator from "./AppAuthNavigator";
-import HomeNavigator from "./HomeNavigator";
 
-function App() {
+import AppAuthNavigator from "./AppAuthNavigator";
+import MainNavigator from "./MainNavigator";
+
+export default function App() {
   const Stack = createStackNavigator();
-  const Tab = createBottomTabNavigator();
 
   const [isLogin, setIsLogin] = React.useState(false);
 
@@ -28,20 +25,16 @@ function App() {
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        {isLogin ? (
-          <Tab.Screen name="HomeNavigator" component={HomeNavigator} />
-        ) : (
-          <Stack.Screen name="Auth" component={AppAuthNavigator} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      {isLogin ? (
+        <Stack.Screen name="Main" component={MainNavigator} />
+      ) : (
+        <Stack.Screen name="Auth" component={AppAuthNavigator} />
+      )}
+    </Stack.Navigator>
   );
 }
-
-export default App;
