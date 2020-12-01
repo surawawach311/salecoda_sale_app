@@ -7,13 +7,3 @@ export var BASE_URL_DEVILING = `https://dev-app.iconkaset.com`;
 export var BASE_URL_NPC = `https://dev-app.iconkaset.com/npc`;
 export var baseURL_key_of_underground_v1 = `https://dev-app.iconkaset.com/key_of_underground/v1`;
 export var baseURL_key_of_underground_v2 = `https://dev-app.iconkaset.com/key_of_underground/v2`;
-
-export const instanceSohee = axios.create({
-  baseURL: baseURL
-});
-export const instanceNpc = axios.create({
-  baseURL: BASE_URL_NPC
-});
-export const instanceKeyOfUnderground = axios.create({
-  baseURL: baseURL_key_of_underground_v1
-});

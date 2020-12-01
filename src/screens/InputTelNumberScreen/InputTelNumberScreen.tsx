@@ -21,6 +21,7 @@ const InputTelNumberScreen = ({ navigation, route }: InputOtpScreenNavigationPro
   const [value, setValue] = React.useState<string>("");
   const [isError, setIsError] = React.useState(false);
 
+
   const verifyPhoneNo = (tel: string) => {
     VerifiesDataSource.verifyPhoneNo(tel).then((res) => {
       if (res == undefined) {
@@ -62,7 +63,6 @@ const InputTelNumberScreen = ({ navigation, route }: InputOtpScreenNavigationPro
               onPress={() => {
                 Keyboard.dismiss();
                 verifyPhoneNo(value);
-                // navigation.navigate("InputOtp", { telephone: '0938355808' });
               }}
             >
               <Text style={styles.textButton}>ขอรหัสOTP</Text>
