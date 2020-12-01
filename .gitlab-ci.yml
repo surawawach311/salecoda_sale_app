@@ -1,8 +1,6 @@
 stages:
   - deploy
 
-before_script:
-  - npm ci
 deploy:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop"'
@@ -12,6 +10,8 @@ deploy:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - ~/.npm
+  before_script:
+    - npm ci
   script:
     - apk add --no-cache bash
     - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
