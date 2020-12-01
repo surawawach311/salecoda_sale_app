@@ -11,7 +11,7 @@ deploy:
     paths:
       - ~/.npm
   before_script:
-    - npm ci
+    - yarn install --ignore-platform
   script:
     - apk add --no-cache bash
     - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
