@@ -28,8 +28,6 @@
         "web": {
             "favicon": "./assets/favicon.png"
         },
-        "description": {
-            "sellcoda mobile application"
-        }
+        "description": "sellcoda mobile application"
     }
 }
