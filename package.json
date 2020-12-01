@@ -18,7 +18,7 @@
         "@react-navigation/stack": "^5.10.0",
         "@types/lodash": "^4.14.165",
         "axios": "^0.21.0",
-        "expo": "~39.0.2",
+        "expo": "^39.0.5",
         "expo-font": "~8.3.0",
         "expo-status-bar": "~1.0.2",
         "native-base": "^2.13.14",
