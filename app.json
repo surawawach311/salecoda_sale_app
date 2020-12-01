@@ -2,7 +2,7 @@
     "expo": {
         "name": "morroc",
         "slug": "morroc",
-        "version": "1.1.0",
+        "version": "1.1.1",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "android": {
@@ -27,6 +27,7 @@
         },
         "web": {
             "favicon": "./assets/favicon.png"
-        }
+        },
+        "description": "sellcoda mobile application"
     }
 }
