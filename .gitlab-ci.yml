@@ -1,5 +1,6 @@
 stages:
   - deploy
+  - schedule
 
 deploy:
   rules:
@@ -16,3 +17,13 @@ deploy:
     - apk add --no-cache bash
     - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
     - npx expo publish --non-interactive
+
+schedule-morroc:
+  image: alpine:3.7
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop"'
+  stage: schedule
+  script:
+    - apk add --no-cache curl
+    - echo "{\"content\":\"deploy success, open this link https://expo.io/@iconkaset/projects/morroc\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
+    - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
