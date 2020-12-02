@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Added [v1.3.0] - 2020-12-02
+- Add product list
+
 ## Added [v1.2.0] - 2020-12-01
 - Added expo cli
 

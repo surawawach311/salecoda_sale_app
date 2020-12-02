@@ -1,6 +1,6 @@
 import { ShopEntity } from "./ShopEntity";
 
-export interface ShopEntityList {
+export interface ShopListEntity {
     data: ShopEntity[]
     total: number
 }
