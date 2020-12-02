@@ -1,21 +1,34 @@
-import React from "react";
-import { StyleSheet, Text, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, Image, StyleSheet, ScrollView } from "react-native";
 import { Container, View } from "native-base";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import { StackScreenProps } from "@react-navigation/stack";
 import Search from "../../components/Search";
 import ButtonShop from "../../components/ButtonShop";
 import ProductCard from "../../components/ProductCard";
+import { ShopDataSource } from "../../datasource/ShopDataSource";
+import { ProductEntity } from "../../entities/ProductEntity";
+import {} from "react-native-gesture-handler";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Shop">;
 
 const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
+  const [productList, setProductList] = useState<ProductEntity[]>();
+  useEffect(() => {
+    fecthData();
+  }, []);
+
+  const fecthData = async () => {
+    await ShopDataSource.getProduct().then((res) => {
+      setProductList(res);
+    });
+  };
+
   return (
     <Container>
       <View style={styles.wrapSearch}>
         <Search />
       </View>
-
       <View style={styles.warpShopHeader}>
         <Image
           style={styles.bgImage}
@@ -41,20 +54,20 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         <ButtonShop onPress={() => navigation.navigate("ShopList")} />
       </View>
       <View style={styles.wrapProduct}>
-        <ProductCard
-          thName="ไฮซีส"
-          enName="EMAMECTIN BENZ..."
-          productInfo="20*1 L | ฿7,600/ลัง"
-          imagePath={require("../../../assets/mock-product/hiseed.png")}
-          price="190"
-        />
-        <ProductCard
-          thName="ไซม๊อกซิเมท"
-          enName="CYMOXANIL+MAN..."
-          productInfo="20*1 kg| ฿7,000/ลัง"
-          imagePath={require("../../../assets/mock-product/cymox.png")}
-          price="350"
-        />
+        <ScrollView
+          contentContainerStyle={styles.grid}
+          showsVerticalScrollIndicator={false}
+        >
+          {productList?.map((item) => (
+            <ProductCard
+              thName={item.title}
+              enName={item.common_title}
+              productInfo={item.packing_size}
+              price={item.price_per_volumn}
+              imagePath={encodeURI(item.image)}
+            />
+          ))}
+        </ScrollView>
       </View>
     </Container>
   );
@@ -68,12 +81,15 @@ const styles = StyleSheet.create({
   warpShopHeader: {
     flex: 0.5,
   },
-
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
   shopInfo: { padding: 20 },
   wrapProduct: {
     flex: 1,
-    marginTop: 50,
-    marginLeft: 35,
+    marginTop: "10%",
     flexDirection: "row",
   },
   warpChangeShop: {
@@ -81,7 +97,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    top: 250,
+    top: "33%",
   },
   bgImage: {
     width: "100%",

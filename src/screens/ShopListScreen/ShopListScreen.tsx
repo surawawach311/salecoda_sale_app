@@ -56,7 +56,7 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
         );
       });
     } else {
-      <AppLoading />;
+      null;
     }
     return list;
   };
