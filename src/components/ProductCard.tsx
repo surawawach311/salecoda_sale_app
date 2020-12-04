@@ -41,8 +41,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </View>
         <View style={styleds.warpInfo}>
           <Text style={styleds.textThName}>{thName}</Text>
-          <Text style={styleds.textEnName}>
-            {enName.length > 17 ? `${enName.substring(0,15)}...` : enName}
+          <Text numberOfLines={1} style={styleds.textEnName}>
+            {enName}
           </Text>
           <Text style={styleds.textEnName}>{productInfo}</Text>
         </View>
