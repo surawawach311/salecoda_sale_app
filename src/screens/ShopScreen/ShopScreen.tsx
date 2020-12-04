@@ -8,7 +8,7 @@ import ButtonShop from "../../components/ButtonShop";
 import ProductCard from "../../components/ProductCard";
 import { ShopDataSource } from "../../datasource/ShopDataSource";
 import { ProductEntity } from "../../entities/ProductEntity";
-import {} from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Shop">;
 
@@ -59,13 +59,19 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           showsVerticalScrollIndicator={false}
         >
           {productList?.map((item) => (
-            <ProductCard
-              thName={item.title}
-              enName={item.common_title}
-              productInfo={item.packing_size}
-              price={item.price_per_volumn}
-              imagePath={encodeURI(item.image)}
-            />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("ProductInfo", { product: item })
+              }
+            >
+              <ProductCard
+                thName={item.title}
+                enName={item.common_title}
+                productInfo={item.packing_size}
+                price={item.price_per_volumn}
+                imagePath={encodeURI(item.image)}
+              />
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
