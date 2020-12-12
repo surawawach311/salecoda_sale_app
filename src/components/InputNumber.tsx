@@ -7,15 +7,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const InputNumber: React.FC = () => {
+interface InputNumberProps {
+  value: string;
+}
+
+const InputNumber: React.FC<InputNumberProps> = ({ value }) => {
   return (
     <View style={styled.container}>
       <TouchableOpacity>
-        <Image style={styled.plus} source={require("../../assets/plus.png")} />
-      </TouchableOpacity>
-      <TextInput maxLength={6} defaultValue="0" />
-      <TouchableOpacity>
         <Image style={styled.plus} source={require("../../assets/minus.png")} />
+      </TouchableOpacity>
+      <TextInput maxLength={6} value={value} />
+      <TouchableOpacity>
+        <Image style={styled.plus} source={require("../../assets/plus.png")} />
       </TouchableOpacity>
     </View>
   );
