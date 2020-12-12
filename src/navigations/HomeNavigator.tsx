@@ -1,33 +1,106 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import PurchaseNavigator from "./PurchaseNavigator";
+import { Image, StyleSheet } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import HistoryScreen from "../screens/HistoryScreen/HistoryScreen";
+import NotificationScreen from "../screens/NotificationScreen/NotificationScreen";
+import OrderScreen from "../screens/OrderScreen/OrderScreen";
+import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import HomeScreen from "../screens/HomeScreen/HomeSrceen";
 
-export type HomeStackParamList = {
-  Home: undefined;
-  Purchase: undefined;
-};
-
 const HomeNavigator: React.FC = () => {
-  const HomeStack = createStackNavigator<HomeStackParamList>();
+  const Tab = createBottomTabNavigator();
 
   return (
     <>
-      <HomeStack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-          headerBackTitleVisible: false
-        }}
-      >
-        <HomeStack.Screen name="Home" component={HomeScreen} />
-        <HomeStack.Screen
-          name="Purchase"
-          component={PurchaseNavigator}
-          
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Image
+                style={styles.icon}
+                source={
+                  focused
+                    ? require("../../assets/navigator-icon/home-active.png")
+                    : require("../../assets/navigator-icon/home-inactive.png")
+                }
+              />
+            ),
+          }}
         />
-      </HomeStack.Navigator>
+        <Tab.Screen
+          name="History"
+          component={HistoryScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Image
+                style={styles.icon}
+                source={
+                  focused
+                    ? require("../../assets/navigator-icon/history-active.png")
+                    : require("../../assets/navigator-icon/history-inactive.png")
+                }
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Order"
+          component={OrderScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Image
+                style={styles.icon}
+                source={
+                  focused
+                    ? require("../../assets/navigator-icon/order-active.png")
+                    : require("../../assets/navigator-icon/order-inactive.png")
+                }
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Notification"
+          component={NotificationScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Image
+                style={styles.icon}
+                source={
+                  focused
+                    ? require("../../assets/navigator-icon/noti-active.png")
+                    : require("../../assets/navigator-icon/noti-inactive.png")
+                }
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Image
+                style={styles.icon}
+                source={
+                  focused
+                    ? require("../../assets/navigator-icon/profile-active.png")
+                    : require("../../assets/navigator-icon/profile-inactive.png")
+                }
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     </>
   );
 };
+const styles = StyleSheet.create({
+  icon: {
+    width: 24,
+    height: 24,
+  },
+});
 export default HomeNavigator;

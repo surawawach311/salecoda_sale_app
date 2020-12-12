@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Added [v1.4.0] - 2020-12-12
+- Add product info and cart screen
+
 ## Added [v1.3.0] - 2020-12-02
 - Add product list
 

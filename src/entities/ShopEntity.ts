@@ -1,7 +1,6 @@
 export interface ShopEntity {
-    customer_no: string
+    id: string
     name: string
     telephone: string
     territory: string
-    company: string
 }

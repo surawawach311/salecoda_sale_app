@@ -61,7 +61,10 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           {productList?.map((item) => (
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("ProductInfo", { product: item })
+                navigation.navigate("ProductInfo", {
+                  product: item,
+                  shop: route.params.shop,
+                })
               }
             >
               <ProductCard
