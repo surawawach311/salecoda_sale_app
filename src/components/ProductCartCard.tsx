@@ -1,24 +1,41 @@
 import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 
-const ProductCartCard: React.FC<any> = ({ children }) => {
+interface ProductCartCardProps {
+  children?: React.ReactNode;
+  title: string;
+  pricePerUnit?: string;
+  pricePerVolume?: string;
+  priceTotal: string;
+  image: string;
+  quantity: string;
+}
+
+const ProductCartCard: React.FC<ProductCartCardProps> = ({
+  children,
+  title,
+  pricePerUnit,
+  pricePerVolume,
+  image,
+  quantity,
+  priceTotal,
+}) => {
   return (
     <View style={styles.contianer}>
       <View style={styles.warpImg}>
-        <Image
-          style={styles.img}
-          source={require("../../assets/mock-product/hiseed.png")}
-        />
+        <Image style={styles.img} source={{ uri: image }} />
       </View>
       <View style={styles.warpInfo}>
-        <Text style={styles.textTitle}>ไฮซีส</Text>
+        <Text style={styles.textTitle}>{title}</Text>
         <Text>
-          <Text style={styles.textPerPrice}>฿190/ขวด </Text>
-          <Text style={styles.textPerVolum}> 0*1 L|฿7,600/ลัง</Text>
+          <Text style={styles.textPerPrice}>
+            {`${pricePerUnit} x ${quantity} ลัง`}
+          </Text>
+          <Text style={styles.textPerVolum}> {pricePerVolume}</Text>
         </Text>
         <View style={styles.warpQuantity}>
           {children}
-          <Text style={styles.textPriceTotal}>20000</Text>
+          <Text style={styles.textPriceTotal}>{priceTotal}</Text>
         </View>
       </View>
     </View>
@@ -38,7 +55,7 @@ const styles = StyleSheet.create({
   },
   img: { width: "100%", height: 60, resizeMode: "contain" },
   warpInfo: { padding: 10, flex: 1 },
-  textTitle: { fontSize: 18 },
+  textTitle: { fontSize: 18, fontWeight: "bold" },
   textPerPrice: { fontSize: 14 },
   textPerVolum: { fontSize: 14, color: "#616A7B" },
   textPriceTotal: { fontSize: 18, color: "#FF5D5D", fontWeight: "bold" },
