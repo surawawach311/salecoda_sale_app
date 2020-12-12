@@ -31,17 +31,14 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
       CartDataSource.addToCartByShopId(
         route.params.shop.id,
         route.params.product.id,
-        quantity+1
+        quantity + 1
       );
-      // (prevQuantity) => {
-      //   return prevQuantity + 1;
-      // });
     } else {
       setQuantity((prev) => prev - 1);
       CartDataSource.addToCartByShopId(
         route.params.shop.id,
         route.params.product.id,
-        quantity-1
+        quantity - 1
       );
     }
   };

@@ -9,8 +9,6 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
     static addToCartByShopId(shopId: string, itemId: string, quantity: number) {
-        console.log(quantity)
-        
         const data = {
             action: "adjust",
             item_id: itemId,
