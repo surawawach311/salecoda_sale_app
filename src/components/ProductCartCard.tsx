@@ -1,14 +1,19 @@
 import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface ProductCartCardProps {
   children?: React.ReactNode;
   title: string;
-  pricePerUnit?: string;
-  pricePerVolume?: string;
-  priceTotal: string;
+  pricePerUnit: number;
+  pricePerVolume?: number;
+  volumeUnit: string;
+  saleUnit: string;
+  priceTotal: number;
   image: string;
-  quantity: string;
+  quantity: number;
+  packingSize: string;
+  onDelete: () => void;
 }
 
 const ProductCartCard: React.FC<ProductCartCardProps> = ({
@@ -16,9 +21,13 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
   title,
   pricePerUnit,
   pricePerVolume,
+  volumeUnit,
+  saleUnit,
   image,
   quantity,
   priceTotal,
+  packingSize,
+  onDelete,
 }) => {
   return (
     <View style={styles.contianer}>
@@ -26,12 +35,25 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
         <Image style={styles.img} source={{ uri: image }} />
       </View>
       <View style={styles.warpInfo}>
-        <Text style={styles.textTitle}>{title}</Text>
+        <View style={styles.warpTitle}>
+          <Text style={styles.textTitle}>{title}</Text>
+          <TouchableOpacity onPress={onDelete}>
+            <Image
+              style={styles.imgDelete}
+              source={require("../../assets/delete.png")}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.textPerVolum}>
+          {`฿${pricePerVolume}/${volumeUnit}`}
+        </Text>
+        <Text
+          style={styles.textTotal}
+        >{`${packingSize} | ฿ ${pricePerUnit} ${saleUnit}`}</Text>
         <Text>
-          <Text style={styles.textPerPrice}>
-            {`${pricePerUnit} x ${quantity} ลัง`}
+          <Text style={styles.textPriceUnit}>
+            {`฿${pricePerUnit} x ${quantity} ${saleUnit}`}
           </Text>
-          <Text style={styles.textPerVolum}> {pricePerVolume}</Text>
         </Text>
         <View style={styles.warpQuantity}>
           {children}
@@ -55,9 +77,24 @@ const styles = StyleSheet.create({
   },
   img: { width: "100%", height: 60, resizeMode: "contain" },
   warpInfo: { padding: 10, flex: 1 },
-  textTitle: { fontSize: 18, fontWeight: "bold" },
-  textPerPrice: { fontSize: 14 },
-  textPerVolum: { fontSize: 14, color: "#616A7B" },
+  warpTitle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  textTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#181725",
+  },
+  textPriceUnit: {
+    fontSize: 10,
+    fontWeight: "500",
+  },
+  textPerVolum: {
+    fontSize: 12,
+    color: "#181725",
+    fontWeight: "bold",
+  },
   textPriceTotal: { fontSize: 18, color: "#FF5D5D", fontWeight: "bold" },
   warpQuantity: {
     marginTop: 8,
@@ -65,6 +102,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  textTotal: { fontSize: 12, fontWeight: "500", color: "#616A7B" },
+  imgDelete: { width: 25, height: 25 },
 });
 
 export default ProductCartCard;
