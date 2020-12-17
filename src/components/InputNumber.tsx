@@ -9,17 +9,38 @@ import {
 
 interface InputNumberProps {
   value: string;
+  onPlus: () => void;
+  onMinus: () => void;
+  onChangeText?: (e: string) => void;
+  onBlur: () => void;
 }
 
-const InputNumber: React.FC<InputNumberProps> = ({ value }) => {
+const InputNumber: React.FC<InputNumberProps> = ({
+  value,
+  onPlus,
+  onMinus,
+  onChangeText,
+  onBlur,
+}) => {
   return (
     <View style={styled.container}>
-      <TouchableOpacity>
-        <Image style={styled.plus} source={require("../../assets/minus.png")} />
+      <TouchableOpacity onPress={onMinus}>
+        <Image
+          style={styled.iconAdjust}
+          source={require("../../assets/minus.png")}
+        />
       </TouchableOpacity>
-      <TextInput maxLength={6} value={value} />
-      <TouchableOpacity>
-        <Image style={styled.plus} source={require("../../assets/plus.png")} />
+      <TextInput
+        maxLength={6}
+        defaultValue={value}
+        onChangeText={onChangeText}
+        onBlur={onBlur}
+      />
+      <TouchableOpacity onPress={onPlus}>
+        <Image
+          style={styled.iconAdjust}
+          source={require("../../assets/plus.png")}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -37,7 +58,7 @@ const styled = StyleSheet.create({
     justifyContent: "space-between",
     flexWrap: "wrap",
   },
-  plus: {
+  iconAdjust: {
     width: 20,
     height: 20,
     resizeMode: "cover",

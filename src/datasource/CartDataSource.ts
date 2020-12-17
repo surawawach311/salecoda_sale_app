@@ -20,4 +20,15 @@ export class CartDataSource {
             .then(res => res.data)
             .catch(error => console.log(error))
     }
+
+    static removeItem(shopId: string, itemId: string) {
+        const data = {
+            action: "remove",
+            item_id: itemId,
+        }
+        return httpClient
+            .post(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`, data)
+            .then(res => res.data)
+            .catch(error => console.log(error))
+    }
 }
