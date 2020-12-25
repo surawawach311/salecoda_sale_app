@@ -29,6 +29,9 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
   packingSize,
   onDelete,
 }) => {
+   const currencyFormat = (num: number) => {
+    return "฿" + num.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  };
   return (
     <View style={styles.contianer}>
       <View style={styles.warpImg}>
@@ -57,7 +60,9 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
         </Text>
         <View style={styles.warpQuantity}>
           {children}
-          <Text style={styles.textPriceTotal}>{priceTotal}</Text>
+          <Text style={styles.textPriceTotal}>
+            {currencyFormat(priceTotal)}
+          </Text>
         </View>
       </View>
     </View>

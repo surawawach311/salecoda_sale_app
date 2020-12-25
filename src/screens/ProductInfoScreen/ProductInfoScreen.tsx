@@ -26,21 +26,13 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
   const [quantity, setQuantity] = useState(0);
 
   const addCart = (action: string) => {
-    if (action == "plus") {
-      setQuantity((prev) => prev + 1);
-      CartDataSource.addToCartByShopId(
-        route.params.shop.id,
-        route.params.product.id,
-        quantity + 1
-      );
-    } else {
-      setQuantity((prev) => prev - 1);
-      CartDataSource.addToCartByShopId(
-        route.params.shop.id,
-        route.params.product.id,
-        quantity - 1
-      );
-    }
+    const nextQuantity = action === "plus" ? quantity + 5 : quantity - 5
+    setQuantity(nextQuantity);
+    CartDataSource.addToCartByShopId(
+      route.params.shop.id,
+      route.params.product.id,
+      nextQuantity
+    );
   };
 
   return (
@@ -49,7 +41,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
         <View>
           <View style={styled.wrapInfo}>
             <View style={styled.imageInfo}>
-              {route.params.product.image !== "No" ? (
+              {route.params.product.image !== "" ? (
                 <Image
                   style={styled.image}
                   source={{ uri: route.params.product.image }}

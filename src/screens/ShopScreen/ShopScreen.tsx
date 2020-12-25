@@ -72,7 +72,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 enName={item.common_title}
                 productInfo={item.packing_size}
                 price={item.price_per_volumn}
-                imagePath={encodeURI(item.image)}
+                imagePath={item.image}
               />
             </TouchableOpacity>
           ))}
