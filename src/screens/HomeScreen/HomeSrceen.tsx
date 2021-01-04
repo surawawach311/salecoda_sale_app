@@ -58,7 +58,6 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
           <Text style={styles.textMenu}>สั่งสินค้า</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          // style={{ justifyContent: "center", backgroundColor: "red" }}
           onPress={() => {
             UserLocalStorageService.deleteAccessToken();
           }}
@@ -70,7 +69,6 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
           <Text style={styles.textMenu}>โปรโมชั่น</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          // style={{ justifyContent: "center", backgroundColor: "red" }}
           onPress={() => {
             UserLocalStorageService.deleteAccessToken();
           }}
@@ -92,13 +90,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileWarp: {
-    flex: 0.3,
+    flex: 0.4,
     backgroundColor: "#4C95FF",
     flexDirection: "row",
     alignItems: "center",
   },
   innerImgContainer: {
-    flex: 1,
     alignItems: "flex-end",
     paddingRight: 20,
   },
@@ -130,18 +127,13 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   menuWarp: {
-    flex: 1,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     backgroundColor: "#FBFBFB",
-    position: "absolute",
     flexDirection: "row",
-    width: "100%",
-    top: 200,
-    height: "20%",
-    left: 0,
+    top: -20,
     justifyContent: "center",
-    paddingTop: 15,
+    paddingBottom: 10,
   },
   menuIcon: {
     width: 64,

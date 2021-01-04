@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fixed [v1.4.1] - 2020-12-12
+- Adjust position menu bar 
+
 ## Added [v1.4.0] - 2020-12-12
 - Add product info and cart screen
 
