@@ -26,7 +26,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <View style={styleds.container}>
       <View style={styleds.border}>
         <View style={styleds.warpImage}>
-          {imagePath != "No" ? (
+          {imagePath != "" ? (
             <>
               <Image source={{ uri: imagePath }} style={styleds.imageProduct} />
             </>

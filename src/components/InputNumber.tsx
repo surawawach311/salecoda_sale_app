@@ -35,6 +35,7 @@ const InputNumber: React.FC<InputNumberProps> = ({
         defaultValue={value}
         onChangeText={onChangeText}
         onBlur={onBlur}
+        keyboardType="number-pad"
       />
       <TouchableOpacity onPress={onPlus}>
         <Image

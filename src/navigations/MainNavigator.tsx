@@ -5,7 +5,6 @@ import HomeNavigator from "./HomeNavigator";
 
 const MainNavigator: React.FC = () => {
   const Stack = createStackNavigator();
-
   return (
     <Stack.Navigator
       initialRouteName="Home"
