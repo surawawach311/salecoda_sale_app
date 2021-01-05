@@ -30,11 +30,11 @@ export default function App() {
         headerShown: false,
       }}
     >
-      {/* {isLogin ? ( */}
+      {isLogin ? (
         <Stack.Screen name="Main" component={MainNavigator} />
-      {/* ) : ( */}
-        {/* <Stack.Screen name="Auth" component={AppAuthNavigator} /> */}
-      {/* )} */}
+       ) : ( 
+         <Stack.Screen name="Auth" component={AppAuthNavigator} /> 
+       )} 
     </Stack.Navigator>
   );
 }

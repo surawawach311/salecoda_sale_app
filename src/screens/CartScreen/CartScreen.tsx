@@ -34,20 +34,16 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     await CartDataSource.addToCartByShopId(
       route.params.shop.id,
       itemId,
-      quantity + 5
+      quantity + 1
     ).then((res) => setCart(res));
-
-    // setItems(res["items"]));
   };
 
   const decreaseProduct = async (itemId: string, quantity: number) => {
     await CartDataSource.addToCartByShopId(
       route.params.shop.id,
       itemId,
-      quantity - 5
+      quantity - 1
     ).then((res) => setCart(res));
-
-    // setItems(res["items"]));
   };
   const adjustProduct = async (itemId: string, quantity: number) => {
     const regexp = /^[0-9\b]+$/;
@@ -139,7 +135,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
               <View style={styled.warpPrice}>
                 <Text style={styled.textBeforeTotal}>ราคาก่อนลด</Text>
                 <Text style={styled.textBeforeTotal}>
-                  {currencyFormat(cart.total_price)}
+                  {currencyFormat(cart.before_discount)}
                 </Text>
               </View>
               <View style={styled.warpPrice}>
