@@ -7,6 +7,10 @@ import OrderScreen from "../screens/OrderScreen/OrderScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import HomeScreen from "../screens/HomeScreen/HomeSrceen";
 
+export type HomeStackParamList = {
+  Home: undefined;
+  Purchase: undefined;
+};
 const HomeNavigator: React.FC = () => {
   const Tab = createBottomTabNavigator();
 

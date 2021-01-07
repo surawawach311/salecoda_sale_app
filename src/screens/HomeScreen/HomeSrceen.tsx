@@ -4,21 +4,18 @@ import {
   Text,
   Image,
   StyleSheet,
-  SafeAreaView,
-  ImageBackground,
 } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserLocalStorageService } from "../../services/UserLocalStorageService";
-import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import { HomeStackParamList } from "../../navigations/HomeNavigator";
 
-type HomeScreenRouteProp = RouteProp<HomeStackParamList, "Purchase">;
+type HomeScreenRouteProp = RouteProp<HomeStackParamList, "Home">;
 
 type HomeScreenNavigationProp = StackNavigationProp<
   HomeStackParamList,
-  "Purchase"
+  "Home"
 >;
 type Props = {
   route: HomeScreenRouteProp;
