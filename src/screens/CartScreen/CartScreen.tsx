@@ -1,19 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, KeyboardAvoidingView } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Image,
+  Platform,
+} from "react-native";
 import ButtonShop from "../../components/ButtonShop";
 import { StackScreenProps } from "@react-navigation/stack";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import ProductCartCard from "../../components/ProductCartCard";
 import InputNumber from "../../components/InputNumber";
 import { CartDataSource } from "../../datasource/CartDataSource";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { CartProductEntity } from "../../entities/CartProductEntity";
-import { Platform } from "react-native";
+import { ModalDeliveryMethod } from "../../components/ModalDeliveryMethod";
+import { values } from "lodash";
+import { ShopEntity } from "../../entities/ShopEntity";
+import Dash from "react-native-dash";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
 const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
-  const [items, setItems] = useState<CartProductEntity[]>([]);
+  const [modalDelivery, setModalDelivery] = useState(false);
+  const [remark, setRemark] = useState("");
+  const [deliveryPoint, setDeliveryPoint] = useState<ShopEntity>();
+  const [] = useState<CartProductEntity[]>([]);
   const [cart, setCart] = useState<any>();
   const [quantity, setQuantity] = useState(0);
   useEffect(() => {
@@ -25,7 +38,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
   const getCart = async () => {
     CartDataSource.getCartByShop(route.params.shop.id).then((res) =>
-      // setItems(res["items"])
       setCart(res)
     );
   };
@@ -53,8 +65,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         itemId,
         quantity
       ).then((res) => setCart(res));
-
-      // setItems(res["items"]));
     } else {
       alert("Number Only");
     }
@@ -64,8 +74,16 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     CartDataSource.removeItem(route.params.shop.id, itemId).then((res) =>
       setCart(res)
     );
+  };
 
-    // setItems(res["items"])  );
+  const handleCloseModal = () => {
+    setModalDelivery(false);
+  };
+
+  const handleOkDeliveryModal = (value: string, shop: ShopEntity) => {
+    setDeliveryPoint(shop);
+    setRemark(value);
+    setModalDelivery(false);
   };
 
   return (
@@ -98,6 +116,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     onDelete={() => removeItem(item.id)}
                   >
                     <InputNumber
+                      key={item.title}
                       value={item.quantity.toString()}
                       onPlus={() => increaseProduct(item.id, item.quantity)}
                       onMinus={() => decreaseProduct(item.id, item.quantity)}
@@ -115,11 +134,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
               <View style={styled.paymentMethod}>
                 {cart.available_payments.map((method: any) => {
                   return method.name == "เงินสด" ? (
-                    <Text style={styled.textBodyPayment}>
-                      {method.name} (รับส่วนลดเพิ่ม {method.discount_rate}%)
-                    </Text>
+                    <View style={styled.methodChoiceContainer}>
+                      <View style={styled.iconPin} />
+                      <Text key={method.name} style={styled.textBodyPayment}>
+                        {method.name} (รับส่วนลดเพิ่ม {method.discount_rate}%)
+                      </Text>
+                    </View>
                   ) : method.remain_credit ? (
-                    <Text style={styled.textBodyPayment}>
+                    <Text key={method.name} style={styled.textBodyPayment}>
                       {method.name} (คงเหลือ {method.remain_credit})
                     </Text>
                   ) : null;
@@ -130,7 +152,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
               <Text style={styled.textHeaderPayment}>ส่วนลดที่เหลือ</Text>
               <Text>ไม่มีวงเงินเคลม</Text>
             </View>
-            <View style={styled.lineDash} />
+            <Dash
+              dashGap={2}
+              dashLength={4}
+              dashThickness={4}
+              style={{ width: "100%", height: 1 }}
+              dashColor="#C8CDD6"
+            />
             <View style={styled.totalPriceContainer}>
               <View style={styled.warpPrice}>
                 <Text style={styled.textBeforeTotal}>ราคาก่อนลด</Text>
@@ -151,6 +179,59 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 </Text>
               </View>
             </View>
+            <View style={styled.warpDelivery}>
+              <View style={styled.headerDeliveryMethodtContainer}>
+                <Text style={styled.textHeaderPayment}>ตัวเลือกการจัดส่ง</Text>
+                {!deliveryPoint ? null : (
+                  <TouchableOpacity
+                    onPress={() => setModalDelivery(!modalDelivery)}
+                  >
+                    <Text style={styled.textChageDeliveryMethod}>เปลี่ยน</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View style={styled.line} />
+              {!deliveryPoint ? (
+                <TouchableOpacity
+                  style={styled.buttonDelivery}
+                  onPress={() => {
+                    setModalDelivery(!modalDelivery);
+                  }}
+                >
+                  <Image
+                    style={styled.iconDelivery}
+                    source={require("../../../assets/delivery.png")}
+                  />
+                  <Text style={styled.textButtonDelivery}> เลือกการจัดส่ง</Text>
+                </TouchableOpacity>
+              ) : (
+                <View style={styled.deliveryPointContainer}>
+                  <Image
+                    style={styled.iconLocation}
+                    source={require("../../../assets/location.png")}
+                  />
+                  <View style={styled.deliveryMethodtContainer}>
+                    <Text style={styled.textDeliveryMethod}>จัดส่งที่ร้าน</Text>
+                    <Text style={styled.textDeliveryPoint}>
+                      <Text style={styled.deliveryTextShopName}>
+                        {`${deliveryPoint.name} \n`}
+                      </Text>
+                      <Text>{`${deliveryPoint?.address} ตำบล${deliveryPoint.sub_district} \n`}</Text>
+                      <Text>{`อำเภอ${deliveryPoint.district} ${deliveryPoint.province} ${deliveryPoint.post_code}`}</Text>
+                    </Text>
+                    {!remark ? null : (
+                      <Text style={styled.textRemark}>หมายเหตุ: {remark}</Text>
+                    )}
+                  </View>
+                </View>
+              )}
+            </View>
+            <ModalDeliveryMethod
+              visible={modalDelivery}
+              onClose={handleCloseModal}
+              onOk={handleOkDeliveryModal}
+              shop={route.params.shop}
+            />
           </ScrollView>
         ) : (
           <></>
@@ -167,6 +248,24 @@ const styled = StyleSheet.create({
   warpChangeShop: {
     padding: 10,
   },
+  warpDelivery: { padding: 10, marginTop: 9, backgroundColor: "#FFFFFF" },
+  buttonDelivery: {
+    flexDirection: "row",
+    borderRadius: 6,
+    backgroundColor: "#F0F8FF",
+    justifyContent: "center",
+    padding: 10,
+    marginTop: 20,
+    margin: 10,
+    alignItems: "center",
+  },
+  iconDelivery: {
+    width: 36,
+    height: 36,
+    resizeMode: "contain",
+  },
+  iconLocation: { width: 20, height: 20, resizeMode: "contain" },
+  textButtonDelivery: { color: "#4C95FF", fontSize: 14, fontWeight: "bold" },
   borderContainer: {
     flex: 2,
     backgroundColor: "#F8FAFF",
@@ -201,9 +300,18 @@ const styled = StyleSheet.create({
   },
   lineDash: {
     borderStyle: "dashed",
-    borderWidth: 1,
-    borderRadius: 1,
+    borderWidth: 5,
+    borderRadius: 5,
     borderColor: "#C8CDD6",
+    borderTopWidth: 5,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+  },
+  line: {
+    marginTop: 10,
+    borderBottomColor: "#EBEFF2",
+    borderBottomWidth: 2,
+    borderRadius: 3,
   },
   totalPriceContainer: {
     padding: 15,
@@ -212,8 +320,47 @@ const styled = StyleSheet.create({
   warpPrice: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 5,
   },
   textBeforeTotal: { fontSize: 16, color: "#6B7995" },
   textLabelTotalPrice: { fontSize: 16, color: "#314364", fontWeight: "bold" },
   textTotalPrice: { fontSize: 20, color: "#4C95FF", fontWeight: "bold" },
+  deliveryPointContainer: { margin: 20, flexDirection: "row" },
+  deliveryTextShopName: { fontWeight: "bold" },
+  textChageDeliveryMethod: {
+    color: "#4C95FF",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  textDeliveryPoint: {
+    color: "#616A7B",
+    fontSize: 16,
+  },
+  textRemark: {
+    color: "#616A7B",
+    fontSize: 16,
+    marginTop: 10,
+  },
+  deliveryMethodtContainer: { marginLeft: 10 },
+  textDeliveryMethod: {
+    color: "#616A7B",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  headerDeliveryMethodtContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  iconPin: {
+    borderRadius: 50,
+    borderWidth: 5,
+    borderColor: "#4C95FF",
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
+  methodChoiceContainer: {
+    flexDirection: "row",
+  },
 });
