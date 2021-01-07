@@ -2,7 +2,10 @@
 
 ## [Version - 1]
 
-## Fixed [v1.4.1] - 2020-12-12
+## Added [v1.4.0] - 2020-1-7
+- Can choose a delivery method
+
+## Fixed [v1.4.1] - 2020-1-5
 - Adjust position menu bar 
 
 ## Added [v1.4.0] - 2020-12-12
