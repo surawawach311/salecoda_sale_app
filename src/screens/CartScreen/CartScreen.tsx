@@ -134,14 +134,17 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
               <View style={styled.paymentMethod}>
                 {cart.available_payments.map((method: any) => {
                   return method.name == "เงินสด" ? (
-                    <View style={styled.methodChoiceContainer}>
+                    <View
+                      key={method.name}
+                      style={styled.methodChoiceContainer}
+                    >
                       <View style={styled.iconPin} />
-                      <Text key={method.name} style={styled.textBodyPayment}>
+                      <Text style={styled.textBodyPayment}>
                         {method.name} (รับส่วนลดเพิ่ม {method.discount_rate}%)
                       </Text>
                     </View>
                   ) : method.remain_credit ? (
-                    <Text key={method.name} style={styled.textBodyPayment}>
+                    <Text style={styled.textBodyPayment}>
                       {method.name} (คงเหลือ {method.remain_credit})
                     </Text>
                   ) : null;

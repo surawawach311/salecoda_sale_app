@@ -60,6 +60,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         >
           {productList?.map((item) => (
             <TouchableOpacity
+              key={item.id}
               onPress={() =>
                 navigation.navigate("ProductInfo", {
                   product: item,
@@ -71,7 +72,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 thName={item.title}
                 enName={item.common_title}
                 productInfo={item.packing_size}
-                price={item.price_per_volumn}
+                price={item.price_per_volume}
                 imagePath={item.image}
               />
             </TouchableOpacity>

@@ -57,7 +57,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
               <View style={styled.wrapTitlePrice}>
                 <Text style={styled.textH1}>{route.params.product.title}</Text>
                 <Text style={styled.textH1}>
-                  {` ฿${route.params.product.price_per_volumn}`}
+                  {` ฿${route.params.product.price_per_volume}`}
                 </Text>
               </View>
               <View>
