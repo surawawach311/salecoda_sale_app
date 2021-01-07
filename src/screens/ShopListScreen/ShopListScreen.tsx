@@ -20,51 +20,33 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
   route,
 }) => {
   const [] = useState(false);
-  const [shopData, setShopData] = useState<
-    _.Object<_.Dictionary<ShopEntity[]>>
-  >();
+  const [shopData, setShopData] = useState<ShopEntity[]>();
 
   useEffect(() => {
     ShopFacade.getShopListData().then((res) => setShopData(res));
   }, []);
 
-  const renderList: () => JSX.Element[] = () => {
-    const list: JSX.Element[] = [];
-    if (shopData !== undefined) {
-      shopData.forEach((shops, territory) => {
-        list.push(
-          <>
-            <ListItem itemHeader>
-              <Text
-                key={territory}
-                style={styles.textHeader}
-              >{`ร้านค้าในเขต ${territory}`}</Text>
-            </ListItem>
-          </>
-        );
-        shops.map((shop: ShopEntity) =>
-          list.push(
-            <ListItem
-              key={shop.name}
-              onPress={() => {
-                navigation.navigate("Shop", { shop: shop });
-              }}
-            >
-              <Text key={shop.name}>{shop.name}</Text>
-            </ListItem>
-          )
-        );
-      });
-    } else {
-      null;
-    }
-    return list;
-  };
-
   return (
     <View style={styles.container}>
       <ScrollView>
-        <List key={"1"}>{renderList()}</List>
+        <List>
+          <ListItem itemHeader>
+            <Text
+              key={"A04"}
+              style={styles.textHeader}
+            >{`ร้านค้าในเขต A04`}</Text>
+          </ListItem>
+          {shopData?.map((data) => (
+            <ListItem
+              key={data.name}
+              onPress={() => {
+                navigation.navigate("Shop", { shop: data });
+              }}
+            >
+              <Text key={data.name}>{data.name}</Text>
+            </ListItem>
+          ))}
+        </List>
       </ScrollView>
     </View>
   );
