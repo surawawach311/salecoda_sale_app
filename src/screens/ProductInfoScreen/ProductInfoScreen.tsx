@@ -26,13 +26,26 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
   const [quantity, setQuantity] = useState(0);
 
   const addCart = (action: string) => {
-    const nextQuantity = action === "plus" ? quantity + 5 : quantity - 5
+    const nextQuantity = action === "plus" ? quantity + 5 : quantity - 5;
     setQuantity(nextQuantity);
     CartDataSource.addToCartByShopId(
       route.params.shop.id,
       route.params.product.id,
       nextQuantity
     );
+  };
+
+  const adjustProduct = async (quantity: number) => {
+    const regexp = /^[0-9\b]+$/;
+    if (quantity.toString() === "" || regexp.test(quantity.toString())) {
+      CartDataSource.addToCartByShopId(
+        route.params.shop.id,
+        route.params.product.id,
+        quantity
+      );
+    } else {
+      alert("Number Only");
+    }
   };
 
   return (
@@ -125,6 +138,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                 value={quantity.toString()}
                 onChangeText={(text) => {
                   setQuantity(Number(text));
+                  adjustProduct(Number(text));
                 }}
                 keyboardType="number-pad"
               />
