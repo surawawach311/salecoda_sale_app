@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fixed [v1.5.2] - 2020-1-7
+- Modal bounce in delivery method
+
 ## Added [v1.5.1] - 2020-1-7
 - Fixed add product to cart on text change
 - Fixed bug ket prop
