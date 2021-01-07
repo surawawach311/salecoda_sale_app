@@ -40,7 +40,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </View>
         <View style={styleds.warpInfo}>
-          <Text style={styleds.textThName}>{thName}</Text>
+          <Text numberOfLines={1} style={styleds.textThName}>
+            {thName}
+          </Text>
           <Text numberOfLines={1} style={styleds.textEnName}>
             {enName}
           </Text>
