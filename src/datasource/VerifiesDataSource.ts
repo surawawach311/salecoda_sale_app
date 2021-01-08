@@ -42,4 +42,16 @@ export class VerifiesDataSource {
                 console.log(error);
             })
     }
+
+    static getProfile(): Promise<UserEntity> {
+        return httpClient
+            .get(`${baseURL}/v1/sellcoda/staffs/profile`)
+            .then((response) => {
+                return response.data
+            })
+            .catch((error) => {
+                console.log(error);
+
+            })
+    }
 }

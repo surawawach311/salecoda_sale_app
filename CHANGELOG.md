@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.6.0] - 2020-1-8
+- Get profile by token in Home Screen
+- Use territory from profile to get dealer
+
 ## Fixed [v1.5.2] - 2020-1-7
 - Modal bounce in delivery method
 

@@ -1,85 +1,99 @@
-import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  ImageBackground,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserLocalStorageService } from "../../services/UserLocalStorageService";
-import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import { HomeStackParamList } from "../../navigations/HomeNavigator";
+import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
+import { UserEntity } from "../../entities/userEntity";
+import { AppLoading } from "expo";
 
-type HomeScreenRouteProp = RouteProp<HomeStackParamList, "Purchase">;
+type HomeScreenRouteProp = RouteProp<HomeStackParamList, "Home">;
 
-type HomeScreenNavigationProp = StackNavigationProp<
-  HomeStackParamList,
-  "Purchase"
->;
+type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList, "Home">;
 type Props = {
   route: HomeScreenRouteProp;
   navigation: HomeScreenNavigationProp;
 };
 
 const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
+  const [profile, setProfile] = useState<UserEntity>();
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const getProfile = async () => {
+    await VerifiesDataSource.getProfile().then((respone: UserEntity) => {
+      setProfile(respone);
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.profileWarp}>
-        <Image
-          style={styles.bgImage}
-          source={require("../../../assets/bgHome.png")}
-        />
-        <View style={styles.innerTextContainer}>
-          <Text style={styles.WelcomeHeader}>Hello, Boom</Text>
-          <Text style={styles.positionText}>Sale, Marketing executive</Text>
-        </View>
-        <View style={styles.innerImgContainer}>
-          <Image
-            style={styles.imageProfile}
-            source={require("../../../assets/image-profile-default.png")}
-          />
-        </View>
-      </View>
-      <View style={styles.menuWarp}>
-        <TouchableOpacity
-          // style={{ justifyContent: "center", backgroundColor: "red" }}
-          onPress={() => {
-            navigation.navigate("Purchase");
-          }}
-        >
-          <Image
-            style={styles.menuIcon}
-            source={require("../../../assets/menu-icon/order.png")}
-          />
-          <Text style={styles.textMenu}>สั่งสินค้า</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            UserLocalStorageService.deleteAccessToken();
-          }}
-        >
-          <Image
-            style={styles.menuIcon}
-            source={require("../../../assets/menu-icon/promotion.png")}
-          />
-          <Text style={styles.textMenu}>โปรโมชั่น</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            UserLocalStorageService.deleteAccessToken();
-          }}
-        >
-          <Image
-            style={styles.menuIcon}
-            source={require("../../../assets/menu-icon/shop.png")}
-          />
-          <Text style={styles.textMenu}>ร้านค้า</Text>
-        </TouchableOpacity>
-      </View>
+      {profile ? (
+        <>
+          <View style={styles.profileWarp}>
+            <Image
+              style={styles.bgImage}
+              source={require("../../../assets/bgHome.png")}
+            />
+            <View style={styles.innerTextContainer}>
+              <Text
+                style={styles.WelcomeHeader}
+              >{`Hello, ${profile.name}`}</Text>
+              <Text style={styles.positionText}>Sale, Marketing executive</Text>
+            </View>
+            <View style={styles.innerImgContainer}>
+              <Image
+                style={styles.imageProfile}
+                source={require("../../../assets/image-profile-default.png")}
+              />
+            </View>
+          </View>
+          <View style={styles.menuWarp}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Purchase", {
+                  screen: "ShopList",
+                  params: { territory: profile.territory },
+                });
+              }}
+            >
+              <Image
+                style={styles.menuIcon}
+                source={require("../../../assets/menu-icon/order.png")}
+              />
+              <Text style={styles.textMenu}>สั่งสินค้า</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                UserLocalStorageService.deleteAccessToken();
+              }}
+            >
+              <Image
+                style={styles.menuIcon}
+                source={require("../../../assets/menu-icon/promotion.png")}
+              />
+              <Text style={styles.textMenu}>โปรโมชั่น</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                UserLocalStorageService.deleteAccessToken();
+              }}
+            >
+              <Image
+                style={styles.menuIcon}
+                source={require("../../../assets/menu-icon/shop.png")}
+              />
+              <Text style={styles.textMenu}>ร้านค้า</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      ) : (
+        <AppLoading />
+      )}
     </View>
   );
 };

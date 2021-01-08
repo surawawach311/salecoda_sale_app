@@ -9,9 +9,10 @@ import { ProductEntity } from "../entities/ProductEntity";
 import ProductInfoScreen from "../screens/ProductInfoScreen/ProductInfoScreen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CartScreen from "../screens/CartScreen/CartScreen";
+import { UserEntity } from "../entities/userEntity";
 
 export type PurchaseStackParamList = {
-  ShopList: undefined;
+  ShopList: { territory: string };
   Shop: { shop: ShopEntity };
   ProductInfo: { product: ProductEntity; shop: ShopEntity };
   Cart: { shop: ShopEntity };
