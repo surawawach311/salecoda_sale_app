@@ -29,7 +29,6 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
           <List>
             <ListItem itemHeader>
               <Text
-                key={"A04"}
                 style={styles.textHeader}
               >{`ร้านค้าในเขต ${route.params.territory}`}</Text>
             </ListItem>
