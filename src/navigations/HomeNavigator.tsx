@@ -6,10 +6,12 @@ import NotificationScreen from "../screens/NotificationScreen/NotificationScreen
 import OrderScreen from "../screens/OrderScreen/OrderScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import HomeScreen from "../screens/HomeScreen/HomeSrceen";
+import { UserEntity } from "../entities/userEntity";
+
 
 export type HomeStackParamList = {
   Home: undefined;
-  Purchase: undefined;
+  Purchase: { territory: string };
 };
 const HomeNavigator: React.FC = () => {
   const Tab = createBottomTabNavigator();

@@ -3,9 +3,9 @@ import { ProductEntity } from "../entities/ProductEntity";
 import { ShopListEntity } from "../entities/ShopListEntity";
 import { httpClient } from "../services/HttpClient";
 export class ShopDataSource {
-    static getShop(): Promise<ShopListEntity> {
+    static getShop(territory:string): Promise<ShopListEntity> {
         return httpClient
-            .get(`${baseURL}/v1/sellcoda/customers/dealers?territory=A04`)
+            .get(`${baseURL}/v1/sellcoda/customers/dealers?territory=${territory}`)
             .then(res => res.data)
             .catch(error => console.log(error))
     }
