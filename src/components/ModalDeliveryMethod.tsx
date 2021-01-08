@@ -80,14 +80,14 @@ export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
               value={remark}
             />
           </View>
-          <SafeAreaView style={styled.deliveryButtonContainer}>
+          <View style={styled.deliveryButtonContainer}>
             <TouchableOpacity
               style={styled.deliveryButton}
               onPress={() => onOk(remark, shop)}
             >
               <Text style={styled.deliveryButtonText}>ยืนยัน</Text>
             </TouchableOpacity>
-          </SafeAreaView>
+          </View>
         </View>
       </KeyboardAvoidingView>
     </Modal>

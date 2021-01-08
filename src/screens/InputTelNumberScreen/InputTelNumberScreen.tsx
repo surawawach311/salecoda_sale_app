@@ -12,18 +12,32 @@ import {
 } from "react-native";
 import { InputPhone } from "../../components/InputPhone";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps } from "@react-navigation/stack";
 import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
 
-type InputOtpScreenNavigationProp = StackScreenProps<AppAuthParamList, "InputTelNumber">
+type InputOtpScreenNavigationProp = StackScreenProps<
+  AppAuthParamList,
+  "InputTelNumber"
+>;
 
-const InputTelNumberScreen = ({ navigation, route }: InputOtpScreenNavigationProp) => {
+const InputTelNumberScreen = ({
+  navigation,
+  route,
+}: InputOtpScreenNavigationProp) => {
   const [value, setValue] = React.useState<string>("");
   const [isError, setIsError] = React.useState(false);
 
+  const fillZero = (tel: string) => {
+    if (tel.length < 10) {
+      return `0${tel}`;
+    } else {
+      return tel;
+    }
+  };
 
   const verifyPhoneNo = (tel: string) => {
-    VerifiesDataSource.verifyPhoneNo(tel).then((res) => {
+    const telephoneNo = fillZero(tel);
+    VerifiesDataSource.verifyPhoneNo(telephoneNo).then((res) => {
       if (res == undefined) {
         setIsError(true);
       } else {
