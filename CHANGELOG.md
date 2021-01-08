@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fixed [v1.6.1] - 2020-1-8
+- Fixed position in shop screen
+
 ## Added [v1.6.0] - 2020-1-8
 - Get profile by token in Home Screen
 - Use territory from profile to get dealer
