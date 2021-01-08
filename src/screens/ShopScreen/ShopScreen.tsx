@@ -54,7 +54,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         <ButtonShop onPress={() => navigation.navigate("ShopList")} />
       </View>
       <View style={styles.wrapProduct}>
-        <ScrollView
+      <ScrollView
           contentContainerStyle={styles.grid}
           showsVerticalScrollIndicator={false}
         >
@@ -78,18 +78,18 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-      </View>
+      </View> 
     </Container>
   );
 };
 
 const styles = StyleSheet.create({
   wrapSearch: {
-    marginTop: 8,
-    flex: 0.2,
+    marginTop: 4,
+    height: 70, 
   },
   warpShopHeader: {
-    flex: 0.5,
+    height: 200, 
   },
   grid: {
     flexDirection: "row",
@@ -99,15 +99,12 @@ const styles = StyleSheet.create({
   shopInfo: { padding: 20 },
   wrapProduct: {
     flex: 1,
-    marginTop: "10%",
     flexDirection: "row",
   },
   warpChangeShop: {
     padding: 25,
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    top: "33%",
+    height: 50,
+    top: -50,
   },
   bgImage: {
     width: "100%",
