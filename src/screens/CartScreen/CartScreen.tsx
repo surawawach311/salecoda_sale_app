@@ -239,6 +239,20 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         ) : (
           <></>
         )}
+        <TouchableOpacity
+          style={styled.confirmOrderButton}
+          onPress={() => {
+            setModalDelivery(!modalDelivery);
+          }}
+        >
+          <View style={styled.iconCartWarp}>
+            <Image
+              style={styled.iconLocation}
+              source={require("../../../assets/order-cart.png")}
+            />
+          </View>
+          <Text style={styled.textconfirmOrderButton}>ยืนยันคำสั่งซื้อ</Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
@@ -365,5 +379,22 @@ const styled = StyleSheet.create({
   },
   methodChoiceContainer: {
     flexDirection: "row",
+  },
+  confirmOrderButton: {
+    flexDirection: "row",
+    borderRadius: 6,
+    backgroundColor: "#4C95FF",
+    padding: 10,
+    margin: 20,
+    alignItems: "center",
+  },
+  iconCartWarp: {
+    marginRight: 100,
+    marginLeft: 10,
+  },
+  textconfirmOrderButton: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
