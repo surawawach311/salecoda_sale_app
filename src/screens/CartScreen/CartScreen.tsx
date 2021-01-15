@@ -19,16 +19,21 @@ import { ModalDeliveryMethod } from "../../components/ModalDeliveryMethod";
 import { values } from "lodash";
 import { ShopEntity } from "../../entities/ShopEntity";
 import Dash from "react-native-dash";
+import { OrderItemModel, OrderModel } from "../../models/OrderModel";
+import { CartEntity, ItemCart } from "../../entities/CartEntity";
+import { OrderFacade } from "../../facade/OrderFacade";
+import { OrderEntity } from "../../entities/OrderEntity";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
 const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [modalDelivery, setModalDelivery] = useState(false);
   const [remark, setRemark] = useState("");
-  const [deliveryPoint, setDeliveryPoint] = useState<ShopEntity>();
+  const [shippingAddress, setShippingAddress] = useState<ShopEntity>();
   const [] = useState<CartProductEntity[]>([]);
-  const [cart, setCart] = useState<any>();
+  const [cart, setCart] = useState<CartEntity>();
   const [quantity, setQuantity] = useState(0);
+
   useEffect(() => {
     getCart();
   }, []);
@@ -37,7 +42,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     return "฿" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   };
   const getCart = async () => {
-    CartDataSource.getCartByShop(route.params.shop.id).then((res) =>
+    CartDataSource.getCartByShop(route.params.shop.id).then((res: CartEntity) =>
       setCart(res)
     );
   };
@@ -47,7 +52,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       route.params.shop.id,
       itemId,
       quantity + 1
-    ).then((res) => setCart(res));
+    ).then((res: CartEntity) => setCart(res));
   };
 
   const decreaseProduct = async (itemId: string, quantity: number) => {
@@ -55,7 +60,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       route.params.shop.id,
       itemId,
       quantity - 1
-    ).then((res) => setCart(res));
+    ).then((res: CartEntity) => setCart(res));
   };
   const adjustProduct = async (itemId: string, quantity: number) => {
     const regexp = /^[0-9\b]+$/;
@@ -64,16 +69,17 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         route.params.shop.id,
         itemId,
         quantity
-      ).then((res) => setCart(res));
+      ).then((res: CartEntity) => setCart(res));
     } else {
       alert("Number Only");
     }
   };
 
   const removeItem = async (itemId: string) => {
-    CartDataSource.removeItem(route.params.shop.id, itemId).then((res) =>
-      setCart(res)
-    );
+    CartDataSource.removeItem(
+      route.params.shop.id,
+      itemId
+    ).then((res: CartEntity) => setCart(res));
   };
 
   const handleCloseModal = () => {
@@ -81,9 +87,25 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const handleOkDeliveryModal = (value: string, shop: ShopEntity) => {
-    setDeliveryPoint(shop);
+    setShippingAddress(shop);
     setRemark(value);
     setModalDelivery(false);
+  };
+
+  const confirmOrder = (
+    shop: ShopEntity,
+    shippingAddress?: any,
+    cart?: CartEntity
+  ) => {
+    if (shippingAddress && cart) {
+      OrderFacade.confirmOrder(shop, shippingAddress, cart).then(
+        (res: OrderEntity) => {
+          navigation.navigate("OrderSuccess", { data: res });
+        }
+      );
+    } else {
+      alert("กรุณาเลือกสถานที่จัดส่ง");
+    }
   };
 
   return (
@@ -100,7 +122,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styled.productContainer}>
               <Text style={styled.textProduct}>สินค้า</Text>
-              {cart.items.map((item: CartProductEntity, index: number) => {
+              {cart.items.map((item: ItemCart, index: number) => {
                 return (
                   <ProductCartCard
                     key={item.title}
@@ -185,7 +207,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
             <View style={styled.warpDelivery}>
               <View style={styled.headerDeliveryMethodtContainer}>
                 <Text style={styled.textHeaderPayment}>ตัวเลือกการจัดส่ง</Text>
-                {!deliveryPoint ? null : (
+                {!shippingAddress ? null : (
                   <TouchableOpacity
                     onPress={() => setModalDelivery(!modalDelivery)}
                   >
@@ -194,7 +216,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 )}
               </View>
               <View style={styled.line} />
-              {!deliveryPoint ? (
+              {!shippingAddress ? (
                 <TouchableOpacity
                   style={styled.buttonDelivery}
                   onPress={() => {
@@ -217,10 +239,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     <Text style={styled.textDeliveryMethod}>จัดส่งที่ร้าน</Text>
                     <Text style={styled.textDeliveryPoint}>
                       <Text style={styled.deliveryTextShopName}>
-                        {`${deliveryPoint.name} \n`}
+                        {`${shippingAddress.name} \n`}
                       </Text>
-                      <Text>{`${deliveryPoint?.address} ตำบล${deliveryPoint.sub_district} \n`}</Text>
-                      <Text>{`อำเภอ${deliveryPoint.district} ${deliveryPoint.province} ${deliveryPoint.post_code}`}</Text>
+                      <Text>{`${shippingAddress.address} ตำบล${shippingAddress.sub_district} \n`}</Text>
+                      <Text>{`อำเภอ${shippingAddress.district} ${shippingAddress.province} ${shippingAddress.post_code}`}</Text>
                     </Text>
                     {!remark ? null : (
                       <Text style={styled.textRemark}>หมายเหตุ: {remark}</Text>
@@ -242,7 +264,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         <TouchableOpacity
           style={styled.confirmOrderButton}
           onPress={() => {
-            setModalDelivery(!modalDelivery);
+            confirmOrder(route.params.shop, shippingAddress, cart);
           }}
         >
           <View style={styled.iconCartWarp}>

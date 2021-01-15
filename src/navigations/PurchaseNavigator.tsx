@@ -9,13 +9,16 @@ import { ProductEntity } from "../entities/ProductEntity";
 import ProductInfoScreen from "../screens/ProductInfoScreen/ProductInfoScreen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CartScreen from "../screens/CartScreen/CartScreen";
-import { UserEntity } from "../entities/userEntity";
+import OrderSuccessScreen from "../screens/OrderSuccessScreen/OrderSuccessScreen";
+import { OrderModel } from "../models/OrderModel";
+import { OrderEntity } from "../entities/OrderEntity";
 
 export type PurchaseStackParamList = {
   ShopList: { territory: string };
   Shop: { shop: ShopEntity };
   ProductInfo: { product: ProductEntity; shop: ShopEntity };
   Cart: { shop: ShopEntity };
+  OrderSuccess: { data: OrderEntity };
 };
 
 const PurchaseNavigator: React.FC = () => {
@@ -74,6 +77,11 @@ const PurchaseNavigator: React.FC = () => {
         name="Cart"
         component={CartScreen}
         options={{ title: "ตะกร้าสินค้า" }}
+      />
+      <PurchaseStack.Screen
+        name="OrderSuccess"
+        component={OrderSuccessScreen}
+        options={{ headerShown: false }}
       />
     </PurchaseStack.Navigator>
   );
