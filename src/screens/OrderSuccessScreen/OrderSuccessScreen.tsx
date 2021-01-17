@@ -3,29 +3,34 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import Dash from "react-native-dash";
+import { currencyFormat } from "../../utilities/CurrencyFormat";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 type OrderSuccessScreenRouteProp = StackScreenProps<
   PurchaseStackParamList,
   "OrderSuccess"
 >;
 
-const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
+const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({navigation,
   route,
 }) => {
   return (
     <View style={styled.container}>
       <View style={styled.headerWarp}>
-        <View style={styled.iconCloseContainer}>
+        {console.log(route.params.data)}
+        <TouchableOpacity style={styled.iconCloseContainer} onPress={()=>navigation.navigate("Home")}>
           <Image
             style={styled.iconClose}
             source={require("../../../assets/cancle.png")}
           />
-        </View>
+        </TouchableOpacity>
         <Text style={styled.textheader}>รอยืนยันคำสั่งซื้อ</Text>
       </View>
       <View style={styled.bodyContainer}>
         <View style={styled.shopNameWarp}>
-          <Text style={styled.textShopName}>บริษัท แสงศิริพร จำกัด</Text>
+          <Text style={styled.textShopName}>
+            {route.params.data.shipping_address.name}
+          </Text>
         </View>
         <View style={styled.iconWaitWarp}>
           <Image
@@ -63,7 +68,9 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
               <Text
                 style={styled.textProduct}
               >{`${item.title} ${item.quantity}x(${item.unit})`}</Text>
-              <Text style={styled.textProduct}>{`฿${item.price}`}</Text>
+              <Text style={styled.textProduct}>
+                {currencyFormat(item.price)}
+              </Text>
             </View>
           );
         })}
@@ -77,18 +84,18 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
         <View style={styled.productTextWarp}>
           <Text style={styled.textPrice}>ราคาก่อนลด</Text>
           <Text style={styled.textPrice}>
-            {route.params.data.before_discount}
+            {currencyFormat(route.params.data.before_discount)}
           </Text>
         </View>
         <View style={styled.productTextWarp}>
           <Text style={styled.textPrice}>ส่วนลดรวม</Text>
           <Text style={styled.textPrice}>
-            {route.params.data.total_discount}
+            {currencyFormat(route.params.data.total_discount)}
           </Text>
         </View>
         <View style={styled.productTextWarp}>
           <Text style={styled.textLabelTotal}>ราคารวม</Text>
-          <Text style={styled.textTotal}>{route.params.data.total_price}</Text>
+          <Text style={styled.textTotal}>{currencyFormat(route.params.data.total_price)}</Text>
         </View>
         <Dash
           dashGap={2}
@@ -96,6 +103,31 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
           dashThickness={1}
           style={styled.lineDash}
           dashColor="#C8CDD6"
+        />
+        <View style={{ marginTop: 10 }}>
+          <Text style={styled.textProductHeader}>ของแถมที่ได้รับ</Text>
+          <Image
+            style={{
+              width: 52,
+              height: 52,
+              resizeMode: "contain",
+              alignSelf: "center",
+            }}
+            source={require("../../../assets/box-empty.png")}
+          />
+          <Text style={{ alignSelf: "center", color: "#C2C6CE" }}>
+            ไม่มีของแถมที่ได้รับ
+          </Text>
+        </View>
+      </View>
+      <View style={{ marginHorizontal: 20 }}>
+        <Image
+          style={{
+            height: 23,
+            width: "100%",
+            resizeMode: "cover",
+          }}
+          source={require("../../../assets/bill.png")}
         />
       </View>
     </View>
@@ -122,10 +154,10 @@ const styled = StyleSheet.create({
   bodyContainer: {
     backgroundColor: "#FFF",
     marginTop: 12,
-    margin: 20,
-    borderRadius:6,
-    // borderTopLeftRadius: 6,
-    // borderTopRightRadius: 6,
+    marginHorizontal: 20,
+    // borderRadius:6,
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
     padding: 15,
   },
   shopNameWarp: {
@@ -168,7 +200,7 @@ const styled = StyleSheet.create({
   textProductHeader: { fontSize: 18, fontWeight: "bold" },
   productTextWarp: {
     marginTop: 10,
-    marginVertical: 3,
+    // marginVertical: 3,
     flexDirection: "row",
     justifyContent: "space-between",
   },
