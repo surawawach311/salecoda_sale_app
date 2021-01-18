@@ -6,7 +6,7 @@ export interface CartEntity {
     available_promotions: PromotionCart[]
     applied_promotions: AppliedPromotionCart[]
     available_payments: []
-    selected_payment: string
+    selected_payment: paymentCartEntity
     before_discount: number
     total_discount: number
     total_price: number
@@ -45,4 +45,12 @@ export interface AppliedPromotionCart {
 export interface QuantityWithUnit {
     quantity: number
     unit: string
+}
+
+export interface paymentCartEntity {
+    discount_rate: number | undefined
+    due_date: number | undefined
+    id: string
+    name: string
+    remain_credit: number
 }

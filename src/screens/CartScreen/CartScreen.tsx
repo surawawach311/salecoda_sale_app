@@ -13,14 +13,22 @@ import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import ProductCartCard from "../../components/ProductCartCard";
 import InputNumber from "../../components/InputNumber";
 import { CartDataSource } from "../../datasource/CartDataSource";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  ScrollView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import { CartProductEntity } from "../../entities/CartProductEntity";
 import { ModalDeliveryMethod } from "../../components/ModalDeliveryMethod";
 import { values } from "lodash";
 import { ShopEntity } from "../../entities/ShopEntity";
 import Dash from "react-native-dash";
 import { OrderItemModel, OrderModel } from "../../models/OrderModel";
-import { CartEntity, ItemCart } from "../../entities/CartEntity";
+import {
+  CartEntity,
+  ItemCart,
+  paymentCartEntity,
+} from "../../entities/CartEntity";
 import { OrderFacade } from "../../facade/OrderFacade";
 import { OrderEntity } from "../../entities/OrderEntity";
 
@@ -30,12 +38,16 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [modalDelivery, setModalDelivery] = useState(false);
   const [remark, setRemark] = useState("");
   const [shippingAddress, setShippingAddress] = useState<ShopEntity>();
-  const [] = useState<CartProductEntity[]>([]);
   const [cart, setCart] = useState<CartEntity>();
   const [quantity, setQuantity] = useState(0);
+  const [payment, setPayment] = useState<string | undefined>();
 
   useEffect(() => {
     getCart();
+    if (cart?.selected_payment.id != undefined) {
+      setPayment(cart?.selected_payment.id)
+    }
+    
   }, []);
 
   const currencyFormat = (num: number) => {
@@ -90,6 +102,21 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     setShippingAddress(shop);
     setRemark(value);
     setModalDelivery(false);
+  };
+  const handlePayment = (payment: string) => {
+    if (payment == "cash") {
+      setPayment("cash");
+      CartDataSource.calculate(
+        route.params.shop.id,
+        payment
+      ).then((res: CartEntity) => setCart(res));
+    } else {
+      setPayment("credit");
+      CartDataSource.calculate(
+        route.params.shop.id,
+        payment
+      ).then((res: CartEntity) => setCart(res));
+    }
   };
 
   const confirmOrder = (
@@ -154,22 +181,45 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
             <View style={styled.paymentContainer}>
               <Text style={styled.textHeaderPayment}>วิธีชำระเงิน</Text>
               <View style={styled.paymentMethod}>
-                {cart.available_payments.map((method: any) => {
+                {cart.available_payments.map((method: paymentCartEntity) => {
                   return method.name == "เงินสด" ? (
                     <View
                       key={method.name}
                       style={styled.methodChoiceContainer}
                     >
-                      <View style={styled.iconPin} />
+                      <TouchableWithoutFeedback
+                        onPress={() => handlePayment("cash")}
+                      >
+                        {payment == "cash" ? (
+                          <View style={styled.iconPin} />
+                        ) : (
+                          <View style={styled.iconUnPin} />
+                        )}
+                      </TouchableWithoutFeedback>
                       <Text style={styled.textBodyPayment}>
                         {method.name} (รับส่วนลดเพิ่ม {method.discount_rate}%)
                       </Text>
                     </View>
-                  ) : method.remain_credit ? (
-                    <Text style={styled.textBodyPayment}>
-                      {method.name} (คงเหลือ {method.remain_credit})
-                    </Text>
-                  ) : null;
+                  ) : (
+                    <View
+                      key={method.name}
+                      style={styled.methodChoiceContainer}
+                    >
+                      <TouchableWithoutFeedback
+                        onPress={() => handlePayment("credit")}
+                      >
+                        {payment == "credit" ? (
+                          <View style={styled.iconPin} />
+                        ) : (
+                          <View style={styled.iconUnPin} />
+                        )}
+                      </TouchableWithoutFeedback>
+
+                      <Text style={styled.textBodyPayment}>
+                        {method.name} (คงเหลือ {method.remain_credit})
+                      </Text>
+                    </View>
+                  );
                 })}
               </View>
             </View>
@@ -399,8 +449,17 @@ const styled = StyleSheet.create({
     height: 20,
     marginRight: 5,
   },
+  iconUnPin: {
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
   methodChoiceContainer: {
     flexDirection: "row",
+    marginBottom: 5,
   },
   confirmOrderButton: {
     flexDirection: "row",

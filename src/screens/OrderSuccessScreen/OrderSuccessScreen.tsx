@@ -17,7 +17,6 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({navigation,
   return (
     <View style={styled.container}>
       <View style={styled.headerWarp}>
-        {console.log(route.params.data)}
         <TouchableOpacity style={styled.iconCloseContainer} onPress={()=>navigation.navigate("Home")}>
           <Image
             style={styled.iconClose}
