@@ -31,4 +31,15 @@ export class CartDataSource {
             .then(res => res.data)
             .catch(error => console.log(error))
     }
+
+    static calculate(shopId: string, payment: string) {
+        const data = {
+            action: "calculate",
+            payment_method: payment,
+        }
+        return httpClient
+            .post(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`, data)
+            .then(res => res.data)
+            .catch(error => console.log(error))
+    }
 }

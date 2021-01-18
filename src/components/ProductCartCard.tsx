@@ -29,13 +29,20 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
   packingSize,
   onDelete,
 }) => {
-   const currencyFormat = (num: number) => {
+  const currencyFormat = (num: number) => {
     return "฿" + num.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   };
   return (
     <View style={styles.contianer}>
       <View style={styles.warpImg}>
-        <Image style={styles.img} source={{ uri: image }} />
+        {image != "" ? (
+          <Image style={styles.img} source={{ uri: image }} />
+        ) : (
+          <Image
+            style={styles.img}
+            source={require("../../assets/empty-product.png")}
+          />
+        )}
       </View>
       <View style={styles.warpInfo}>
         <View style={styles.warpTitle}>

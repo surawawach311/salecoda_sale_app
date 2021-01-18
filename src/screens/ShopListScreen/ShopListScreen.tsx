@@ -9,7 +9,10 @@ import { AppLoading } from "expo";
 import { StackScreenProps } from "@react-navigation/stack";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 
-type ShopListScreenRouteProp = StackScreenProps<PurchaseStackParamList, "ShopList">;
+type ShopListScreenRouteProp = StackScreenProps<
+  PurchaseStackParamList,
+  "ShopList"
+>;
 
 const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
   navigation,
@@ -19,12 +22,16 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
   const [shopData, setShopData] = useState<ShopEntity[]>();
 
   useEffect(() => {
-    ShopFacade.getShopListData(route.params.territory).then((res) => setShopData(res));
+    ShopFacade.getShopListData(route.params.territory).then((res) =>
+      setShopData(res)
+    );
   }, []);
 
   return (
     <View style={styles.container}>
-      {route.params != undefined ? (
+      {route.params != undefined &&
+      shopData != undefined &&
+      shopData.length > 0 ? (
         <ScrollView>
           <List>
             <ListItem itemHeader>
