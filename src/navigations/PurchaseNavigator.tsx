@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image, StyleSheet, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import ShopListScreen from "../screens/ShopListScreen/ShopListScreen";
@@ -10,8 +10,9 @@ import ProductInfoScreen from "../screens/ProductInfoScreen/ProductInfoScreen";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import CartScreen from "../screens/CartScreen/CartScreen";
 import OrderSuccessScreen from "../screens/OrderSuccessScreen/OrderSuccessScreen";
-import { OrderModel } from "../models/OrderModel";
 import { OrderEntity } from "../entities/OrderEntity";
+import OrderSuccessDetail from "../screens/OrderSuccessScreenDetail/OrderSuccessScreenDetail";
+import { ThaiDateFormat } from "../utilities/ThaiDateFormat";
 
 export type PurchaseStackParamList = {
   ShopList: { territory: string };
@@ -19,6 +20,7 @@ export type PurchaseStackParamList = {
   ProductInfo: { product: ProductEntity; shop: ShopEntity };
   Cart: { shop: ShopEntity };
   OrderSuccess: { data: OrderEntity };
+  SuccessDetail: { data: OrderEntity };
 };
 
 const PurchaseNavigator: React.FC = () => {
@@ -82,6 +84,26 @@ const PurchaseNavigator: React.FC = () => {
         name="OrderSuccess"
         component={OrderSuccessScreen}
         options={{ headerShown: false }}
+      />
+      <PurchaseStack.Screen
+        name="SuccessDetail"
+        component={OrderSuccessDetail}
+        options={({ navigation, route }) => ({
+          headerTitle: <Text>{ThaiDateFormat(route.params.data.created)}</Text>,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate("Shop")}>
+              <Image
+                style={{
+                  marginLeft: 15,
+                  width: 15,
+                  height: 28,
+                  resizeMode: "contain",
+                }}
+                source={require("../../assets/close.png")}
+              />
+            </TouchableOpacity>
+          ),
+        })}
       />
     </PurchaseStack.Navigator>
   );

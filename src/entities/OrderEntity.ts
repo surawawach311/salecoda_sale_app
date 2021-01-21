@@ -33,6 +33,7 @@ export interface OrderItemEnitity {
     unit: string
     cover: string
     original_price: string
+    packing_size: string
 }
 
 export interface ShippingAdressEntity {

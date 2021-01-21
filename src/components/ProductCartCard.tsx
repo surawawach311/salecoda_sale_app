@@ -1,19 +1,27 @@
 import React from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ViewPagerAndroidBase,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { currencyFormat } from "../utilities/CurrencyFormat";
 
 interface ProductCartCardProps {
   children?: React.ReactNode;
   title: string;
   pricePerUnit: number;
   pricePerVolume?: number;
-  volumeUnit: string;
-  saleUnit: string;
+  volumeUnit?: string;
+  saleUnit?: string;
   priceTotal: number;
   image: string;
   quantity: number;
-  packingSize: string;
-  onDelete: () => void;
+  packingSize?: string;
+  onDelete?: () => void;
+  mode: string;
 }
 
 const ProductCartCard: React.FC<ProductCartCardProps> = ({
@@ -28,10 +36,8 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
   priceTotal,
   packingSize,
   onDelete,
+  mode,
 }) => {
-  const currencyFormat = (num: number) => {
-    return "฿" + num.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-  };
   return (
     <View style={styles.contianer}>
       <View style={styles.warpImg}>
@@ -47,24 +53,36 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
       <View style={styles.warpInfo}>
         <View style={styles.warpTitle}>
           <Text style={styles.textTitle}>{title}</Text>
-          <TouchableOpacity onPress={onDelete}>
-            <Image
-              style={styles.imgDelete}
-              source={require("../../assets/delete.png")}
-            />
-          </TouchableOpacity>
+          {mode != "show" ? (
+            <TouchableOpacity onPress={onDelete}>
+              <Image
+                style={styles.imgDelete}
+                source={require("../../assets/delete.png")}
+              />
+            </TouchableOpacity>
+          ) : null}
         </View>
-        <Text style={styles.textPerVolum}>
-          {`฿${pricePerVolume}/${volumeUnit}`}
-        </Text>
-        <Text
-          style={styles.textTotal}
-        >{`${packingSize} | ฿ ${pricePerUnit} ${saleUnit}`}</Text>
-        <Text>
-          <Text style={styles.textPriceUnit}>
-            {`฿${pricePerUnit} x ${quantity} ${saleUnit}`}
+        {mode != "show" ? (
+          <Text style={styles.textPerVolum}>
+            {pricePerVolume
+              ? `${currencyFormat(pricePerVolume)}/${volumeUnit}`
+              : null}
           </Text>
-        </Text>
+        ) : null}
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={styles.textTotal}>{`${packingSize} | ${currencyFormat(
+            pricePerUnit
+          )}/${saleUnit}`}</Text>
+          {mode != "show" ? null : <Text>{`${quantity}x(${saleUnit})`}</Text>}
+        </View>
+        {mode != "show" ? (
+          <Text>
+            <Text style={styles.textPriceUnit}>
+              {`${currencyFormat(pricePerUnit)} x ${quantity} ${saleUnit}`}
+            </Text>
+          </Text>
+        ) : null}
+
         <View style={styles.warpQuantity}>
           {children}
           <Text style={styles.textPriceTotal}>

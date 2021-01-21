@@ -16,7 +16,8 @@ export class OrderFacade {
                 quantity: item.quantity,
                 cover: item.image,
                 desc: item.desc,
-                unit: item.sale_unit
+                unit: item.sale_unit,
+                packing_size: item.packing_size
             }
         })
 
@@ -27,7 +28,9 @@ export class OrderFacade {
             before_discount: cart.before_discount,
             total_discount: cart.total_discount,
             total_price: cart.total_price,
-            payment_method: "cash",
+            premium_memo: [],
+            discount_memo: [],
+            payment_method: cart.selected_payment.id,
             shipping_method: "delivery",
             shipping_address: {
                 name: shippingAddress.name,
@@ -39,8 +42,6 @@ export class OrderFacade {
                 post_code: shippingAddress.post_code
             }
         }
-
         return OrderDataSource.comfirmOrder(order)
-
     }
 }
