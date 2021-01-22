@@ -5,19 +5,24 @@ import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import Dash from "react-native-dash";
 import { currencyFormat } from "../../utilities/CurrencyFormat";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { OrderItemEnitity } from "../../entities/OrderEntity";
 
 type OrderSuccessScreenRouteProp = StackScreenProps<
   PurchaseStackParamList,
   "OrderSuccess"
 >;
 
-const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({navigation,
+const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
+  navigation,
   route,
 }) => {
   return (
     <View style={styled.container}>
       <View style={styled.headerWarp}>
-        <TouchableOpacity style={styled.iconCloseContainer} onPress={()=>navigation.navigate("Home")}>
+        <TouchableOpacity
+          style={styled.iconCloseContainer}
+          onPress={() => navigation.navigate("Home")}
+        >
           <Image
             style={styled.iconClose}
             source={require("../../../assets/cancle.png")}
@@ -63,7 +68,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({navigation,
 
         {route.params.data.items.map((item) => {
           return (
-            <View style={styled.productTextWarp}>
+            <View key={item.id} style={styled.productTextWarp}>
               <Text
                 style={styled.textProduct}
               >{`${item.title} ${item.quantity}x(${item.unit})`}</Text>
@@ -94,7 +99,9 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({navigation,
         </View>
         <View style={styled.productTextWarp}>
           <Text style={styled.textLabelTotal}>ราคารวม</Text>
-          <Text style={styled.textTotal}>{currencyFormat(route.params.data.total_price)}</Text>
+          <Text style={styled.textTotal}>
+            {currencyFormat(route.params.data.total_price)}
+          </Text>
         </View>
         <Dash
           dashGap={2}
@@ -118,6 +125,16 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({navigation,
             ไม่มีของแถมที่ได้รับ
           </Text>
         </View>
+        <TouchableOpacity
+          style={{ marginTop: 50 }}
+          onPress={() =>
+            navigation.navigate("SuccessDetail", { data: route.params.data })
+          }
+        >
+          <Text style={{ color: "#616A7B", alignSelf: "center" }}>
+            ดูรายละเอียดคำสั่งซื้อนี้
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={{ marginHorizontal: 20 }}>
         <Image

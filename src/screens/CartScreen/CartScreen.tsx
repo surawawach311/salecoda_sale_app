@@ -18,12 +18,9 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
-import { CartProductEntity } from "../../entities/CartProductEntity";
 import { ModalDeliveryMethod } from "../../components/ModalDeliveryMethod";
-import { values } from "lodash";
 import { ShopEntity } from "../../entities/ShopEntity";
 import Dash from "react-native-dash";
-import { OrderItemModel, OrderModel } from "../../models/OrderModel";
 import {
   CartEntity,
   ItemCart,
@@ -45,9 +42,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   useEffect(() => {
     getCart();
     if (cart?.selected_payment.id != undefined) {
-      setPayment(cart?.selected_payment.id)
+      setPayment(cart?.selected_payment.id);
     }
-    
   }, []);
 
   const currencyFormat = (num: number) => {
@@ -163,6 +159,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     quantity={item.quantity}
                     priceTotal={item.total_price}
                     onDelete={() => removeItem(item.id)}
+                    mode="cart"
                   >
                     <InputNumber
                       key={item.title}
@@ -216,7 +213,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       </TouchableWithoutFeedback>
 
                       <Text style={styled.textBodyPayment}>
-                        {method.name} (คงเหลือ {method.remain_credit})
+                        {method.name} (คงเหลือ{" "}
+                        {currencyFormat(method.remain_credit)})
                       </Text>
                     </View>
                   );

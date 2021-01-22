@@ -8,7 +8,6 @@ import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import HomeScreen from "../screens/HomeScreen/HomeSrceen";
 import { UserEntity } from "../entities/userEntity";
 
-
 export type HomeStackParamList = {
   Home: undefined;
   Purchase: { territory: string };
