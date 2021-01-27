@@ -11,6 +11,7 @@ import { UserEntity } from "../entities/userEntity";
 export type HomeStackParamList = {
   Home: undefined;
   Purchase: { territory: string };
+  Order: undefined;
 };
 const HomeNavigator: React.FC = () => {
   const Tab = createBottomTabNavigator();
