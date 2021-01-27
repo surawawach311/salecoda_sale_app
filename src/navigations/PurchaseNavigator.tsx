@@ -90,19 +90,6 @@ const PurchaseNavigator: React.FC = () => {
         component={OrderSuccessDetail}
         options={({ navigation, route }) => ({
           headerTitle: <Text>{ThaiDateFormat(route.params.data.created)}</Text>,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.navigate("Shop")}>
-              <Image
-                style={{
-                  marginLeft: 15,
-                  width: 15,
-                  height: 28,
-                  resizeMode: "contain",
-                }}
-                source={require("../../assets/close.png")}
-              />
-            </TouchableOpacity>
-          ),
         })}
       />
     </PurchaseStack.Navigator>
