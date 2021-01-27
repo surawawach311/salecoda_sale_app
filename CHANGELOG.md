@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.7.0] - 2020-1-27
+- Added order list Screen
+- Added order success screen
+
 ## Fixed [v1.6.1] - 2020-1-8
 - Fixed position in shop screen
 
