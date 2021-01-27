@@ -1,5 +1,6 @@
 import { baseURL } from "../config/develop-config";
 import { ProductEntity } from "../entities/ProductEntity";
+import { ShopEntity } from "../entities/ShopEntity";
 import { ShopListEntity } from "../entities/ShopListEntity";
 import { httpClient } from "../services/HttpClient";
 export class ShopDataSource {
@@ -12,7 +13,11 @@ export class ShopDataSource {
     static getProduct(shopId: string): Promise<ProductEntity[]> {
         return httpClient.get(`${baseURL}/v1/sellcoda/shops/${shopId}/products/prices?limit=10&company=icpl`)
             .then(res => res.data.products)
-            .catch(error => console.error(error)
-            )
+            .catch(error => console.error(error))
+    }
+    static getShopById(shopId: string): Promise<ShopEntity> {
+        return httpClient.get(`${baseURL}/v1/sellcoda/customers/dealers/${shopId}`)
+            .then(res => res.data)
+            .catch(error => console.error(error))
     }
 }

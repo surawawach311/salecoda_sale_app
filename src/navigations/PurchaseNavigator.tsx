@@ -16,7 +16,7 @@ import { ThaiDateFormat } from "../utilities/ThaiDateFormat";
 
 export type PurchaseStackParamList = {
   ShopList: { territory: string };
-  Shop: { shop: ShopEntity };
+  Shop: { shop?: ShopEntity };
   ProductInfo: { product: ProductEntity; shop: ShopEntity };
   Cart: { shop: ShopEntity };
   OrderSuccess: { data: OrderEntity };
@@ -90,19 +90,6 @@ const PurchaseNavigator: React.FC = () => {
         component={OrderSuccessDetail}
         options={({ navigation, route }) => ({
           headerTitle: <Text>{ThaiDateFormat(route.params.data.created)}</Text>,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.navigate("Shop")}>
-              <Image
-                style={{
-                  marginLeft: 15,
-                  width: 15,
-                  height: 28,
-                  resizeMode: "contain",
-                }}
-                source={require("../../assets/close.png")}
-              />
-            </TouchableOpacity>
-          ),
         })}
       />
     </PurchaseStack.Navigator>

@@ -1,3 +1,5 @@
+import { ShopEntity } from "./ShopEntity";
+
 export interface OrderEntity {
 
     id: string
@@ -20,6 +22,7 @@ export interface OrderEntity {
     created_by: string
     updated: string
     created: string
+    buyer: ShopEntity
 
 }
 

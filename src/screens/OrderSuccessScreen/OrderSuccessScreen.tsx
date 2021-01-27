@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
@@ -6,6 +6,9 @@ import Dash from "react-native-dash";
 import { currencyFormat } from "../../utilities/CurrencyFormat";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { OrderItemEnitity } from "../../entities/OrderEntity";
+import { ShopDataSource } from "../../datasource/ShopDataSource";
+import { ShopEntity } from "../../entities/ShopEntity";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 type OrderSuccessScreenRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -16,12 +19,24 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
   navigation,
   route,
 }) => {
+  const [shop, setShop] = useState<ShopEntity>();
+
+  useEffect(() => {
+    getShopInfo();
+  }, []);
+
+  const getShopInfo = () => {
+    ShopDataSource.getShopById(
+      route.params.data.buyer_id
+    ).then((res: ShopEntity) => setShop(res));
+  };
+
   return (
     <View style={styled.container}>
       <View style={styled.headerWarp}>
         <TouchableOpacity
           style={styled.iconCloseContainer}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("Shop", { shop: shop })}
         >
           <Image
             style={styled.iconClose}
@@ -32,9 +47,16 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
       </View>
       <View style={styled.bodyContainer}>
         <View style={styled.shopNameWarp}>
-          <Text style={styled.textShopName}>
-            {route.params.data.shipping_address.name}
-          </Text>
+          {console.log(shop)}
+          {shop ? (
+            <Text style={styled.textShopName}>{shop?.name}</Text>
+          ) : (
+            <SkeletonPlaceholder>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ width: 120, height: 30, borderRadius: 4 }} />
+              </View>
+            </SkeletonPlaceholder>
+          )}
         </View>
         <View style={styled.iconWaitWarp}>
           <Image
@@ -135,6 +157,16 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
             ดูรายละเอียดคำสั่งซื้อนี้
           </Text>
         </TouchableOpacity>
+        <View style={styled.deliveryButtonContainer}>
+          <TouchableOpacity
+            style={styled.deliveryButton}
+            onPress={() => {
+              navigation.navigate("Order");
+            }}
+          >
+            <Text style={styled.deliveryButtonText}>ดูคำสั่งซื้อทั้งหมด</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={{ marginHorizontal: 20 }}>
         <Image
@@ -224,4 +256,20 @@ const styled = StyleSheet.create({
   textPrice: { fontSize: 16, color: "#6B7995" },
   textLabelTotal: { fontSize: 16, fontWeight: "bold" },
   textTotal: { fontSize: 20, fontWeight: "bold", color: "#4C95FF" },
+  deliveryButton: {
+    height: 50,
+    backgroundColor: "#4C95FF",
+    justifyContent: "center",
+    borderRadius: 8,
+  },
+  deliveryButtonText: {
+    color: "#FFF",
+    fontSize: 18,
+    alignSelf: "center",
+  },
+  deliveryButtonContainer: {
+    marginTop: "5%",
+    backgroundColor: "#FFFFFF",
+    width: "100%",
+  },
 });

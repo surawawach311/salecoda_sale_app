@@ -9,5 +9,11 @@ export class OrderDataSource {
             .then(res => res.data)
             .catch(error => console.log(error))
     }
+
+    static getAllOrder(): Promise<OrderEntity[]> {
+        return httpClient.get(`${baseURL}/v1/sellcoda/orders`)
+            .then(res => res.data.orders)
+            .catch(error => console.log(error))
+    }
 }
 
