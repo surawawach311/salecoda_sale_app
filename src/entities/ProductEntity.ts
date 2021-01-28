@@ -13,5 +13,6 @@ export interface ProductEntity {
     sale_unit: string,
     package_size: string,
     image: string,
-    company: string
+    company: string,
+    is_have_promotion: boolean
 }
