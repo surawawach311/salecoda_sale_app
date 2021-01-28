@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.8.0] - 2020-1-28
+- Added TagLabel component
+- Added Promo Tag to ProductCard
+
 ## Added [v1.7.0] - 2020-1-27
 - Added order list Screen
 - Added order success screen
