@@ -74,6 +74,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 productInfo={item.packing_size}
                 price={item.price_per_volume}
                 imagePath={item.image}
+                havePromo={item.is_have_promotion}
               />
             </TouchableOpacity>
           ))}
