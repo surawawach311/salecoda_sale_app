@@ -11,7 +11,7 @@ const TagLabel: React.FC<IProps> = ({ style, children }) => {
 
   return (
     <View style={{ flexDirection: "row" }}>
-      <View style={triangleStyle(combineStyles.height)} />
+      <View style={triangleStyle(combineStyles.height, combineStyles.backgroundColor)} />
       <View style={combineStyles}>
         {children}
         <View style={holeStyle(combineStyles.height)} />
@@ -32,7 +32,7 @@ const defaultStyles = StyleSheet.create({
   },
 });
 
-const triangleStyle: StyleProp<any> = (height: number) => {
+const triangleStyle: StyleProp<any> = (height: number, backgroundColor: ColorValue) => {
   return {
     width: 0,
     height: 0,
@@ -43,7 +43,7 @@ const triangleStyle: StyleProp<any> = (height: number) => {
     borderBottomWidth: height / 2,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
-    borderBottomColor: "#6D3DEF",
+    borderBottomColor: backgroundColor,
     transform: [{ rotate: "-90deg" }],
     right: -(height / 4),
     bottom: -(height / 4),
