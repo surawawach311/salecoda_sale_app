@@ -3,6 +3,8 @@ import { OrderModel, OrderItemModel } from "../models/OrderModel";
 import { CartEntity, ItemCart } from "../entities/CartEntity";
 import { OrderDataSource } from "../datasource/OrderDataSource";
 import { OrderEntity } from "../entities/OrderEntity";
+import _, { Dictionary } from "lodash";
+import { ShopOrderCardModel } from "../models/ShopOrderCard";
 
 export class OrderFacade {
 
@@ -43,5 +45,28 @@ export class OrderFacade {
             }
         }
         return OrderDataSource.comfirmOrder(order)
+    }
+    static getAllOrder(): Promise<Dictionary<OrderEntity[]>> {
+        return OrderDataSource.getAllOrder().then((orders: OrderEntity[]) => {
+            const groups = _.groupBy(orders, 'buyer.name');
+            return groups
+
+        });
+    }
+
+    static formatShopOrderCard() {
+        return OrderFacade.getAllOrder().then((res) => {
+            return Object.entries(res).map(([key, val]) => {
+                const data: ShopOrderCardModel = {
+                    id: val[0].buyer_id,
+                    name: key,
+                    territory: val[0].buyer.zone,
+                    province: val[0].buyer.province,
+                    totalOrder: val.length
+                }
+                return data
+            }
+            );
+        });
     }
 }

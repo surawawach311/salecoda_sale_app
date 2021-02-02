@@ -16,7 +16,7 @@ import { ThaiDateFormat } from "../utilities/ThaiDateFormat";
 
 export type PurchaseStackParamList = {
   ShopList: { territory: string };
-  Shop: { shop?: ShopEntity };
+  Shop: { shop: ShopEntity };
   ProductInfo: { product: ProductEntity; shop: ShopEntity };
   Cart: { shop: ShopEntity };
   OrderSuccess: { data: OrderEntity };
