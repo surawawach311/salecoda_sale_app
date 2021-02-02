@@ -29,7 +29,9 @@ const OrderCard: React.FC<OrderCardProps> = ({
         </View>
         <View style={styled.innerheaderRightCard}>
           <Text style={styled.detail}>ดูรายละเอียด</Text>
-          <Text style={styled.textDate}>{`${ThaiDateFormat(createDatetime)} ${ThaiTimeFormat(createDatetime)}`}</Text> 
+          <Text style={styled.textDate}>{`${ThaiDateFormat(
+            createDatetime
+          )} ${ThaiTimeFormat(createDatetime)}`}</Text>
           <View />
         </View>
       </View>
@@ -53,7 +55,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
         </View>
         <View style={styled.statusContainer}>
           <View style={styled.statusBadge}>
-            <Text style={styled.textStatusBadge}>รออนุมัติวงเงิน</Text>
+            <Text style={styled.textStatusBadge}>รอยืนยันคำสั่งซื้อ</Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image
@@ -84,7 +86,8 @@ const styled = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    margin: 20,
+    marginHorizontal: 20,
+    marginBottom: 15,
     padding: 20,
   },
   headerCard: { flexDirection: "row", justifyContent: "space-between" },
