@@ -8,4 +8,5 @@ export interface ShopEntity {
     post_code: string
     telephone: string
     territory: string
+    zone: string
 }
