@@ -10,6 +10,7 @@ export interface CartEntity {
     before_discount: number
     total_discount: number
     total_price: number
+    received_discounts :DiscountEntity[]
 }
 
 export interface ItemCart {
@@ -53,4 +54,17 @@ export interface paymentCartEntity {
     id: string
     name: string
     remain_credit: number
+}
+
+export interface DiscountEntity {
+    id: string
+    image: string
+    item_id: string
+    name: string
+    price: number
+    promotion_id: string
+    promotion_image: string
+    promotion_name: string
+    promotion_type: string
+    quantity: number
 }
