@@ -10,7 +10,7 @@ export interface CartEntity {
     before_discount: number
     total_discount: number
     total_price: number
-    received_discounts :DiscountEntity[]
+    received_discounts: DiscountEntity[]
 }
 
 export interface ItemCart {
@@ -67,4 +67,5 @@ export interface DiscountEntity {
     promotion_name: string
     promotion_type: string
     quantity: number
+    total: number
 }

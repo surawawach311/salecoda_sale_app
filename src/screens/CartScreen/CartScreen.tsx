@@ -23,6 +23,7 @@ import { ShopEntity } from "../../entities/ShopEntity";
 import Dash from "react-native-dash";
 import {
   CartEntity,
+  DiscountEntity,
   ItemCart,
   paymentCartEntity,
 } from "../../entities/CartEntity";
@@ -49,8 +50,11 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }, []);
 
   const getCart = async () => {
-    CartDataSource.getCartByShop(route.params.shop.id).then((res: CartEntity) =>
-      setCart(res)
+    CartDataSource.getCartByShop(route.params.shop.id).then(
+      (res: CartEntity) => {
+        console.log(res);
+        setCart(res);
+      }
     );
   };
 
@@ -157,13 +161,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         <View
           style={{
             flexDirection: "row",
-
             justifyContent: "flex-start",
             alignItems: "center",
             backgroundColor: "#FFFFFF",
           }}
         >
-          <Text style={{ fontSize: 16, color: "#6B7995" }}>{item.title}</Text>
+          <Text style={{ fontSize: 14, color: "#6B7995" }}>{item.title}</Text>
 
           {expanded ? (
             <Icon
@@ -198,39 +201,36 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     );
   };
   const _renderContent = () => {
-    return cart?.received_discounts
-      .filter((item) => item.item_id != null)
-      .map((item) => {
-        return (
-          <View
-            key={item.item_id}
+    return cart?.received_discounts.map((item) => {
+      return (
+        <View
+          key={item.id}
+          style={{
+            backgroundColor: "#FBFBFB",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingVertical: 5,
+          }}
+        >
+          <Text
             style={{
-              backgroundColor: "#FBFBFB",
-              // marginLeft: 10,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingVertical: 5,
+              fontSize: 14,
+              color: "rgba(156, 169, 197, 1)",
             }}
           >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(156, 169, 197, 1)",
-              }}
-            >
-              {item.item_id}
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(156, 169, 197, 1)",
-              }}
-            >
-              {currencyFormat(item.price)}
-            </Text>
-          </View>
-        );
-      });
+            {`${item.name} (${item.price}฿ x ${item.quantity} ลัง)`}
+          </Text>
+          <Text
+            style={{
+              fontSize: 14,
+              color: "rgba(156, 169, 197, 1)",
+            }}
+          >
+            {currencyFormat(item.total)}
+          </Text>
+        </View>
+      );
+    });
   };
 
   return (
@@ -343,14 +343,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 />
                 <View style={styled.totalPriceContainer}>
                   <View style={styled.warpPrice}>
-                    <Text style={styled.textBeforeTotal}>ราคาก่อนลด</Text>
+                    <Text style={styled.textDiscount}>ราคาก่อนลด</Text>
                     <Text style={styled.textBeforeDiscount}>
                       {currencyFormat(cart.before_discount)}
                     </Text>
                   </View>
                   {cashDiscount != 0 ? (
                     <View style={styled.warpPrice}>
-                      <Text style={styled.textBeforeTotal}>ส่วนลดเงินสด</Text>
+                      <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
                       <Text style={styled.textDiscountFromCash}>
                         {currencyFormat(cashDiscount)}
                       </Text>
@@ -363,7 +363,15 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     style={{ borderWidth: 0, paddingVertical: 5 }}
                   />
 
-                  <View style={styled.warpPrice}>
+                  <View
+                    style={{
+                      backgroundColor: "#FBFBFB",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginVertical: 5,
+                      padding: 5,
+                    }}
+                  >
                     <Text style={styled.textBeforeTotal}>ส่วนลดรวม</Text>
                     <Text style={styled.textTotalDiscount}>
                       {currencyFormat(cart.total_discount)}
@@ -404,7 +412,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         source={require("../../../assets/delivery.png")}
                       />
                       <Text style={styled.textButtonDelivery}>
-                        {" "}
                         เลือกการจัดส่ง
                       </Text>
                     </TouchableOpacity>
@@ -576,7 +583,7 @@ const styled = StyleSheet.create({
   },
   textDiscountFromProduct: {
     color: "rgba(58, 174, 73, 1)",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
   },
   textDiscountFromCash: {
@@ -589,6 +596,8 @@ const styled = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  textDiscount: { fontSize: 14, color: "#6B7995" },
+
   textBeforeTotal: { fontSize: 16, color: "#6B7995" },
   textLabelTotalPrice: { fontSize: 16, color: "#314364", fontWeight: "bold" },
   textTotalPrice: { fontSize: 20, color: "#4C95FF", fontWeight: "bold" },
