@@ -52,7 +52,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const getCart = async () => {
     CartDataSource.getCartByShop(route.params.shop.id).then(
       (res: CartEntity) => {
-        console.log(res);
         setCart(res);
       }
     );
