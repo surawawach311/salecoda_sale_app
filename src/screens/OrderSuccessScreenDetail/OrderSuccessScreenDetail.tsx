@@ -215,13 +215,61 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           />
           <View style={styled.emptyPremiumContainer}>
             <Text style={styled.textProductHeader}>ของแถมที่ได้รับ</Text>
-            <View>
-              <Image
-                style={styled.imgEmpty}
-                source={require("../../../assets/box-empty.png")}
-              />
-              <Text style={styled.textPremuimEmpty}>ไม่มีของแถมที่ได้รับ</Text>
-            </View>
+            {route.params.data.premium_memo.length > 0 ? (
+              <View style={{ marginTop: 10 }}>
+                {route.params.data.premium_memo.map((item) => {
+                  return (
+                    <View
+                      key={item.id}
+                      style={{
+                        borderRadius: 6,
+                        padding: 10,
+                        paddingLeft: 5,
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Image
+                        style={{
+                          width: 60,
+                          height: 60,
+                          resizeMode: "contain",
+                        }}
+                        source={{ uri: encodeURI(item.cover) }}
+                      />
+                      <View
+                        style={{
+                          marginLeft: 5,
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: "#616A7B",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={{ fontWeight: "bold", fontSize: 11 }}
+                        >{`${item.quantity} ลัง`}</Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            ) : (
+              <View>
+                <Image
+                  style={styled.imgEmpty}
+                  source={require("../../../assets/box-empty.png")}
+                />
+                <Text style={styled.textPremuimEmpty}>
+                  ไม่มีของแถมที่ได้รับ
+                </Text>
+              </View>
+            )}
           </View>
         </View>
         <View style={styled.footer}>

@@ -193,43 +193,45 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           {currencyFormat(
             cart?.received_discounts
               .filter((item) => item.item_id != null)
-              .reduce((sum, item) => sum + item.price, 0)
+              .reduce((sum, item) => sum + item.total, 0)
           )}
         </Text>
       </View>
     );
   };
   const _renderContent = () => {
-    return cart?.received_discounts.map((item) => {
-      return (
-        <View
-          key={item.id}
-          style={{
-            backgroundColor: "#FBFBFB",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingVertical: 5,
-          }}
-        >
-          <Text
+    return cart?.received_discounts
+      .filter((item) => item.item_id != null)
+      .map((item) => {
+        return (
+          <View
+            key={item.id}
             style={{
-              fontSize: 14,
-              color: "rgba(156, 169, 197, 1)",
+              backgroundColor: "#FBFBFB",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingVertical: 5,
             }}
           >
-            {`${item.name} (${item.price}฿ x ${item.quantity} ลัง)`}
-          </Text>
-          <Text
-            style={{
-              fontSize: 14,
-              color: "rgba(156, 169, 197, 1)",
-            }}
-          >
-            {currencyFormat(item.total)}
-          </Text>
-        </View>
-      );
-    });
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(156, 169, 197, 1)",
+              }}
+            >
+              {`${item.name} (${item.price}฿ x ${item.quantity} ลัง)`}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(156, 169, 197, 1)",
+              }}
+            >
+              {currencyFormat(item.total)}
+            </Text>
+          </View>
+        );
+      });
   };
 
   return (
@@ -277,6 +279,73 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           onBlur={() => adjustProduct(item.id, quantity)}
                         />
                       </ProductCartCard>
+                    );
+                  })}
+                </View>
+                <View
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    marginTop: 10,
+                    padding: 20,
+                  }}
+                >
+                  <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                    ของแถมที่ได้รับ
+                  </Text>
+                  {cart.available_premiums.map((item) => {
+                    return (
+                      <View
+                        key={item.id}
+                        style={{
+                          borderRadius: 6,
+                          backgroundColor: "#F9F9F9",
+                          width: 170,
+                          height: 80,
+                          marginTop: 10,
+                          padding: 10,
+                          paddingLeft: 5,
+                          flexDirection: "row",
+                        }}
+                      >
+                        <View
+                          style={{
+                            backgroundColor: "#FFFFFF",
+                            borderRadius: 4,
+                            width: 60,
+                            height: 60,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Image
+                            style={{
+                              width: 50,
+                              height: 50,
+                              resizeMode: "contain",
+                            }}
+                            source={{ uri: encodeURI(item.image) }}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            marginLeft: 5,
+                            justifyContent: "space-around",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: "#616A7B",
+                              fontWeight: "600",
+                            }}
+                          >
+                            {item.name}
+                          </Text>
+                          <Text
+                            style={{ fontWeight: "bold", fontSize: 11 }}
+                          >{`${item.quantity} ลัง`}</Text>
+                        </View>
+                      </View>
                     );
                   })}
                 </View>

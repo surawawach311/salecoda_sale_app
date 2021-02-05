@@ -11,7 +11,7 @@ export class ShopDataSource {
             .catch(error => console.log(error))
     }
     static getProduct(shopId: string): Promise<ProductEntity[]> {
-        return httpClient.get(`${baseURL}/v1/sellcoda/shops/${shopId}/products/prices?limit=10&company=icpl`)
+        return httpClient.get(`${baseURL}/v1/sellcoda/shops/${shopId}/products/prices?limit=100&company=icpl`)
             .then(res => res.data.products)
             .catch(error => console.error(error))
     }

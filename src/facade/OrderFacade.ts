@@ -1,8 +1,8 @@
 import { ShopEntity } from "../entities/ShopEntity";
 import { OrderModel, OrderItemModel } from "../models/OrderModel";
-import { CartEntity, ItemCart } from "../entities/CartEntity";
+import { CartEntity, ItemCart, PremiumEntity } from "../entities/CartEntity";
 import { OrderDataSource } from "../datasource/OrderDataSource";
-import { OrderEntity } from "../entities/OrderEntity";
+import { OrderEntity, PremiumOrderEntity } from "../entities/OrderEntity";
 import _, { Dictionary } from "lodash";
 import { ShopOrderCardModel } from "../models/ShopOrderCard";
 
@@ -23,6 +23,20 @@ export class OrderFacade {
             }
         })
 
+        let premium_items: PremiumOrderEntity[] = cart.available_premiums.map((item: PremiumEntity) => {
+            return {
+                id: item.id,
+                price: item.price,
+                quantity: item.quantity,
+                name: item.name,
+                cover: item.image,
+                promotion_id: item.promotion_id,
+                promotion_name: item.promotion_name,
+                promotion_image: item.promotion_image,
+                item_id: item.item_id
+            }
+        })
+
         let order: OrderModel = {
             seller_id: "icpl",
             buyer_id: shop.id,
@@ -30,8 +44,8 @@ export class OrderFacade {
             before_discount: cart.before_discount,
             total_discount: cart.total_discount,
             total_price: cart.total_price,
-            premium_memo: [],
-            discount_memo: [],
+            premium_memo: premium_items,
+            discount_memo: cart.received_discounts,
             payment_method: cart.selected_payment.id,
             shipping_method: "delivery",
             shipping_address: {
@@ -42,8 +56,10 @@ export class OrderFacade {
                 sub_district: shippingAddress.sub_district,
                 province: shippingAddress.province,
                 post_code: shippingAddress.post_code
-            }
+            },
+            special_request_discounts: cart.received_special_request_discounts
         }
+
         return OrderDataSource.comfirmOrder(order)
     }
     static getAllOrder(): Promise<Dictionary<OrderEntity[]>> {
