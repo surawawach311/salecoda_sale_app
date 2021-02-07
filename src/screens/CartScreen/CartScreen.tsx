@@ -282,73 +282,75 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     );
                   })}
                 </View>
-                <View
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    marginTop: 10,
-                    padding: 20,
-                  }}
-                >
-                  <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                    ของแถมที่ได้รับ
-                  </Text>
-                  {cart.available_premiums.map((item) => {
-                    return (
-                      <View
-                        key={item.id}
-                        style={{
-                          borderRadius: 6,
-                          backgroundColor: "#F9F9F9",
-                          width: 170,
-                          height: 80,
-                          marginTop: 10,
-                          padding: 10,
-                          paddingLeft: 5,
-                          flexDirection: "row",
-                        }}
-                      >
+                {cart.available_premiums.length > 0 ? (
+                  <View
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      marginTop: 10,
+                      padding: 20,
+                    }}
+                  >
+                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                      ของแถมที่ได้รับ
+                    </Text>
+                    {cart.available_premiums.map((item) => {
+                      return (
                         <View
+                          key={item.id}
                           style={{
-                            backgroundColor: "#FFFFFF",
-                            borderRadius: 4,
-                            width: 60,
-                            height: 60,
-                            justifyContent: "center",
-                            alignItems: "center",
+                            borderRadius: 6,
+                            backgroundColor: "#F9F9F9",
+                            width: 170,
+                            height: 80,
+                            marginTop: 10,
+                            padding: 10,
+                            paddingLeft: 5,
+                            flexDirection: "row",
                           }}
                         >
-                          <Image
+                          <View
                             style={{
-                              width: 50,
-                              height: 50,
-                              resizeMode: "contain",
-                            }}
-                            source={{ uri: encodeURI(item.image) }}
-                          />
-                        </View>
-                        <View
-                          style={{
-                            marginLeft: 5,
-                            justifyContent: "space-around",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: "#616A7B",
-                              fontWeight: "600",
+                              backgroundColor: "#FFFFFF",
+                              borderRadius: 4,
+                              width: 60,
+                              height: 60,
+                              justifyContent: "center",
+                              alignItems: "center",
                             }}
                           >
-                            {item.name}
-                          </Text>
-                          <Text
-                            style={{ fontWeight: "bold", fontSize: 11 }}
-                          >{`${item.quantity} ลัง`}</Text>
+                            <Image
+                              style={{
+                                width: 50,
+                                height: 50,
+                                resizeMode: "contain",
+                              }}
+                              source={{ uri: encodeURI(item.image) }}
+                            />
+                          </View>
+                          <View
+                            style={{
+                              marginLeft: 5,
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                color: "#616A7B",
+                                fontWeight: "600",
+                              }}
+                            >
+                              {item.name}
+                            </Text>
+                            <Text
+                              style={{ fontWeight: "bold", fontSize: 11 }}
+                            >{`${item.quantity} ลัง`}</Text>
+                          </View>
                         </View>
-                      </View>
-                    );
-                  })}
-                </View>
+                      );
+                    })}
+                  </View>
+                ) : null}
                 <View style={styled.paymentContainer}>
                   <Text style={styled.textHeaderPayment}>วิธีชำระเงิน</Text>
                   <View style={styled.paymentMethod}>

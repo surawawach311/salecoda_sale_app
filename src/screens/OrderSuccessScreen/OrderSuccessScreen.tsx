@@ -8,6 +8,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { ShopDataSource } from "../../datasource/ShopDataSource";
 import { ShopEntity } from "../../entities/ShopEntity";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { Icon, Accordion } from "native-base";
 
 type OrderSuccessScreenRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -23,6 +24,96 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
   useEffect(() => {
     getShopInfo();
   }, []);
+
+  const dataArray = [{ title: "ส่วนลดรายการ", content: "" }];
+
+  const _renderHeader = (item: { title: React.ReactNode }, expanded: any) => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          marginVertical: 5,
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "#FFFFFF",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            backgroundColor: "#FFFFFF",
+          }}
+        >
+          <Text style={{ fontSize: 14, color: "#6B7995" }}>{item.title}</Text>
+
+          {expanded ? (
+            <Icon
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                color: "rgba(107, 121, 149, 1)",
+              }}
+              type="AntDesign"
+              name="up"
+            />
+          ) : (
+            <Icon
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                color: "rgba(107, 121, 149, 1)",
+              }}
+              type="AntDesign"
+              name="down"
+            />
+          )}
+        </View>
+        <Text style={styled.textDiscountFromProduct}>
+          {currencyFormat(
+            route.params.data.discount_memo
+              .filter((item) => item.item_id != null && item.item_id != "")
+              .reduce((sum, item) => sum + item.price * item.quantity, 0)
+          )}
+        </Text>
+      </View>
+    );
+  };
+  const _renderContent = () => {
+    return route.params.data.discount_memo
+      .filter((item) => item.item_id != null && item.item_id != "")
+      .map((item) => {
+        return (
+          <View
+            key={item.id}
+            style={{
+              backgroundColor: "#FBFBFB",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingVertical: 5,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(156, 169, 197, 1)",
+              }}
+            >
+              {`${item.name} (${item.price}฿ x ${item.quantity} ลัง)`}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "rgba(156, 169, 197, 1)",
+              }}
+            >
+              {currencyFormat(item.price * item.quantity)}
+            </Text>
+          </View>
+        );
+      });
+  };
 
   const getShopInfo = () => {
     ShopDataSource.getShopById(
@@ -107,14 +198,44 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
             dashColor="#C8CDD6"
           />
           <View style={styled.productTextWarp}>
-            <Text style={styled.textPrice}>ราคาก่อนลด</Text>
+            <Text style={{ fontSize: 14, color: "#6B7995" }}>ราคาก่อนลด</Text>
             <Text style={styled.textPrice}>
               {currencyFormat(route.params.data.before_discount)}
             </Text>
           </View>
+          {route.params.data.discount_memo.length > 0
+            ? route.params.data.discount_memo
+                .filter((item) => item.item_id == null || item.item_id == "")
+                .map((item) => {
+                  return (
+                    <View
+                      key={item.id}
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginVertical: 10,
+                        marginTop: 20,
+                      }}
+                    >
+                      <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
+                      <Text style={styled.textDiscountFromCash}>
+                        {currencyFormat(item.price)}
+                      </Text>
+                    </View>
+                  );
+                })
+            : null}
+          <Accordion
+            dataArray={dataArray}
+            renderHeader={_renderHeader}
+            renderContent={_renderContent}
+            style={{ borderWidth: 0, paddingVertical: 5 }}
+          />
           <View style={styled.productTextWarp}>
-            <Text style={styled.textPrice}>ส่วนลดรวม</Text>
-            <Text style={styled.textPrice}>
+            <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดรวม</Text>
+            <Text
+              style={{ color: "#616A7B", fontSize: 16, fontWeight: "bold" }}
+            >
               {currencyFormat(route.params.data.total_discount)}
             </Text>
           </View>
@@ -134,62 +255,66 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
           <View style={{ marginTop: 10 }}>
             <Text style={styled.textProductHeader}>ของแถมที่ได้รับ</Text>
             <View style={{ marginTop: 10 }}>
-              {route.params.data.premium_memo.map((item) => {
-                return (
-                  <View
-                    key={item.id}
-                    style={{
-                      borderRadius: 6,
-                      padding: 10,
-                      paddingLeft: 5,
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Image
-                      style={{
-                        width: 60,
-                        height: 60,
-                        resizeMode: "contain",
-                      }}
-                      source={{ uri: encodeURI(item.cover) }}
-                    />
+              {route.params.data.premium_memo.length > 0 ? (
+                route.params.data.premium_memo.map((item) => {
+                  return (
                     <View
+                      key={item.id}
                       style={{
-                        marginLeft: 5,
-                        justifyContent: "space-around",
+                        borderRadius: 6,
+                        padding: 10,
+                        paddingLeft: 5,
+                        flexDirection: "row",
                       }}
                     >
-                      <Text
+                      <Image
                         style={{
-                          fontSize: 14,
-                          color: "#616A7B",
-                          fontWeight: "600",
+                          width: 60,
+                          height: 60,
+                          resizeMode: "contain",
+                        }}
+                        source={{ uri: encodeURI(item.cover) }}
+                      />
+                      <View
+                        style={{
+                          marginLeft: 5,
+                          justifyContent: "space-around",
                         }}
                       >
-                        {item.name}
-                      </Text>
-                      <Text
-                        style={{ fontWeight: "bold", fontSize: 11 }}
-                      >{`${item.quantity} ลัง`}</Text>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: "#616A7B",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={{ fontWeight: "bold", fontSize: 11 }}
+                        >{`${item.quantity} ลัง`}</Text>
+                      </View>
                     </View>
-                  </View>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <>
+                  <Image
+                    style={{
+                      width: 52,
+                      height: 52,
+                      marginTop: 20,
+                      resizeMode: "contain",
+                      alignSelf: "center",
+                    }}
+                    source={require("../../../assets/box-empty.png")}
+                  />
+                  <Text style={{ alignSelf: "center", color: "#C2C6CE" }}>
+                    ไม่มีของแถมที่ได้รับ
+                  </Text>
+                </>
+              )}
             </View>
-
-            {/* <Image
-              style={{
-                width: 52,
-                height: 52,
-                marginTop: 20,
-                resizeMode: "contain",
-                alignSelf: "center",
-              }}
-              source={require("../../../assets/box-empty.png")}
-            />
-            <Text style={{ alignSelf: "center", color: "#C2C6CE" }}>
-              ไม่มีของแถมที่ได้รับ
-            </Text> */}
           </View>
           <TouchableOpacity
             style={{ marginTop: 30 }}
@@ -291,12 +416,11 @@ const styled = StyleSheet.create({
   textProductHeader: { fontSize: 18, fontWeight: "bold" },
   productTextWarp: {
     marginTop: 10,
-    // marginVertical: 3,
     flexDirection: "row",
     justifyContent: "space-between",
   },
   textProduct: { fontSize: 16, color: "#333333" },
-  textPrice: { fontSize: 16, color: "#6B7995" },
+  textPrice: { fontSize: 16, color: "#616A7B" },
   textLabelTotal: { fontSize: 16, fontWeight: "bold" },
   textTotal: { fontSize: 20, fontWeight: "bold", color: "#4C95FF" },
   deliveryButton: {
@@ -315,4 +439,25 @@ const styled = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     width: "100%",
   },
+  textDiscountFromProduct: {
+    color: "rgba(58, 174, 73, 1)",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  warpPrice: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 5,
+  },
+  textDiscountFromCash: {
+    color: "#4C95FF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  textTotalDiscount: {
+    color: "#616A7B",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  textDiscount: { fontSize: 14, color: "#6B7995" },
 });

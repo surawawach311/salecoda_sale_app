@@ -24,6 +24,7 @@ export interface OrderEntity {
     created: string
     buyer: ShopEntity
     premium_memo: PremiumOrderEntity[]
+    discount_memo: DiscountOrderEntity[]
 
 }
 
@@ -59,6 +60,17 @@ export interface PremiumOrderEntity {
     quantity: number
     name: string
     cover: string
+    promotion_id: string
+    promotion_name: string
+    promotion_image: string
+    item_id: string
+}
+
+export interface DiscountOrderEntity {
+    id: string
+    price: number
+    quantity: number
+    name: string
     promotion_id: string
     promotion_name: string
     promotion_image: string
