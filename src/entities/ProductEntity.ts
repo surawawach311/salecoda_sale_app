@@ -15,4 +15,17 @@ export interface ProductEntity {
     image: string,
     company: string,
     is_have_promotion: boolean
+    promotions: PromotionEntity[]
+}
+
+export interface PromotionEntity {
+    id: string
+    promotion_type: string
+    name: string
+    image: string
+    desc: string
+    start_date: string
+    end_date: string
+    updated: string
+    created: string
 }

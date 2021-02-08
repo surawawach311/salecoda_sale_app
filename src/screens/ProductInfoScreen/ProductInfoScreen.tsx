@@ -12,6 +12,8 @@ import {
   Platform,
 } from "react-native";
 import { CartDataSource } from "../../datasource/CartDataSource";
+import { ProductDataSource } from "../../datasource/ProductDataSource";
+import { ProductEntity, PromotionEntity } from "../../entities/ProductEntity";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 
 type ProductInfoScreenNavigationProp = StackScreenProps<
@@ -24,6 +26,20 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
   route,
 }) => {
   const [quantity, setQuantity] = useState(0);
+  const [product, setProduct] = useState<ProductEntity>();
+
+  useEffect(() => {
+    getProduct();
+  }, []);
+
+  const getProduct = async () => {
+    await ProductDataSource.getNameProduct(
+      route.params.shop.id,
+      route.params.product.id
+    ).then((res) => {
+      setProduct(res);
+    });
+  };
 
   const addCart = (action: string) => {
     const nextQuantity = action === "plus" ? quantity + 5 : quantity - 5;
@@ -55,10 +71,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
           <View style={styled.wrapInfo}>
             <View style={styled.imageInfo}>
               {route.params.product.image !== "" ? (
-                <Image
-                  style={styled.image}
-                  source={{ uri: route.params.product.image }}
-                />
+                <Image style={styled.image} source={{ uri: product?.image }} />
               ) : (
                 <Image
                   style={styled.image}
@@ -68,18 +81,12 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
             </View>
             <View>
               <View style={styled.wrapTitlePrice}>
-                <Text style={styled.textH1}>{route.params.product.title}</Text>
-                <Text style={styled.textH1}>
-                  {` ฿${route.params.product.price_per_volume}`}
-                </Text>
+                <Text style={styled.textH1}>{product?.title}</Text>
+                <Text style={styled.textH1}>{product?.price_per_volume}</Text>
               </View>
               <View>
-                <Text style={styled.textCommon}>
-                  {route.params.product.common_title}
-                </Text>
-                <Text style={styled.textSize}>
-                  {route.params.product.packing_size}
-                </Text>
+                <Text style={styled.textCommon}>{product?.common_title}</Text>
+                <Text style={styled.textSize}>{product?.packing_size}</Text>
               </View>
             </View>
           </View>
@@ -89,9 +96,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
             </View>
             <View style={styled.wrapDescription}>
               <Text style={styled.textH2}>สารสำคัญ</Text>
-              <Text style={styled.textH5}>
-                {route.params.product.common_title}
-              </Text>
+              <Text style={styled.textH5}>{product?.common_title}</Text>
               <Text style={styled.textH2}>คุณสมบัติและ ประโยชน์</Text>
               <Text style={styled.textH5}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -104,6 +109,26 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                 massa, ac pharetra sapien
               </Text>
             </View>
+            {product?.promotions
+              ? product.promotions.map((promotion: PromotionEntity) => {
+                  return (
+                    <View key={promotion.id} style={styled.warpPromotion}>
+                      <Image
+                        style={{ width: 25, height: 25 }}
+                        source={require("../../../assets/promotion.png")}
+                      />
+                      <View style={{ marginLeft: 5 }}>
+                        <Text style={{ fontSize: 18, color: "#FFFFFF" }}>
+                          โปรโมชั่น
+                        </Text>
+                        <Text style={{ fontSize: 18, color: "#FFFFFF" }}>
+                          {promotion.desc}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })
+              : null}
           </View>
         </View>
       </ScrollView>
@@ -116,7 +141,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
             <View style={styled.warpQuantity}>
               <TouchableOpacity
                 onPress={async () => {
-                  await addCart("minus");
+                  addCart("minus");
                 }}
               >
                 <Image
@@ -144,7 +169,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
               />
               <TouchableOpacity
                 onPress={async () => {
-                  await addCart("plus");
+                  addCart("plus");
                 }}
               >
                 <Image
@@ -259,5 +284,12 @@ const styled = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 18,
     alignSelf: "center",
+  },
+  warpPromotion: {
+    borderRadius: 10,
+    padding: 20,
+    margin: 20,
+    backgroundColor: "#DE2828",
+    flexDirection: "row",
   },
 });

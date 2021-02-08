@@ -1,3 +1,6 @@
+import { DiscountEntity, SpecialRequestEnity } from "../entities/CartEntity";
+import { PremiumOrderEntity } from "../entities/OrderEntity";
+
 export interface OrderModel {
     buyer_id: string
     seller_id: string
@@ -7,9 +10,10 @@ export interface OrderModel {
     total_price: number
     shipping_method: string
     payment_method: string
-    premium_memo: []
-    discount_memo: []
+    premium_memo: PremiumOrderEntity[]
+    discount_memo: DiscountEntity[]
     shipping_address: ShippingAdressModel
+    special_request_discounts: SpecialRequestEnity[]
 }
 
 export interface OrderItemModel {

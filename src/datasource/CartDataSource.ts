@@ -1,8 +1,10 @@
 import { baseURL } from "../config/develop-config";
+import { CartEntity } from "../entities/CartEntity";
+import { CartFacade } from "../facade/CartFacade";
 import { httpClient } from "../services/HttpClient";
 
 export class CartDataSource {
-    static getCartByShop(shopId: string) {
+    static getCartByShop(shopId: string): Promise<CartEntity> {
         return httpClient
             .get(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`)
             .then(res => res.data)

@@ -1,4 +1,4 @@
-import { ShopEntity } from "./ShopEntity";
+import { ShopEntity } from "./ShopEntity"
 
 export interface OrderEntity {
 
@@ -23,6 +23,8 @@ export interface OrderEntity {
     updated: string
     created: string
     buyer: ShopEntity
+    premium_memo: PremiumOrderEntity[]
+    discount_memo: DiscountOrderEntity[]
 
 }
 
@@ -50,4 +52,27 @@ export interface ShippingAdressEntity {
     post_code: string
     country: string
     remark: string
+}
+
+export interface PremiumOrderEntity {
+    id: string
+    price: number
+    quantity: number
+    name: string
+    cover: string
+    promotion_id: string
+    promotion_name: string
+    promotion_image: string
+    item_id: string
+}
+
+export interface DiscountOrderEntity {
+    id: string
+    price: number
+    quantity: number
+    name: string
+    promotion_id: string
+    promotion_name: string
+    promotion_image: string
+    item_id: string
 }
