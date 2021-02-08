@@ -136,14 +136,16 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     shippingAddress?: any,
     cart?: CartEntity
   ) => {
-    if (shippingAddress && cart) {
+    if (!shippingAddress) {
+      alert("กรุณาเลือกสถานที่จัดส่ง");
+    } else if (!cart?.selected_payment) {
+      alert("กรุณาเลือกวิธีการชำระเงิน");
+    } else {
       OrderFacade.confirmOrder(shop, shippingAddress, cart).then(
         (res: OrderEntity) => {
           navigation.navigate("OrderSuccess", { data: res });
         }
       );
-    } else {
-      alert("กรุณาเลือกสถานที่จัดส่ง");
     }
   };
   const _renderHeader = (item: { title: React.ReactNode }, expanded: any) => {

@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.9.0] - 2020-2-8
+- Added promotion tag
+- Added discount detail
+
 ## Added [v1.8.0] - 2020-2-2
 - Added order list by shop
 
