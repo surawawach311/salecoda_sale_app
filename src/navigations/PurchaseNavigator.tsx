@@ -13,6 +13,8 @@ import OrderSuccessScreen from "../screens/OrderSuccessScreen/OrderSuccessScreen
 import { OrderEntity } from "../entities/OrderEntity";
 import OrderSuccessDetail from "../screens/OrderSuccessScreenDetail/OrderSuccessScreenDetail";
 import { ThaiDateFormat } from "../utilities/ThaiDateFormat";
+import { CartEntity } from "../entities/CartEntity";
+import SpecialRequestScreen from "../screens/SpecialRequestScreen/SpecialRequestScreen";
 
 export type PurchaseStackParamList = {
   ShopList: { territory: string };
@@ -21,6 +23,7 @@ export type PurchaseStackParamList = {
   Cart: { shop: ShopEntity };
   OrderSuccess: { data: OrderEntity };
   SuccessDetail: { data: OrderEntity };
+  SpecialRequest: { cart: CartEntity; shop: ShopEntity };
 };
 
 const PurchaseNavigator: React.FC = () => {
@@ -91,6 +94,11 @@ const PurchaseNavigator: React.FC = () => {
         options={({ navigation, route }) => ({
           headerTitle: <Text>{ThaiDateFormat(route.params.data.created)}</Text>,
         })}
+      />
+      <PurchaseStack.Screen
+        name="SpecialRequest"
+        component={SpecialRequestScreen}
+        options={{ title: "ขอส่วนลดพิเศษ" }}
       />
     </PurchaseStack.Navigator>
   );

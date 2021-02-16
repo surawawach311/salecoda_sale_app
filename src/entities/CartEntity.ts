@@ -13,6 +13,7 @@ export interface CartEntity {
     received_discounts: DiscountEntity[]
     available_premiums: PremiumEntity[]
     received_special_request_discounts: SpecialRequestEnity[]
+    total_received_special_request_discount:number
 }
 
 export interface ItemCart {

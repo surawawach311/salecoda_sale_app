@@ -2,7 +2,11 @@
 
 ## [Version - 1]
 
-## Added [v1.2.0] - 2020-2-8
+## Added [v1.11.0] - 2020-2-18
+
+- Added Special Request
+
+## Added [v1.10.0] - 2020-2-8
 
 - Added promotion tag
 - Added discount detail

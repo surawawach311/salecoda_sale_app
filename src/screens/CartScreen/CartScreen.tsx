@@ -201,7 +201,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       </View>
     );
   };
-  const _renderContent = () => {
+  const _renderContent = (data: []) => {
     return cart?.received_discounts
       .filter((item) => item.item_id != null)
       .map((item) => {
@@ -353,6 +353,99 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     })}
                   </View>
                 ) : null}
+                {cart.received_special_request_discounts.length > 0 ? (
+                  <View
+                    style={{
+                      marginTop: 10,
+                      padding: 20,
+                      backgroundColor: "#FFFFFF",
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text style={styled.textHeaderPayment}>
+                        Special Request
+                      </Text>
+                      <TouchableOpacity>
+                        <Text
+                          style={{
+                            color: "#4C95FF",
+                            fontWeight: "500",
+                            fontSize: 14,
+                          }}
+                        >
+                          แก้ไข
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styled.line} />
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: 10,
+                      }}
+                    >
+                      <Text style={{ fontSize: 16, color: "#6B7995" }}>
+                        ขอส่วนลดพิเศษเพิ่ม
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: "#6B7995",
+                        }}
+                      >
+                        {currencyFormat(
+                          cart.total_received_special_request_discount
+                        )}
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("SpecialRequest", {
+                        cart: cart,
+                        shop: route.params.shop,
+                      })
+                    }
+                    style={{
+                      backgroundColor: "#FFFFFF",
+                      marginTop: 10,
+                      padding: 20,
+                    }}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: "#EAF4FF",
+                        height: 48,
+                        borderRadius: 6,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Image
+                        style={{ width: 25, height: 25 }}
+                        source={require("../../../assets/special_request.png")}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: "#4C95FF",
+                          fontWeight: "bold",
+                          marginLeft: 10,
+                        }}
+                      >
+                        Special Request
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
                 <View style={styled.paymentContainer}>
                   <Text style={styled.textHeaderPayment}>วิธีชำระเงิน</Text>
                   <View style={styled.paymentMethod}>
