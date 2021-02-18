@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.11.1] - 2020-2-18
+ 
+ - fix buyer undefined
+
 ## Added [v1.11.0] - 2020-2-18
 
 - Added Special Request
