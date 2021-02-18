@@ -49,9 +49,13 @@ const OrderCard: React.FC<OrderCardProps> = ({
             style={styled.iconLocation}
             source={require("../../assets/location3.png")}
           />
-          <Text style={styled.textCompanyAddress}>
-            {`${address.name} \n${address.address} ตำบล${address.sub_district} อำเภอ${address.district} ${address.province} ${address.post_code} `}
-          </Text>
+          {address ? (
+            <Text style={styled.textCompanyAddress}>
+              {`${address.name} \n${address.address} ตำบล${address.sub_district} อำเภอ${address.district} ${address.province} ${address.post_code} `}
+            </Text>
+          ) : (
+            <Text style={styled.textCompanyAddress}>undefined</Text>
+          )}
         </View>
         <View style={styled.statusContainer}>
           <View style={styled.statusBadge}>
