@@ -33,6 +33,7 @@ import { Accordion, Icon } from "native-base";
 import { currencyFormat } from "../../utilities/CurrencyFormat";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CartEmptyState from "./CartEmptyState";
+import AccrodingPrice from "../../components/AccrodingPrice";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
@@ -44,15 +45,29 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(0);
   const [payment, setPayment] = useState<string | undefined>();
   const [cashDiscount, setCashDiscount] = useState(0);
+  const [specialRequest, setSpecialRequest] = useState<
+    { item: string; price: number }[]
+  >([]);
 
   useEffect(() => {
     getCart();
   }, []);
 
   const getCart = async () => {
+    let discountState: { item: string; price: string }[] = [];
+
     CartDataSource.getCartByShop(route.params.shop.id).then(
       (res: CartEntity) => {
+        console.log(res);
+
         setCart(res);
+        res.received_special_request_discounts.map((discount) => {
+          discountState.push({
+            item: `${discount.name} (${discount.price}฿ x ${discount.quantity} ลัง)`,
+            price: discount.total,
+          });
+        });
+        setSpecialRequest(discountState);
       }
     );
   };
@@ -201,7 +216,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       </View>
     );
   };
-  const _renderContent = (data: []) => {
+  const _renderContent = () => {
     return cart?.received_discounts
       .filter((item) => item.item_id != null)
       .map((item) => {
@@ -353,7 +368,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     })}
                   </View>
                 ) : null}
-                {cart.received_special_request_discounts.length > 0 ? (
+
+                {specialRequest.length > 0 ? (
                   <View
                     style={{
                       marginTop: 10,
@@ -383,27 +399,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       </TouchableOpacity>
                     </View>
                     <View style={styled.line} />
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        marginTop: 10,
-                      }}
-                    >
-                      <Text style={{ fontSize: 16, color: "#6B7995" }}>
-                        ขอส่วนลดพิเศษเพิ่ม
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: "#6B7995",
-                        }}
-                      >
-                        {currencyFormat(
-                          cart.total_received_special_request_discount
-                        )}
-                      </Text>
-                    </View>
+                    {console.log(specialRequest)}
+
+                    <AccrodingPrice
+                      title="ขอส่วนลดพิเศษเพิ่ม"
+                      total={100}
+                      detail={specialRequest}
+                    />
                   </View>
                 ) : (
                   <TouchableOpacity
