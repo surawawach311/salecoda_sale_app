@@ -399,11 +399,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       </TouchableOpacity>
                     </View>
                     <View style={styled.line} />
-                    {console.log(specialRequest)}
-
                     <AccrodingPrice
                       title="ขอส่วนลดพิเศษเพิ่ม"
-                      total={100}
+                      total={cart.total_received_special_request_discount}
                       detail={specialRequest}
                     />
                   </View>
