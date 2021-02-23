@@ -26,6 +26,8 @@ import {
   DiscountEntity,
   ItemCart,
   paymentCartEntity,
+  PremiumEntity,
+  SpecialRequestEnity,
 } from "../../entities/CartEntity";
 import { OrderFacade } from "../../facade/OrderFacade";
 import { OrderEntity } from "../../entities/OrderEntity";
@@ -36,6 +38,8 @@ import CartEmptyState from "./CartEmptyState";
 import AccrodingPrice from "../../components/AccrodingPrice";
 import { OrderDataSource } from "../../datasource/OrderDataSource";
 import { useIsFocused } from "@react-navigation/native";
+import PremiumCard from "../../components/PremiumCard";
+import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
@@ -47,27 +51,38 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(0);
   const [payment, setPayment] = useState<string | undefined>();
   const [cashDiscount, setCashDiscount] = useState(0);
-  const [specialRequest, setSpecialRequest] = useState<
-    { item: string; price: number }[]
-  >([]);
+  const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>(
+    []
+  );
+  const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
   const isFocused = useIsFocused();
   useEffect(() => {
     getCart();
   }, [isFocused]);
 
-  const getCart = async () => {
-    let discountState: { item: string; price: string }[] = [];
+  const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
+    let arrayOutput: any[] = [];
+    data.map((item: any) => {
+      arrayOutput.push({
+        item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
+        price: item.total,
+      });
+    });
+    return arrayOutput;
+  };
 
+  const getCart = async () => {
     CartDataSource.getCartByShop(route.params.shop.id).then(
       (res: CartEntity) => {
         setCart(res);
-        res.received_special_request_discounts.map((discount) => {
-          discountState.push({
-            item: `${discount.name} (${discount.price}฿ x ${discount.quantity} ลัง)`,
-            price: discount.total,
-          });
-        });
-        setSpecialRequest(discountState);
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.received_special_request_discounts
+        );
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.received_discounts.filter((item) => item.item_id != null)
+        );
+        setSpecialRequest(discountSpecial);
+        setDiscoutPromo(discountProduct);
       }
     );
   };
@@ -77,7 +92,17 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       route.params.shop.id,
       itemId,
       quantity + 1
-    ).then((res: CartEntity) => setCart(res));
+    ).then((res: CartEntity) => {
+      setCart(res);
+      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+        res.received_special_request_discounts
+      );
+      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+        res.received_discounts.filter((item) => item.item_id != null)
+      );
+      setSpecialRequest(discountSpecial);
+      setDiscoutPromo(discountProduct);
+    });
   };
 
   const decreaseProduct = async (itemId: string, quantity: number) => {
@@ -85,7 +110,17 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       route.params.shop.id,
       itemId,
       quantity - 1
-    ).then((res: CartEntity) => setCart(res));
+    ).then((res: CartEntity) => {
+      setCart(res);
+      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+        res.received_special_request_discounts
+      );
+      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+        res.received_discounts.filter((item) => item.item_id != null)
+      );
+      setSpecialRequest(discountSpecial);
+      setDiscoutPromo(discountProduct);
+    });
   };
   const adjustProduct = async (itemId: string, quantity: number) => {
     const regexp = /^[0-9\b]+$/;
@@ -94,17 +129,36 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         route.params.shop.id,
         itemId,
         quantity
-      ).then((res: CartEntity) => setCart(res));
+      ).then((res: CartEntity) => {
+        setCart(res);
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.received_special_request_discounts
+        );
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.received_discounts.filter((item) => item.item_id != null)
+        );
+        setSpecialRequest(discountSpecial);
+        setDiscoutPromo(discountProduct);
+      });
     } else {
       alert("Number Only");
     }
   };
 
   const removeItem = async (itemId: string) => {
-    CartDataSource.removeItem(
-      route.params.shop.id,
-      itemId
-    ).then((res: CartEntity) => setCart(res));
+    CartDataSource.removeItem(route.params.shop.id, itemId).then(
+      (res: CartEntity) => {
+        setCart(res);
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.received_special_request_discounts
+        );
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.received_discounts.filter((item) => item.item_id != null)
+        );
+        setSpecialRequest(discountSpecial);
+        setDiscoutPromo(discountProduct);
+      }
+    );
   };
 
   const handleCloseModal = () => {
@@ -133,16 +187,35 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
               });
             }
           }
-          setCart(res);
+          {
+            setCart(res);
+            let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+              res.received_special_request_discounts
+            );
+            let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+              res.received_discounts.filter((item) => item.item_id != null)
+            );
+            setSpecialRequest(discountSpecial);
+            setDiscoutPromo(discountProduct);
+          }
         }
       );
     } else {
       setPayment("credit");
       setCashDiscount(0);
-      CartDataSource.calculate(
-        route.params.shop.id,
-        payment
-      ).then((res: CartEntity) => setCart(res));
+      CartDataSource.calculate(route.params.shop.id, payment).then(
+        (res: CartEntity) => {
+          setCart(res);
+          let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+            res.received_special_request_discounts
+          );
+          let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+            res.received_discounts.filter((item) => item.item_id != null)
+          );
+          setSpecialRequest(discountSpecial);
+          setDiscoutPromo(discountProduct);
+        }
+      );
     }
   };
   const dataArray = [{ title: "ส่วนลดรายการ", content: "" }];
@@ -163,93 +236,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         }
       );
     }
-  };
-  const _renderHeader = (item: { title: React.ReactNode }, expanded: any) => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          marginVertical: 5,
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            backgroundColor: "#FFFFFF",
-          }}
-        >
-          <Text style={{ fontSize: 14, color: "#6B7995" }}>{item.title}</Text>
-
-          {expanded ? (
-            <Icon
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "rgba(107, 121, 149, 1)",
-              }}
-              type="AntDesign"
-              name="up"
-            />
-          ) : (
-            <Icon
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "rgba(107, 121, 149, 1)",
-              }}
-              type="AntDesign"
-              name="down"
-            />
-          )}
-        </View>
-        <Text style={styled.textDiscountFromProduct}>
-          {currencyFormat(
-            cart?.received_discounts
-              .filter((item) => item.item_id != null)
-              .reduce((sum, item) => sum + item.total, 0)
-          )}
-        </Text>
-      </View>
-    );
-  };
-  const _renderContent = () => {
-    return cart?.received_discounts
-      .filter((item) => item.item_id != null)
-      .map((item) => {
-        return (
-          <View
-            key={item.id}
-            style={{
-              backgroundColor: "#FBFBFB",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingVertical: 5,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(156, 169, 197, 1)",
-              }}
-            >
-              {`${item.name} (${item.price}฿ x ${item.quantity} ลัง)`}
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(156, 169, 197, 1)",
-              }}
-            >
-              {currencyFormat(item.total)}
-            </Text>
-          </View>
-        );
-      });
   };
 
   return (
@@ -301,82 +287,23 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   })}
                 </View>
                 {cart.available_premiums.length > 0 ? (
-                  <View
-                    style={{
-                      backgroundColor: "#FFFFFF",
-                      marginTop: 10,
-                      padding: 20,
-                    }}
-                  >
+                  <View style={styled.PremiumContainer}>
                     <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                       ของแถมที่ได้รับ
                     </Text>
-                    {cart.available_premiums.map((item) => {
+                    {cart.available_premiums.map((item: PremiumEntity) => {
                       return (
-                        <View
-                          key={item.id}
-                          style={{
-                            borderRadius: 6,
-                            backgroundColor: "#F9F9F9",
-                            width: 170,
-                            height: 80,
-                            marginTop: 10,
-                            padding: 10,
-                            paddingLeft: 5,
-                            flexDirection: "row",
-                          }}
-                        >
-                          <View
-                            style={{
-                              backgroundColor: "#FFFFFF",
-                              borderRadius: 4,
-                              width: 60,
-                              height: 60,
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <Image
-                              style={{
-                                width: 50,
-                                height: 50,
-                                resizeMode: "contain",
-                              }}
-                              source={{ uri: encodeURI(item.image) }}
-                            />
-                          </View>
-                          <View
-                            style={{
-                              marginLeft: 5,
-                              justifyContent: "space-around",
-                            }}
-                          >
-                            <Text
-                              style={{
-                                fontSize: 14,
-                                color: "#616A7B",
-                                fontWeight: "600",
-                              }}
-                            >
-                              {item.name}
-                            </Text>
-                            <Text
-                              style={{ fontWeight: "bold", fontSize: 11 }}
-                            >{`${item.quantity} ลัง`}</Text>
-                          </View>
-                        </View>
+                        <PremiumCard
+                          title={item.name}
+                          image={item.image}
+                          quantity={item.quantity}
+                        />
                       );
                     })}
                   </View>
                 ) : null}
                 {specialRequest.length > 0 ? (
-                  <View
-                    style={{
-                      marginTop: 10,
-                      padding: 20,
-                      backgroundColor: "#FFFFFF",
-                    }}
-                  >
+                  <View style={styled.specialRequestContainer}>
                     <View
                       style={{
                         flexDirection: "row",
@@ -422,34 +349,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         item: specialRequest,
                       })
                     }
-                    style={{
-                      backgroundColor: "#FFFFFF",
-                      marginTop: 10,
-                      padding: 20,
-                    }}
+                    style={styled.buttonSpecialRequestContainer}
                   >
-                    <View
-                      style={{
-                        backgroundColor: "#EAF4FF",
-                        height: 48,
-                        borderRadius: 6,
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
+                    <View style={styled.buttonSpecialRequest}>
                       <Image
                         style={{ width: 25, height: 25 }}
                         source={require("../../../assets/special_request.png")}
                       />
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: "#4C95FF",
-                          fontWeight: "bold",
-                          marginLeft: 10,
-                        }}
-                      >
+                      <Text style={styled.textButtonSpecialRequest}>
                         Special Request
                       </Text>
                     </View>
@@ -533,11 +440,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   {cart.received_discounts.filter(
                     (item) => item.item_id != null
                   ).length > 0 ? (
-                    <Accordion
-                      dataArray={dataArray}
-                      renderHeader={_renderHeader}
-                      renderContent={_renderContent}
-                      style={{ borderWidth: 0, paddingVertical: 5 }}
+                    <AccrodingPrice
+                      title="ส่วนลดรายการ"
+                      total={cart?.received_discounts
+                        .filter((item) => item.item_id != null)
+                        .reduce((sum, item) => sum + item.total, 0)}
+                      detail={discoutPromo}
                     />
                   ) : null}
 
@@ -847,5 +755,34 @@ const styled = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  buttonSpecialRequestContainer: {
+    backgroundColor: "#FFFFFF",
+    marginTop: 10,
+    padding: 20,
+  },
+  buttonSpecialRequest: {
+    backgroundColor: "#EAF4FF",
+    height: 48,
+    borderRadius: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textButtonSpecialRequest: {
+    fontSize: 16,
+    color: "#4C95FF",
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+  PremiumContainer: {
+    backgroundColor: "#FFFFFF",
+    marginTop: 10,
+    padding: 20,
+  },
+  specialRequestContainer: {
+    marginTop: 10,
+    padding: 20,
+    backgroundColor: "#FFFFFF",
   },
 });
