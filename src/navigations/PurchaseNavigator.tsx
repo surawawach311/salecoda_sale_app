@@ -15,6 +15,7 @@ import OrderSuccessDetail from "../screens/OrderSuccessScreenDetail/OrderSuccess
 import { ThaiDateFormat } from "../utilities/ThaiDateFormat";
 import { CartEntity } from "../entities/CartEntity";
 import SpecialRequestScreen from "../screens/SpecialRequestScreen/SpecialRequestScreen";
+import { ItemSpecialRequest } from "../models/SpecialRequestModel";
 
 export type PurchaseStackParamList = {
   ShopList: { territory: string };
@@ -23,7 +24,11 @@ export type PurchaseStackParamList = {
   Cart: { shop: ShopEntity };
   OrderSuccess: { data: OrderEntity };
   SuccessDetail: { data: OrderEntity };
-  SpecialRequest: { cart: CartEntity; shop: ShopEntity };
+  SpecialRequest: {
+    cart: CartEntity;
+    shop: ShopEntity;
+    item: { item: string; price: number }[];
+  };
 };
 
 const PurchaseNavigator: React.FC = () => {
