@@ -70,4 +70,14 @@ export class CartDataSource {
             .then(res => res.data)
             .catch(error => console.log(error))
     }
+
+    static clearSpecialRequest(shopId: string) {
+        const data = {
+            action: "remove_special_request",
+        }
+        return httpClient
+            .post(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`, data)
+            .then(res => res.data)
+            .catch(error => console.log(error))
+    }
 }
