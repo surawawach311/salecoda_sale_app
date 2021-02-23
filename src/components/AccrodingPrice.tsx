@@ -82,7 +82,7 @@ export default AccrodingPrice;
 
 const styled = StyleSheet.create({
   textContentName: {
-    color: "rgba(58, 174, 73, 1)",
+    color: "#6B7995",
     fontSize: 14,
     fontWeight: "bold",
   },

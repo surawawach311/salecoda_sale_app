@@ -34,6 +34,8 @@ import { currencyFormat } from "../../utilities/CurrencyFormat";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CartEmptyState from "./CartEmptyState";
 import AccrodingPrice from "../../components/AccrodingPrice";
+import { OrderDataSource } from "../../datasource/OrderDataSource";
+import { useIsFocused } from "@react-navigation/native";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
@@ -41,25 +43,23 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [modalDelivery, setModalDelivery] = useState(false);
   const [remark, setRemark] = useState("");
   const [shippingAddress, setShippingAddress] = useState<ShopEntity>();
-  const [cart, setCart] = useState<CartEntity>();
+  const [cart, setCart] = useState<CartEntity | undefined>();
   const [quantity, setQuantity] = useState(0);
   const [payment, setPayment] = useState<string | undefined>();
   const [cashDiscount, setCashDiscount] = useState(0);
   const [specialRequest, setSpecialRequest] = useState<
     { item: string; price: number }[]
   >([]);
-
+  const isFocused = useIsFocused();
   useEffect(() => {
     getCart();
-  }, []);
+  }, [isFocused]);
 
   const getCart = async () => {
     let discountState: { item: string; price: string }[] = [];
 
     CartDataSource.getCartByShop(route.params.shop.id).then(
       (res: CartEntity) => {
-        console.log(res);
-
         setCart(res);
         res.received_special_request_discounts.map((discount) => {
           discountState.push({
@@ -158,6 +158,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else {
       OrderFacade.confirmOrder(shop, shippingAddress, cart).then(
         (res: OrderEntity) => {
+          CartDataSource.clearSpecialRequest(shop.id);
           navigation.navigate("OrderSuccess", { data: res });
         }
       );
@@ -368,7 +369,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     })}
                   </View>
                 ) : null}
-
                 {specialRequest.length > 0 ? (
                   <View
                     style={{
@@ -386,7 +386,15 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       <Text style={styled.textHeaderPayment}>
                         Special Request
                       </Text>
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate("SpecialRequest", {
+                            cart: cart,
+                            shop: route.params.shop,
+                            item: specialRequest,
+                          })
+                        }
+                      >
                         <Text
                           style={{
                             color: "#4C95FF",
@@ -411,6 +419,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       navigation.navigate("SpecialRequest", {
                         cart: cart,
                         shop: route.params.shop,
+                        item: specialRequest,
                       })
                     }
                     style={{
@@ -521,13 +530,22 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       </Text>
                     </View>
                   ) : null}
-                  <Accordion
-                    dataArray={dataArray}
-                    renderHeader={_renderHeader}
-                    renderContent={_renderContent}
-                    style={{ borderWidth: 0, paddingVertical: 5 }}
-                  />
+                  {cart.received_discounts.filter(
+                    (item) => item.item_id != null
+                  ).length > 0 ? (
+                    <Accordion
+                      dataArray={dataArray}
+                      renderHeader={_renderHeader}
+                      renderContent={_renderContent}
+                      style={{ borderWidth: 0, paddingVertical: 5 }}
+                    />
+                  ) : null}
 
+                  <AccrodingPrice
+                    title="ขอส่วนลดพิเศษเพิ่ม"
+                    total={cart.total_received_special_request_discount}
+                    detail={specialRequest}
+                  />
                   <View
                     style={{
                       backgroundColor: "#FBFBFB",
