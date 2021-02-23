@@ -5,6 +5,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import SpecialRequestProductCard from "../../components/SpecialProductCard";
 import { CartDataSource } from "../../datasource/CartDataSource";
 import { CartEntity } from "../../entities/CartEntity";
+import { CartFacade } from "../../facade/CartFacade";
 import {
   ItemSpecialRequest,
   ProductSpecialRequestModel,
@@ -87,7 +88,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
   };
 
   const createSpecialRequest = () => {
-    CartDataSource.createSpecialRequest(route.params.shop.id, request).then(
+    CartFacade.createSpecialRequest(route.params.shop.id, request).then(
       (res) => {
         CartDataSource.addSpecialRequest(route.params.shop.id, res).then(
           (res: CartEntity) => {
