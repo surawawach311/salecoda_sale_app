@@ -57,7 +57,8 @@ export class OrderFacade {
                 province: shippingAddress.province,
                 post_code: shippingAddress.post_code
             },
-            special_request_discounts: cart.received_special_request_discounts
+            special_request_discounts: cart.received_special_request_discounts,
+            special_request_id: cart.special_request_id
         }
 
         return OrderDataSource.comfirmOrder(order)

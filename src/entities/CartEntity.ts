@@ -14,6 +14,7 @@ export interface CartEntity {
     available_premiums: PremiumEntity[]
     received_special_request_discounts: SpecialRequestEnity[]
     total_received_special_request_discount: number
+    special_request_id: string
 }
 
 export interface ItemCart {
