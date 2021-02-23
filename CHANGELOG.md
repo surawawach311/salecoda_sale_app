@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.11.2] - 2020-2-23
+
+- Improve Special Request in Cart Screen
+
 ## Added [v1.11.1] - 2020-2-18
  
  - fix buyer undefined

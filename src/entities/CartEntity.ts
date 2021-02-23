@@ -13,7 +13,8 @@ export interface CartEntity {
     received_discounts: DiscountEntity[]
     available_premiums: PremiumEntity[]
     received_special_request_discounts: SpecialRequestEnity[]
-    total_received_special_request_discount:number
+    total_received_special_request_discount: number
+    special_request_id: string
 }
 
 export interface ItemCart {
@@ -92,4 +93,7 @@ export interface SpecialRequestEnity {
     price: number
     quantity: number
     special_request_id: string
+    image: string
+    item_id: string
+    total: number
 }

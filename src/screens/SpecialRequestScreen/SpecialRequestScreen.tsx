@@ -81,23 +81,27 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     CartDataSource.calculateSpecialRequest(
       route.params.shop.id,
       productRequestDiscount
-    ).then((res) => setCart(res));
+    ).then((res) => {
+      setCart(res);
+    });
   };
 
   const createSpecialRequest = () => {
     CartDataSource.createSpecialRequest(route.params.shop.id, request).then(
-      (res) =>
+      (res) => {
         CartDataSource.addSpecialRequest(route.params.shop.id, res).then(
-          (res) => {
-            navigation.navigate("Cart", { shop: route.params.shop });
+          (res: CartEntity) => {
+            navigation.navigate("Cart", {
+              shop: route.params.shop,
+            });
           }
-        )
+        );
+      }
     );
   };
 
   const handleConfirmSpecialRequest = () => {
     createSpecialRequest();
-    navigation.navigate("Cart", { shop: route.params.shop });
   };
 
   return (

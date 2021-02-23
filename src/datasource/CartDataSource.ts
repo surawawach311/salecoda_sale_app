@@ -45,16 +45,16 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static calculateSpecialRequest(shopId: string, data: ItemSpecialRequest[]) {
-        let arr = { data }
+    static calculateSpecialRequest(shopId: string, discounts: ItemSpecialRequest[]) {
+        let arr = { discounts }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart/calculate_special_request?shopId=${shopId}`, arr)
             .then(res => res.data)
             .catch(error => console.log(error))
     }
 
-    static createSpecialRequest(shopId: string, data: ItemSpecialRequest[]): Promise<string> {
-        let arr = { 'data': data }
+    static createSpecialRequest(shopId: string, discounts: ItemSpecialRequest[]): Promise<string> {
+        let arr = { discounts }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart/special_request?shopId=${shopId}`, arr)
             .then(res => res.data.id)
@@ -64,6 +64,16 @@ export class CartDataSource {
         const data = {
             action: "add_special_request",
             special_request_id: specialId,
+        }
+        return httpClient
+            .post(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`, data)
+            .then(res => res.data)
+            .catch(error => console.log(error))
+    }
+
+    static clearSpecialRequest(shopId: string) {
+        const data = {
+            action: "remove_special_request",
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`, data)
