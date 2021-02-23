@@ -95,5 +95,5 @@ export interface SpecialRequestEnity {
     special_request_id: string
     image: string
     item_id: string
-    total: string
+    total: number
 }
