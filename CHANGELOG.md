@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.11.3] - 2020-2-23
+
+- Fixed Can't submit special request amount 0 
+
 ## Added [v1.11.2] - 2020-2-23
 
 - Improve Special Request in Cart Screen
