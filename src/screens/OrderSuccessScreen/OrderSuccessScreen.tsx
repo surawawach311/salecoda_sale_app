@@ -9,6 +9,10 @@ import { ShopDataSource } from "../../datasource/ShopDataSource";
 import { ShopEntity } from "../../entities/ShopEntity";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { Icon, Accordion } from "native-base";
+import { sum } from "lodash";
+import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
+import AccrodingPrice from "../../components/AccrodingPrice";
+import { DiscountOrderEntity } from "../../entities/OrderEntity";
 
 type OrderSuccessScreenRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -20,99 +24,36 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
   route,
 }) => {
   const [shop, setShop] = useState<ShopEntity>();
+  const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>(
+    []
+  );
+  const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
 
   useEffect(() => {
+    initialData();
     getShopInfo();
   }, []);
 
-  const dataArray = [{ title: "ส่วนลดรายการ", content: "" }];
-
-  const _renderHeader = (item: { title: React.ReactNode }, expanded: any) => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          marginVertical: 5,
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            backgroundColor: "#FFFFFF",
-          }}
-        >
-          <Text style={{ fontSize: 14, color: "#6B7995" }}>{item.title}</Text>
-
-          {expanded ? (
-            <Icon
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "rgba(107, 121, 149, 1)",
-              }}
-              type="AntDesign"
-              name="up"
-            />
-          ) : (
-            <Icon
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "rgba(107, 121, 149, 1)",
-              }}
-              type="AntDesign"
-              name="down"
-            />
-          )}
-        </View>
-        <Text style={styled.textDiscountFromProduct}>
-          {currencyFormat(
-            route.params.data.discount_memo
-              .filter((item) => item.item_id != null && item.item_id != "")
-              .reduce((sum, item) => sum + item.price * item.quantity, 0)
-          )}
-        </Text>
-      </View>
-    );
-  };
-  const _renderContent = () => {
-    return route.params.data.discount_memo
-      .filter((item) => item.item_id != null && item.item_id != "")
-      .map((item) => {
-        return (
-          <View
-            key={item.id}
-            style={{
-              backgroundColor: "#FBFBFB",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingVertical: 5,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(156, 169, 197, 1)",
-              }}
-            >
-              {`${item.name} (${item.price}฿ x ${item.quantity} ลัง)`}
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(156, 169, 197, 1)",
-              }}
-            >
-              {currencyFormat(item.price * item.quantity)}
-            </Text>
-          </View>
-        );
+  const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
+    let arrayOutput: any[] = [];
+    data.map((item: any) => {
+      arrayOutput.push({
+        item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
+        price: item.price * item.quantity,
       });
+    });
+    return arrayOutput;
+  };
+
+  const initialData = () => {
+    let promo = formatAccrodion(
+      route.params.data.discount_memo.filter(
+        (item) => item.item_id != null && item.item_id != ""
+      )
+    );
+    let request = formatAccrodion(route.params.data.special_request_discounts);
+    setDiscoutPromo(promo);
+    setSpecialRequest(request);
   };
 
   const getShopInfo = () => {
@@ -218,18 +159,33 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                       }}
                     >
                       <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
-                      <Text style={styled.textDiscountFromCash}>
+                      <Text style={[styled.textDiscountFromCash,{color:"#FF8329"}]}>
                         {currencyFormat(item.price)}
                       </Text>
                     </View>
                   );
                 })
             : null}
-          <Accordion
-            dataArray={dataArray}
-            renderHeader={_renderHeader}
-            renderContent={_renderContent}
-            style={{ borderWidth: 0, paddingVertical: 5 }}
+          {route.params.data.discount_memo.filter(
+            (item: DiscountOrderEntity) => item.item_id != ""
+          ).length > 0 ? (
+            <AccrodingPrice
+              title="ส่วนลดรายการ"
+              total={route.params.data.discount_memo
+                .filter((item: DiscountOrderEntity) => item.item_id != "")
+                .reduce((sum, item) => sum + item.price * item.quantity, 0)}
+              detail={discoutPromo}
+              price_color={"#3AAE49"}
+            />
+          ) : null}
+          <AccrodingPrice
+            title="ขอส่วนลดพิเศษเพิ่ม"
+            total={route.params.data.special_request_discounts.reduce(
+              (sum, item) => sum + item.price * item.quantity,
+              0
+            )}
+            detail={specialRequest}
+            price_color={"#BB6BD9"}
           />
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดรวม</Text>
