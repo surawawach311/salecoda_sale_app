@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.11.4] - 2020-2-24
+
+- Refactort code cart screen , success screen, detail success screen
+
 ## Fixed [v1.11.3] - 2020-2-23
 
 - Fixed Can't submit special request amount 0 
