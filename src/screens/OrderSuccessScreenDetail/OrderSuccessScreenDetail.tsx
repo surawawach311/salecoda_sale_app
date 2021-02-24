@@ -93,8 +93,6 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
   } = route.params.data;
   return (
     <View style={styled.container}>
-      {console.log(route.params.data)}
-      
       <ScrollView>
         <View style={styled.upperContainer}>
           <View style={styled.innerUpperContainer}>
