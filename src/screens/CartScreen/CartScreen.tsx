@@ -23,20 +23,16 @@ import { ShopEntity } from "../../entities/ShopEntity";
 import Dash from "react-native-dash";
 import {
   CartEntity,
-  DiscountEntity,
   ItemCart,
   paymentCartEntity,
   PremiumEntity,
-  SpecialRequestEnity,
 } from "../../entities/CartEntity";
 import { OrderFacade } from "../../facade/OrderFacade";
 import { OrderEntity } from "../../entities/OrderEntity";
-import { Accordion, Icon } from "native-base";
 import { currencyFormat } from "../../utilities/CurrencyFormat";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CartEmptyState from "./CartEmptyState";
 import AccrodingPrice from "../../components/AccrodingPrice";
-import { OrderDataSource } from "../../datasource/OrderDataSource";
 import { useIsFocused } from "@react-navigation/native";
 import PremiumCard from "../../components/PremiumCard";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
@@ -218,7 +214,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       );
     }
   };
-  const dataArray = [{ title: "ส่วนลดรายการ", content: "" }];
+
   const confirmOrder = (
     shop: ShopEntity,
     shippingAddress?: any,
@@ -338,6 +334,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       title="ขอส่วนลดพิเศษเพิ่ม"
                       total={cart.total_received_special_request_discount}
                       detail={specialRequest}
+                      price_color={"#BB6BD9"}
                     />
                   </View>
                 ) : (
@@ -432,7 +429,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   {cashDiscount != 0 ? (
                     <View style={styled.warpPrice}>
                       <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
-                      <Text style={styled.textDiscountFromCash}>
+                      <Text
+                        style={{
+                          color: "#FF8329",
+                          fontSize: 16,
+                          fontWeight: "bold",
+                        }}
+                      >
                         {currencyFormat(cashDiscount)}
                       </Text>
                     </View>
@@ -446,14 +449,18 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         .filter((item) => item.item_id != null)
                         .reduce((sum, item) => sum + item.total, 0)}
                       detail={discoutPromo}
+                      price_color={"#3AAE49"}
+                    />
+                  ) : null}
+                  {cart.received_special_request_discounts.length > 0 ? (
+                    <AccrodingPrice
+                      title="ขอส่วนลดพิเศษเพิ่ม"
+                      total={cart.total_received_special_request_discount}
+                      detail={specialRequest}
+                      price_color={"#BB6BD9"}
                     />
                   ) : null}
 
-                  <AccrodingPrice
-                    title="ขอส่วนลดพิเศษเพิ่ม"
-                    total={cart.total_received_special_request_discount}
-                    detail={specialRequest}
-                  />
                   <View
                     style={{
                       backgroundColor: "#FBFBFB",
@@ -539,22 +546,39 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   shop={route.params.shop}
                 />
               </ScrollView>
-              <TouchableOpacity
-                style={styled.confirmOrderButton}
-                onPress={() => {
-                  confirmOrder(route.params.shop, shippingAddress, cart);
+              <View
+                style={{
+                  justifyContent: "center",
+                  backgroundColor: "#FFFFFF",
+                  flexDirection: "column",
+                  height: 90,
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 6,
+                  },
+                  shadowOpacity: 0.39,
+                  shadowRadius: 8.3,
+                  elevation: 13,
                 }}
               >
-                <View style={styled.iconCartWarp}>
-                  <Image
-                    style={styled.iconLocation}
-                    source={require("../../../assets/order-cart.png")}
-                  />
-                </View>
-                <Text style={styled.textconfirmOrderButton}>
-                  ยืนยันคำสั่งซื้อ
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styled.confirmOrderButton}
+                  onPress={() => {
+                    confirmOrder(route.params.shop, shippingAddress, cart);
+                  }}
+                >
+                  <View style={styled.iconCartWarp}>
+                    <Image
+                      style={styled.iconLocation}
+                      source={require("../../../assets/order-cart.png")}
+                    />
+                  </View>
+                  <Text style={styled.textconfirmOrderButton}>
+                    ยืนยันคำสั่งซื้อ
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </>
           ) : (
             <CartEmptyState />
@@ -746,6 +770,7 @@ const styled = StyleSheet.create({
     padding: 10,
     margin: 20,
     alignItems: "center",
+    height: 50,
   },
   iconCartWarp: {
     marginRight: 100,
