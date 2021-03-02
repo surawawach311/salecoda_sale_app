@@ -57,7 +57,10 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
               onPress={() => {
                 navigation.navigate("Purchase", {
                   screen: "ShopList",
-                  params: { territory: profile.territory },
+                  params: {
+                    territory: profile.territory,
+                    company: profile.company,
+                  },
                 });
               }}
             >
