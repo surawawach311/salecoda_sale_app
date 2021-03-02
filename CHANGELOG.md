@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.11.5] - 2020-3-2
+
+- Fixed cash discount in order success screen and success detail screen
+
 ## Fixed [v1.11.4] - 2020-2-24
 
 - Refactort code cart screen , success screen, detail success screen
