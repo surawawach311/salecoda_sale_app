@@ -151,7 +151,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
           </View>
           {discount_memo.length > 0
             ? discount_memo
-                .filter((item) => item.item_id == "cash")
+                .filter((item) => item.id == "cash")
                 .map((item) => {
                   return (
                     <View
