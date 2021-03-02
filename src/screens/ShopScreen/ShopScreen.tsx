@@ -19,7 +19,10 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }, []);
 
   const fecthData = async () => {
-    await ShopDataSource.getProduct(route.params.shop.id).then((res) => {
+    await ShopDataSource.getProduct(
+      route.params.shop.id,
+      route.params.company
+    ).then((res) => {
       setProductList(res);
     });
   };

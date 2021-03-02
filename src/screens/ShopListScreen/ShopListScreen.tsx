@@ -43,7 +43,7 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
               <ListItem
                 key={data.name}
                 onPress={() => {
-                  navigation.navigate("Shop", { shop: data });
+                  navigation.navigate("Shop", { shop: data,company: route.params.company });
                 }}
               >
                 <Text key={data.name}>{data.name}</Text>
