@@ -2,6 +2,11 @@
 
 ## [Version - 1]
 
+## Fixed [v1.11.4] - 2020-03-04
+
+- Fixed scroll lag in ShopScreen by change ScrollView to FlatList
+- Added image resize method to ProductCard in ShopScreen
+
 ## Fixed [v1.11.3] - 2020-2-23
 
 - Fixed Can't submit special request amount 0 
