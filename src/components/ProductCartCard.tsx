@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     color: "#181725",
     fontWeight: "bold",
   },
-  textPriceTotal: { fontSize: 18, color: "#FF5D5D", fontWeight: "bold" },
+  textPriceTotal: { fontSize: 18, color: "#181725", fontWeight: "bold" },
   warpQuantity: {
     marginTop: 8,
     flexDirection: "row",

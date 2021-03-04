@@ -18,8 +18,8 @@ import SpecialRequestScreen from "../screens/SpecialRequestScreen/SpecialRequest
 import { ItemSpecialRequest } from "../models/SpecialRequestModel";
 
 export type PurchaseStackParamList = {
-  ShopList: { territory: string };
-  Shop: { shop: ShopEntity };
+  ShopList: { territory: string; company: string };
+  Shop: { shop: ShopEntity; company: string };
   ProductInfo: { product: ProductEntity; shop: ShopEntity };
   Cart: { shop: ShopEntity };
   OrderSuccess: { data: OrderEntity };

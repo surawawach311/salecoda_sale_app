@@ -6,6 +6,7 @@ import { currencyFormat } from "../utilities/CurrencyFormat";
 export interface AccrodingPriceProps {
   title: string;
   total: number;
+  price_color?: string;
   detail: {
     item: string;
     price: number;
@@ -16,6 +17,7 @@ const AccrodingPrice: React.FC<AccrodingPriceProps> = ({
   title,
   total,
   detail,
+  price_color,
 }) => {
   const props = [
     {
@@ -39,7 +41,14 @@ const AccrodingPrice: React.FC<AccrodingPriceProps> = ({
             <Icon style={styled.iconAccording} type="AntDesign" name="down" />
           )}
         </View>
-        <Text style={styled.textContentName}>{currencyFormat(item.total)}</Text>
+        <Text
+          style={[
+            styled.textContentName,
+            price_color ? { color: price_color } : { color: "#6B7995" },
+          ]}
+        >
+          {currencyFormat(item.total)}
+        </Text>
       </View>
     );
   };

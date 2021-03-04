@@ -2,10 +2,22 @@
 
 ## [Version - 1]
 
-## Fixed [v1.11.4] - 2020-03-04
+## Fixed [v1.12.1] - 2020-03-04
 
 - Fixed scroll lag in ShopScreen by change ScrollView to FlatList
 - Added image resize method to ProductCard in ShopScreen
+
+## Enhance [v1.12.0] - 2020-3-2
+
+- Enhance filter product by company
+
+## Fixed [v1.11.5] - 2020-3-2
+
+- Fixed cash discount in order success screen and success detail screen
+
+## Fixed [v1.11.4] - 2020-2-24
+
+- Refactort code cart screen , success screen, detail success screen
 
 ## Fixed [v1.11.3] - 2020-2-23
 

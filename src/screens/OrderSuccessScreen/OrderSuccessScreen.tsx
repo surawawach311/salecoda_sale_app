@@ -8,7 +8,9 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { ShopDataSource } from "../../datasource/ShopDataSource";
 import { ShopEntity } from "../../entities/ShopEntity";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import { Icon, Accordion } from "native-base";
+import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
+import AccrodingPrice from "../../components/AccrodingPrice";
+import { DiscountOrderEntity } from "../../entities/OrderEntity";
 
 type OrderSuccessScreenRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -20,99 +22,36 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
   route,
 }) => {
   const [shop, setShop] = useState<ShopEntity>();
+  const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>(
+    []
+  );
+  const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
 
   useEffect(() => {
+    initialData();
     getShopInfo();
   }, []);
 
-  const dataArray = [{ title: "ส่วนลดรายการ", content: "" }];
-
-  const _renderHeader = (item: { title: React.ReactNode }, expanded: any) => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          marginVertical: 5,
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            backgroundColor: "#FFFFFF",
-          }}
-        >
-          <Text style={{ fontSize: 14, color: "#6B7995" }}>{item.title}</Text>
-
-          {expanded ? (
-            <Icon
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "rgba(107, 121, 149, 1)",
-              }}
-              type="AntDesign"
-              name="up"
-            />
-          ) : (
-            <Icon
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "rgba(107, 121, 149, 1)",
-              }}
-              type="AntDesign"
-              name="down"
-            />
-          )}
-        </View>
-        <Text style={styled.textDiscountFromProduct}>
-          {currencyFormat(
-            route.params.data.discount_memo
-              .filter((item) => item.item_id != null && item.item_id != "")
-              .reduce((sum, item) => sum + item.price * item.quantity, 0)
-          )}
-        </Text>
-      </View>
-    );
-  };
-  const _renderContent = () => {
-    return route.params.data.discount_memo
-      .filter((item) => item.item_id != null && item.item_id != "")
-      .map((item) => {
-        return (
-          <View
-            key={item.id}
-            style={{
-              backgroundColor: "#FBFBFB",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingVertical: 5,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(156, 169, 197, 1)",
-              }}
-            >
-              {`${item.name} (${item.price}฿ x ${item.quantity} ลัง)`}
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: "rgba(156, 169, 197, 1)",
-              }}
-            >
-              {currencyFormat(item.price * item.quantity)}
-            </Text>
-          </View>
-        );
+  const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
+    let arrayOutput: any[] = [];
+    data.map((item: any) => {
+      arrayOutput.push({
+        item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
+        price: item.price * item.quantity,
       });
+    });
+    return arrayOutput;
+  };
+
+  const initialData = () => {
+    let promo = formatAccrodion(
+      route.params.data.discount_memo.filter(
+        (item) => item.item_id != null && item.item_id != ""
+      )
+    );
+    let request = formatAccrodion(route.params.data.special_request_discounts);
+    setDiscoutPromo(promo);
+    setSpecialRequest(request);
   };
 
   const getShopInfo = () => {
@@ -120,7 +59,16 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
       route.params.data.buyer_id
     ).then((res: ShopEntity) => setShop(res));
   };
-
+  const {
+    special_request_discounts,
+    discount_memo,
+    before_discount,
+    total_discount,
+    total_price,
+    order_no,
+    items,
+    premium_memo,
+  } = route.params.data;
   return (
     <View style={styled.container}>
       <View style={styled.headerWarp}>
@@ -169,16 +117,14 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
               style={styled.iconInvoice}
               source={require("../../../assets/invoice.png")}
             />
-            <Text style={styled.textOrderNumber}>
-              {route.params.data.order_no}
-            </Text>
+            <Text style={styled.textOrderNumber}>{order_no}</Text>
           </View>
           <View style={styled.productHeaderWarp}>
             <Text style={styled.textProductHeader}>สินค้า</Text>
             <Text style={styled.textProductHeader}>ราคารวม</Text>
           </View>
 
-          {route.params.data.items.map((item) => {
+          {items.map((item) => {
             return (
               <View key={item.id} style={styled.productTextWarp}>
                 <Text
@@ -200,12 +146,12 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ราคาก่อนลด</Text>
             <Text style={styled.textPrice}>
-              {currencyFormat(route.params.data.before_discount)}
+              {currencyFormat(before_discount)}
             </Text>
           </View>
-          {route.params.data.discount_memo.length > 0
-            ? route.params.data.discount_memo
-                .filter((item) => item.item_id == null || item.item_id == "")
+          {discount_memo.length > 0
+            ? discount_memo
+                .filter((item) => item.id == "cash")
                 .map((item) => {
                   return (
                     <View
@@ -218,32 +164,53 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                       }}
                     >
                       <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
-                      <Text style={styled.textDiscountFromCash}>
+                      <Text
+                        style={[
+                          styled.textDiscountFromCash,
+                          { color: "#FF8329" },
+                        ]}
+                      >
                         {currencyFormat(item.price)}
                       </Text>
                     </View>
                   );
                 })
             : null}
-          <Accordion
-            dataArray={dataArray}
-            renderHeader={_renderHeader}
-            renderContent={_renderContent}
-            style={{ borderWidth: 0, paddingVertical: 5 }}
-          />
+          {discount_memo.filter(
+            (item: DiscountOrderEntity) => item.item_id != ""
+          ).length > 0 ? (
+            <AccrodingPrice
+              title="ส่วนลดรายการ"
+              total={discount_memo
+                .filter((item: DiscountOrderEntity) => item.item_id != "")
+                .reduce((sum, item) => sum + item.price * item.quantity, 0)}
+              detail={discoutPromo}
+              price_color={"#3AAE49"}
+            />
+          ) : null}
+          {special_request_discounts.length > 0 ? (
+            <AccrodingPrice
+              title="ขอส่วนลดพิเศษเพิ่ม"
+              total={special_request_discounts.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+              )}
+              detail={specialRequest}
+              price_color={"#BB6BD9"}
+            />
+          ) : null}
+
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดรวม</Text>
             <Text
               style={{ color: "#616A7B", fontSize: 16, fontWeight: "bold" }}
             >
-              {currencyFormat(route.params.data.total_discount)}
+              {currencyFormat(total_discount)}
             </Text>
           </View>
           <View style={styled.productTextWarp}>
             <Text style={styled.textLabelTotal}>ราคารวม</Text>
-            <Text style={styled.textTotal}>
-              {currencyFormat(route.params.data.total_price)}
-            </Text>
+            <Text style={styled.textTotal}>{currencyFormat(total_price)}</Text>
           </View>
           <Dash
             dashGap={2}
@@ -255,8 +222,8 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
           <View style={{ marginTop: 10 }}>
             <Text style={styled.textProductHeader}>ของแถมที่ได้รับ</Text>
             <View style={{ marginTop: 10 }}>
-              {route.params.data.premium_memo.length > 0 ? (
-                route.params.data.premium_memo.map((item) => {
+              {premium_memo.length > 0 ? (
+                premium_memo.map((item) => {
                   return (
                     <View
                       key={item.id}
@@ -379,7 +346,6 @@ const styled = StyleSheet.create({
   shopNameWarp: {
     flexDirection: "row",
     justifyContent: "center",
-    // marginTop: 20,
   },
   textShopName: {
     color: "#4C95FF",
