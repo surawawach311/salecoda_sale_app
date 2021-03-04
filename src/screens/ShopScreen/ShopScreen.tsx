@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Image, StyleSheet, ScrollView } from "react-native";
+import { Text, Image, StyleSheet, FlatList } from "react-native";
 import { Container, View } from "native-base";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -30,21 +30,12 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         <Search />
       </View>
       <View style={styles.warpShopHeader}>
-        <Image
-          style={styles.bgImage}
-          source={require("../../../assets/bgShop.png")}
-        />
+        <Image style={styles.bgImage} source={require("../../../assets/bgShop.png")} />
         <View style={styles.shopInfo}>
           <Text style={styles.textShopName}>{route.params.shop.name}</Text>
-          <Image
-            style={styles.skyRocket}
-            source={require("../../../assets/skyrocket.png")}
-          />
+          <Image style={styles.skyRocket} source={require("../../../assets/skyrocket.png")} />
           <View style={styles.shopPoint}>
-            <Image
-              style={styles.coin}
-              source={require("../../../assets/coin.png")}
-            />
+            <Image style={styles.coin} source={require("../../../assets/coin.png")} />
 
             <Text style={styles.textPoint}>0 คะแนน</Text>
           </View>
@@ -54,11 +45,11 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         <ButtonShop onPress={() => navigation.navigate("ShopList")} />
       </View>
       <View style={styles.wrapProduct}>
-        <ScrollView
-          contentContainerStyle={styles.grid}
-          showsVerticalScrollIndicator={false}
-        >
-          {productList?.map((item) => (
+        <FlatList
+          data={productList}
+          numColumns={2}
+          columnWrapperStyle={{ flex: 1, justifyContent: "center" }}
+          renderItem={({ item }) => (
             <TouchableOpacity
               key={item.id}
               onPress={() =>
@@ -77,8 +68,9 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 havePromo={item.is_have_promotion}
               />
             </TouchableOpacity>
-          ))}
-        </ScrollView>
+          )}
+          keyExtractor={(item) => item.id}
+        />
       </View>
     </Container>
   );

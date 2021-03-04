@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text, Platform } from "react-native";
 import TagLabel from "./TagLabel";
 
 interface ProductCardProps {
@@ -25,7 +25,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <View style={styleds.warpImage}>
           {imagePath != "" ? (
             <>
-              <Image source={{ uri: imagePath }} style={styleds.imageProduct} />
+              <Image
+                source={{ uri: imagePath }}
+                style={styleds.imageProduct}
+                resizeMethod={Platform.OS === "android" ? "resize" : "auto"}
+              />
             </>
           ) : (
             <>
