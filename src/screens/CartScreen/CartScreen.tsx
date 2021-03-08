@@ -227,7 +227,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else {
       OrderFacade.confirmOrder(shop, shippingAddress, cart).then(
         (res: OrderEntity) => {
-          CartDataSource.clearSpecialRequest(shop.id);
+          CartDataSource.clearCart(shop.id);
           navigation.navigate("OrderSuccess", { data: res });
         }
       );
@@ -253,7 +253,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   {cart.items.map((item: ItemCart, index: number) => {
                     return (
                       <ProductCartCard
-                        key={item.title}
+                        key={item.id}
                         title={item.title}
                         pricePerVolume={item.price_per_volume}
                         volumeUnit={item.volume_unit}
