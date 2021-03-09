@@ -80,4 +80,14 @@ export class CartDataSource {
             .then(res => res.data)
             .catch(error => console.log(error))
     }
+
+    static clearCart(shopId: string) {
+        const data = {
+            action: "clear",
+        }
+        return httpClient
+            .post(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`, data)
+            .then(res => res.data)
+            .catch(error => console.log(error))
+    }
 }

@@ -2,6 +2,15 @@
 
 ## [Version - 1]
 
+## Enhance [v1.13.0] - 2020-03-05
+
+- Updated Cart to be cleared when confirm Order
+
+## Fixed [v1.12.1] - 2020-03-04
+
+- Fixed scroll lag in ShopScreen by change ScrollView to FlatList
+- Added image resize method to ProductCard in ShopScreen
+
 ## Enhance [v1.12.0] - 2020-3-2
 
 - Enhance filter product by company
