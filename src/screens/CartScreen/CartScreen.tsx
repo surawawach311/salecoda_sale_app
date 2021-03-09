@@ -90,7 +90,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     await CartDataSource.addToCartByShopId(
       route.params.shop.id,
       itemId,
-      quantity + 1
+      quantity + 1,
+      payment,
+      useSubsidize
     ).then((res: CartEntity) => {
       setCart(res);
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -108,7 +110,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     await CartDataSource.addToCartByShopId(
       route.params.shop.id,
       itemId,
-      quantity - 1
+      quantity - 1,
+      payment,
+      useSubsidize
     ).then((res: CartEntity) => {
       setCart(res);
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -127,7 +131,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       CartDataSource.addToCartByShopId(
         route.params.shop.id,
         itemId,
-        quantity
+        quantity,
+        payment,
+        useSubsidize
       ).then((res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -145,7 +151,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const removeItem = async (itemId: string) => {
-    CartDataSource.removeItem(route.params.shop.id, itemId).then(
+    CartDataSource.removeItem(route.params.shop.id, itemId, payment,useSubsidize).then(
       (res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -172,7 +178,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const handlePayment = (payment: string) => {
     if (payment == "cash") {
       setPayment("cash");
-      CartDataSource.calculate(route.params.shop.id, payment).then(
+      CartDataSource.calculate(route.params.shop.id, payment, useSubsidize).then(
         (res: CartEntity) => {
           if (
             res.received_discounts.filter((item) => item.id != null)
@@ -202,7 +208,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else {
       setPayment("credit");
       setCashDiscount(0);
-      CartDataSource.calculate(route.params.shop.id, payment).then(
+      CartDataSource.calculate(route.params.shop.id, payment, useSubsidize).then(
         (res: CartEntity) => {
           setCart(res);
           let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -217,6 +223,15 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       );
     }
   };
+
+  const handleUseSubsidize = (b: boolean) => {
+    CartDataSource.calculate(route.params.shop.id, payment, b).then(
+      (res: CartEntity) => {
+        setCart(res)
+        setUseSubsudize(b)
+      }
+    )
+  }
 
   const confirmOrder = (
     shop: ShopEntity,
@@ -421,7 +436,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       alignItems: "center",
                     }}
                   >
-                    {/* {console.log(cart)} */}
                     <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
                     <Text style={{ color: "#616A7B" }}>
                       {currencyFormat(cart.available_subsidize)}
@@ -436,14 +450,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   >
                     <CheckBox
                       checked={useSubsidize}
-                      onPress={() => setUseSubsudize(!useSubsidize)}
+                      onPress={() => handleUseSubsidize(!useSubsidize)}
                     />
 
                     <Text style={{ marginLeft: 15, color: "#6B7995" }}>
                       ใช้ส่วนลด
                     </Text>
                     <Text style={{ color: "#FF5D5D", fontWeight: "bold" }}>
-                      {currencyFormat(cart.usable_subsidize)}
+                      {' ' + currencyFormat(cart.usable_subsidize)}
                     </Text>
                   </View>
                 </View>
