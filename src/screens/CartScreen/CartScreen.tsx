@@ -52,7 +52,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     []
   );
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [useSubsidize, setUseSubsudize] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -438,7 +437,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   >
                     <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
                     <Text style={{ color: "#616A7B" }}>
-                      {currencyFormat(cart.available_subsidize)}
+                      {cart.available_subsidize > 0 ? currencyFormat(cart.available_subsidize) : ''}
                     </Text>
                   </View>
                   <View
@@ -448,17 +447,22 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       alignItems: "center",
                     }}
                   >
-                    <CheckBox
-                      checked={useSubsidize}
-                      onPress={() => handleUseSubsidize(!useSubsidize)}
-                    />
-
-                    <Text style={{ marginLeft: 15, color: "#6B7995" }}>
-                      ใช้ส่วนลด
-                    </Text>
-                    <Text style={{ color: "#FF5D5D", fontWeight: "bold" }}>
-                      {' ' + currencyFormat(cart.usable_subsidize)}
-                    </Text>
+                    {cart.available_subsidize > 0 ? 
+                      <>
+                        <CheckBox
+                          checked={useSubsidize}
+                          onPress={() => handleUseSubsidize(!useSubsidize)}
+                          color="#FF5D5D"
+                          style={{ borderRadius: 4 }}
+                        />
+                        <Text style={{ marginLeft: 15, color: "#6B7995" }}>
+                          ใช้ส่วนลด
+                        </Text>
+                        <Text style={{ color: "#FF5D5D", fontWeight: "bold" }}>
+                          {' ' + currencyFormat(cart.usable_subsidize)}
+                        </Text>
+                      </> : <Text style={{ color: "#6B7995" }}>ไม่มีวงเงินที่สามารถใช้ได้</Text>
+                    }
                   </View>
                 </View>
                 <Dash
@@ -509,13 +513,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       price_color={"#BB6BD9"}
                     />
                   ) : null}
-
-                  <View style={styled.warpPrice}>
+                  {cart.subsidize_discount != 0 ? <View style={styled.warpPrice}>
                     <Text style={styled.textDiscount}>ส่วนลดดูแลราคา</Text>
                     <Text style={styled.textSubsidizeDiscount}>
                       {currencyFormat(cart.subsidize_discount)}
                     </Text>
-                  </View>
+                  </View> : null}
                   <View
                     style={{
                       backgroundColor: "#FBFBFB",
