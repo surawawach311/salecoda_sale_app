@@ -43,7 +43,6 @@ export class CartDataSource {
             payment_method: payment,
             is_subsidize: useSubsidize,
         }
-        console.log("DATA", data)
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`, data)
             .then(res => res.data)

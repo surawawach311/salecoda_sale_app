@@ -81,6 +81,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         );
         setSpecialRequest(discountSpecial);
         setDiscoutPromo(discountProduct);
+        setUseSubsudize(false)
       }
     );
   };
