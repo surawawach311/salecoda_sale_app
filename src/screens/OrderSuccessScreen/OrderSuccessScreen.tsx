@@ -68,6 +68,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
     order_no,
     items,
     premium_memo,
+    subsidize,
   } = route.params.data;
   return (
     <View style={styled.container}>
@@ -149,6 +150,37 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
               {currencyFormat(before_discount)}
             </Text>
           </View>
+          {discount_memo.filter(
+            (item: DiscountOrderEntity) => item.item_id != ""
+          ).length > 0 ? (
+            <AccrodingPrice
+              title="ส่วนลดรายการ"
+              total={discount_memo
+                .filter((item: DiscountOrderEntity) => item.item_id != "")
+                .reduce((sum, item) => sum + item.price * item.quantity, 0)}
+              detail={discoutPromo}
+              price_color={"#3AAE49"}
+            />
+          ) : null}
+          {special_request_discounts.length > 0 ? (
+            <AccrodingPrice
+              title="ขอส่วนลดพิเศษเพิ่ม"
+              total={special_request_discounts.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+              )}
+              detail={specialRequest}
+              price_color={"#BB6BD9"}
+            />
+          ) : null}
+          {subsidize != 0 ? <View style={styled.productTextWarp}>
+            <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดดูแลราคา</Text>
+            <Text
+              style={{ color: "#FF5D5D", fontSize: 16, fontWeight: "bold" }}
+            >
+              {currencyFormat(subsidize)}
+            </Text>
+          </View> : null}
           {discount_memo.length > 0
             ? discount_memo
                 .filter((item) => item.id == "cash")
@@ -176,30 +208,6 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                   );
                 })
             : null}
-          {discount_memo.filter(
-            (item: DiscountOrderEntity) => item.item_id != ""
-          ).length > 0 ? (
-            <AccrodingPrice
-              title="ส่วนลดรายการ"
-              total={discount_memo
-                .filter((item: DiscountOrderEntity) => item.item_id != "")
-                .reduce((sum, item) => sum + item.price * item.quantity, 0)}
-              detail={discoutPromo}
-              price_color={"#3AAE49"}
-            />
-          ) : null}
-          {special_request_discounts.length > 0 ? (
-            <AccrodingPrice
-              title="ขอส่วนลดพิเศษเพิ่ม"
-              total={special_request_discounts.reduce(
-                (sum, item) => sum + item.price * item.quantity,
-                0
-              )}
-              detail={specialRequest}
-              price_color={"#BB6BD9"}
-            />
-          ) : null}
-
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดรวม</Text>
             <Text
