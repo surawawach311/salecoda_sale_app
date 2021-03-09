@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.16.0] - 2020-3-09
+
+- Added subsidize discount to OrderSuccessScreenDetail
+
 ## Enhance [v1.15.0] - 2020-3-09
 
 - Added subsidize usage to CartScreen
