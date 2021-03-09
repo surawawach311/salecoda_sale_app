@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.13.0] - 2020-3-9
+
+- change position cash discount
+
 ## Enhance [v1.12.0] - 2020-3-2
 
 - Enhance filter product by company
