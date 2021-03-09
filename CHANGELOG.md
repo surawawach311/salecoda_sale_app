@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.15.0] - 2020-3-09
+
+- Added subsidize usage to CartScreen
+
 ## Enhance [v1.14.0] - 2020-3-09
 
 - change position cash discount
