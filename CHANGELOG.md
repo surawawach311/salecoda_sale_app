@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.14.0] - 2020-3-09
+
+- change position cash discount
+
 ## Enhance [v1.13.0] - 2020-03-05
 
 - Updated Cart to be cleared when confirm Order

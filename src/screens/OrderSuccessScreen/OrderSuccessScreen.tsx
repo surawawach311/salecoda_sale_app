@@ -192,7 +192,6 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                         flexDirection: "row",
                         justifyContent: "space-between",
                         marginVertical: 10,
-                        marginTop: 20,
                       }}
                     >
                       <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
