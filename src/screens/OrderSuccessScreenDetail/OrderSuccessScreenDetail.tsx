@@ -90,6 +90,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
     total_price,
     premium_memo,
     status,
+    subsidize,
   } = route.params.data;
   return (
     <View style={styled.container}>
@@ -249,6 +250,14 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               price_color={"#BB6BD9"}
             />
           ) : null}
+          {subsidize != 0 ? <View style={styled.productTextWarp}>
+            <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดดูแลราคา</Text>
+            <Text
+              style={{ color: "#FF5D5D", fontSize: 16, fontWeight: "bold" }}
+            >
+              {currencyFormat(subsidize)}
+            </Text>
+          </View> : null}
           {discount_memo.length > 0
             ? discount_memo
                 .filter((item) => item.item_id == null || item.id == "cash")
