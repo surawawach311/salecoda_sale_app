@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.12.0] - 2020-3-2
+
+- Enhance filter product by company
+
 ## Fixed [v1.11.5] - 2020-3-2
 
 - Fixed cash discount in order success screen and success detail screen
