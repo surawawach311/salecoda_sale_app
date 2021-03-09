@@ -426,20 +426,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       {currencyFormat(cart.before_discount)}
                     </Text>
                   </View>
-                  {cashDiscount != 0 ? (
-                    <View style={styled.warpPrice}>
-                      <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
-                      <Text
-                        style={{
-                          color: "#FF8329",
-                          fontSize: 16,
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {currencyFormat(cashDiscount)}
-                      </Text>
-                    </View>
-                  ) : null}
+
                   {cart.received_discounts.filter(
                     (item) => item.item_id != null
                   ).length > 0 ? (
@@ -460,7 +447,20 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       price_color={"#BB6BD9"}
                     />
                   ) : null}
-
+                  {cashDiscount != 0 ? (
+                    <View style={styled.warpPrice}>
+                      <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
+                      <Text
+                        style={{
+                          color: "#FF8329",
+                          fontSize: 16,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {currencyFormat(cashDiscount)}
+                      </Text>
+                    </View>
+                  ) : null}
                   <View
                     style={{
                       backgroundColor: "#FBFBFB",
@@ -470,6 +470,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       padding: 5,
                     }}
                   >
+                    
                     <Text style={styled.textBeforeTotal}>ส่วนลดรวม</Text>
                     <Text style={styled.textTotalDiscount}>
                       {currencyFormat(cart.total_discount)}
