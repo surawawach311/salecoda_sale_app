@@ -14,7 +14,8 @@ export interface OrderModel {
     discount_memo: DiscountEntity[]
     shipping_address: ShippingAdressModel
     special_request_discounts: SpecialRequestEnity[]
-    special_request_id: string
+    special_request_id: string,
+    subsidize: number,
 }
 
 export interface OrderItemModel {

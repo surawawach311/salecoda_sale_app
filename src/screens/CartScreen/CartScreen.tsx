@@ -243,7 +243,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else if (!cart?.selected_payment) {
       alert("กรุณาเลือกวิธีการชำระเงิน");
     } else {
-      OrderFacade.confirmOrder(shop, shippingAddress, cart).then(
+      OrderFacade.confirmOrder(shop, shippingAddress, cart, cart.subsidize_discount).then(
         (res: OrderEntity) => {
           CartDataSource.clearCart(shop.id);
           navigation.navigate("OrderSuccess", { data: res });
@@ -510,6 +510,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     />
                   ) : null}
 
+                  <View style={styled.warpPrice}>
+                    <Text style={styled.textDiscount}>ส่วนลดดูแลราคา</Text>
+                    <Text style={styled.textSubsidizeDiscount}>
+                      {currencyFormat(cart.subsidize_discount)}
+                    </Text>
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#FBFBFB",
@@ -744,6 +750,11 @@ const styled = StyleSheet.create({
   textBeforeDiscount: {
     color: "#6B7995",
     fontSize: 16,
+  },
+  textSubsidizeDiscount: {
+    color: "#FF5D5D",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   textDiscountFromProduct: {
     color: "rgba(58, 174, 73, 1)",
