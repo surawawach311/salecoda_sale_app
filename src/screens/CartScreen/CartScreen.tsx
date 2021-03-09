@@ -175,12 +175,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       CartDataSource.calculate(route.params.shop.id, payment).then(
         (res: CartEntity) => {
           if (
-            res.received_discounts.filter((item) => item.item_id != null)
+            res.received_discounts.filter((item) => item.id != null)
               .length > 0
           ) {
             {
               res.received_discounts.map((item) => {
-                if (item.item_id == null) {
+                if (item.id == 'cash') {
                   setCashDiscount(item.price);
                 }
               });
