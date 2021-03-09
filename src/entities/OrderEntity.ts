@@ -1,7 +1,6 @@
 import { ShopEntity } from "./ShopEntity"
 
 export interface OrderEntity {
-
     id: string
     order_no: string
     buyer_id: string
@@ -26,7 +25,7 @@ export interface OrderEntity {
     premium_memo: PremiumOrderEntity[]
     discount_memo: DiscountOrderEntity[]
     special_request_discounts: SpecialOrderEntity[]
-
+    subsidize: number
 }
 
 export interface OrderItemEnitity {
