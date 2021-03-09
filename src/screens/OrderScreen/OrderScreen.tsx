@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Search from "../../components/Search";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OrderCard from "../../components/OrderCard";
@@ -16,10 +16,13 @@ import { FilterOrder } from "../../definitions/FilterOrder";
 import { OrderFacade } from "../../facade/OrderFacade";
 import { ShopOrderCardModel } from "../../models/ShopOrderCard";
 import { set } from "react-native-reanimated";
+import { ThemeContext } from "../../stores/UserStore";
+import { UserEntity } from "../../entities/userEntity";
 
 type OrderScreenRouteProp = StackScreenProps<HomeStackParamList, "Order">;
 
 const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
+  const [user, setUser] = useState<UserEntity>();
   const [orderList, setOrderList] = useState<OrderEntity[]>();
   const [shopOrderCard, setShopOrderCard] = useState<ShopOrderCardModel[]>();
   const [filter, setFilter] = useState<FilterOrder>(FilterOrder.territory);
@@ -27,10 +30,12 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
     FilterOrder.territory
   );
   const [shopName, setShopName] = useState<string>();
+  const theme = useContext(ThemeContext);
 
   useEffect(() => {
     getAllOrder();
     getAllOrderGroupByShop();
+    theme.then((res) => setUser(res));
   }, []);
 
   const getAllOrder = () => {
@@ -59,7 +64,6 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
               setNavbutton(FilterOrder.territory);
               getAllOrder();
               setFilter(FilterOrder.territory);
-
             }}
             style={styled.filterList}
           >
@@ -254,7 +258,11 @@ const styled = StyleSheet.create({
   },
   textStatusActive: { color: "#4C95FF" },
   textStatusInActive: { color: "#6B7995" },
-  filterList: { flexDirection: "row", justifyContent: "space-between",marginBottom:7},
+  filterList: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 7,
+  },
   icon: { width: 20, height: 20, resizeMode: "contain" },
   textFilterOrderActive: { fontSize: 16, fontWeight: "bold", color: "#4C95FF" },
   textFilterOrderInActive: {
