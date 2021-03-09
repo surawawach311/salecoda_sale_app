@@ -15,6 +15,9 @@ export interface CartEntity {
     received_special_request_discounts: SpecialRequestEnity[]
     total_received_special_request_discount: number
     special_request_id: string
+    usable_subsidize:number
+    available_subsidize:number
+
 }
 
 export interface ItemCart {

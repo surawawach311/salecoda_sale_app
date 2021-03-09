@@ -36,6 +36,7 @@ import AccrodingPrice from "../../components/AccrodingPrice";
 import { useIsFocused } from "@react-navigation/native";
 import PremiumCard from "../../components/PremiumCard";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
+import { ListItem, Body, CheckBox } from "native-base";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
@@ -51,6 +52,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     []
   );
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [useSubsidize, setUseSubsudize] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {
     getCart();
@@ -408,9 +411,41 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     )}
                   </View>
                 </View>
-                <View style={styled.totalPriceContainer}>
-                  <Text style={styled.textHeaderPayment}>ส่วนลดที่เหลือ</Text>
-                  <Text>ไม่มีวงเงินเคลม</Text>
+                <View
+                  style={{ paddingHorizontal: 15, backgroundColor: "white" }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    {/* {console.log(cart)} */}
+                    <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
+                    <Text style={{ color: "#616A7B" }}>
+                      {currencyFormat(cart.available_subsidize)}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      marginVertical: 12,
+                      alignItems: "center",
+                    }}
+                  >
+                    <CheckBox
+                      checked={useSubsidize}
+                      onPress={() => setUseSubsudize(!useSubsidize)}
+                    />
+
+                    <Text style={{ marginLeft: 15, color: "#6B7995" }}>
+                      ใช้ส่วนลด
+                    </Text>
+                    <Text style={{ color: "#FF5D5D", fontWeight: "bold" }}>
+                      {currencyFormat(cart.usable_subsidize)}
+                    </Text>
+                  </View>
                 </View>
                 <Dash
                   dashGap={2}
