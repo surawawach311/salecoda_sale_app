@@ -1,4 +1,4 @@
-import { baseURL, BASE_URL_WHISPER } from "../config/develop-config";
+import { baseURL, BASE_URL_POPORING, BASE_URL_WHISPER } from "../config/develop-config";
 import { OrderEntity } from "../entities/OrderEntity";
 import { OrderModel } from "../models/OrderModel";
 import { httpClient } from "../services/HttpClient";
@@ -10,14 +10,14 @@ export class OrderDataSource {
             .catch(error => console.log(error))
     }
 
-    static getAllOrder(): Promise<OrderEntity[]> {
-        return httpClient.get(`${baseURL}/v1/sellcoda/orders?territory=A04&status=waiting_confirm&limit=35`)
+    static getOrderWithStatus(territory: string, company: string, status: string): Promise<OrderEntity[]> {
+        return httpClient.get(`${BASE_URL_POPORING}/v4/orders/sellcoda/territory?territory=${territory}&company_id=${company}&status=${status}`)
             .then(res => res.data.orders)
             .catch(error => console.log(error))
     }
 
-    static getOrderListByShopId(shopId: string): Promise<OrderEntity[]> {
-        return httpClient.get(`${baseURL}/v1/sellcoda/orders?buyer=${shopId}&status=waiting_confirm&limit=100`)
+    static getOrderListByShopId(shopId: string, company: string, status: string): Promise<OrderEntity[]> {
+        return httpClient.get(`${BASE_URL_POPORING}/v4/orders/sellcoda?company_id=${company}&dealer_id=${shopId}&status=${status}`)
             .then(res => res.data.orders)
             .catch(error => console.log(error))
     }

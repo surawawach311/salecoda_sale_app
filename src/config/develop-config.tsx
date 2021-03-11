@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export var baseURL = `https://dev-app.iconkaset.com/sohee`;
+export var BASE_URL_POPORING = `https://dev-app.iconkaset.com/poporing`;
 export var BASE_URL_DARK_FRAME = `https://dev-app.iconkaset.com/dark_frame`;
 export var BASE_URL_WHISPER = `https://dev-app.iconkaset.com/whisper`;
 export var BASE_URL_DEVILING = `https://dev-app.iconkaset.com`;
