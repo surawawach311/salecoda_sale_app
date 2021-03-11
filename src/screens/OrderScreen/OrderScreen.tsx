@@ -15,44 +15,93 @@ import { HomeStackParamList } from "../../navigations/HomeNavigator";
 import { FilterOrder } from "../../definitions/FilterOrder";
 import { OrderFacade } from "../../facade/OrderFacade";
 import { ShopOrderCardModel } from "../../models/ShopOrderCard";
-import { set } from "react-native-reanimated";
-import { ThemeContext } from "../../stores/UserStore";
-import { UserEntity } from "../../entities/userEntity";
+import { UserDataContext } from "../../provider/UserDataProvider";
+import EmptyState from "../../components/EmptyState";
 
 type OrderScreenRouteProp = StackScreenProps<HomeStackParamList, "Order">;
 
 const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
-  const [user, setUser] = useState<UserEntity>();
+  // const [user, setUser] = useState<UserEntity>();
   const [orderList, setOrderList] = useState<OrderEntity[]>();
   const [shopOrderCard, setShopOrderCard] = useState<ShopOrderCardModel[]>();
-  const [filter, setFilter] = useState<FilterOrder>(FilterOrder.territory);
+  const [filter, setFilter] = useState<
+    "waiting_order_confirm" | "opened" | "delivering"
+  >("waiting_order_confirm");
   const [navbutton, setNavbutton] = useState<FilterOrder>(
     FilterOrder.territory
   );
+  const [showOrder, setShowOrder] = useState<boolean>(true);
   const [shopName, setShopName] = useState<string>();
-  const theme = useContext(ThemeContext);
-
+  const userDataStore = useContext(UserDataContext);
+  const { userData } = userDataStore;
   useEffect(() => {
-    getAllOrder();
-    getAllOrderGroupByShop();
-    theme.then((res) => setUser(res));
+    getOrder("waiting_order_confirm");
+    getAllOrderGroupByShop(
+      userData.territory,
+      userData.company,
+      "waiting_order_confirm"
+    );
   }, []);
 
-  const getAllOrder = () => {
-    OrderDataSource.getAllOrder().then((res) => {
+  const handleNavButton = () => {
+    setShowOrder(false);
+    setNavbutton(FilterOrder.shop);
+    setShopName(undefined);
+    getAllOrderGroupByShop(userData.territory, userData.company, filter);
+  };
+
+  const handleFilter = (
+    status: "waiting_order_confirm" | "opened" | "delivering"
+  ) => {
+    setFilter(status);
+    if (showOrder) {
+      // if (navbutton == FilterOrder.territory) {
+      OrderDataSource.getOrderWithStatus(
+        userData.territory,
+        userData.company,
+        status
+      ).then((res) => {
+        setOrderList(res);
+      });
+    } else {
+      // } else if (navbutton == FilterOrder.shop) {
+      OrderFacade.formatShopOrderCard(
+        userData.territory,
+        userData.company,
+        status
+      ).then((res) => {
+        setShopOrderCard(res);
+      });
+    }
+  };
+
+  const getOrder = (status: string) => {
+    OrderDataSource.getOrderWithStatus(
+      userData.territory,
+      userData.company,
+      status
+    ).then((res) => {
       setOrderList(res);
     });
   };
 
-  const fetchOrderListByShop = (shopId: string) => {
-    OrderDataSource.getOrderListByShopId(shopId).then((res) => {
-      setFilter(FilterOrder.territory);
-      setOrderList(res);
-    });
+  const fetchOrderListByShop = (shopId: string, company: string) => {
+    OrderDataSource.getOrderListByShopId(shopId, company, filter).then(
+      (res) => {
+        setShowOrder(true);
+        setOrderList(res);
+      }
+    );
   };
 
-  const getAllOrderGroupByShop = () => {
-    OrderFacade.formatShopOrderCard().then((res) => setShopOrderCard(res));
+  const getAllOrderGroupByShop = (
+    territory: string,
+    company: string,
+    status: string
+  ) => {
+    OrderFacade.formatShopOrderCard(territory, company, status).then((res) => {
+      setShopOrderCard(res);
+    });
   };
   return (
     <View style={styled.container}>
@@ -62,8 +111,8 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() => {
               setNavbutton(FilterOrder.territory);
-              getAllOrder();
-              setFilter(FilterOrder.territory);
+              setShowOrder(true);
+              getOrder("waiting_order_confirm");
             }}
             style={styled.filterList}
           >
@@ -85,14 +134,12 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
                   : styled.textFilterOrderInActive
               }
             >
-              รายเขต (A04)
+              รายเขต ({userData.territory})
             </Text>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
             onPress={() => {
-              setFilter(FilterOrder.shop);
-              setNavbutton(FilterOrder.shop);
-              setShopName(undefined);
+              handleNavButton();
             }}
             style={styled.filterList}
           >
@@ -144,17 +191,59 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
         ) : null}
         <View style={styled.breakLine} />
         <View style={styled.filterStatus}>
-          <View style={styled.badgeStatus}>
-            <Text style={styled.textStatusActive}>รอยืนยันคำสั่งซื้อ</Text>
-          </View>
-          <Text style={styled.textStatusInActive}>เปิดออเดอร์แล้ว</Text>
-          <Text style={styled.textStatusInActive}>กำลังจัดส่ง</Text>
+          <TouchableOpacity
+            onPress={() => handleFilter("waiting_order_confirm")}
+          >
+            <View
+              style={
+                filter == "waiting_order_confirm" ? styled.badgeStatus : null
+              }
+            >
+              <Text
+                style={
+                  filter == "waiting_order_confirm"
+                    ? styled.textStatusActive
+                    : styled.textStatusInActive
+                }
+              >
+                รอยืนยันคำสั่งซื้อ
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFilter("opened")}>
+            <View style={filter == "opened" ? styled.badgeStatus : null}>
+              <Text
+                style={
+                  filter == "opened"
+                    ? styled.textStatusActive
+                    : styled.textStatusInActive
+                }
+              >
+                เปิดออเดอร์แล้ว
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFilter("delivering")}>
+            <View style={filter == "delivering" ? styled.badgeStatus : null}>
+              <Text
+                style={
+                  filter == "delivering"
+                    ? styled.textStatusActive
+                    : styled.textStatusInActive
+                }
+              >
+                กำลังจัดส่ง
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styled.breakLine} />
-        {filter == FilterOrder.territory ? (
-          <ScrollView style={{ marginBottom: 120 }}>
-            {orderList != undefined
-              ? orderList.map((order: OrderEntity) => {
+        {showOrder ? (
+          <ScrollView style={{ marginBottom: 120, marginTop: 10 }}>
+            {
+              // showOrder ? (
+              orderList != undefined && orderList.length > 0 ? (
+                orderList.map((order: OrderEntity) => {
                   return (
                     <TouchableOpacity
                       key={order.order_no}
@@ -176,65 +265,72 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
                     </TouchableOpacity>
                   );
                 })
-              : null}
+              ) : (
+                <EmptyState />
+              )
+            }
           </ScrollView>
         ) : (
           <ScrollView style={{ height: "100%" }}>
-            {shopOrderCard?.map((shop: ShopOrderCardModel) => {
-              return (
-                <TouchableOpacity
-                  key={shop.id}
-                  onPress={() => {
-                    fetchOrderListByShop(shop.id);
-                    setShopName(shop.name);
-                  }}
-                >
-                  <View key={shop.name} style={styled.shopCard}>
-                    <View>
-                      <Image
-                        style={styled.imageNotFound}
-                        source={require("../../../assets/empty-product.png")}
-                      />
-                    </View>
-                    <View style={{ marginLeft: 10 }}>
-                      <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                        {shop.name}
-                      </Text>
-                      <Text style={{ fontSize: 13, color: "#6B7995" }}>
-                        <Text>{shop.territory}</Text>
-                        <Text>| {shop.province}</Text>
-                      </Text>
-                      <View
-                        style={{
-                          width: 90,
-                          padding: 6,
-                          backgroundColor: "#E3F0FF",
-                          borderRadius: 4,
-                          marginTop: 10,
-                          flexDirection: "row",
-                        }}
-                      >
+            {shopOrderCard != undefined && shopOrderCard.length > 0 ? (
+              shopOrderCard?.map((shop: ShopOrderCardModel) => {
+                return (
+                  <TouchableOpacity
+                    key={shop.id}
+                    onPress={() => {
+                      fetchOrderListByShop(shop.id, userData.company);
+                      setShopName(shop.name);
+                    }}
+                  >
+                    <View key={shop.name} style={styled.shopCard}>
+                      <View>
                         <Image
-                          style={styled.iconInvoice}
-                          source={require("../../../assets/invoice.png")}
+                          style={styled.imageNotFound}
+                          source={require("../../../assets/empty-product.png")}
                         />
-                        <Text
+                      </View>
+                      <View style={{ marginLeft: 10 }}>
+                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                          {shop.name}
+                        </Text>
+                        <Text style={{ fontSize: 13, color: "#6B7995" }}>
+                          <Text>{shop.territory}</Text>
+                          <Text>| {shop.province}</Text>
+                        </Text>
+                        <View
                           style={{
-                            marginLeft: 4,
-                            fontSize: 14,
-                            fontWeight: "bold",
-                            color: "#4C95FF",
-                            alignItems: "center",
+                            width: "55%",
+                            padding: 7,
+                            paddingHorizontal: 10,
+                            backgroundColor: "#E3F0FF",
+                            borderRadius: 4,
+                            marginTop: 10,
+                            flexDirection: "row",
                           }}
                         >
-                          {`${shop.totalOrder} คำสั่งซื้อ`}
-                        </Text>
+                          <Image
+                            style={styled.iconInvoice}
+                            source={require("../../../assets/invoice.png")}
+                          />
+                          <Text
+                            style={{
+                              marginLeft: 4,
+                              fontSize: 14,
+                              fontWeight: "bold",
+                              color: "#4C95FF",
+                            }}
+                          >
+                            {`${shop.totalOrder} คำสั่งซื้อ`}
+                          </Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
+                  </TouchableOpacity>
+                );
+              })
+            ) : (
+              <EmptyState />
+            )}
           </ScrollView>
         )}
       </SafeAreaView>
@@ -253,7 +349,7 @@ const styled = StyleSheet.create({
   },
   badgeStatus: {
     backgroundColor: "#E3F0FF",
-    padding: 8,
+    padding: 7,
     borderRadius: 15,
   },
   textStatusActive: { color: "#4C95FF" },
@@ -293,7 +389,7 @@ const styled = StyleSheet.create({
     margin: 10,
     paddingLeft: 10,
     padding: 20,
-    // alignItems: "center",
+    alignItems: "center",
   },
   imageNotFound: {
     height: 80,

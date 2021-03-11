@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { ThaiDateFormat, ThaiTimeFormat } from "../utilities/ThaiDateFormat";
+import TagStatus from "./TagStatus";
 
 interface OrderCardProps {
   orderNumber: string;
@@ -58,18 +59,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
           )}
         </View>
         <View style={styled.statusContainer}>
-          <View style={styled.statusBadge}>
-            <Text style={styled.textStatusBadge}>รอยืนยันคำสั่งซื้อ</Text>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Image
-              style={{ width: 30, height: 30, resizeMode: "contain" }}
-              source={require("../../assets/correct.png")}
-            />
-            <Text style={{ color: "#69D200", marginLeft: 5 }}>
-              ข้อมูลจัดส่งครบ
-            </Text>
-          </View>
+          <TagStatus status={status} />
         </View>
       </View>
     </View>
@@ -92,7 +82,7 @@ const styled = StyleSheet.create({
     elevation: 5,
     marginHorizontal: 20,
     marginBottom: 15,
-    padding: 20,
+    padding: 21,
   },
   headerCard: { flexDirection: "row", justifyContent: "space-between" },
   textOrderNumber: { fontSize: 14, fontWeight: "bold", marginLeft: 4 },
@@ -129,11 +119,9 @@ const styled = StyleSheet.create({
   },
   textCompanyAddress: { color: "#6B7995", marginLeft: 5 },
   statusBadge: {
-    width: 100,
-    height: 36,
     backgroundColor: "#FFE9D8",
     borderRadius: 18,
-    padding: 7,
+    padding: 10,
     marginLeft: 15,
   },
   statusContainer: { flexDirection: "row", justifyContent: "space-between" },

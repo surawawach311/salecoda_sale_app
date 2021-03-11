@@ -63,16 +63,16 @@ export class OrderFacade {
 
         return OrderDataSource.comfirmOrder(order)
     }
-    static getAllOrder(): Promise<Dictionary<OrderEntity[]>> {
-        return OrderDataSource.getAllOrder().then((orders: OrderEntity[]) => {
+    static getAllOrder(territory: string, company: string, status: string): Promise<Dictionary<OrderEntity[]>> {
+        return OrderDataSource.getOrderWithStatus(territory, company, status).then((orders: OrderEntity[]) => {
             const groups = _.groupBy(orders, 'buyer.name');
             return groups
 
         });
     }
 
-    static formatShopOrderCard() {
-        return OrderFacade.getAllOrder().then((res) => {
+    static formatShopOrderCard(territory: string, company: string, status: string) {
+        return OrderFacade.getAllOrder(territory, company, status).then((res) => {
             return Object.entries(res).map(([key, val]) => {
                 const data: ShopOrderCardModel = {
                     id: val[0].buyer_id,
