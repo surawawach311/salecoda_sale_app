@@ -2,6 +2,12 @@
 
 ## [Version - 1]
 
+## Enhance [v1.17.0] - 2020-3-09
+
+- Added SVG transformer lib
+- Added promotion-tag svg icon 
+- Updated promotion tag in ProductCard
+
 ## Enhance [v1.16.0] - 2020-3-09
 
 - Added subsidize discount to OrderSuccessScreenDetail

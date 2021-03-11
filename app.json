@@ -28,6 +28,22 @@
         "web": {
             "favicon": "./assets/favicon.png"
         },
-        "description": "sellcoda mobile application version 1.2.0"
+        "description": "sellcoda mobile application version 1.2.0",
+        "packagerOpts": {
+            "config": "metro.config.js",
+            "sourceExts": [
+                "expo.ts",
+                "expo.tsx",
+                "expo.js",
+                "expo.jsx",
+                "ts",
+                "tsx",
+                "js",
+                "jsx",
+                "json",
+                "wasm",
+                "svg"
+            ]
+        }
     }
 }

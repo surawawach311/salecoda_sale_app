@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Image, Text, Platform } from "react-native";
-import TagLabel from "./TagLabel";
+import PromoTag from "../../assets/svg/promotion-tag.svg";
 
 interface ProductCardProps {
   imagePath: string;
@@ -55,9 +55,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </View>
       {havePromo && (
         <View style={styleds.warpPromoTag}>
-          <TagLabel style={styleds.promoTag}>
-            <Text style={styleds.textPromoTag}>Promo</Text>
-          </TagLabel>
+          <PromoTag width={48} height={32} />
         </View>
       )}
     </View>
@@ -98,7 +96,6 @@ const styleds = StyleSheet.create({
   },
   warpInfo: {
     margin: 10,
-
     alignItems: "center",
     justifyContent: "flex-start",
   },
@@ -125,17 +122,8 @@ const styleds = StyleSheet.create({
   textInfo: { fontSize: 14, color: "#616A7B" },
   warpPromoTag: {
     position: "absolute",
-    top: 18,
+    top: 12,
     right: 14,
-  },
-  promoTag: {
-    backgroundColor: "#6D3DEF",
-  },
-  textPromoTag: {
-    color: "#FFF",
-    fontSize: 10,
-    textAlign: "center",
-    fontWeight: "bold",
   },
 });
 export default ProductCard;
