@@ -91,6 +91,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
     total_price,
     premium_memo,
     status,
+    subsidize,
   } = route.params.data;
   return (
     <View style={styled.container}>
@@ -229,30 +230,6 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             </Text>
           </View>
 
-          {discount_memo.length > 0
-            ? discount_memo
-                .filter(
-                  (item) => item.item_id == null || item.id == "cash"
-                )
-                .map((item) => {
-                  return (
-                    <View
-                      key={item.id}
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        marginVertical: 10,
-                        marginTop: 10,
-                      }}
-                    >
-                      <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
-                      <Text style={styled.textDiscountFromCash}>
-                        {currencyFormat(item.price)}
-                      </Text>
-                    </View>
-                  );
-                })
-            : null}
           {discount_memo.filter((item) => item.item_id != null).length > 0 ? (
             <AccrodingPrice
               title="ส่วนลดรายการ"
@@ -274,6 +251,36 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               price_color={"#BB6BD9"}
             />
           ) : null}
+          {subsidize != 0 ? <View style={styled.productTextWarp}>
+            <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดดูแลราคา</Text>
+            <Text
+              style={{ color: "#FF5D5D", fontSize: 16, fontWeight: "bold" }}
+            >
+              {currencyFormat(subsidize)}
+            </Text>
+          </View> : null}
+          {discount_memo.length > 0
+            ? discount_memo
+                .filter((item) => item.item_id == null || item.id == "cash")
+                .map((item) => {
+                  return (
+                    <View
+                      key={item.id}
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginVertical: 10,
+                        marginTop: 10,
+                      }}
+                    >
+                      <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
+                      <Text style={styled.textDiscountFromCash}>
+                        {currencyFormat(item.price)}
+                      </Text>
+                    </View>
+                  );
+                })
+            : null}
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดรวม</Text>
             <Text
