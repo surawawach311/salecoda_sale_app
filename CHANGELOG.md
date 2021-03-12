@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.19.0] - 2020-3-12
+
+- Added Empty in history screen
+
 ## Enhance [v1.18.0] - 2020-3-11
 
 - Added Other Filter
