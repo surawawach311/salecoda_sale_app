@@ -50,7 +50,6 @@ const styled = StyleSheet.create({
   badgeRed: { backgroundColor: "#FFE9D8" },
   badgeBlue: { backgroundColor: "#E3F0FF" },
   containerBadge: {
-    // backgroundColor: "#FFE9D8",
     borderRadius: 18,
     padding: 10,
     marginLeft: 15,

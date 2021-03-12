@@ -19,9 +19,6 @@ const EmptyState: React.FC = () => {
         <Text style={{ color: "#C2C6CE", fontSize: 14 }}>
           ไม่มีคำสั่งซื้อ
         </Text>
-        {/* <Text style={{ color: "#C2C6CE", fontSize: 14 }}>
-          เลือกซื้อสินค้าที่ร้านซื้อบ่อยได้ด้านล่าง
-        </Text> */}
       </View>
     </View>
   );

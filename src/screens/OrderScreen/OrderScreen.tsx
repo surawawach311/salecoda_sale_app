@@ -21,7 +21,6 @@ import EmptyState from "../../components/EmptyState";
 type OrderScreenRouteProp = StackScreenProps<HomeStackParamList, "Order">;
 
 const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
-  // const [user, setUser] = useState<UserEntity>();
   const [orderList, setOrderList] = useState<OrderEntity[]>();
   const [shopOrderCard, setShopOrderCard] = useState<ShopOrderCardModel[]>();
   const [filter, setFilter] = useState<
@@ -55,7 +54,6 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
   ) => {
     setFilter(status);
     if (showOrder) {
-      // if (navbutton == FilterOrder.territory) {
       OrderDataSource.getOrderWithStatus(
         userData.territory,
         userData.company,
@@ -64,7 +62,6 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
         setOrderList(res);
       });
     } else {
-      // } else if (navbutton == FilterOrder.shop) {
       OrderFacade.formatShopOrderCard(
         userData.territory,
         userData.company,
@@ -241,7 +238,6 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
         {showOrder ? (
           <ScrollView style={{ marginBottom: 120, marginTop: 10 }}>
             {
-              // showOrder ? (
               orderList != undefined && orderList.length > 0 ? (
                 orderList.map((order: OrderEntity) => {
                   return (
