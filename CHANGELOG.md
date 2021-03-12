@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.18.0] - 2020-3-11
+
+- Added Other Filter
+
 ## Enhance [v1.17.0] - 2020-3-09
 
 - Added SVG transformer lib

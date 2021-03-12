@@ -15,6 +15,7 @@ import { Accordion, Icon } from "native-base";
 import AccrodingPrice from "../../components/AccrodingPrice";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import BadgeStatus from "../../components/BadgeStatus";
+import TagStatus from "../../components/TagStatus";
 
 type OrderSuccessScreenDetailRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -104,7 +105,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               />
               <Text style={styled.textOrderNumber}>{order_no}</Text>
             </View>
-            <BadgeStatus status={status} />
+            <TagStatus status={status} />
           </View>
           <Dash
             dashGap={2}
