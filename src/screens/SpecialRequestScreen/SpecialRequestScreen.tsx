@@ -187,7 +187,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
             <Text
               style={{ fontWeight: "bold", fontSize: 20, color: "#4C95FF" }}
             >
-              ฿61,100.00
+              {currencyFormat(cart?.total_price)}
             </Text>
           </View>
         </View>
