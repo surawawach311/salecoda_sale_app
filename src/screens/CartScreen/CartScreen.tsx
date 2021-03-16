@@ -63,7 +63,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     data.map((item: any) => {
       arrayOutput.push({
         item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
-        price: item.total,
+        price: item.price,
+        quantity: item.quantity,
       });
     });
     return arrayOutput;

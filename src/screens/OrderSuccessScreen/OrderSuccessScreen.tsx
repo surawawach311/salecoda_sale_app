@@ -37,7 +37,8 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
     data.map((item: any) => {
       arrayOutput.push({
         item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
-        price: item.price * item.quantity,
+        price: item.price,
+        quantity: item.quantity,
       });
     });
     return arrayOutput;
