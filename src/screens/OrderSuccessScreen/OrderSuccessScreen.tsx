@@ -132,7 +132,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                   style={styled.textProduct}
                 >{`${item.title} ${item.quantity}x(${item.unit})`}</Text>
                 <Text style={styled.textProduct}>
-                  {currencyFormat(item.price)}
+                  {currencyFormat(item.quantity * item.price)}
                 </Text>
               </View>
             );
