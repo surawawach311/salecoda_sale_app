@@ -75,6 +75,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
       arrayOutput.push({
         item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
         price: item.price,
+        quantity: item.quantity,
       });
     });
     return arrayOutput;
@@ -208,7 +209,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>จำนวนรวม</Text>
             <Text
               style={{ fontSize: 18, fontWeight: "bold" }}
-            >{`${totalQuantity} ลัง`}</Text>
+            >{`${totalQuantity} ชุด`}</Text>
           </View>
           <Dash
             dashGap={2}
@@ -235,7 +236,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               title="ส่วนลดรายการ"
               total={discount_memo
                 .filter((item) => item.item_id != "")
-                .reduce((sum, item) => sum + item.price, 0)}
+                .reduce((sum, item) => sum + item.quantity * item.price, 0)}
               detail={discoutPromo}
               price_color={"#3AAE49"}
             />
