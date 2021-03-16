@@ -248,7 +248,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                           height: 60,
                           resizeMode: "contain",
                         }}
-                        source={{ uri: encodeURI(item.cover) }}
+                        source={{ uri: item.cover }}
                       />
                       <View
                         style={{
