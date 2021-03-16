@@ -10,16 +10,24 @@ export class OrderDataSource {
             .catch(error => console.log(error))
     }
 
-    static getOrderWithStatus(territory: string, company: string, status: string): Promise<OrderEntity[]> {
-        return httpClient.get(`${BASE_URL_POPORING}/v4/orders/sellcoda/territory?territory=${territory}&company_id=${company}&status=${status}`)
+    static getOrderWithStatus(territory: string, company: string, status: string, keyword: string = ""): Promise<OrderEntity[]> {
+        return httpClient.get(`${BASE_URL_POPORING}/v4/orders/sellcoda/territory?territory=${territory}&company_id=${company}&status=${status}&keywords=${keyword}`)
             .then(res => res.data.orders)
             .catch(error => console.log(error))
     }
 
-    static getOrderListByShopId(shopId: string, company: string, status: string): Promise<OrderEntity[]> {
-        return httpClient.get(`${BASE_URL_POPORING}/v4/orders/sellcoda?company_id=${company}&dealer_id=${shopId}&status=${status}`)
-            .then(res => res.data.orders)
-            .catch(error => console.log(error))
+    static getOrderListByShopId(shopId: string, company: string, status: string, keywords?: string): Promise<OrderEntity[]> {
+        if (keywords) {
+            const url = `${BASE_URL_POPORING}/v4/orders/sellcoda?company_id=${company}&dealer_id=${shopId}&status=${status}&keywords=${keywords}`
+            return httpClient.get(url)
+                .then(res => res.data.orders)
+                .catch(error => console.log(error))
+        } else {
+            const url = `${BASE_URL_POPORING}/v4/orders/sellcoda?company_id=${company}&dealer_id=${shopId}&status=${status}`
+            return httpClient.get(url)
+                .then(res => res.data.orders)
+                .catch(error => console.log(error))
+        }
     }
 }
 

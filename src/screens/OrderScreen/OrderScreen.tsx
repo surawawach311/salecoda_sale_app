@@ -31,6 +31,8 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
   );
   const [showOrder, setShowOrder] = useState<boolean>(true);
   const [shopName, setShopName] = useState<string>();
+  const [shopId, setShopId] = useState<string>("");
+
   const userDataStore = useContext(UserDataContext);
   const { userData } = userDataStore;
   useEffect(() => {
@@ -100,10 +102,37 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
       setShopOrderCard(res);
     });
   };
+
+  const searchOrder = (keyword: string) => {
+    if (navbutton == FilterOrder.territory) {
+      OrderDataSource.getOrderWithStatus(
+        userData.territory,
+        userData.company,
+        filter,
+        keyword
+      ).then((res) => {
+        setOrderList(res);
+      });
+    } else if (navbutton == FilterOrder.shop) {
+      OrderDataSource.getOrderListByShopId(
+        shopId,
+        userData.company,
+        filter,
+        keyword
+      ).then((res) => {
+        setOrderList(res);
+      });
+    }
+  };
   return (
     <View style={styled.container}>
       <SafeAreaView>
-        <Search />
+        <Search
+          placeholder="ค้นหาคำสั่งซื้อ"
+          onChange={(event) => {
+            searchOrder(event);
+          }}
+        />
         <View style={styled.filterWraper}>
           <TouchableWithoutFeedback
             onPress={() => {
@@ -237,34 +266,32 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
         <View style={styled.breakLine} />
         {showOrder ? (
           <ScrollView style={{ marginBottom: 120, marginTop: 10 }}>
-            {
-              orderList != undefined && orderList.length > 0 ? (
-                orderList.map((order: OrderEntity) => {
-                  return (
-                    <TouchableOpacity
+            {orderList != undefined && orderList.length > 0 ? (
+              orderList.map((order: OrderEntity) => {
+                return (
+                  <TouchableOpacity
+                    key={order.order_no}
+                    onPress={() => {
+                      navigation.navigate("Purchase", {
+                        screen: "SuccessDetail",
+                        params: { data: order },
+                      });
+                    }}
+                  >
+                    <OrderCard
                       key={order.order_no}
-                      onPress={() => {
-                        navigation.navigate("Purchase", {
-                          screen: "SuccessDetail",
-                          params: { data: order },
-                        });
-                      }}
-                    >
-                      <OrderCard
-                        key={order.order_no}
-                        orderNumber={order.order_no}
-                        createDatetime={order.created}
-                        quantity={order.items.length}
-                        address={order.buyer}
-                        status={order.status}
-                      />
-                    </TouchableOpacity>
-                  );
-                })
-              ) : (
-                <EmptyState />
-              )
-            }
+                      orderNumber={order.order_no}
+                      createDatetime={order.created}
+                      quantity={order.items.length}
+                      address={order.buyer}
+                      status={order.status}
+                    />
+                  </TouchableOpacity>
+                );
+              })
+            ) : (
+              <EmptyState />
+            )}
           </ScrollView>
         ) : (
           <ScrollView style={{ height: "100%" }}>
@@ -276,6 +303,7 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
                     onPress={() => {
                       fetchOrderListByShop(shop.id, userData.company);
                       setShopName(shop.name);
+                      setShopId(shop.id);
                     }}
                   >
                     <View key={shop.name} style={styled.shopCard}>

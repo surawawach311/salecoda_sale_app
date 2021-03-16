@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.20.0] - 2020-3-16
+
+- Add Search bar in Order Screen
+
 ## Fix [v1.19.3] - 2020-3-16
 
 - Fixed premium image
