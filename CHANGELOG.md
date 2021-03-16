@@ -2,6 +2,26 @@
 
 ## [Version - 1]
 
+## Fix [v1.19.3] - 2020-3-16
+
+- Fixed premium image
+
+## Fix [v1.19.2] - 2020-3-16
+
+- Fixed total discount per item in CartScreen
+- Fixed total discount per item in OrderSuccessScreen
+
+## Fix [v1.19.1] - 2020-3-12
+
+- Fixed total price in SpecialRequestScreen
+- Fixed total price per item in OrderSuccessScreen
+- Fixed total discount per item in OrderSuccessDetailScreen
+- Fixed total items unit from `ลัง` to `ชุด` in OrderSuccessDetailScreen
+
+## Enhance [v1.19.0] - 2020-3-12
+
+- Added Empty in history screen
+
 ## Enhance [v1.18.0] - 2020-3-11
 
 - Added Other Filter

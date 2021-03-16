@@ -37,7 +37,8 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
     data.map((item: any) => {
       arrayOutput.push({
         item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
-        price: item.price * item.quantity,
+        price: item.price,
+        quantity: item.quantity,
       });
     });
     return arrayOutput;
@@ -132,7 +133,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                   style={styled.textProduct}
                 >{`${item.title} ${item.quantity}x(${item.unit})`}</Text>
                 <Text style={styled.textProduct}>
-                  {currencyFormat(item.price)}
+                  {currencyFormat(item.quantity * item.price)}
                 </Text>
               </View>
             );
@@ -247,7 +248,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                           height: 60,
                           resizeMode: "contain",
                         }}
-                        source={{ uri: encodeURI(item.cover) }}
+                        source={{ uri: item.cover }}
                       />
                       <View
                         style={{
