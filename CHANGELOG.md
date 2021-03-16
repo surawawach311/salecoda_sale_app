@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.19.3] - 2020-3-16
+
+- Fixed premium image
+
 ## Fix [v1.19.2] - 2020-3-16
 
 - Fixed total discount per item in CartScreen
