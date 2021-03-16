@@ -419,7 +419,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
                             <Text style={styled.textBodyPayment}>
                               {method.name} (คงเหลือ{" "}
-                              {currencyFormat(method.remain_credit)})
+                              {currencyFormat(method.remain_credit,2)})
                             </Text>
                           </View>
                         );
@@ -439,7 +439,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   >
                     <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
                     <Text style={{ color: "#616A7B" }}>
-                      {cart.available_subsidize > 0 ? currencyFormat(cart.available_subsidize) : ''}
+                      {cart.available_subsidize > 0 ? currencyFormat(cart.available_subsidize,2) : ''}
                     </Text>
                   </View>
                   <View
@@ -461,7 +461,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           ใช้ส่วนลด
                         </Text>
                         <Text style={{ color: "#FF5D5D", fontWeight: "bold" }}>
-                          {' ' + currencyFormat(cart.usable_subsidize)}
+                          {' ' + currencyFormat(cart.usable_subsidize,2)}
                         </Text>
                       </> : <Text style={{ color: "#6B7995" }}>ไม่มีวงเงินที่สามารถใช้ได้</Text>
                     }
@@ -478,7 +478,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   <View style={styled.warpPrice}>
                     <Text style={styled.textDiscount}>ราคาก่อนลด</Text>
                     <Text style={styled.textBeforeDiscount}>
-                      {currencyFormat(cart.before_discount)}
+                      {currencyFormat(cart.before_discount,2)}
                     </Text>
                   </View>
 
@@ -505,7 +505,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   {cart.subsidize_discount != 0 ? <View style={styled.warpPrice}>
                     <Text style={styled.textDiscount}>ส่วนลดดูแลราคา</Text>
                     <Text style={styled.textSubsidizeDiscount}>
-                      {currencyFormat(cart.subsidize_discount)}
+                      {currencyFormat(cart.subsidize_discount,2)}
                     </Text>
                   </View> : null}
                   {cashDiscount != 0 ? (
@@ -518,7 +518,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           fontWeight: "bold",
                         }}
                       >
-                        {currencyFormat(cashDiscount)}
+                        {currencyFormat(cashDiscount,2)}
                       </Text>
                     </View>
                   ) : null}
@@ -534,13 +534,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     
                     <Text style={styled.textBeforeTotal}>ส่วนลดรวม</Text>
                     <Text style={styled.textTotalDiscount}>
-                      {currencyFormat(cart.total_discount)}
+                      {currencyFormat(cart.total_discount,2)}
                     </Text>
                   </View>
                   <View style={styled.warpPrice}>
                     <Text style={styled.textLabelTotalPrice}>ราคารวม</Text>
                     <Text style={styled.textTotalPrice}>
-                      {currencyFormat(cart.total_price)}
+                      {currencyFormat(cart.total_price,2)}
                     </Text>
                   </View>
                 </View>

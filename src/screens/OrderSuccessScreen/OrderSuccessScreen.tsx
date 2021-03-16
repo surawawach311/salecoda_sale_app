@@ -148,7 +148,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ราคาก่อนลด</Text>
             <Text style={styled.textPrice}>
-              {currencyFormat(before_discount)}
+              {currencyFormat(before_discount,2)}
             </Text>
           </View>
           {discount_memo.filter(
@@ -179,7 +179,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
             <Text
               style={{ color: "#FF5D5D", fontSize: 16, fontWeight: "bold" }}
             >
-              {currencyFormat(subsidize)}
+              {currencyFormat(subsidize,2)}
             </Text>
           </View> : null}
           {discount_memo.length > 0
@@ -202,7 +202,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                           { color: "#FF8329" },
                         ]}
                       >
-                        {currencyFormat(item.price)}
+                        {currencyFormat(item.price,2)}
                       </Text>
                     </View>
                   );
@@ -213,12 +213,12 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
             <Text
               style={{ color: "#616A7B", fontSize: 16, fontWeight: "bold" }}
             >
-              {currencyFormat(total_discount)}
+              {currencyFormat(total_discount,2)}
             </Text>
           </View>
           <View style={styled.productTextWarp}>
             <Text style={styled.textLabelTotal}>ราคารวม</Text>
-            <Text style={styled.textTotal}>{currencyFormat(total_price)}</Text>
+            <Text style={styled.textTotal}>{currencyFormat(total_price,2)}</Text>
           </View>
           <Dash
             dashGap={2}
