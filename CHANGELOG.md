@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.21.0] - 2020-3-16
+
+- Add decimal in all price total
+
 ## Added [v1.20.0] - 2020-3-16
 
 - Add Search bar in Order Screen
