@@ -2,10 +2,12 @@ import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import AccrodingPrice from "../../components/AccrodingPrice";
 import SpecialRequestProductCard from "../../components/SpecialProductCard";
 import { CartDataSource } from "../../datasource/CartDataSource";
 import { CartEntity } from "../../entities/CartEntity";
 import { CartFacade } from "../../facade/CartFacade";
+import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import {
   ItemSpecialRequest,
   ProductSpecialRequestModel,
@@ -25,6 +27,10 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
   const [products, setProducts] = useState<ProductSpecialRequestModel[]>([]);
   const [request, setRequest] = useState<ItemSpecialRequest[]>([]);
   const [cart, setCart] = useState<CartEntity>(route.params.cart);
+  const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
+  const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>(
+    []
+  );
 
   useEffect(() => {
     formatData();
@@ -52,6 +58,28 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     );
     setProducts(productSpecialRequest);
     setRequest(itemRequest);
+    let promo = formatAccrodion(
+      route.params.cart.received_discounts.filter(
+        (item) => item.item_id != null && item.item_id != ""
+      )
+    );
+    let request = formatAccrodion(
+      route.params.cart.received_special_request_discounts
+    );
+    setDiscoutPromo(promo);
+    setSpecialRequest(request);
+  };
+
+  const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
+    let arrayOutput: any[] = [];
+    data.map((item: any) => {
+      arrayOutput.push({
+        item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
+        price: item.price,
+        quantity: item.quantity,
+      });
+    });
+    return arrayOutput;
   };
 
   const propsCallback = (e: ItemSpecialRequest) => {
@@ -76,6 +104,18 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
           : item;
       }
     );
+    let special_request = formatAccrodion(
+      products
+        .filter((item) => item.id == e.price_id)
+        .map((item) => {
+          return {
+            name: item.name,
+            price: e.amount,
+            quantity: item.quantity,
+          };
+        })
+    );
+    setSpecialRequest(special_request);
     setRequest(productRequestDiscount);
     setProducts(productCardRequestDiscount);
 
@@ -146,6 +186,27 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
           elevation: 17,
         }}
       >
+        {/* {discount_memo.filter((item) => item.item_id != null).length > 0 ? (
+            <AccrodingPrice
+              title="ส่วนลดรายการ"
+              total={discount_memo
+                .filter((item) => item.item_id != "")
+                .reduce((sum, item) => sum + item.quantity * item.price, 0)}
+              detail={discoutPromo}
+              price_color={"#3AAE49"}
+            />
+          ) : null}
+          {special_request_discounts.length > 0 ? (
+            <AccrodingPrice
+              title="ขอส่วนลดพิเศษเพิ่ม"
+              total={special_request_discounts.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+              )}
+              detail={specialRequest}
+              price_color={"#BB6BD9"}
+            />
+          ) : null} */}
         <View
           style={{
             padding: 10,
@@ -153,9 +214,29 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
         >
           <View style={styled.warpSummary}>
             <Text style={styled.fontBottomSumary}>ราคาก่อนลด</Text>
-            <Text style={styled.fontBottomSumary}>{cart?.before_discount}</Text>
+            <Text style={styled.fontBottomSumary}>
+              {currencyFormat(cart?.before_discount, 2)}
+            </Text>
           </View>
-          <View style={styled.warpSummary}>
+
+          <AccrodingPrice
+            title="ส่วนลดรายการ"
+            total={discoutPromo
+              .filter((item) => item.item != "")
+              .reduce((sum, item) => sum + item.quantity * item.price, 0)}
+            detail={discoutPromo}
+            price_color={"#3AAE49"}
+          />
+          <AccrodingPrice
+            title="ขอส่วนลดพิเศษเพิ่ม"
+            total={specialRequest.reduce(
+              (sum, item) => sum + item.price * item.quantity,
+              0
+            )}
+            detail={specialRequest}
+            price_color={"#BB6BD9"}
+          />
+          {/* <View style={styled.warpSummary}>
             <Text style={styled.fontBottomSumary}>ส่วนลดจากรายการ</Text>
             <Text style={styled.fontBottomSumary}>
               {currencyFormat(
@@ -164,13 +245,13 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
                   .reduce((sum, item) => sum + item.total, 0)
               )}
             </Text>
-          </View>
-          <View style={styled.warpSummary}>
+          </View> */}
+          {/* <View style={styled.warpSummary}>
             <Text style={styled.fontBottomSumary}>ขอส่วนลดพิเศษเพิ่ม</Text>
             <Text style={styled.fontBottomSumary}>
               {currencyFormat(cart?.total_received_special_request_discount)}
             </Text>
-          </View>
+          </View> */}
           <View
             style={{
               borderWidth: 1,
