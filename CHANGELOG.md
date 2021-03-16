@@ -2,6 +2,11 @@
 
 ## [Version - 1]
 
+## Fix [v1.19.2] - 2020-3-16
+
+- Fixed total discount per item in CartScreen
+- Fixed total discount per item in OrderSuccessScreen
+
 ## Fix [v1.19.1] - 2020-3-12
 
 - Fixed total price in SpecialRequestScreen
