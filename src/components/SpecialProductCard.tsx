@@ -11,7 +11,7 @@ export interface SpecialRequestProductCardProps {
   quantity: number;
   sale_unit: string;
   promotion_discount?: number;
-  callback: (data:ItemSpecialRequest) => void;
+  callback: (data: ItemSpecialRequest) => void;
   discountRequest?: number;
 }
 
@@ -49,10 +49,17 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
               justifyContent: "center",
             }}
           >
-            <Image
-              style={{ width: 65, height: 65, resizeMode: "contain" }}
-              source={{ uri: encodeURI(image) }}
-            />
+            {image != "" ? (
+              <Image
+                style={{ width: 65, height: 65, resizeMode: "contain" }}
+                source={{ uri: encodeURI(image) }}
+              />
+            ) : (
+              <Image
+                style={{ width: 65, height: 65, resizeMode: "contain" }}
+                source={require("../../assets/empty-product.png")}
+              />
+            )}
           </View>
           <View style={{ justifyContent: "space-evenly" }}>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>{title}</Text>
@@ -154,7 +161,7 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
               <TouchableOpacity
                 onPress={() => {
                   setRequestPrice(true);
-                  callback({ price_id: id, amount: "" });
+                  callback({ price_id: id, amount: 0 });
                 }}
               >
                 <Text
