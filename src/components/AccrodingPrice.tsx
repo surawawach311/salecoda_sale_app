@@ -10,6 +10,7 @@ export interface AccrodingPriceProps {
   detail: {
     item: string;
     price: number;
+    quantity: number;
   }[];
 }
 
@@ -60,18 +61,19 @@ const AccrodingPrice: React.FC<AccrodingPriceProps> = ({
       {
         item: string;
         price: number;
+        quantity: number;
       }
     ];
   }) => {
     return item.detail.map(
       (
-        item: { item: React.ReactNode; price: number | undefined },
+        item: { item: React.ReactNode; price: number; quantity: number },
         index: number
       ) => {
         return (
           <View key={index} style={styled.textDetailContainer}>
             <Text style={styled.textDetail}>{item.item}</Text>
-            <Text style={styled.textDetail}>{currencyFormat(item.price)}</Text>
+            <Text style={styled.textDetail}>{currencyFormat(item.price * item.quantity)}</Text>
           </View>
         );
       }
