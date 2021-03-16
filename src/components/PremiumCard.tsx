@@ -42,7 +42,7 @@ const PremiumCard: React.FC<PremiumCardProps> = ({
               height: 50,
               resizeMode: "contain",
             }}
-            source={{ uri: encodeURI(image) }}
+            source={{ uri: image }}
           />
         </View>
         <View
