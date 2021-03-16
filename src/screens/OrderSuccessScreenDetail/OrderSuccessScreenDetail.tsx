@@ -227,7 +227,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ราคาก่อนลด</Text>
             <Text style={styled.textPrice}>
-              {currencyFormat(before_discount)}
+              {currencyFormat(before_discount,2)}
             </Text>
           </View>
 
@@ -260,7 +260,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               <Text
                 style={{ color: "#FF5D5D", fontSize: 16, fontWeight: "bold" }}
               >
-                {currencyFormat(subsidize)}
+                {currencyFormat(subsidize,2)}
               </Text>
             </View>
           ) : null}
@@ -280,7 +280,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                     >
                       <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
                       <Text style={styled.textDiscountFromCash}>
-                        {currencyFormat(item.price)}
+                        {currencyFormat(item.price,2)}
                       </Text>
                     </View>
                   );
@@ -291,7 +291,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             <Text
               style={{ color: "#616A7B", fontSize: 16, fontWeight: "bold" }}
             >
-              {currencyFormat(total_discount)}
+              {currencyFormat(total_discount,2)}
             </Text>
           </View>
           <View style={{ borderWidth: 1, borderColor: "#EBEFF2" }} />
@@ -304,7 +304,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             <Text
               style={{ fontSize: 20, fontWeight: "bold", color: "#4C95FF" }}
             >
-              {currencyFormat(total_price)}
+              {currencyFormat(total_price,2)}
             </Text>
           </View>
           <Dash

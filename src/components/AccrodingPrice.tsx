@@ -48,7 +48,7 @@ const AccrodingPrice: React.FC<AccrodingPriceProps> = ({
             price_color ? { color: price_color } : { color: "#6B7995" },
           ]}
         >
-          {currencyFormat(item.total)}
+          {currencyFormat(item.total,2)}
         </Text>
       </View>
     );
@@ -73,7 +73,7 @@ const AccrodingPrice: React.FC<AccrodingPriceProps> = ({
         return (
           <View key={index} style={styled.textDetailContainer}>
             <Text style={styled.textDetail}>{item.item}</Text>
-            <Text style={styled.textDetail}>{currencyFormat(item.price * item.quantity)}</Text>
+            <Text style={styled.textDetail}>{currencyFormat(item.price * item.quantity,2)}</Text>
           </View>
         );
       }
