@@ -209,7 +209,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>จำนวนรวม</Text>
             <Text
               style={{ fontSize: 18, fontWeight: "bold" }}
-            >{`${totalQuantity} ลัง`}</Text>
+            >{`${totalQuantity} ชุด`}</Text>
           </View>
           <Dash
             dashGap={2}
