@@ -11,10 +11,11 @@ import {
 } from "react-native";
 
 interface ButtonShopProps {
+  shopName?: string;
   onPress?: () => void;
 }
 
-const ButtonShop: React.FC<ButtonShopProps> = ({ onPress }) => {
+const ButtonShop: React.FC<ButtonShopProps> = ({ onPress, shopName }) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.containter}>
@@ -23,9 +24,16 @@ const ButtonShop: React.FC<ButtonShopProps> = ({ onPress }) => {
             style={styles.iconShop}
             source={require("../../assets/shop.png")}
           />
-          <Text style={styles.textChangeShop}>เปลี่ยนร้านค้า</Text>
+          {shopName ? (
+            <Text style={styles.shopName}>{shopName}</Text>
+          ) : (
+            <Text style={styles.textChangeShop}>เปลี่ยนร้านค้า</Text>
+          )}
         </View>
-        <View>
+        <View style={{ flexDirection: "row" }}>
+          {shopName ? (
+            <Text style={styles.textChangeShop}>เปลี่ยนร้านค้า</Text>
+          ) : null}
           <Image
             style={styles.iconRight}
             source={require("../../assets/right.png")}
@@ -46,7 +54,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
-  warpRight: { flex: 1, flexDirection: "row", alignItems: "center" },
+  warpRight: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
   warpLeft: { flex: 1, alignItems: "center" },
   textChangeShop: {
     color: "#6B7995",
@@ -58,5 +70,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     justifyContent: "flex-end",
   },
+  shopName: { color: "#6B7995", fontSize: 16, fontWeight: "600" },
 });
 export default ButtonShop;

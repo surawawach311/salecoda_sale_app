@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.22.0] - 2020-3-17
+
+- Button shop can display shop name
+
 ## Added [v1.21.0] - 2020-3-16
 
 - Add decimal in all price total

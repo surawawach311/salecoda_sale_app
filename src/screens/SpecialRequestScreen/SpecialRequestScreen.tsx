@@ -186,27 +186,6 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
           elevation: 17,
         }}
       >
-        {/* {discount_memo.filter((item) => item.item_id != null).length > 0 ? (
-            <AccrodingPrice
-              title="ส่วนลดรายการ"
-              total={discount_memo
-                .filter((item) => item.item_id != "")
-                .reduce((sum, item) => sum + item.quantity * item.price, 0)}
-              detail={discoutPromo}
-              price_color={"#3AAE49"}
-            />
-          ) : null}
-          {special_request_discounts.length > 0 ? (
-            <AccrodingPrice
-              title="ขอส่วนลดพิเศษเพิ่ม"
-              total={special_request_discounts.reduce(
-                (sum, item) => sum + item.price * item.quantity,
-                0
-              )}
-              detail={specialRequest}
-              price_color={"#BB6BD9"}
-            />
-          ) : null} */}
         <View
           style={{
             padding: 10,
