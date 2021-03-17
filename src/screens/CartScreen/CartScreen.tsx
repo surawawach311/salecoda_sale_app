@@ -82,7 +82,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         );
         setSpecialRequest(discountSpecial);
         setDiscoutPromo(discountProduct);
-        setUseSubsudize(false)
+        setUseSubsudize(false);
       }
     );
   };
@@ -152,19 +152,22 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const removeItem = async (itemId: string) => {
-    CartDataSource.removeItem(route.params.shop.id, itemId, payment,useSubsidize).then(
-      (res: CartEntity) => {
-        setCart(res);
-        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
-          res.received_special_request_discounts
-        );
-        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-          res.received_discounts.filter((item) => item.item_id != null)
-        );
-        setSpecialRequest(discountSpecial);
-        setDiscoutPromo(discountProduct);
-      }
-    );
+    CartDataSource.removeItem(
+      route.params.shop.id,
+      itemId,
+      payment,
+      useSubsidize
+    ).then((res: CartEntity) => {
+      setCart(res);
+      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+        res.received_special_request_discounts
+      );
+      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+        res.received_discounts.filter((item) => item.item_id != null)
+      );
+      setSpecialRequest(discountSpecial);
+      setDiscoutPromo(discountProduct);
+    });
   };
 
   const handleCloseModal = () => {
@@ -179,38 +182,23 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const handlePayment = (payment: string) => {
     if (payment == "cash") {
       setPayment("cash");
-      CartDataSource.calculate(route.params.shop.id, payment, useSubsidize).then(
-        (res: CartEntity) => {
-          if (
-            res.received_discounts.filter((item) => item.id != null)
-              .length > 0
-          ) {
-            {
-              res.received_discounts.map((item) => {
-                if (item.id == 'cash') {
-                  setCashDiscount(item.price);
-                }
-              });
-            }
-          }
+      CartDataSource.calculate(
+        route.params.shop.id,
+        payment,
+        useSubsidize
+      ).then((res: CartEntity) => {
+        if (
+          res.received_discounts.filter((item) => item.id != null).length > 0
+        ) {
           {
-            setCart(res);
-            let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
-              res.received_special_request_discounts
-            );
-            let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-              res.received_discounts.filter((item) => item.item_id != null)
-            );
-            setSpecialRequest(discountSpecial);
-            setDiscoutPromo(discountProduct);
+            res.received_discounts.map((item) => {
+              if (item.id == "cash") {
+                setCashDiscount(item.price);
+              }
+            });
           }
         }
-      );
-    } else {
-      setPayment("credit");
-      setCashDiscount(0);
-      CartDataSource.calculate(route.params.shop.id, payment, useSubsidize).then(
-        (res: CartEntity) => {
+        {
           setCart(res);
           let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
             res.received_special_request_discounts
@@ -221,18 +209,36 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           setSpecialRequest(discountSpecial);
           setDiscoutPromo(discountProduct);
         }
-      );
+      });
+    } else {
+      setPayment("credit");
+      setCashDiscount(0);
+      CartDataSource.calculate(
+        route.params.shop.id,
+        payment,
+        useSubsidize
+      ).then((res: CartEntity) => {
+        setCart(res);
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.received_special_request_discounts
+        );
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.received_discounts.filter((item) => item.item_id != null)
+        );
+        setSpecialRequest(discountSpecial);
+        setDiscoutPromo(discountProduct);
+      });
     }
   };
 
   const handleUseSubsidize = (b: boolean) => {
     CartDataSource.calculate(route.params.shop.id, payment, b).then(
       (res: CartEntity) => {
-        setCart(res)
-        setUseSubsudize(b)
+        setCart(res);
+        setUseSubsudize(b);
       }
-    )
-  }
+    );
+  };
 
   const confirmOrder = (
     shop: ShopEntity,
@@ -244,12 +250,15 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else if (!cart?.selected_payment) {
       alert("กรุณาเลือกวิธีการชำระเงิน");
     } else {
-      OrderFacade.confirmOrder(shop, shippingAddress, cart, cart.subsidize_discount).then(
-        (res: OrderEntity) => {
-          CartDataSource.clearCart(shop.id);
-          navigation.navigate("OrderSuccess", { data: res });
-        }
-      );
+      OrderFacade.confirmOrder(
+        shop,
+        shippingAddress,
+        cart,
+        cart.subsidize_discount
+      ).then((res: OrderEntity) => {
+        CartDataSource.clearCart(shop.id);
+        navigation.navigate("OrderSuccess", { data: res });
+      });
     }
   };
 
@@ -260,7 +269,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       keyboardVerticalOffset={80}
     >
       <View style={styled.warpChangeShop}>
-        <ButtonShop onPress={() => navigation.navigate("ShopList")} />
+        <ButtonShop
+          shopName={route.params.shop.name}
+          onPress={() => navigation.navigate("ShopList")}
+        />
       </View>
       {cart !== undefined ? (
         <View style={styled.borderContainer}>
@@ -419,7 +431,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
                             <Text style={styled.textBodyPayment}>
                               {method.name} (คงเหลือ{" "}
-                              {currencyFormat(method.remain_credit,2)})
+                              {currencyFormat(method.remain_credit, 2)})
                             </Text>
                           </View>
                         );
@@ -439,7 +451,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   >
                     <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
                     <Text style={{ color: "#616A7B" }}>
-                      {cart.available_subsidize > 0 ? currencyFormat(cart.available_subsidize,2) : ''}
+                      {cart.available_subsidize > 0
+                        ? currencyFormat(cart.available_subsidize, 2)
+                        : ""}
                     </Text>
                   </View>
                   <View
@@ -449,7 +463,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       alignItems: "center",
                     }}
                   >
-                    {cart.available_subsidize > 0 ? 
+                    {cart.available_subsidize > 0 ? (
                       <>
                         <CheckBox
                           checked={useSubsidize}
@@ -461,10 +475,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           ใช้ส่วนลด
                         </Text>
                         <Text style={{ color: "#FF5D5D", fontWeight: "bold" }}>
-                          {' ' + currencyFormat(cart.usable_subsidize,2)}
+                          {" " + currencyFormat(cart.usable_subsidize, 2)}
                         </Text>
-                      </> : <Text style={{ color: "#6B7995" }}>ไม่มีวงเงินที่สามารถใช้ได้</Text>
-                    }
+                      </>
+                    ) : (
+                      <Text style={{ color: "#6B7995" }}>
+                        ไม่มีวงเงินที่สามารถใช้ได้
+                      </Text>
+                    )}
                   </View>
                 </View>
                 <Dash
@@ -478,7 +496,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   <View style={styled.warpPrice}>
                     <Text style={styled.textDiscount}>ราคาก่อนลด</Text>
                     <Text style={styled.textBeforeDiscount}>
-                      {currencyFormat(cart.before_discount,2)}
+                      {currencyFormat(cart.before_discount, 2)}
                     </Text>
                   </View>
 
@@ -502,12 +520,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       price_color={"#BB6BD9"}
                     />
                   ) : null}
-                  {cart.subsidize_discount != 0 ? <View style={styled.warpPrice}>
-                    <Text style={styled.textDiscount}>ส่วนลดดูแลราคา</Text>
-                    <Text style={styled.textSubsidizeDiscount}>
-                      {currencyFormat(cart.subsidize_discount,2)}
-                    </Text>
-                  </View> : null}
+                  {cart.subsidize_discount != 0 ? (
+                    <View style={styled.warpPrice}>
+                      <Text style={styled.textDiscount}>ส่วนลดดูแลราคา</Text>
+                      <Text style={styled.textSubsidizeDiscount}>
+                        {currencyFormat(cart.subsidize_discount, 2)}
+                      </Text>
+                    </View>
+                  ) : null}
                   {cashDiscount != 0 ? (
                     <View style={styled.warpPrice}>
                       <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
@@ -518,7 +538,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           fontWeight: "bold",
                         }}
                       >
-                        {currencyFormat(cashDiscount,2)}
+                        {currencyFormat(cashDiscount, 2)}
                       </Text>
                     </View>
                   ) : null}
@@ -531,16 +551,15 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       padding: 5,
                     }}
                   >
-                    
                     <Text style={styled.textBeforeTotal}>ส่วนลดรวม</Text>
                     <Text style={styled.textTotalDiscount}>
-                      {currencyFormat(cart.total_discount,2)}
+                      {currencyFormat(cart.total_discount, 2)}
                     </Text>
                   </View>
                   <View style={styled.warpPrice}>
                     <Text style={styled.textLabelTotalPrice}>ราคารวม</Text>
                     <Text style={styled.textTotalPrice}>
-                      {currencyFormat(cart.total_price,2)}
+                      {currencyFormat(cart.total_price, 2)}
                     </Text>
                   </View>
                 </View>
