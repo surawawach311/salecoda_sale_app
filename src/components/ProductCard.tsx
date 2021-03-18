@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Image, Text, Platform } from "react-native";
 import PromoTag from "../../assets/svg/promotion-tag.svg";
+import { currencyFormat } from "../utilities/CurrencyFormat";
 
 interface ProductCardProps {
   imagePath: string;
@@ -50,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <Text style={styleds.textEnName}>{productInfo}</Text>
         </View>
         <View style={styleds.warpPrice}>
-          <Text style={styleds.textPrice}>฿{price}</Text>
+          <Text style={styleds.textPrice}>{currencyFormat(price)}</Text>
         </View>
       </View>
       {havePromo && (
