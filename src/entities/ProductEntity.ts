@@ -16,6 +16,7 @@ export interface ProductEntity {
     company: string,
     is_have_promotion: boolean
     promotions: PromotionEntity[]
+    property: string
 }
 
 export interface PromotionEntity {

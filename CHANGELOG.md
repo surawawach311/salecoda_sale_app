@@ -2,6 +2,12 @@
 
 ## [Version - 1]
 
+## Hotfix [v1.22.1] - 2020-3-18
+
+- Added comma in product list, product screen
+
+- show property product
+
 ## Enhance [v1.22.0] - 2020-3-17
 
 - Button shop can display shop name

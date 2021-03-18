@@ -15,6 +15,7 @@ import { CartDataSource } from "../../datasource/CartDataSource";
 import { ProductDataSource } from "../../datasource/ProductDataSource";
 import { ProductEntity, PromotionEntity } from "../../entities/ProductEntity";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
+import { currencyFormat } from "../../utilities/CurrencyFormat";
 
 type ProductInfoScreenNavigationProp = StackScreenProps<
   PurchaseStackParamList,
@@ -66,130 +67,136 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
 
   return (
     <>
-      <ScrollView style={styled.container}>
-        <View>
-          <View style={styled.wrapInfo}>
-            <View style={styled.imageInfo}>
-              {route.params.product.image !== "" ? (
-                <Image style={styled.image} source={{ uri: product?.image }} />
-              ) : (
-                <Image
-                  style={styled.image}
-                  source={require("../../../assets/empty-product.png")}
-                />
-              )}
-            </View>
+      {product ? (
+        <>
+          <ScrollView style={styled.container}>
             <View>
-              <View style={styled.wrapTitlePrice}>
-                <Text style={styled.textH1}>{product?.title}</Text>
-                <Text style={styled.textH1}>{product?.price_per_volume}</Text>
+              <View style={styled.wrapInfo}>
+                <View style={styled.imageInfo}>
+                  {route.params.product.image !== "" ? (
+                    <Image
+                      style={styled.image}
+                      source={{ uri: product?.image }}
+                    />
+                  ) : (
+                    <Image
+                      style={styled.image}
+                      source={require("../../../assets/empty-product.png")}
+                    />
+                  )}
+                </View>
+                <View>
+                  <View style={styled.wrapTitlePrice}>
+                    <Text style={styled.textH1}>{product?.title}</Text>
+                    <Text style={styled.textH1}>
+                      {currencyFormat(product?.price_per_volume, 0)}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styled.textCommon}>
+                      {product?.common_title}
+                    </Text>
+                    <Text style={styled.textSize}>{product?.packing_size}</Text>
+                  </View>
+                </View>
               </View>
-              <View>
-                <Text style={styled.textCommon}>{product?.common_title}</Text>
-                <Text style={styled.textSize}>{product?.packing_size}</Text>
+              <View style={styled.containerDescription}>
+                <View style={styled.wrapDescriptionHeader}>
+                  <Text style={styled.textDescriptionHeader}>
+                    รายละเอียดสินค้า
+                  </Text>
+                </View>
+                <View style={styled.wrapDescription}>
+                  <Text style={styled.textH2}>สารสำคัญ</Text>
+                  <Text style={styled.textH5}>{product?.common_title}</Text>
+                  <Text style={styled.textH2}>คุณสมบัติและ ประโยชน์</Text>
+                  <Text style={styled.textH5}>
+                    {product.property ? product.property : "-"}
+                  </Text>
+                </View>
+                {product?.promotions
+                  ? product.promotions.map((promotion: PromotionEntity) => {
+                      return (
+                        <View key={promotion.id} style={styled.warpPromotion}>
+                          <Image
+                            style={{ width: 25, height: 25 }}
+                            source={require("../../../assets/promotion.png")}
+                          />
+                          <View style={{ marginLeft: 5 }}>
+                            <Text style={{ fontSize: 18, color: "#FFFFFF" }}>
+                              โปรโมชั่น
+                            </Text>
+                            <Text style={{ fontSize: 16, color: "#FFFFFF" }}>
+                              {promotion.desc}
+                            </Text>
+                          </View>
+                        </View>
+                      );
+                    })
+                  : null}
               </View>
             </View>
-          </View>
-          <View style={styled.containerDescription}>
-            <View style={styled.wrapDescriptionHeader}>
-              <Text style={styled.textDescriptionHeader}>รายละเอียดสินค้า</Text>
-            </View>
-            <View style={styled.wrapDescription}>
-              <Text style={styled.textH2}>สารสำคัญ</Text>
-              <Text style={styled.textH5}>{product?.common_title}</Text>
-              <Text style={styled.textH2}>คุณสมบัติและ ประโยชน์</Text>
-              <Text style={styled.textH5}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Maecenas malesuada mauris id laoreet tempor. Pellentesque quis
-                mauris feugiat purus eleifend cursus. Vivamus vitae aliquam
-                ligula. Mauris vel est non leo semper sagittis. Lorem ipsum
-                dolor sit amet, consectetur adipiscing elit. Nam eleifend diam
-                ut faucibus iaculis. Donec in nisl mattis, commodo risus ut,
-                venenatis nisl. Curabitur non convallis lorem. Nam ac fringilla
-                massa, ac pharetra sapien
-              </Text>
-            </View>
-            {product?.promotions
-              ? product.promotions.map((promotion: PromotionEntity) => {
-                  return (
-                    <View key={promotion.id} style={styled.warpPromotion}>
-                      <Image
-                        style={{ width: 25, height: 25 }}
-                        source={require("../../../assets/promotion.png")}
-                      />
-                      <View style={{ marginLeft: 5 }}>
-                        <Text style={{ fontSize: 18, color: "#FFFFFF" }}>
-                          โปรโมชั่น
-                        </Text>
-                        <Text style={{ fontSize: 18, color: "#FFFFFF" }}>
-                          {promotion.desc}
-                        </Text>
-                      </View>
-                    </View>
-                  );
-                })
-              : null}
-          </View>
-        </View>
-      </ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={90}
-      >
-        <View style={styled.wrapBottom}>
-          <View style={styled.safeAreaBottom}>
-            <View style={styled.warpQuantity}>
-              <TouchableOpacity
-                onPress={async () => {
-                  addCart("minus");
-                }}
-              >
-                <Image
-                  style={styled.imgIcon}
-                  source={require("../../../assets/minus-cart.png")}
-                />
-              </TouchableOpacity>
-              <TextInput
-                style={{
-                  marginHorizontal: 10,
-                  minWidth: 60,
-                  alignSelf: "center",
-                  textAlign: "center",
-                  color: "#616A7B",
-                  fontSize: 20,
-                  fontWeight: "600",
-                }}
-                maxLength={5}
-                value={quantity.toString()}
-                onChangeText={(text) => {
-                  setQuantity(Number(text));
-                  adjustProduct(Number(text));
-                }}
-                keyboardType="number-pad"
-              />
-              <TouchableOpacity
-                onPress={async () => {
-                  addCart("plus");
-                }}
-              >
-                <Image
-                  style={styled.imgIcon}
-                  source={require("../../../assets/add-cart.png")}
-                />
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Cart", { shop: route.params.shop })
-              }
-            >
-              <View style={styled.buttonCheckout}>
-                <Text style={styled.textButton}>สั่งซื้อสินค้า</Text>
+          </ScrollView>
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={90}
+          >
+            <View style={styled.wrapBottom}>
+              <View style={styled.safeAreaBottom}>
+                <View style={styled.warpQuantity}>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      addCart("minus");
+                    }}
+                  >
+                    <Image
+                      style={styled.imgIcon}
+                      source={require("../../../assets/minus-cart.png")}
+                    />
+                  </TouchableOpacity>
+                  <TextInput
+                    style={{
+                      marginHorizontal: 10,
+                      minWidth: 60,
+                      alignSelf: "center",
+                      textAlign: "center",
+                      color: "#616A7B",
+                      fontSize: 20,
+                      fontWeight: "600",
+                    }}
+                    maxLength={5}
+                    value={quantity.toString()}
+                    onChangeText={(text) => {
+                      setQuantity(Number(text));
+                      adjustProduct(Number(text));
+                    }}
+                    keyboardType="number-pad"
+                  />
+                  <TouchableOpacity
+                    onPress={async () => {
+                      addCart("plus");
+                    }}
+                  >
+                    <Image
+                      style={styled.imgIcon}
+                      source={require("../../../assets/add-cart.png")}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Cart", { shop: route.params.shop })
+                  }
+                >
+                  <View style={styled.buttonCheckout}>
+                    <Text style={styled.textButton}>สั่งซื้อสินค้า</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </KeyboardAvoidingView>
+            </View>
+          </KeyboardAvoidingView>
+        </>
+      ) : null}
     </>
   );
 };
