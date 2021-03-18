@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.23.0] - 2020-3-18
+
+- Add search product
+
 ## Hotfix [v1.22.1] - 2020-3-18
 
 - Added comma in product list, product screen
