@@ -19,6 +19,7 @@ const Search: React.FC<SearchProps> = ({ placeholder, onChange }) => {
     <View style={styles.container}>
       <Image style={styles.image} source={require("../../assets/search.png")} />
       <TextInput
+        style={{ flex: 1 }}
         placeholder={placeholder ? placeholder : ""}
         onChangeText={onChange}
       />

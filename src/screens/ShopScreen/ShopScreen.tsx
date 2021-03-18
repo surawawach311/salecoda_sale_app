@@ -9,6 +9,7 @@ import ProductCard from "../../components/ProductCard";
 import { ShopDataSource } from "../../datasource/ShopDataSource";
 import { ProductEntity } from "../../entities/ProductEntity";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { ProductDataSource } from "../../datasource/ProductDataSource";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Shop">;
 
@@ -27,18 +28,42 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     });
   };
 
+  const searchProduct = (keywords: string) => {
+    ProductDataSource.getProductList(
+      route.params.shop.id,
+      route.params.company,
+      keywords
+    ).then((res) => {
+      setProductList(res);
+    });
+  };
+
   return (
     <Container>
       <View style={styles.wrapSearch}>
-        <Search />
+        <Search
+          placeholder="ค้นหาสินค้า"
+          onChange={(value) => {
+            searchProduct(value);
+          }}
+        />
       </View>
       <View style={styles.warpShopHeader}>
-        <Image style={styles.bgImage} source={require("../../../assets/bgShop.png")} />
+        <Image
+          style={styles.bgImage}
+          source={require("../../../assets/bgShop.png")}
+        />
         <View style={styles.shopInfo}>
           <Text style={styles.textShopName}>{route.params.shop.name}</Text>
-          <Image style={styles.skyRocket} source={require("../../../assets/skyrocket.png")} />
+          <Image
+            style={styles.skyRocket}
+            source={require("../../../assets/skyrocket.png")}
+          />
           <View style={styles.shopPoint}>
-            <Image style={styles.coin} source={require("../../../assets/coin.png")} />
+            <Image
+              style={styles.coin}
+              source={require("../../../assets/coin.png")}
+            />
 
             <Text style={styles.textPoint}>0 คะแนน</Text>
           </View>
