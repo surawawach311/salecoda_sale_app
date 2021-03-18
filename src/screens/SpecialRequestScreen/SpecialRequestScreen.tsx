@@ -67,6 +67,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     );
     setDiscoutPromo(promo);
     setSpecialRequest(request);
+    setRemark(route.params.cart.special_request_remark);
   };
 
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
@@ -120,7 +121,8 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
 
     CartDataSource.calculateSpecialRequest(
       route.params.shop.id,
-      productRequestDiscount
+      productRequestDiscount,
+      remark,
     ).then((res) => {
       setCart(res);
     });
