@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Added [v1.24.0] - 2020-3-18
+
+- Add Special Request remark input to SpecialRemarkScreen
+
 ## Added [v1.23.0] - 2020-3-18
 
 - Add search product
