@@ -15,6 +15,7 @@ export interface OrderModel {
     shipping_address: ShippingAdressModel
     special_request_discounts: SpecialRequestEnity[]
     special_request_id: string,
+    special_request_remark: string,
     subsidize: number,
 }
 

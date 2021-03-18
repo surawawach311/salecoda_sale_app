@@ -59,6 +59,7 @@ export class OrderFacade {
             },
             special_request_discounts: cart.received_special_request_discounts,
             special_request_id: cart.special_request_id,
+            special_request_remark: cart.special_request_remark,
             subsidize: subsidize,
         }
 

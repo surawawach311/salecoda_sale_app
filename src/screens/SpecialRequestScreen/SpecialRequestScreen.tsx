@@ -1,7 +1,7 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
 import AccrodingPrice from "../../components/AccrodingPrice";
 import SpecialRequestProductCard from "../../components/SpecialProductCard";
 import { CartDataSource } from "../../datasource/CartDataSource";
@@ -28,9 +28,8 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
   const [request, setRequest] = useState<ItemSpecialRequest[]>([]);
   const [cart, setCart] = useState<CartEntity>(route.params.cart);
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
-  const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>(
-    []
-  );
+  const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>([]);
+  const [remark, setRemark] = useState("");
 
   useEffect(() => {
     formatData();
@@ -128,7 +127,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
   };
 
   const createSpecialRequest = () => {
-    CartFacade.createSpecialRequest(route.params.shop.id, request).then(
+    CartFacade.createSpecialRequest(route.params.shop.id, request, remark).then(
       (res) => {
         CartDataSource.addSpecialRequest(route.params.shop.id, res).then(
           (res: CartEntity) => {
@@ -169,6 +168,15 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
               );
             })
           : null}
+        <View style={styled.remarkWrapper}>
+          <Text style={styled.specialLabelFont}>หมายเหตุ</Text>
+          <TextInput 
+            style={styled.remarkTextInput} 
+            value={remark} 
+            placeholder="ใส่หมายเหตุ..." 
+            onChangeText={setRemark} 
+          />
+        </View>
       </ScrollView>
 
       <View
@@ -267,6 +275,20 @@ export default SpecialRequestScreen;
 const styled = StyleSheet.create({
   container: {},
   specialLabel: { padding: 16, backgroundColor: "#FFFFFF", marginBottom: 5 },
+  remarkWrapper: { 
+    padding: 16, 
+    backgroundColor: "#FFFFFF",
+    marginBottom: 5 
+  },
+  remarkTextInput: {
+    height: 128,
+    padding: 16,
+    borderWidth: 1, 
+    borderRadius: 12, 
+    borderColor: "#E1E7F6",
+    marginTop: 12,
+    textAlignVertical: "top",
+  },
   specialLabelFont: { fontSize: 17, fontWeight: "bold" },
   confirmOrderButton: {
     flexDirection: "row",
