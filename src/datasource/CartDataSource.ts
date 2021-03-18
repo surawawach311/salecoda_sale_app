@@ -49,16 +49,16 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static calculateSpecialRequest(shopId: string, discounts: ItemSpecialRequest[]) {
-        let arr = { discounts }
+    static calculateSpecialRequest(shopId: string, discounts: ItemSpecialRequest[], remark: string) {
+        let arr = { discounts, remark }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart/calculate_special_request?shopId=${shopId}`, arr)
             .then(res => res.data)
             .catch(error => console.log(error))
     }
 
-    static createSpecialRequest(shopId: string, discounts: ItemSpecialRequest[]): Promise<string> {
-        let arr = { discounts }
+    static createSpecialRequest(shopId: string, discounts: ItemSpecialRequest[], remark: string): Promise<string> {
+        let arr = { discounts, remark }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart/special_request?shopId=${shopId}`, arr)
             .then(res => res.data.id)
