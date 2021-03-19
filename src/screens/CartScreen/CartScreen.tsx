@@ -434,8 +434,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                             </TouchableWithoutFeedback>
 
                             <Text style={styled.textBodyPayment}>
-                              {method.name} (คงเหลือ{" "}
-                              {currencyFormat(method.remain_credit, 2)})
+                              {method.name}
+                               {/* (คงเหลือ{" "}
+                              {currencyFormat(method.remain_credit, 2)}) */}
                             </Text>
                           </View>
                         );
