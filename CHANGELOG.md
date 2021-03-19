@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.24.2] - 2020-3-19
+
+- Fixed confirm order
+
 ## Fixed [v1.24.1] - 2020-3-19
 
 - Fixed limit shop list
