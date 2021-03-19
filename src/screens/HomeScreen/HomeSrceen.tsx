@@ -72,7 +72,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                UserLocalStorageService.deleteAccessToken();
+                alert("อยู่ระหว่างการพัฒนาระบบ")
               }}
             >
               <Image
@@ -83,7 +83,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                UserLocalStorageService.deleteAccessToken();
+                alert("อยู่ระหว่างการพัฒนาระบบ")
               }}
             >
               <Image
