@@ -272,8 +272,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       keyboardVerticalOffset={80}
     >
-      {console.log(userData)}
-
       <View style={styled.warpChangeShop}>
         <ButtonShop
           shopName={route.params.shop.name}
