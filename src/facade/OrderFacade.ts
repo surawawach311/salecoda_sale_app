@@ -62,8 +62,6 @@ export class OrderFacade {
             special_request_remark: cart.special_request_remark,
             subsidize: subsidize,
         }
-        // console.log(order);
-        
         return OrderDataSource.comfirmOrder(order)
     }
     static getAllOrder(territory: string, company: string, status: string): Promise<Dictionary<OrderEntity[]>> {
