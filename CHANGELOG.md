@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.24.4] - 2020-3-19
+
+- remove credit limit
+
 ## Fixed [v1.24.3] - 2020-3-19
 
 - Fixed menu button (delete funtion removeToken)
