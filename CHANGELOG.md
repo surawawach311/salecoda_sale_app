@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.24.1] - 2020-3-19
+
+- Fixed limit shop list
+
 ## Added [v1.24.0] - 2020-3-18
 
 - Add Special Request remark input to SpecialRemarkScreen

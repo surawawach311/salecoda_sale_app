@@ -6,7 +6,7 @@ import { httpClient } from "../services/HttpClient";
 export class ShopDataSource {
     static getShop(territory: string): Promise<ShopListEntity> {
         return httpClient
-            .get(`${baseURL}/v1/sellcoda/customers/dealers?territory=${territory}`)
+            .get(`${baseURL}/v1/sellcoda/customers/dealers?territory=${territory}&limit=100`)
             .then(res => res.data)
             .catch(error => console.log(error))
     }
