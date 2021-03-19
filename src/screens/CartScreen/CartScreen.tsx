@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -36,7 +36,8 @@ import AccrodingPrice from "../../components/AccrodingPrice";
 import { useIsFocused } from "@react-navigation/native";
 import PremiumCard from "../../components/PremiumCard";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
-import { ListItem, Body, CheckBox } from "native-base";
+import { CheckBox } from "native-base";
+import { UserDataContext } from "../../provider/UserDataProvider";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
@@ -57,6 +58,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   useEffect(() => {
     getCart();
   }, [isFocused]);
+  const userDataStore = useContext(UserDataContext);
+  const { userData } = userDataStore;
 
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
@@ -251,6 +254,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       alert("กรุณาเลือกวิธีการชำระเงิน");
     } else {
       OrderFacade.confirmOrder(
+        userData.company,
         shop,
         shippingAddress,
         cart,
@@ -268,6 +272,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       keyboardVerticalOffset={80}
     >
+      {console.log(userData)}
+
       <View style={styled.warpChangeShop}>
         <ButtonShop
           shopName={route.params.shop.name}

@@ -19,7 +19,6 @@ const HomeNavigator: React.FC = () => {
 
   return (
     <>
-      <UserDataProvider>
         <Tab.Navigator initialRouteName="Home">
           <Tab.Screen
             name="Home"
@@ -102,7 +101,6 @@ const HomeNavigator: React.FC = () => {
             }}
           />
         </Tab.Navigator>
-      </UserDataProvider>
     </>
   );
 };
