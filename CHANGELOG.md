@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.24.5] - 2020-3-24
+
+- remove url encoding for image in CartScreen & SpecialProductCard
+
 ## Fixed [v1.24.4] - 2020-3-19
 
 - remove credit limit
