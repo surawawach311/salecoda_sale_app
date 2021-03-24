@@ -52,7 +52,7 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
             {image != "" ? (
               <Image
                 style={{ width: 65, height: 65, resizeMode: "contain" }}
-                source={{ uri: encodeURI(image) }}
+                source={{ uri: image }}
               />
             ) : (
               <Image

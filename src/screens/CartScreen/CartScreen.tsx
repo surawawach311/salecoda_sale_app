@@ -293,7 +293,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         pricePerVolume={item.price_per_volume}
                         volumeUnit={item.volume_unit}
                         packingSize={item.packing_size}
-                        image={encodeURI(item.image)}
+                        image={item.image}
                         pricePerUnit={item.price}
                         saleUnit={item.sale_unit}
                         quantity={item.quantity}
