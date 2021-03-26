@@ -51,10 +51,11 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
         )?.price,
       })
     );
-    const itemRequest: ItemSpecialRequest[] = route.params.cart.items.map(
+
+    const itemRequest: ItemSpecialRequest[] = route.params.cart.received_special_request_discounts.map(
       (item) => ({
         price_id: item.id,
-        amount: 0,
+        amount: Math.abs(item.price),
       })
     );
     setProducts(productSpecialRequest);
@@ -77,33 +78,18 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     data.map((item: any) => {
       arrayOutput.push({
         id: item.id,
-        item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
-        price: item.price,
+        item: `${item.name} (${Math.abs(item.price)}฿ x ${item.quantity} ลัง)`,
+        price: Math.abs(item.price),
         quantity: item.quantity,
       });
     });
     return arrayOutput;
   };
 
-  const formatAccrodionSpecial = (data: any[]): AccrodionPriceModel[] => {
-    let arrayOutput: any[] = [];
-    data.map((item: any) => {
-      arrayOutput.push({
-        item: `${item.name} (${item.discount}฿ x ${item.quantity} ลัง)`,
-        price: item.discount,
-        quantity: item.quantity,
-      });
-    });
-    return arrayOutput;
-  };
-  const handleUpdateFruits = (value: any) => {
-    setSpecialRequest((prevFruits) =>
-      prevFruits.map((fruit) => {
-        return fruit.id === value.id
-          ? { ...fruit, price: value.amount }
-          : fruit;
-      })
-    );
+  const handleRemoveItem = (value?: string) => {
+    const id = value;
+    setSpecialRequest(specialRequest.filter((item) => item.id !== id));
+    setRequest(request.filter((item) => item.price_id !== id));
   };
   const propsCallback = (e: ItemSpecialRequest) => {
     let productRequestDiscount: ItemSpecialRequest[] = request?.map(
@@ -117,6 +103,31 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
       }
     );
 
+    if (request.length <= 0) {
+      setRequest([{ amount: e.amount, price_id: e.price_id }]);
+    } else {
+      let checkDuplicateId = request.find(
+        (item) => item.price_id === e.price_id
+      );
+      if (checkDuplicateId) {
+        setRequest((prevState) =>
+          prevState.map((item) => {
+            return item.price_id === e.price_id
+              ? {
+                  ...item,
+                  amount: e.amount,
+                }
+              : item;
+          })
+        );
+      } else {
+        setRequest((prevArray) => [
+          ...prevArray,
+          { amount: e.amount, price_id: e.price_id },
+        ]);
+      }
+    }
+
     let productCardRequestDiscount = products.map(
       (item: ProductSpecialRequestModel) => {
         return item.id == e.price_id
@@ -129,9 +140,11 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     );
     let newItem = {
       id: e.price_id,
-      item: `${products.find((a) => a.id == e.price_id)?.name} (${ currencyFormat(parseInt(e.amount))} x ${
-        products.find((a) => a.id == e.price_id)?.sale_unit
-      })`,
+      item: `${
+        products.find((a) => a.id == e.price_id)?.name
+      } (${currencyFormat(parseInt(e.amount))} x ${
+        products.find((a) => a.id == e.price_id)?.quantity
+      } ${products.find((a) => a.id == e.price_id)?.sale_unit})`,
       price: e.amount,
       quantity: products.find((a) => a.id == e.price_id)?.quantity,
     };
@@ -139,16 +152,20 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     if (specialRequest.length <= 0) {
       setSpecialRequest([newItem]);
     } else {
-      let checkDuplicateId = specialRequest.find((item) => item.id === e.price_id);
+      let checkDuplicateId = specialRequest.find(
+        (item) => item.id === e.price_id
+      );
       if (checkDuplicateId) {
         setSpecialRequest((prevState) =>
           prevState.map((item) => {
             return item.id === e.price_id
               ? {
                   ...item,
-                  item: `${products.find((a) => a.id == e.price_id)?.name} (${
-                    currencyFormat(parseInt(e.amount))
-                  } x ${products.find((a) => a.id == e.price_id)?.sale_unit})`,
+                  item: `${
+                    products.find((a) => a.id == e.price_id)?.name
+                  } (${currencyFormat(parseInt(e.amount))} x ${
+                    products.find((a) => a.id == e.price_id)?.quantity
+                  } ${products.find((a) => a.id == e.price_id)?.sale_unit})`,
                   price: e.amount,
                 }
               : item;
@@ -159,7 +176,6 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
       }
     }
 
-    setRequest(productRequestDiscount);
     setProducts(productCardRequestDiscount);
 
     CartDataSource.calculateSpecialRequest(
@@ -209,6 +225,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
                   promotion_discount={product.promotion_discount}
                   callback={propsCallback}
                   discountRequest={product.discount}
+                  onDelete={handleRemoveItem}
                 />
               );
             })

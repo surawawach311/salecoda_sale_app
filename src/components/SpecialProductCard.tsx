@@ -20,6 +20,7 @@ export interface SpecialRequestProductCardProps {
   promotion_discount?: number;
   callback: (data: ItemSpecialRequest) => void;
   discountRequest?: number;
+  onDelete: (id: string | undefined) => void;
 }
 
 const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
@@ -32,6 +33,7 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
   promotion_discount,
   callback,
   discountRequest,
+  onDelete,
 }) => {
   const [amount, setAmount] = useState<number | undefined>(discountRequest);
   const [editable, setEditable] = useState<boolean>();
@@ -132,12 +134,16 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
               ส่วนลดพิเศษ
             </Text>
           </View>
+
           {editable || !amount ? (
             editable ? (
               <TouchableOpacity
                 style={{ marginRight: 10 }}
                 onPress={() => {
                   setEditable(false);
+                  amount != discountRequest && amount != undefined
+                    ? setAmount(discountRequest)
+                    : undefined;
                 }}
               >
                 <Text
@@ -165,6 +171,7 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
                 onPress={() => {
                   setAmount(undefined);
                   setEditable(false);
+                  onDelete(id);
                 }}
               >
                 <Image
@@ -239,7 +246,9 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
                 keyboardType="numeric"
                 maxLength={6}
                 placeholder={"ระบุส่วนลดพิเศษ"}
-                onChangeText={(e) => setAmount(e)}
+                onChangeText={(e) => {
+                  setAmount(e);
+                }}
                 defaultValue={amount ? Math.abs(amount).toString() : ""}
               />
               <Text>{`฿/${sale_unit}`}</Text>
