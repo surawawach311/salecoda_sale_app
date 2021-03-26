@@ -28,7 +28,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
   const [request, setRequest] = useState<ItemSpecialRequest[]>([]);
   const [cart, setCart] = useState<CartEntity>(route.params.cart);
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
-  const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>([]);
+  const [specialRequest, setSpecialRequest] = useState<any[]>([]);
   const [remark, setRemark] = useState("");
 
   useEffect(() => {
@@ -46,13 +46,16 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
           (a) => a.item_id == item.id
         )?.price,
         total_price: item.total_price,
-        discount: undefined,
+        discount: route.params.cart.received_special_request_discounts.find(
+          (special) => special.item_id == item.id
+        )?.price,
       })
     );
-    const itemRequest: ItemSpecialRequest[] = route.params.cart.items.map(
+
+    const itemRequest: ItemSpecialRequest[] = route.params.cart.received_special_request_discounts.map(
       (item) => ({
         price_id: item.id,
-        amount: 0,
+        amount: Math.abs(item.price),
       })
     );
     setProducts(productSpecialRequest);
@@ -74,14 +77,20 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     let arrayOutput: any[] = [];
     data.map((item: any) => {
       arrayOutput.push({
-        item: `${item.name} (${item.price}฿ x ${item.quantity} ลัง)`,
-        price: item.price,
+        id: item.id,
+        item: `${item.name} (${Math.abs(item.price)}฿ x ${item.quantity} ลัง)`,
+        price: Math.abs(item.price),
         quantity: item.quantity,
       });
     });
     return arrayOutput;
   };
 
+  const handleRemoveItem = (value?: string) => {
+    const id = value;
+    setSpecialRequest(specialRequest.filter((item) => item.id !== id));
+    setRequest(request.filter((item) => item.price_id !== id));
+  };
   const propsCallback = (e: ItemSpecialRequest) => {
     let productRequestDiscount: ItemSpecialRequest[] = request?.map(
       (item: ItemSpecialRequest) => {
@@ -94,6 +103,31 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
       }
     );
 
+    if (request.length <= 0) {
+      setRequest([{ amount: e.amount, price_id: e.price_id }]);
+    } else {
+      let checkDuplicateId = request.find(
+        (item) => item.price_id === e.price_id
+      );
+      if (checkDuplicateId) {
+        setRequest((prevState) =>
+          prevState.map((item) => {
+            return item.price_id === e.price_id
+              ? {
+                  ...item,
+                  amount: e.amount,
+                }
+              : item;
+          })
+        );
+      } else {
+        setRequest((prevArray) => [
+          ...prevArray,
+          { amount: e.amount, price_id: e.price_id },
+        ]);
+      }
+    }
+
     let productCardRequestDiscount = products.map(
       (item: ProductSpecialRequestModel) => {
         return item.id == e.price_id
@@ -104,25 +138,50 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
           : item;
       }
     );
-    let special_request = formatAccrodion(
-      products
-        .filter((item) => item.id == e.price_id)
-        .map((item) => {
-          return {
-            name: item.name,
-            price: e.amount,
-            quantity: item.quantity,
-          };
-        })
-    );
-    setSpecialRequest(special_request);
-    setRequest(productRequestDiscount);
+    let newItem = {
+      id: e.price_id,
+      item: `${
+        products.find((a) => a.id == e.price_id)?.name
+      } (${currencyFormat(parseInt(e.amount))} x ${
+        products.find((a) => a.id == e.price_id)?.quantity
+      } ${products.find((a) => a.id == e.price_id)?.sale_unit})`,
+      price: e.amount,
+      quantity: products.find((a) => a.id == e.price_id)?.quantity,
+    };
+
+    if (specialRequest.length <= 0) {
+      setSpecialRequest([newItem]);
+    } else {
+      let checkDuplicateId = specialRequest.find(
+        (item) => item.id === e.price_id
+      );
+      if (checkDuplicateId) {
+        setSpecialRequest((prevState) =>
+          prevState.map((item) => {
+            return item.id === e.price_id
+              ? {
+                  ...item,
+                  item: `${
+                    products.find((a) => a.id == e.price_id)?.name
+                  } (${currencyFormat(parseInt(e.amount))} x ${
+                    products.find((a) => a.id == e.price_id)?.quantity
+                  } ${products.find((a) => a.id == e.price_id)?.sale_unit})`,
+                  price: e.amount,
+                }
+              : item;
+          })
+        );
+      } else {
+        setSpecialRequest((prevArray) => [...prevArray, newItem]);
+      }
+    }
+
     setProducts(productCardRequestDiscount);
 
     CartDataSource.calculateSpecialRequest(
       route.params.shop.id,
       productRequestDiscount,
-      remark,
+      remark
     ).then((res) => {
       setCart(res);
     });
@@ -166,17 +225,18 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
                   promotion_discount={product.promotion_discount}
                   callback={propsCallback}
                   discountRequest={product.discount}
+                  onDelete={handleRemoveItem}
                 />
               );
             })
           : null}
         <View style={styled.remarkWrapper}>
           <Text style={styled.specialLabelFont}>หมายเหตุ</Text>
-          <TextInput 
-            style={styled.remarkTextInput} 
-            value={remark} 
-            placeholder="ใส่หมายเหตุ..." 
-            onChangeText={setRemark} 
+          <TextInput
+            style={styled.remarkTextInput}
+            value={remark}
+            placeholder="ใส่หมายเหตุ..."
+            onChangeText={setRemark}
           />
         </View>
       </ScrollView>
@@ -225,22 +285,6 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
             detail={specialRequest}
             price_color={"#BB6BD9"}
           />
-          {/* <View style={styled.warpSummary}>
-            <Text style={styled.fontBottomSumary}>ส่วนลดจากรายการ</Text>
-            <Text style={styled.fontBottomSumary}>
-              {currencyFormat(
-                cart?.received_discounts
-                  .filter((item) => item.item_id != null)
-                  .reduce((sum, item) => sum + item.total, 0)
-              )}
-            </Text>
-          </View> */}
-          {/* <View style={styled.warpSummary}>
-            <Text style={styled.fontBottomSumary}>ขอส่วนลดพิเศษเพิ่ม</Text>
-            <Text style={styled.fontBottomSumary}>
-              {currencyFormat(cart?.total_received_special_request_discount)}
-            </Text>
-          </View> */}
           <View
             style={{
               borderWidth: 1,
@@ -277,16 +321,16 @@ export default SpecialRequestScreen;
 const styled = StyleSheet.create({
   container: {},
   specialLabel: { padding: 16, backgroundColor: "#FFFFFF", marginBottom: 5 },
-  remarkWrapper: { 
-    padding: 16, 
+  remarkWrapper: {
+    padding: 16,
     backgroundColor: "#FFFFFF",
-    marginBottom: 5 
+    marginBottom: 5,
   },
   remarkTextInput: {
     height: 128,
     padding: 16,
-    borderWidth: 1, 
-    borderRadius: 12, 
+    borderWidth: 1,
+    borderRadius: 12,
     borderColor: "#E1E7F6",
     marginTop: 12,
     textAlignVertical: "top",
