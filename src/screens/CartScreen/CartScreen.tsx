@@ -414,8 +414,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                               )}
                             </TouchableWithoutFeedback>
                             <Text style={styled.textBodyPayment}>
-                              {method.name} (รับส่วนลดเพิ่ม{" "}
-                              {method.discount_rate}%)
+                              {method.name}
+                              {method.discount_rate
+                                ? `(รับส่วนลดเพิ่ม ${method.discount_rate} %)`
+                                : null}
                             </Text>
                           </View>
                         ) : (
@@ -435,7 +437,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
                             <Text style={styled.textBodyPayment}>
                               {method.name}
-                               {/* (คงเหลือ{" "}
+                              {/* (คงเหลือ{" "}
                               {currencyFormat(method.remain_credit, 2)}) */}
                             </Text>
                           </View>
