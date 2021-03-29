@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.27.0] - 2020-3-29
+
+- submitted shipping remark data when confirm order in CartScreen
+
 ## Enhance [v1.26.0] - 2020-3-29
 
 - Hide Discount rate 
