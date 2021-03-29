@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.25.0] - 2020-3-29
+
+- add condition substring shop name
+
 ## Fixed [v1.24.5] - 2020-3-24
 
 - remove url encoding for image in CartScreen & SpecialProductCard
