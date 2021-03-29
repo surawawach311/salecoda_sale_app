@@ -25,7 +25,7 @@ const ButtonShop: React.FC<ButtonShopProps> = ({ onPress, shopName }) => {
             source={require("../../assets/shop.png")}
           />
           {shopName ? (
-            <Text style={styles.shopName}>{shopName}</Text>
+            <Text style={styles.shopName}>{shopName.length > 30 ? shopName.substring(0, 30) + "..." : shopName}</Text>
           ) : (
             <Text style={styles.textChangeShop}>เปลี่ยนร้านค้า</Text>
           )}
