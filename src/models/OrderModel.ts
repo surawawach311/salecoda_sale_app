@@ -39,6 +39,7 @@ export interface ShippingAdressModel {
     sub_district: string
     province: string
     post_code: string
+    remark: string
 }
 
 export interface PromotionModel {
