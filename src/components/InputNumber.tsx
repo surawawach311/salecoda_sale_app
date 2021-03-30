@@ -31,6 +31,7 @@ const InputNumber: React.FC<InputNumberProps> = ({
         />
       </TouchableOpacity>
       <TextInput
+        style={{ flex: 1, textAlign: "center" }}
         maxLength={6}
         defaultValue={value}
         onChangeText={onChangeText}
