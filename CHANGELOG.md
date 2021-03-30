@@ -2,9 +2,17 @@
 
 ## [Version - 1]
 
-## Enhance [v1.28.0] - 2020-3-30
+## Enhance [v1.30.0] - 2020-3-30
 
 - increase area input on product card
+
+## Enhance [v1.29.0] - 2020-3-30
+
+- added shipping remark section to OrderSuccessScreenDetail
+
+## Enhance [v1.28.0] - 2020-3-30
+
+- added shipping remark section to CartScreen
 
 ## Enhance [v1.27.0] - 2020-3-29
 

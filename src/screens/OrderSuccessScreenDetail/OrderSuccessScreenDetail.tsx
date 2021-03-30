@@ -93,6 +93,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
     premium_memo,
     status,
     subsidize,
+    shipping_address,
   } = route.params.data;
   return (
     <View style={styled.container}>
@@ -179,6 +180,19 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                 />
               </SkeletonPlaceholder>
             )}
+          </View>
+          <Dash
+            dashGap={2}
+            dashLength={4}
+            dashThickness={1}
+            style={styled.lineDash}
+            dashColor="#C8CDD6"
+          />
+          <View style={{ marginVertical: 10 }}>
+            <Text style={styled.textGrayLabel}>หมายเหตุ</Text>
+            <Text style={styled.textBlack}>
+              {shipping_address.remark ? shipping_address.remark.trim() : '-'}
+            </Text>
           </View>
           <Dash
             dashGap={2}

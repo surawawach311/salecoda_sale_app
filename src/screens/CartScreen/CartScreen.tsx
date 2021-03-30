@@ -179,7 +179,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   const handleOkDeliveryModal = (value: string, shop: ShopEntity) => {
     setShippingAddress(shop);
-    setRemark(value);
+    setRemark(value.trim());
     setModalDelivery(false);
   };
   const handlePayment = (payment: string) => {
@@ -619,14 +619,20 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           <Text>{`${shippingAddress.address} ตำบล${shippingAddress.sub_district} \n`}</Text>
                           <Text>{`อำเภอ${shippingAddress.district} ${shippingAddress.province} ${shippingAddress.post_code}`}</Text>
                         </Text>
-                        {!remark ? null : (
-                          <Text style={styled.textRemark}>
-                            หมายเหตุ: {remark}
-                          </Text>
-                        )}
                       </View>
                     </View>
                   )}
+                  {remark ? (
+                    <>
+                      <View style={styled.line} />
+                      <View style={{marginTop: 8}}>
+                        <Text style={styled.textHeaderPayment}>
+                          หมายเหตุ
+                        </Text>
+                        <Text style={styled.textRemark}>{remark}</Text>
+                      </View>
+                    </>
+                  ): null}
                 </View>
                 <ModalDeliveryMethod
                   visible={modalDelivery}
@@ -707,7 +713,7 @@ const styled = StyleSheet.create({
   warpChangeShop: {
     padding: 10,
   },
-  warpDelivery: { padding: 10, marginTop: 9, backgroundColor: "#FFFFFF" },
+  warpDelivery: { padding: 10, marginTop: 9, backgroundColor: "#FFFFFF", marginBottom: 10 },
   buttonDelivery: {
     flexDirection: "row",
     borderRadius: 6,
@@ -810,7 +816,7 @@ const styled = StyleSheet.create({
   textBeforeTotal: { fontSize: 16, color: "#6B7995" },
   textLabelTotalPrice: { fontSize: 16, color: "#314364", fontWeight: "bold" },
   textTotalPrice: { fontSize: 20, color: "#4C95FF", fontWeight: "bold" },
-  deliveryPointContainer: { margin: 20, flexDirection: "row" },
+  deliveryPointContainer: { margin: 20, flexDirection: "row", marginBottom: 10 },
   deliveryTextShopName: { fontWeight: "bold" },
   textChageDeliveryMethod: {
     color: "#4C95FF",
@@ -824,7 +830,8 @@ const styled = StyleSheet.create({
   textRemark: {
     color: "#616A7B",
     fontSize: 16,
-    marginTop: 10,
+    paddingTop: 12,
+    paddingBottom: 8,
   },
   deliveryMethodtContainer: { marginLeft: 10 },
   textDeliveryMethod: {
