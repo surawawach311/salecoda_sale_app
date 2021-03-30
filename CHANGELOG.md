@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.29.0] - 2020-3-30
+
+- added shipping remark section to OrderSuccessScreenDetail
+
 ## Enhance [v1.28.0] - 2020-3-30
 
 - added shipping remark section to CartScreen
