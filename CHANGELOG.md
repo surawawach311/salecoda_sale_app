@@ -2,6 +2,12 @@
 
 ## [Version - 1]
 
+## Enhance [v1.31.0] - 2020-3-30
+
+- Add filter canceled in order screen
+
+- change wording order success
+
 ## Enhance [v1.30.0] - 2020-3-30
 
 - increase area input on product card
