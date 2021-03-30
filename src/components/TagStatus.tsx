@@ -36,6 +36,24 @@ const TagStatus: React.FC<TagStatusProps> = ({ status }) => {
         <Text style={styled.textRed}>กำลังจัดส่ง</Text>
       </View>
     );
+  } else if (status == "company_canceled") {
+    return (
+      <View style={[styled.containerBadge, styled.badgeRed]}>
+        <Text style={styled.textRed}>ยกเลิกคำสั่งซื้อโดยบริษัท</Text>
+      </View>
+    );
+  } else if (status == "customer_canceled") {
+    return (
+      <View style={[styled.containerBadge, styled.badgeRed]}>
+        <Text style={styled.textRed}>ยกเลิกคำสั่งซื้อโดยร้านค้า</Text>
+      </View>
+    );
+  } else if (status == "sale_executive_rejected") {
+    return (
+      <View style={[styled.containerBadge, styled.badgeRed]}>
+        <Text style={styled.textRed}>ไม่อนุมัติคำสั่งซื้อ</Text>
+      </View>
+    );
   } else {
     return <Text>unknow</Text>;
   }
