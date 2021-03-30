@@ -24,7 +24,7 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
   const [orderList, setOrderList] = useState<OrderEntity[]>();
   const [shopOrderCard, setShopOrderCard] = useState<ShopOrderCardModel[]>();
   const [filter, setFilter] = useState<
-    "waiting_order_confirm" | "opened" | "delivering"
+    "waiting_order_confirm" | "opened" | "delivering" | "canceled"
   >("waiting_order_confirm");
   const [navbutton, setNavbutton] = useState<FilterOrder>(
     FilterOrder.territory
@@ -52,7 +52,7 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
   };
 
   const handleFilter = (
-    status: "waiting_order_confirm" | "opened" | "delivering"
+    status: "waiting_order_confirm" | "opened" | "delivering" | "canceled"
   ) => {
     setFilter(status);
     if (showOrder) {
@@ -259,6 +259,19 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
                 }
               >
                 กำลังจัดส่ง
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFilter("canceled")}>
+            <View style={filter == "canceled" ? styled.badgeStatus : null}>
+              <Text
+                style={
+                  filter == "canceled"
+                    ? styled.textStatusActive
+                    : styled.textStatusInActive
+                }
+              >
+                ยกเลิกคำสั่ง
               </Text>
             </View>
           </TouchableOpacity>
