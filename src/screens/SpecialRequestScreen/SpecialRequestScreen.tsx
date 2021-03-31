@@ -74,13 +74,13 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
   };
 
   // TODO: don't use any type
-  // TODO: resolve item unit
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
     data.map((item: any) => {
+      let unit = item.sale_unit ? item.sale_unit : item.unit
       arrayOutput.push({
         id: item.id,
-        item: `${item.name} (${Math.abs(item.price)}฿ x ${item.quantity} ลัง)`,
+        item: `${item.name} (${Math.abs(item.price)}฿ x ${item.quantity} ${unit})`,
         price: Math.abs(item.price),
         quantity: item.quantity,
       });

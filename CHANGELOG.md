@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.33.0] - 2020-3-31
+
+- Updated discount item detail in CartScreen, OrderSuccessScreen, OrderSuccessDetailScreen and SpecialRequestScreen
+
 ## Enhance [v1.32.0] - 2020-3-31
 
 - Updated order confirmation in CartScreen to submit with premium item detail data

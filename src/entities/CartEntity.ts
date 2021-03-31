@@ -76,6 +76,8 @@ export interface DiscountEntity {
     promotion_type: string
     quantity: number
     total: number
+    packing_size: string
+    sale_unit: string
 }
 
 export interface PremiumEntity {
@@ -104,4 +106,6 @@ export interface SpecialRequestEnity {
     image: string
     item_id: string
     total: number
+    packing_size: string
+    sale_unit: string
 }
