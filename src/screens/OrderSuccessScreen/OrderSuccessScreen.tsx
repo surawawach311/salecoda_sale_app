@@ -277,8 +277,16 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                           {item.name}
                         </Text>
                         <Text
+                          style={{
+                            fontSize: 12,
+                            color: "#616A7B",
+                          }}
+                        >
+                          {item.packing_size}
+                        </Text>
+                        <Text
                           style={{ fontWeight: "bold", fontSize: 11 }}
-                        >{`${item.quantity} ลัง`}</Text>
+                        >{`${item.quantity} ${item.unit}`}</Text>
                       </View>
                     </View>
                   );
