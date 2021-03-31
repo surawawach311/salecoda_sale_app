@@ -33,6 +33,8 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
     getShopInfo();
   }, []);
 
+  // TODO: don't use any type
+  // TODO: resolve item unit
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
     data.map((item: any) => {
