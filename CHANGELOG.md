@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.34.0] - 2020-3-31
+
+- add factory to Delivery method
+
 ## Enhance [v1.33.0] - 2020-3-31
 
 - Updated discount item detail in CartScreen, OrderSuccessScreen, OrderSuccessDetailScreen and SpecialRequestScreen
