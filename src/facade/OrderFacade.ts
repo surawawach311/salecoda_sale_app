@@ -26,14 +26,18 @@ export class OrderFacade {
         let premium_items: PremiumOrderEntity[] = cart.available_premiums.map((item: PremiumEntity) => {
             return {
                 id: item.id,
+                item_no: item.item_no,
                 price: item.price,
                 quantity: item.quantity,
                 name: item.name,
+                common_name: item.common_name,
+                packing_size: item.packing_size,
+                unit: item.unit,
                 cover: item.image,
                 promotion_id: item.promotion_id,
                 promotion_name: item.promotion_name,
                 promotion_image: item.promotion_image,
-                item_id: item.item_id
+                item_id: item.item_id,
             }
         })
 
