@@ -34,13 +34,12 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
   }, []);
 
   // TODO: don't use any type
-  // TODO: resolve item unit
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
     data.map((item: any) => {
       let unit = item.sale_unit ? item.sale_unit : item.unit
       arrayOutput.push({
-        item: `${item.name} (${item.price}฿ x ${item.quantity} $unit)`,
+        item: `${item.name} (${item.price}฿ x ${item.quantity} ${unit})`,
         price: item.price,
         quantity: item.quantity,
       });
@@ -50,11 +49,11 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
 
   const initialData = () => {
     let promo = formatAccrodion(
-      route.params.data.discount_memo.filter(
+      route.params.cart?.received_discounts.filter(
         (item) => item.item_id != null && item.item_id != ""
-      )
+      ) || []
     );
-    let request = formatAccrodion(route.params.data.special_request_discounts);
+    let request = formatAccrodion(route.params.cart?.received_special_request_discounts || []);
     setDiscoutPromo(promo);
     setSpecialRequest(request);
   };

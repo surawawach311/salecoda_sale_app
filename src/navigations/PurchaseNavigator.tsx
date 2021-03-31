@@ -22,7 +22,7 @@ export type PurchaseStackParamList = {
   Shop: { shop: ShopEntity; company: string };
   ProductInfo: { product: ProductEntity; shop: ShopEntity };
   Cart: { shop: ShopEntity };
-  OrderSuccess: { data: OrderEntity };
+  OrderSuccess: { data: OrderEntity, cart?: CartEntity };
   SuccessDetail: { data: OrderEntity };
   SpecialRequest: {
     cart: CartEntity;
