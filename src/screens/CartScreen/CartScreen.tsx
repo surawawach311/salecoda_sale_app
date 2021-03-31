@@ -327,8 +327,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       return (
                         <PremiumCard
                           title={item.name}
+                          desc={item.packing_size}
                           image={item.image}
                           quantity={item.quantity}
+                          unit={item.unit}
                         />
                       );
                     })}
