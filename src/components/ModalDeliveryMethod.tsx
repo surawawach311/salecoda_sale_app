@@ -17,21 +17,22 @@ interface ModalDeliveryMethodProps {
   visible: boolean;
   onClose: () => void;
   onOk: (value: string, shop: ShopEntity) => void;
-  shop: ShopEntity;
+  address: ShopEntity;
+  company: string;
 }
 
 export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
   visible,
   onClose,
   onOk,
-  shop,
+  address,
+  company,
 }) => {
   const [remark, setRemark] = useState("");
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        // keyboardVerticalOffset={60}
         style={styled.container}
       >
         <View style={styled.centerSubContainer}>
@@ -50,25 +51,49 @@ export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
               <Text style={styled.deliveryTextHeader}>เลือกการจัดส่ง</Text>
             </View>
           </View>
-          <View style={styled.deliveryMethodIcon}>
-            <View>
-              <Image
-                style={styled.iconClose}
-                source={require("../../assets/home.png")}
-              />
-              <Text style={styled.deliveryTextIcon}>จัดส่งที่ร้าน</Text>
+          {company == "icpl" ? (
+            <View style={styled.deliveryMethodIcon}>
+              <View>
+                <Image
+                  style={styled.iconClose}
+                  source={require("../../assets/home.png")}
+                />
+                <Text style={styled.deliveryTextIcon}>จัดส่งที่ร้าน</Text>
+              </View>
             </View>
-          </View>
+          ) : (
+            <View style={styled.deliveryMethodIcon}>
+              <View>
+                <Image
+                  style={{
+                    width: 60,
+                    height: 20,
+                    resizeMode: "contain",
+                    alignSelf: "center",
+                    marginBottom: 10,
+                  }}
+                  source={require("../../assets/factory.png")}
+                />
+                <Text style={styled.deliveryTextIcon}>รับที่โรงงาน</Text>
+              </View>
+            </View>
+          )}
           <View style={styled.deliveryAddressContainer}>
             <Text style={styled.textHeaderPayment}>ที่อยู่จัดส่ง</Text>
             <View style={styled.deliveryAddressInnnerContainer}>
               <View style={styled.iconPin} />
-              <View style={styled.textAddress}>
-                <Text style={styled.deliveryTextShopName}>{shop.name}</Text>
-                <Text>
-                  {`${shop.address} ตำบล${shop.sub_district} \n อำเภอ${shop.district} ${shop.province} ${shop.post_code}`}
-                </Text>
-              </View>
+              {address ? (
+                <>
+                  <View style={styled.textAddress}>
+                    <Text style={styled.deliveryTextShopName}>
+                      {address.name}
+                    </Text>
+                    <Text>
+                      {`${address.address} ${address.sub_district} \n ${address.district} ${address.province} ${address.post_code}`}
+                    </Text>
+                  </View>
+                </>
+              ) : null}
             </View>
             <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
 
@@ -83,7 +108,7 @@ export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
           <View style={styled.deliveryButtonContainer}>
             <TouchableOpacity
               style={styled.deliveryButton}
-              onPress={() => onOk(remark, shop)}
+              onPress={() => onOk(remark, address)}
             >
               <Text style={styled.deliveryButtonText}>ยืนยัน</Text>
             </TouchableOpacity>
@@ -158,7 +183,7 @@ const styled = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E1E7F7",
     marginTop: 40,
-    paddingTop:15,
+    paddingTop: 15,
     padding: 10,
   },
   deliveryButtonContainer: {

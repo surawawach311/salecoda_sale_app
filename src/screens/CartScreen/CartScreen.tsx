@@ -44,7 +44,8 @@ type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [modalDelivery, setModalDelivery] = useState(false);
   const [remark, setRemark] = useState("");
-  const [shippingAddress, setShippingAddress] = useState<ShopEntity>();
+  const [shippingAddress, setShippingAddress] = useState<any>();
+  const [deliveryMethod, setDeliveryMethod] = useState<string>("");
   const [cart, setCart] = useState<CartEntity | undefined>();
   const [quantity, setQuantity] = useState(0);
   const [payment, setPayment] = useState<string | undefined>();
@@ -88,6 +89,32 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         setSpecialRequest(discountSpecial);
         setDiscoutPromo(discountProduct);
         setUseSubsudize(false);
+        if (userData.company == "icpl") {
+          const shipAddress = {
+            name: route.params.shop.name,
+            telephone: route.params.shop.telephone,
+            address: route.params.shop.address,
+            district: route.params.shop.district,
+            sub_district: route.params.shop.sub_district,
+            province: route.params.shop.province,
+            post_code: route.params.shop.post_code,
+          };
+          const delivery = "delivery";
+          setShippingAddress(shipAddress);
+          setDeliveryMethod(delivery);
+        } else {
+          const shipAddress = {
+            name: "บริษัท ไอ ซี พี เฟอทิไลเซอร์ จำกัด",
+            address: "เลขที่ 2/11 หมู่ที่ 3",
+            district: "อำเภอนครหลวง",
+            sub_district: "ตำบลแม่ลา",
+            province: "จังหวัดพระนครศรีอยุธยา",
+            post_code: "13260",
+          };
+          const delivery = "factory";
+          setShippingAddress(shipAddress);
+          setDeliveryMethod(delivery);
+        }
       }
     );
   };
@@ -258,6 +285,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       OrderFacade.confirmOrder(
         userData.company,
         shop,
+        deliveryMethod,
         shippingAddress,
         cart,
         cart.subsidize_discount,
@@ -614,7 +642,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       />
                       <View style={styled.deliveryMethodtContainer}>
                         <Text style={styled.textDeliveryMethod}>
-                          จัดส่งที่ร้าน
+                          {deliveryMethod == "delivery"
+                            ? "จัดส่งที่ร้าน"
+                            : "จัดส่งโรงงาน"}
                         </Text>
                         <Text style={styled.textDeliveryPoint}>
                           <Text style={styled.deliveryTextShopName}>
@@ -640,7 +670,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   visible={modalDelivery}
                   onClose={handleCloseModal}
                   onOk={handleOkDeliveryModal}
-                  shop={route.params.shop}
+                  address={shippingAddress}
+                  company={userData.company}
                 />
               </ScrollView>
               <View
@@ -715,7 +746,12 @@ const styled = StyleSheet.create({
   warpChangeShop: {
     padding: 10,
   },
-  warpDelivery: { padding: 10, marginTop: 9, backgroundColor: "#FFFFFF", marginBottom: 10 },
+  warpDelivery: {
+    padding: 10,
+    marginTop: 9,
+    backgroundColor: "#FFFFFF",
+    marginBottom: 10,
+  },
   buttonDelivery: {
     flexDirection: "row",
     borderRadius: 6,
