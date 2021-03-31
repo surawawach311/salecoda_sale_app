@@ -59,12 +59,31 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
   }, []);
 
   const initialData = () => {
-    let promo = formatAccrodion(
-      route.params.data.discount_memo.filter(
-        (item) => item.item_id != null && item.item_id != ""
-      )
-    );
-    let request = formatAccrodion(route.params.data.special_request_discounts);
+    let orderItems = route.params.data.items
+    let recevied_item_discounts = route.params.data.discount_memo
+    .filter(
+      (item) => item.item_id != null && item.item_id != ""
+    ).map((i) => {
+      let refItem = orderItems.find((x) => x.id === i.item_id)
+      return {
+        name: refItem?.title,
+        price: i.price,
+        quantity: i.quantity,
+        sale_unit: refItem?.unit
+      }
+    })
+    let recevied_request_item_discounts = route.params.data.special_request_discounts
+    .map((i) => {
+      let refItem = orderItems.find((x) => x.id === i.item_id)
+      return {
+        name: refItem?.title,
+        price: i.price,
+        quantity: i.quantity,
+        sale_unit: refItem?.unit
+      }
+    })
+    let promo = formatAccrodion(recevied_item_discounts);
+    let request = formatAccrodion(recevied_request_item_discounts);
     setDiscoutPromo(promo);
     setSpecialRequest(request);
   };
