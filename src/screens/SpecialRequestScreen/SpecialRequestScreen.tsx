@@ -73,6 +73,8 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     setRemark(route.params.cart.special_request_remark);
   };
 
+  // TODO: don't use any type
+  // TODO: resolve item unit
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
     data.map((item: any) => {

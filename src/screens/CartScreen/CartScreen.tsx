@@ -61,6 +61,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const userDataStore = useContext(UserDataContext);
   const { userData } = userDataStore;
 
+  // TODO: don't use any type
+  // TODO: resolve item unit
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
     data.map((item: any) => {
@@ -327,8 +329,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       return (
                         <PremiumCard
                           title={item.name}
+                          desc={item.packing_size}
                           image={item.image}
                           quantity={item.quantity}
+                          unit={item.unit}
                         />
                       );
                     })}

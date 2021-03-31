@@ -4,14 +4,12 @@ import React from "react";
 export interface PremiumCardProps {
   image: string;
   title: string;
+  desc: string;
   quantity: number;
+  unit: string;
 }
 
-const PremiumCard: React.FC<PremiumCardProps> = ({
-  image,
-  title,
-  quantity,
-}) => {
+const PremiumCard: React.FC<PremiumCardProps> = ({ image, title, desc, quantity, unit }) => {
   return (
     <View>
       <View
@@ -61,8 +59,14 @@ const PremiumCard: React.FC<PremiumCardProps> = ({
             {title}
           </Text>
           <Text
-            style={{ fontWeight: "bold", fontSize: 11 }}
-          >{`${quantity} ลัง`}</Text>
+            style={{
+              fontSize: 12,
+              color: "#616A7B",
+            }}
+          >
+            {desc}
+          </Text>
+          <Text style={{ fontWeight: "bold", fontSize: 11 }}>{`${quantity} ${unit}`}</Text>
         </View>
       </View>
     </View>

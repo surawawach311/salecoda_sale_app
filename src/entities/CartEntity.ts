@@ -89,6 +89,10 @@ export interface PremiumEntity {
     promotion_name: string
     promotion_type: string
     quantity: number
+    item_no: string
+    common_name: string
+    packing_size: string
+    unit: string
 }
 
 export interface SpecialRequestEnity {

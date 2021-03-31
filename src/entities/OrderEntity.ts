@@ -56,14 +56,18 @@ export interface ShippingAdressEntity {
 
 export interface PremiumOrderEntity {
     id: string
+    item_no: string
     price: number
     quantity: number
     name: string
+    common_name: string
+    packing_size: string
+    unit: string
     cover: string
     promotion_id: string
     promotion_name: string
     promotion_image: string
-    item_id: string
+    item_id: string    
 }
 
 export interface DiscountOrderEntity {
