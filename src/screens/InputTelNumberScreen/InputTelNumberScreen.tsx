@@ -59,7 +59,7 @@ const InputTelNumberScreen = ({
             source={require("../../../assets/bgOtp.png")}
           />
           <View style={styles.wrapText}>
-            <Text style={styles.title}>ลงทะเบียนร้านค้า</Text>
+            <Text style={styles.title}>เข้าสู่ระบบพนักงานขาย</Text>
             <Text style={styles.text}>
               ใส่หมายเลขโทรศัพท์ของคุณเพื่อรับ รหัส OTP ยืนยันการลงทะเบียน
             </Text>
@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
   backgroundImage: {
     backgroundColor: "#FBFBFB",
     width: "100%",
-    // height:undefined,
     resizeMode: "contain",
     position: "absolute",
   },

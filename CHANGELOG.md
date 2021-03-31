@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.31.1] - 2020-3-30
+
+- Edit wording in Input Telephone Screen , Delivery in cart screen
+
 ## Enhance [v1.31.0] - 2020-3-30
 
 - Add filter canceled in order screen

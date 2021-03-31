@@ -104,7 +104,7 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
             <Text
               style={{ color: "#616A7B", fontWeight: "bold", fontSize: 16 }}
             >
-              {` ${currencyFormat(promotion_discount)}/ลัง`}
+              {` ${currencyFormat(promotion_discount)}/${sale_unit}`}
             </Text>
           </View>
         </View>
