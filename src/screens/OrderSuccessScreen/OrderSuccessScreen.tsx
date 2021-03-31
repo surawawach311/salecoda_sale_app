@@ -11,6 +11,7 @@ import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import AccrodingPrice from "../../components/AccrodingPrice";
 import { DiscountOrderEntity } from "../../entities/OrderEntity";
+import TagStatus from "../../components/TagStatus";
 
 type OrderSuccessScreenRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -105,7 +106,11 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
             />
           </View>
           <View style={styled.iconWaitWarp}>
-            <Text style={styled.textDesc}>รอยืนยันคำสั่งซื้อจากร้านค้า</Text>
+            <Text style={styled.textDesc}>
+              {route.params.data.status == "waiting_confirm"
+                ? "รอยืนยันคำสั่งซื้อ"
+                : "รออนุมัติคำสั่งซื้อ"}
+            </Text>
           </View>
           <Dash
             dashGap={2}
@@ -148,7 +153,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ราคาก่อนลด</Text>
             <Text style={styled.textPrice}>
-              {currencyFormat(before_discount,2)}
+              {currencyFormat(before_discount, 2)}
             </Text>
           </View>
           {discount_memo.filter(
@@ -174,14 +179,18 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
               price_color={"#BB6BD9"}
             />
           ) : null}
-          {subsidize != 0 ? <View style={styled.productTextWarp}>
-            <Text style={{ fontSize: 14, color: "#6B7995" }}>ส่วนลดดูแลราคา</Text>
-            <Text
-              style={{ color: "#FF5D5D", fontSize: 16, fontWeight: "bold" }}
-            >
-              {currencyFormat(subsidize,2)}
-            </Text>
-          </View> : null}
+          {subsidize != 0 ? (
+            <View style={styled.productTextWarp}>
+              <Text style={{ fontSize: 14, color: "#6B7995" }}>
+                ส่วนลดดูแลราคา
+              </Text>
+              <Text
+                style={{ color: "#FF5D5D", fontSize: 16, fontWeight: "bold" }}
+              >
+                {currencyFormat(subsidize, 2)}
+              </Text>
+            </View>
+          ) : null}
           {discount_memo.length > 0
             ? discount_memo
                 .filter((item) => item.id == "cash")
@@ -202,7 +211,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
                           { color: "#FF8329" },
                         ]}
                       >
-                        {currencyFormat(item.price,2)}
+                        {currencyFormat(item.price, 2)}
                       </Text>
                     </View>
                   );
@@ -213,12 +222,14 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
             <Text
               style={{ color: "#616A7B", fontSize: 16, fontWeight: "bold" }}
             >
-              {currencyFormat(total_discount,2)}
+              {currencyFormat(total_discount, 2)}
             </Text>
           </View>
           <View style={styled.productTextWarp}>
             <Text style={styled.textLabelTotal}>ราคารวม</Text>
-            <Text style={styled.textTotal}>{currencyFormat(total_price,2)}</Text>
+            <Text style={styled.textTotal}>
+              {currencyFormat(total_price, 2)}
+            </Text>
           </View>
           <Dash
             dashGap={2}
