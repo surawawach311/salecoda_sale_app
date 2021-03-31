@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fixed [v1.34.1] - 2020-3-31
+
+- add factory icon
+
 ## Enhance [v1.34.0] - 2020-3-31
 
 - add factory to Delivery method
