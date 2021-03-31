@@ -259,7 +259,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         shippingAddress,
         cart,
         cart.subsidize_discount,
-        remark,
+        remark
       ).then((res: OrderEntity) => {
         CartDataSource.clearCart(shop.id);
         navigation.navigate("OrderSuccess", { data: res });
@@ -574,7 +574,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 <View style={styled.warpDelivery}>
                   <View style={styled.headerDeliveryMethodtContainer}>
                     <Text style={styled.textHeaderPayment}>
-                      ตัวเลือกการจัดส่ง
+                      สถานที่รับสินค้า/สถานที่จัดส่ง
                     </Text>
                     {!shippingAddress ? null : (
                       <TouchableOpacity
@@ -625,14 +625,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   {remark ? (
                     <>
                       <View style={styled.line} />
-                      <View style={{marginTop: 8}}>
-                        <Text style={styled.textHeaderPayment}>
-                          หมายเหตุ
-                        </Text>
+                      <View style={{ marginTop: 8 }}>
+                        <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
                         <Text style={styled.textRemark}>{remark}</Text>
                       </View>
                     </>
-                  ): null}
+                  ) : null}
                 </View>
                 <ModalDeliveryMethod
                   visible={modalDelivery}
@@ -816,7 +814,11 @@ const styled = StyleSheet.create({
   textBeforeTotal: { fontSize: 16, color: "#6B7995" },
   textLabelTotalPrice: { fontSize: 16, color: "#314364", fontWeight: "bold" },
   textTotalPrice: { fontSize: 20, color: "#4C95FF", fontWeight: "bold" },
-  deliveryPointContainer: { margin: 20, flexDirection: "row", marginBottom: 10 },
+  deliveryPointContainer: {
+    margin: 20,
+    flexDirection: "row",
+    marginBottom: 10,
+  },
   deliveryTextShopName: { fontWeight: "bold" },
   textChageDeliveryMethod: {
     color: "#4C95FF",
