@@ -37,7 +37,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
           <View style={styles.profileWarp}>
             <Image
               style={styles.bgImage}
-              source={require("../../../assets/bgHome.png")}
+              source={require("../../../assets/bgShop.png")}
             />
             <View style={styles.innerTextContainer}>
               <Text
@@ -88,9 +88,9 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
             >
               <Image
                 style={styles.menuIcon}
-                source={require("../../../assets/menu-icon/shop.png")}
+                source={require("../../../assets/menu-icon/report.png")}
               />
-              <Text style={styles.textMenu}>ร้านค้า</Text>
+              <Text style={styles.textMenu}>รายงานการขาย</Text>
             </TouchableOpacity>
           </View>
         </>
@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileWarp: {
-    flex: 0.4,
+    // flex: 0.4,
+    height:"30%",
     backgroundColor: "#4C95FF",
     flexDirection: "row",
     alignItems: "center",
