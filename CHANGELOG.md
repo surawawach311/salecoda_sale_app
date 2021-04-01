@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.35.0] - 2020-04-01
+
+- updated total quantity unit in OrderSuccessDetailScreen for `icpf` company to be `ตัน`
+
 ## Fixed [v1.34.1] - 2020-3-31
 
 - add factory icon
