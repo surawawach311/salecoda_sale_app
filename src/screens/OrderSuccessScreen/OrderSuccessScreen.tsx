@@ -37,7 +37,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
     data.map((item: any) => {
-      let unit = item.sale_unit ? item.sale_unit : item.unit
+      let unit = item.sale_unit ? item.sale_unit : item.unit;
       arrayOutput.push({
         item: `${item.name} (${item.price}฿ x ${item.quantity} ${unit})`,
         price: item.price,
@@ -53,7 +53,9 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
         (item) => item.item_id != null && item.item_id != ""
       ) || []
     );
-    let request = formatAccrodion(route.params.cart?.received_special_request_discounts || []);
+    let request = formatAccrodion(
+      route.params.cart?.received_special_request_discounts || []
+    );
     setDiscoutPromo(promo);
     setSpecialRequest(request);
   };
@@ -136,9 +138,11 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({
           {items.map((item) => {
             return (
               <View key={item.id} style={styled.productTextWarp}>
-                <Text
-                  style={styled.textProduct}
-                >{`${item.title} ${item.quantity}x(${item.unit})`}</Text>
+                <View style={{width:"75%"}}>
+                  <Text
+                    style={styled.textProduct}
+                  >{`${item.title} ${item.quantity}x(${item.unit})`}</Text>
+                </View>
                 <Text style={styled.textProduct}>
                   {currencyFormat(item.quantity * item.price)}
                 </Text>
