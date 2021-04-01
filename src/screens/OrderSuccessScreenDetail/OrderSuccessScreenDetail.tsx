@@ -1,5 +1,5 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import Dash from "react-native-dash";
@@ -16,6 +16,7 @@ import AccrodingPrice from "../../components/AccrodingPrice";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import BadgeStatus from "../../components/BadgeStatus";
 import TagStatus from "../../components/TagStatus";
+import { UserDataContext } from "../../provider/UserDataProvider";
 
 type OrderSuccessScreenDetailRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -32,6 +33,8 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
   const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>(
     []
   );
+  const userDataStore = useContext(UserDataContext);
+  const { userData } = userDataStore;
 
   useEffect(() => {
     getShopById(route.params.data.buyer_id);
@@ -101,6 +104,11 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
     });
     return arrayOutput;
   };
+
+  const totalQuantityUnit = (): string => {
+    return userData.company === 'icpf' ? 'ตัน' : 'ชุด'
+  }
+
   const {
     order_no,
     created,
@@ -244,7 +252,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>จำนวนรวม</Text>
             <Text
               style={{ fontSize: 18, fontWeight: "bold" }}
-            >{`${totalQuantity} ชุด`}</Text>
+            >{`${totalQuantity} ${totalQuantityUnit()}`}</Text>
           </View>
           <Dash
             dashGap={2}
