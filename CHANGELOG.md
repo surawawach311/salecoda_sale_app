@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.39.0] - 2020-04-01
+
+- adjust product name in Product detail , Order Success screen
+
 ## Enahcne [v1.38.0] - 2020-04-01
 
 - remove skyrocket and change background shop header
