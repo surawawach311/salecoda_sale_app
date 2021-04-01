@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.36.0] - 2020-04-01
+
+- updated shipping detail in OrderSuccessDetailScreen for `factory` shipping method
+
 ## Fix [v1.35.1] - 2020-04-01
 
 - fixed failed to create order due to empty shipping telephone

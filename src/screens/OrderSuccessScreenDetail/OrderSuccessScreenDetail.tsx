@@ -17,6 +17,7 @@ import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import BadgeStatus from "../../components/BadgeStatus";
 import TagStatus from "../../components/TagStatus";
 import { UserDataContext } from "../../provider/UserDataProvider";
+import { SHIPPING_METHOD_MAPPING } from "../../definitions/ShippingMethod";
 
 type OrderSuccessScreenDetailRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -122,6 +123,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
     premium_memo,
     status,
     subsidize,
+    shipping_method,
     shipping_address,
   } = route.params.data;
   return (
@@ -187,11 +189,11 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           }}
         >
           <Text style={styled.textGrayLabel}>การจัดส่ง</Text>
-          <Text style={styled.textBlack}>จัดส่งที่ร้าน</Text>
+          <Text style={styled.textBlack}>{SHIPPING_METHOD_MAPPING[shipping_method]}</Text>
           <View style={{ marginVertical: 10 }}>
             {shop ? (
               <Text style={styled.textBlack}>
-                {`${shop?.address} ตำบล${shop?.sub_district} อำเภอ${shop?.district} จังหวัด${shop?.province} ${shop?.post_code}`}
+                {shipping_address.line_one + "\n" + shipping_address.line_two}
               </Text>
             ) : (
               <SkeletonPlaceholder>
