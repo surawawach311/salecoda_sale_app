@@ -67,7 +67,6 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
 
   return (
     <>
-      {console.log(product)}
       {product ? (
         <>
           <ScrollView style={styled.container}>
