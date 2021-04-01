@@ -35,6 +35,7 @@ export interface ItemCart {
     price_per_sale_unit: number
     sale_unit: string
     packing_size: string
+    common_name: string
 }
 
 export interface PromotionCart {

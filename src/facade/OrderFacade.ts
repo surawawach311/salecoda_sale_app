@@ -19,7 +19,8 @@ export class OrderFacade {
                 cover: item.image,
                 desc: item.desc,
                 unit: item.sale_unit,
-                packing_size: item.packing_size
+                packing_size: item.packing_size,
+                common_name: item.common_name,
             }
         })
 

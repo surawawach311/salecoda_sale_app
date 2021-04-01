@@ -29,6 +29,7 @@ export interface OrderItemModel {
     title: string
     unit: string
     packing_size: string
+    common_name: string
 }
 
 export interface ShippingAdressModel {
