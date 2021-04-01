@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.37.0] - 2020-04-01
+
+- add empty notification
+
 ## Fix [v1.36.0] - 2020-04-01
 
 - updated shipping detail in OrderSuccessDetailScreen for `factory` shipping method
