@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.40.0] - 2020-04-01
+
+- Change new Home icon and background
+
 ## Fix [v1.39.1] - 2020-04-01
 
 - fixed missing common name when create order
