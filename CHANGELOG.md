@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.36.0] - 2020-04-01
+
+- add empty notification
+
 ## Fix [v1.35.1] - 2020-04-01
 
 - fixed failed to create order due to empty shipping telephone
