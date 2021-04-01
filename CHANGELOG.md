@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.39.1] - 2020-04-01
+
+- fixed missing common name when create order
+
 ## Enahcne [v1.39.0] - 2020-04-01
 
 - adjust product name in Product detail , Order Success screen
