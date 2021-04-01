@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.35.1] - 2020-04-01
+
+- fixed failed to create order due to empty shipping telephone
+
 ## Enahcne [v1.35.0] - 2020-04-01
 
 - updated total quantity unit in OrderSuccessDetailScreen for `icpf` company to be `ตัน`
