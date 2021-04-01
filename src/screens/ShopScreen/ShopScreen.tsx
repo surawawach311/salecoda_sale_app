@@ -55,18 +55,6 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         />
         <View style={styles.shopInfo}>
           <Text style={styles.textShopName}>{route.params.shop.name}</Text>
-          <Image
-            style={styles.skyRocket}
-            source={require("../../../assets/skyrocket.png")}
-          />
-          <View style={styles.shopPoint}>
-            <Image
-              style={styles.coin}
-              source={require("../../../assets/coin.png")}
-            />
-
-            <Text style={styles.textPoint}>0 คะแนน</Text>
-          </View>
         </View>
       </View>
       <View style={styles.warpChangeShop}>
@@ -110,14 +98,18 @@ const styles = StyleSheet.create({
     height: 70,
   },
   warpShopHeader: {
-    height: 200,
+    height: 150,
   },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
   },
-  shopInfo: { padding: 20 },
+  shopInfo: {
+    flexDirection: "row",
+    padding: 60,
+    paddingLeft: 25,
+  },
   wrapProduct: {
     flex: 1,
     flexDirection: "row",
@@ -129,8 +121,7 @@ const styles = StyleSheet.create({
   },
   bgImage: {
     width: "100%",
-    height: "100%",
-    resizeMode: "cover",
+    height: 150,
     position: "absolute",
   },
   textShopName: {
