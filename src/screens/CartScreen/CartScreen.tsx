@@ -105,7 +105,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         } else {
           const shipAddress = {
             name: "บริษัท ไอ ซี พี เฟอทิไลเซอร์ จำกัด",
-            telephone: "5555555555",
+            telephone: "0352467958",
             address: "เลขที่ 2/11 หมู่ที่ 3",
             district: "อำเภอนครหลวง",
             sub_district: "ตำบลแม่ลา",
