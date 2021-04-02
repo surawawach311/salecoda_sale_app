@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.40.1] - 2020-04-02
+
+- Fixed cash discount datasource to display in CartScreen
+
 ## Enahcne [v1.40.0] - 2020-04-01
 
 - Change new Home icon and background

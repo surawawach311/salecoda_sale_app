@@ -49,7 +49,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [cart, setCart] = useState<CartEntity | undefined>();
   const [quantity, setQuantity] = useState(0);
   const [payment, setPayment] = useState<string | undefined>();
-  const [cashDiscount, setCashDiscount] = useState(0);
   const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>(
     []
   );
@@ -220,32 +219,18 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         payment,
         useSubsidize
       ).then((res: CartEntity) => {
-        if (
-          res.received_discounts.filter((item) => item.id != null).length > 0
-        ) {
-          {
-            res.received_discounts.map((item) => {
-              if (item.id == "cash") {
-                setCashDiscount(item.price);
-              }
-            });
-          }
-        }
-        {
-          setCart(res);
-          let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
-            res.received_special_request_discounts
-          );
-          let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-            res.received_discounts.filter((item) => item.item_id != null)
-          );
-          setSpecialRequest(discountSpecial);
-          setDiscoutPromo(discountProduct);
-        }
+        setCart(res);
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.received_special_request_discounts
+        );
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.received_discounts.filter((item) => item.item_id != null)
+        );
+        setSpecialRequest(discountSpecial);
+        setDiscoutPromo(discountProduct);
       });
     } else {
       setPayment("credit");
-      setCashDiscount(0);
       CartDataSource.calculate(
         route.params.shop.id,
         payment,
@@ -297,6 +282,11 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       });
     }
   };
+
+  const getCashDiscount = (cart: CartEntity): number => {
+    let discountItem = cart.received_discounts.find((i) => i.id === 'cash')
+    return discountItem ? discountItem.price * discountItem.quantity : 0
+  }
 
   return (
     <KeyboardAvoidingView
@@ -569,7 +559,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       </Text>
                     </View>
                   ) : null}
-                  {cashDiscount != 0 ? (
+                  {getCashDiscount(cart) != 0 ? (
                     <View style={styled.warpPrice}>
                       <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
                       <Text
@@ -579,7 +569,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           fontWeight: "bold",
                         }}
                       >
-                        {currencyFormat(cashDiscount, 2)}
+                        {currencyFormat(getCashDiscount(cart), 2)}
                       </Text>
                     </View>
                   ) : null}
