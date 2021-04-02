@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.41.0] - 2020-04-02
+
+- Logout navigate to Input telephone number
+
 ## Fix [v1.40.1] - 2020-04-02
 
 - Fixed cash discount datasource to display in CartScreen
