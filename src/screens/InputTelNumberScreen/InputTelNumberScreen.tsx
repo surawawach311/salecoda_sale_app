@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button } from "native-base";
 import {
   Text,
@@ -14,18 +14,39 @@ import { InputPhone } from "../../components/InputPhone";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
+import { UserLocalStorageService } from "../../services/UserLocalStorageService";
 
 type InputOtpScreenNavigationProp = StackScreenProps<
   AppAuthParamList,
   "InputTelNumber"
 >;
 
-const InputTelNumberScreen = ({
+const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({
   navigation,
   route,
-}: InputOtpScreenNavigationProp) => {
+}) => {
   const [value, setValue] = React.useState<string>("");
   const [isError, setIsError] = React.useState(false);
+  const [isLogin, setIsLogin] = React.useState(false);
+
+  useEffect(() => {
+    checkAuthToken();
+    if (isLogin) {
+      navigation.navigate("Main", {
+        screen: "Home",
+      });
+    }
+  });
+
+  const checkAuthToken = async () => {
+    const auth = await UserLocalStorageService.haveAccessToken().then((res) => {
+      return res;
+    });
+
+    if (auth) {
+      setIsLogin(true);
+    }
+  };
 
   const fillZero = (tel: string) => {
     if (tel.length < 10) {

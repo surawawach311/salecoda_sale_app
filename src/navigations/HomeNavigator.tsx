@@ -13,6 +13,7 @@ export type HomeStackParamList = {
   Home: undefined;
   Purchase: { territory: string };
   Order: undefined;
+  Profile: undefined;
 };
 const HomeNavigator: React.FC = () => {
   const Tab = createBottomTabNavigator();
