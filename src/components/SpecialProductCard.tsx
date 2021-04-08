@@ -71,7 +71,15 @@ const SpecialRequestProductCard: React.FC<SpecialRequestProductCardProps> = ({
             )}
           </View>
           <View style={{ justifyContent: "space-evenly" }}>
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>{title}</Text>
+            <Text
+              style={{
+                fontSize: 16,
+                width: 200,
+                fontWeight: "bold",
+              }}
+            >
+              {title}
+            </Text>
             <Text style={{ color: "#616A7B", fontSize: 16 }}>
               {currencyFormat(total_price)}
             </Text>
