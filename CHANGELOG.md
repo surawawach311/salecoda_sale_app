@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.42.0] - 2020-04-08
+
+- Added discount display to item in CartScreen
+
 ## Fix [v1.41.1] - 2020-04-08
 
 - Fixed product title on special request
