@@ -72,7 +72,7 @@ const AccrodingPrice: React.FC<AccrodingPriceProps> = ({
       ) => {
         return (
           <View key={index} style={styled.textDetailContainer}>
-            <Text style={styled.textDetail}>{item.item}</Text>
+            <Text style={[styled.textDetail,{width:220}]}>{item.item}</Text>
             <Text style={styled.textDetail}>{currencyFormat(item.price * item.quantity,2)}</Text>
           </View>
         );
