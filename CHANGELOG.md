@@ -2,6 +2,11 @@
 
 ## [Version - 1]
 
+
+## Enahcne [v1.43.0] - 2020-04-08
+
+- add special request remark in cart screen and order success detail
+
 ## Fix [v1.42.1] - 2020-04-08
 
 - Fixed width in accrodion

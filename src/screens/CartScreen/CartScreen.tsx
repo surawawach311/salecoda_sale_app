@@ -65,7 +65,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
     data.map((item: any) => {
-      let unit = item.sale_unit ? item.sale_unit : item.unit
+      let unit = item.sale_unit ? item.sale_unit : item.unit;
       arrayOutput.push({
         item: `${item.name} (${item.price}฿ x ${item.quantity} ${unit})`,
         price: item.price,
@@ -284,14 +284,19 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const getCashDiscount = (cart: CartEntity): number => {
-    let discountItem = cart.received_discounts.find((i) => i.id === 'cash')
-    return discountItem ? discountItem.price * discountItem.quantity : 0
-  }
+    let discountItem = cart.received_discounts.find((i) => i.id === "cash");
+    return discountItem ? discountItem.price * discountItem.quantity : 0;
+  };
 
-  const getPromoDiscountForItem = (cart: CartEntity, itemId: string): number => {
-    let discountItem = cart.received_discounts.find((i) => i.item_id === itemId)
-    return discountItem ? discountItem.price * discountItem.quantity : 0
-  }
+  const getPromoDiscountForItem = (
+    cart: CartEntity,
+    itemId: string
+  ): number => {
+    let discountItem = cart.received_discounts.find(
+      (i) => i.item_id === itemId
+    );
+    return discountItem ? discountItem.price * discountItem.quantity : 0;
+  };
 
   return (
     <KeyboardAvoidingView
@@ -313,7 +318,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 <View style={styled.productContainer}>
                   <Text style={styled.textProduct}>สินค้า</Text>
                   {cart.items.map((item: ItemCart, index: number) => {
-                    let discount = getPromoDiscountForItem(cart, item.id)
+                    let discount = getPromoDiscountForItem(cart, item.id);
                     return (
                       <ProductCartCard
                         key={item.id}
@@ -426,6 +431,28 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     </View>
                   </TouchableOpacity>
                 )}
+
+                {cart.special_request_remark ? (
+                  <View
+                    style={{
+                      paddingLeft: 20,
+                      backgroundColor: "#FFFFFF",
+                    }}
+                  >
+                    <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        marginVertical: 12,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text style={{ color: "#6B7995" }}>
+                        {cart.special_request_remark}
+                      </Text>
+                    </View>
+                  </View>
+                ) : null}
                 <View style={styled.paymentContainer}>
                   <Text style={styled.textHeaderPayment}>วิธีชำระเงิน</Text>
                   <View style={styled.paymentMethod}>
