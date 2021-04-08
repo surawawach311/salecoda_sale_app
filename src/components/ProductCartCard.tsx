@@ -93,9 +93,11 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
         <View style={styles.warpQuantity}>
           {children}
           <View>
-            <Text style={styles.textOriginalPrice}>
-              {originalPrice && originalPrice !== priceTotal ? currencyFormat(originalPrice) : ''}
-            </Text>
+            {originalPrice && originalPrice !== priceTotal ? (
+              <Text style={styles.textOriginalPrice}>
+                {currencyFormat(originalPrice)}
+              </Text>
+            ) : null}
             <Text style={styles.textPriceTotal}>
               {currencyFormat(priceTotal)}
             </Text>
