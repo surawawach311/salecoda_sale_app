@@ -85,7 +85,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
               {`${currencyFormat(pricePerUnit)} x ${quantity} ${saleUnit}`}
             </Text>{'  '}
             <Text style={styles.textDiscount}>
-              {discount ? `ส่วนลด ${currencyFormat(Math.abs(discount))}` : ''} 
+              {discount ? `ส่วนลด ${currencyFormat(discount)}` : ''} 
             </Text>
           </Text>
         ) : null}

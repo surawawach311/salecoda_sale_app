@@ -328,7 +328,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         priceTotal={item.total_price + dicount}
                         onDelete={() => removeItem(item.id)}
                         mode="cart"
-                        discount={dicount}
+                        discount={Math.abs(dicount)}
                         originalPrice={item.total_price}
                       >
                         <InputNumber
