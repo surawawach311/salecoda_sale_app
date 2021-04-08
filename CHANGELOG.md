@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.41.1] - 2020-04-08
+
+- Fixed product title on special request
+
 ## Enahcne [v1.41.0] - 2020-04-02
 
 - Logout navigate to Input telephone number
