@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.42.1] - 2020-04-08
+
+- Fixed width in accrodion
+
 ## Enahcne [v1.42.0] - 2020-04-08
 
 - Added discount display to item in CartScreen
