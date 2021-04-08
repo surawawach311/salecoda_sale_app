@@ -288,6 +288,11 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     return discountItem ? discountItem.price * discountItem.quantity : 0
   }
 
+  const getPromoDiscountForItem = (cart: CartEntity, itemId: string): number => {
+    let discountItem = cart.received_discounts.find((i) => i.item_id === itemId)
+    return discountItem ? discountItem.price * discountItem.quantity : 0
+  }
+
   return (
     <KeyboardAvoidingView
       style={styled.container}
@@ -308,6 +313,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 <View style={styled.productContainer}>
                   <Text style={styled.textProduct}>สินค้า</Text>
                   {cart.items.map((item: ItemCart, index: number) => {
+                    let dicount = getPromoDiscountForItem(cart, item.id)
                     return (
                       <ProductCartCard
                         key={item.id}
@@ -319,9 +325,11 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         pricePerUnit={item.price}
                         saleUnit={item.sale_unit}
                         quantity={item.quantity}
-                        priceTotal={item.total_price}
+                        priceTotal={item.total_price + dicount}
                         onDelete={() => removeItem(item.id)}
                         mode="cart"
+                        discount={dicount}
+                        originalPrice={item.total_price}
                       >
                         <InputNumber
                           key={item.title}

@@ -22,6 +22,8 @@ interface ProductCartCardProps {
   packingSize?: string;
   onDelete?: () => void;
   mode: string;
+  discount?: number;
+  originalPrice?: number;
 }
 
 const ProductCartCard: React.FC<ProductCartCardProps> = ({
@@ -37,6 +39,8 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
   packingSize,
   onDelete,
   mode,
+  discount,
+  originalPrice,
 }) => {
   return (
     <View style={styles.contianer}>
@@ -79,15 +83,23 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
           <Text>
             <Text style={styles.textPriceUnit}>
               {`${currencyFormat(pricePerUnit)} x ${quantity} ${saleUnit}`}
+            </Text>{'  '}
+            <Text style={styles.textDiscount}>
+              {discount ? `ส่วนลด ${currencyFormat(Math.abs(discount))}` : ''} 
             </Text>
           </Text>
         ) : null}
 
         <View style={styles.warpQuantity}>
           {children}
-          <Text style={styles.textPriceTotal}>
-            {currencyFormat(priceTotal)}
-          </Text>
+          <View>
+            <Text style={styles.textOriginalPrice}>
+              {originalPrice && originalPrice !== priceTotal ? currencyFormat(originalPrice) : ''}
+            </Text>
+            <Text style={styles.textPriceTotal}>
+              {currencyFormat(priceTotal)}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -120,12 +132,29 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: "500",
   },
+  textDiscount: {
+    fontSize: 10,
+    fontWeight: "500",
+    color: "#3AAE49",
+  },
+  textOriginalPrice: {
+    textAlign: "right",
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#616A7B",
+    textDecorationLine: "line-through",
+  },
   textPerVolum: {
     fontSize: 12,
     color: "#181725",
     fontWeight: "bold",
   },
-  textPriceTotal: { fontSize: 18, color: "#181725", fontWeight: "bold" },
+  textPriceTotal: { 
+    textAlign: "right",
+    fontSize: 18, 
+    color: "#181725", 
+    fontWeight: "bold" 
+  },
   warpQuantity: {
     marginTop: 8,
     flexDirection: "row",
