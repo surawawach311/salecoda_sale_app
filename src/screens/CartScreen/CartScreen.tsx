@@ -313,7 +313,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 <View style={styled.productContainer}>
                   <Text style={styled.textProduct}>สินค้า</Text>
                   {cart.items.map((item: ItemCart, index: number) => {
-                    let dicount = getPromoDiscountForItem(cart, item.id)
+                    let discount = getPromoDiscountForItem(cart, item.id)
                     return (
                       <ProductCartCard
                         key={item.id}
@@ -325,10 +325,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         pricePerUnit={item.price}
                         saleUnit={item.sale_unit}
                         quantity={item.quantity}
-                        priceTotal={item.total_price + dicount}
+                        priceTotal={item.total_price + discount}
                         onDelete={() => removeItem(item.id)}
                         mode="cart"
-                        discount={Math.abs(dicount)}
+                        discount={Math.abs(discount)}
                         originalPrice={item.total_price}
                       >
                         <InputNumber
