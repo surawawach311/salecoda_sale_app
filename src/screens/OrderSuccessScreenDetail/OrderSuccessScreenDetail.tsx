@@ -63,29 +63,29 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
   }, []);
 
   const initialData = () => {
-    let orderItems = route.params.data.items
+    let orderItems = route.params.data.items;
     let recevied_item_discounts = route.params.data.discount_memo
-    .filter(
-      (item) => item.item_id != null && item.item_id != ""
-    ).map((i) => {
-      let refItem = orderItems.find((x) => x.id === i.item_id)
-      return {
-        name: refItem?.title,
-        price: i.price,
-        quantity: i.quantity,
-        sale_unit: refItem?.unit
+      .filter((item) => item.item_id != null && item.item_id != "")
+      .map((i) => {
+        let refItem = orderItems.find((x) => x.id === i.item_id);
+        return {
+          name: refItem?.title,
+          price: i.price,
+          quantity: i.quantity,
+          sale_unit: refItem?.unit,
+        };
+      });
+    let recevied_request_item_discounts = route.params.data.special_request_discounts.map(
+      (i) => {
+        let refItem = orderItems.find((x) => x.id === i.item_id);
+        return {
+          name: refItem?.title,
+          price: i.price,
+          quantity: i.quantity,
+          sale_unit: refItem?.unit,
+        };
       }
-    })
-    let recevied_request_item_discounts = route.params.data.special_request_discounts
-    .map((i) => {
-      let refItem = orderItems.find((x) => x.id === i.item_id)
-      return {
-        name: refItem?.title,
-        price: i.price,
-        quantity: i.quantity,
-        sale_unit: refItem?.unit
-      }
-    })
+    );
     let promo = formatAccrodion(recevied_item_discounts);
     let request = formatAccrodion(recevied_request_item_discounts);
     setDiscoutPromo(promo);
@@ -96,7 +96,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
     let arrayOutput: any[] = [];
     data.map((item: any) => {
-      let unit = item.sale_unit ? item.sale_unit : item.unit
+      let unit = item.sale_unit ? item.sale_unit : item.unit;
       arrayOutput.push({
         item: `${item.name} (${item.price}฿ x ${item.quantity} ${unit})`,
         price: item.price,
@@ -107,8 +107,8 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
   };
 
   const totalQuantityUnit = (): string => {
-    return userData.company === 'icpf' ? 'ตัน' : 'ชุด'
-  }
+    return userData.company === "icpf" ? "ตัน" : "ชุด";
+  };
 
   const {
     order_no,
@@ -125,6 +125,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
     subsidize,
     shipping_method,
     shipping_address,
+    special_request_remark
   } = route.params.data;
   return (
     <View style={styled.container}>
@@ -189,7 +190,9 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           }}
         >
           <Text style={styled.textGrayLabel}>การจัดส่ง</Text>
-          <Text style={styled.textBlack}>{SHIPPING_METHOD_MAPPING[shipping_method]}</Text>
+          <Text style={styled.textBlack}>
+            {SHIPPING_METHOD_MAPPING[shipping_method]}
+          </Text>
           <View style={{ marginVertical: 10 }}>
             {shop ? (
               <Text style={styled.textBlack}>
@@ -222,7 +225,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           <View style={{ marginVertical: 10 }}>
             <Text style={styled.textGrayLabel}>หมายเหตุ</Text>
             <Text style={styled.textBlack}>
-              {shipping_address.remark ? shipping_address.remark.trim() : '-'}
+              {shipping_address.remark ? shipping_address.remark.trim() : "-"}
             </Text>
           </View>
           <Dash
@@ -256,6 +259,12 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               style={{ fontSize: 18, fontWeight: "bold" }}
             >{`${totalQuantity} ${totalQuantityUnit()}`}</Text>
           </View>
+          <View style={{ marginVertical: 10 }}>
+            <Text style={styled.textGrayLabel}>หมายเหตุการขอส่วนลดพิเศษ</Text>
+            <Text style={styled.textBlack}>
+              {special_request_remark ? special_request_remark.trim() : "-"}
+            </Text>
+          </View>
           <Dash
             dashGap={2}
             dashLength={4}
@@ -272,7 +281,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           <View style={styled.productTextWarp}>
             <Text style={{ fontSize: 14, color: "#6B7995" }}>ราคาก่อนลด</Text>
             <Text style={styled.textPrice}>
-              {currencyFormat(before_discount,2)}
+              {currencyFormat(before_discount, 2)}
             </Text>
           </View>
 
@@ -305,7 +314,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               <Text
                 style={{ color: "#FF5D5D", fontSize: 16, fontWeight: "bold" }}
               >
-                {currencyFormat(subsidize,2)}
+                {currencyFormat(subsidize, 2)}
               </Text>
             </View>
           ) : null}
@@ -325,7 +334,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                     >
                       <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
                       <Text style={styled.textDiscountFromCash}>
-                        {currencyFormat(item.price,2)}
+                        {currencyFormat(item.price, 2)}
                       </Text>
                     </View>
                   );
@@ -336,7 +345,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             <Text
               style={{ color: "#616A7B", fontSize: 16, fontWeight: "bold" }}
             >
-              {currencyFormat(total_discount,2)}
+              {currencyFormat(total_discount, 2)}
             </Text>
           </View>
           <View style={{ borderWidth: 1, borderColor: "#EBEFF2" }} />
@@ -349,7 +358,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             <Text
               style={{ fontSize: 20, fontWeight: "bold", color: "#4C95FF" }}
             >
-              {currencyFormat(total_price,2)}
+              {currencyFormat(total_price, 2)}
             </Text>
           </View>
           <Dash

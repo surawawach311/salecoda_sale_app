@@ -26,6 +26,7 @@ export interface OrderEntity {
     discount_memo: DiscountOrderEntity[]
     special_request_discounts: SpecialOrderEntity[]
     subsidize: number
+    special_request_remark: string
 }
 
 export interface OrderItemEnitity {
@@ -67,7 +68,7 @@ export interface PremiumOrderEntity {
     promotion_id: string
     promotion_name: string
     promotion_image: string
-    item_id: string    
+    item_id: string
 }
 
 export interface DiscountOrderEntity {
