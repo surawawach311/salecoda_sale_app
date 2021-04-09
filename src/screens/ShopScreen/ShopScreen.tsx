@@ -64,7 +64,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         <FlatList
           data={productList}
           numColumns={2}
-          columnWrapperStyle={{ flex: 1, justifyContent: "center" }}
+          columnWrapperStyle={{justifyContent:'space-between'}}
           renderItem={({ item }) => (
             <TouchableOpacity
               key={item.id}
@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
   },
   wrapProduct: {
     flex: 1,
+    marginHorizontal:"6%",
     flexDirection: "row",
+    justifyContent: "center",
   },
   warpChangeShop: {
     padding: 25,
