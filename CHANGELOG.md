@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.45.0] - 2020-04-09
+
+- enhance confirm button to hide keyboard
+
 ## Enahcne [v1.44.0] - 2020-04-09
 
 - add price per big unit size
