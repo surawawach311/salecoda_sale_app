@@ -40,7 +40,6 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   return (
     <Container>
-      {console.log(productList)}
       <View style={styles.wrapSearch}>
         <Search
           placeholder="ค้นหาสินค้า"
