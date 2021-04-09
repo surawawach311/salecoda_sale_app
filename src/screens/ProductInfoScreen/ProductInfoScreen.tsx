@@ -87,8 +87,10 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                 </View>
                 <View>
                   <View style={styled.wrapTitlePrice}>
-                    <View style={{width:"70%"}}><Text style={styled.textH1}>{product?.title}</Text></View>
-                    
+                    <View style={{ width: "70%" }}>
+                      <Text style={styled.textH1}>{product?.title}</Text>
+                    </View>
+
                     <Text style={styled.textH1}>
                       {currencyFormat(product?.price_per_volume, 0)}
                     </Text>
@@ -97,7 +99,11 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                     <Text style={styled.textCommon}>
                       {product?.common_title}
                     </Text>
-                    <Text style={styled.textSize}>{product?.packing_size}</Text>
+                    <Text style={styled.textSize}>{`${
+                      product.packing_size
+                    } | ${currencyFormat(product.price_per_sale_unit)}/${
+                      product.product_volume_unit
+                    }`}</Text>
                   </View>
                 </View>
               </View>

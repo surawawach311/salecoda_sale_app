@@ -1,5 +1,6 @@
 
 export interface ProductEntity {
+    [x: string]: any;
     id: string,
     item_no: string,
     title: string,
@@ -17,6 +18,7 @@ export interface ProductEntity {
     is_have_promotion: boolean
     promotions: PromotionEntity[]
     property: string
+    product_volume_unit: string
 }
 
 export interface PromotionEntity {
