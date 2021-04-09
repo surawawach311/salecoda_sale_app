@@ -105,7 +105,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           const shipAddress = {
             name: "บริษัท ไอ ซี พี เฟอทิไลเซอร์ จำกัด",
             telephone: "0352467958",
-            address: "เลขที่ 2/11 หมู่ที่ 3",
+            address: "เลขที่ 2/1 หมู่ที่ 3",
             district: "อำเภอนครหลวง",
             sub_district: "ตำบลแม่ลา",
             province: "จังหวัดพระนครศรีอยุธยา",
@@ -676,8 +676,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           <Text style={styled.deliveryTextShopName}>
                             {`${shippingAddress.name} \n`}
                           </Text>
-                          <Text>{`${shippingAddress.address} ตำบล${shippingAddress.sub_district} \n`}</Text>
-                          <Text>{`อำเภอ${shippingAddress.district} ${shippingAddress.province} ${shippingAddress.post_code}`}</Text>
+                          <Text>{`${shippingAddress.address} ${shippingAddress.sub_district} \n`}</Text>
+                          <Text>{`${shippingAddress.district} ${shippingAddress.province} ${shippingAddress.post_code}`}</Text>
                         </Text>
                       </View>
                     </View>

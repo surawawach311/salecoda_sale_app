@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fix [v1.43.1] - 2020-04-09
+
+- Fixed shipping address  (fert)
 
 ## Enahcne [v1.43.0] - 2020-04-08
 
