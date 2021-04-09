@@ -209,7 +209,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
 
   return (
     <>
-      <ScrollView style={styled.container}>
+      <ScrollView  keyboardShouldPersistTaps="handled" style={styled.container}>
         <View style={styled.specialLabel}>
           <Text style={styled.specialLabelFont}>สินค้าที่ขอลดราคา</Text>
         </View>
