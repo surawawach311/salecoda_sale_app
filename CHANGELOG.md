@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.46.0] - 2020-04-09
+
+- change layout props
+
 ## Enahcne [v1.45.0] - 2020-04-09
 
 - enhance confirm button to hide keyboard
