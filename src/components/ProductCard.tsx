@@ -10,6 +10,8 @@ interface ProductCardProps {
   productInfo: string;
   price: number;
   havePromo: boolean;
+  unit: string;
+  saleUnitPrice: number;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -19,6 +21,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   productInfo,
   price,
   havePromo,
+  unit,
+  saleUnitPrice,
 }) => {
   return (
     <View style={styleds.container}>
@@ -48,7 +52,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <Text numberOfLines={1} style={styleds.textEnName}>
             {enName}
           </Text>
-          <Text style={styleds.textEnName}>{productInfo}</Text>
+          <Text style={styleds.textEnName}>
+            {productInfo}
+            {saleUnitPrice != price
+              ? " | " + currencyFormat(saleUnitPrice) + "/" + unit
+              : null}
+          </Text>
         </View>
         <View style={styleds.warpPrice}>
           <Text style={styleds.textPrice}>{currencyFormat(price)}</Text>

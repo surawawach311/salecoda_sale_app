@@ -40,6 +40,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   return (
     <Container>
+      {console.log(productList)}
       <View style={styles.wrapSearch}>
         <Search
           placeholder="ค้นหาสินค้า"
@@ -82,6 +83,8 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 price={item.price_per_volume}
                 imagePath={item.image}
                 havePromo={item.is_have_promotion}
+                unit={item.sale_unit}
+                saleUnitPrice={item.price_per_sale_unit}
               />
             </TouchableOpacity>
           )}
