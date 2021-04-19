@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, RefreshControl } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import Search from "../../components/Search";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -32,6 +32,7 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
   const [showOrder, setShowOrder] = useState<boolean>(true);
   const [shopName, setShopName] = useState<string>();
   const [shopId, setShopId] = useState<string>("");
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const userDataStore = useContext(UserDataContext);
   const { userData } = userDataStore;
@@ -55,14 +56,26 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
     status: "waiting_order_confirm" | "opened" | "delivering" | "canceled"
   ) => {
     setFilter(status);
+
     if (showOrder) {
-      OrderDataSource.getOrderWithStatus(
-        userData.territory,
-        userData.company,
-        status
-      ).then((res) => {
-        setOrderList(res);
-      });
+      if (shopId != "") {
+        OrderDataSource.getOrderListByShopId(
+          shopId,
+          userData.company,
+          status
+        ).then((res) => {
+          setShowOrder(true);
+          setOrderList(res);
+        });
+      } else {
+        OrderDataSource.getOrderWithStatus(
+          userData.territory,
+          userData.company,
+          status
+        ).then((res) => {
+          setOrderList(res);
+        });
+      }
     } else {
       OrderFacade.formatShopOrderCard(
         userData.territory,
@@ -82,6 +95,29 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
     ).then((res) => {
       setOrderList(res);
     });
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    if (!shopId) {
+      OrderDataSource.getOrderWithStatus(
+        userData.territory,
+        userData.company,
+        filter
+      ).then((res) => {
+        setOrderList(res);
+        setRefreshing(false);
+      });
+    } else {
+      OrderFacade.formatShopOrderCard(
+        userData.territory,
+        userData.company,
+        filter
+      ).then((res) => {
+        setShopOrderCard(res);
+        setRefreshing(false);
+      });
+    }
   };
 
   const fetchOrderListByShop = (shopId: string, company: string) => {
@@ -139,6 +175,7 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
               setNavbutton(FilterOrder.territory);
               setShowOrder(true);
               getOrder("waiting_order_confirm");
+              setShopId("");
             }}
             style={styled.filterList}
           >
@@ -278,7 +315,12 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
         </View>
         <View style={styled.breakLine} />
         {showOrder ? (
-          <ScrollView style={{ marginBottom: 120, marginTop: 10 }}>
+          <ScrollView
+            style={{ marginBottom: 120, marginTop: 10 }}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
             {orderList != undefined && orderList.length > 0 ? (
               orderList.map((order: OrderEntity) => {
                 return (
@@ -307,7 +349,12 @@ const OrderScreen: React.FC<OrderScreenRouteProp> = ({ navigation }) => {
             )}
           </ScrollView>
         ) : (
-          <ScrollView style={{ height: "100%" }}>
+          <ScrollView
+            style={{ height: "100%" }}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
             {shopOrderCard != undefined && shopOrderCard.length > 0 ? (
               shopOrderCard?.map((shop: ShopOrderCardModel) => {
                 return (
