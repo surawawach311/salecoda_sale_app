@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.48.0] - 2020-04-20
+
+- add cancel state in order screen
+
 ## Enahcne [v1.47.0] - 2020-04-19
 
 - add pull to request order screen

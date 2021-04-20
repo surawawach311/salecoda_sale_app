@@ -110,6 +110,16 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
     return userData.company === "icpf" ? "ตัน" : "ชุด";
   };
 
+  const cancelByWording = (status: string): string => {
+    if (status == "sale_executive_rejected") {
+      return "(ผู้จัดการ)";
+    } else if (status == "customer_canceled") {
+      return "(ลูกค้า)";
+    } else {
+      return "(บริษัท)";
+    }
+  };
+
   const {
     order_no,
     created,
@@ -125,11 +135,64 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
     subsidize,
     shipping_method,
     shipping_address,
-    special_request_remark
+    special_request_remark,
+    remark,
+    updated,
   } = route.params.data;
   return (
     <View style={styled.container}>
       <ScrollView>
+        {status == "sale_executive_rejected" ||
+        status == "customer_canceled" ||
+        status == "company_canceled" ? (
+          <View style={{ paddingHorizontal: 20 }}>
+            <Image
+              style={{ alignSelf: "center", width: 120, height: 120 }}
+              source={require("../../../assets/reject-order.png")}
+            />
+            <View
+              style={{
+                backgroundColor: "#FFFFFF",
+                padding: 15,
+                borderRadius: 12,
+              }}
+            >
+              <Text
+                style={{ fontSize: 16, fontWeight: "bold", paddingBottom: 12 }}
+              >
+                รายละเอียดการยกเลิก
+              </Text>
+              <Text
+                style={{ fontSize: 14, color: "#6B7995", paddingBottom: 4 }}
+              >
+                หมายเลขคำสั่งซื้อ : {order_no}
+              </Text>
+              <Text
+                style={{ fontSize: 14, color: "#6B7995", paddingBottom: 12 }}
+              >
+                ขอยกเลิก :{" "}
+                {`${ThaiDateFormat(updated)} ${ThaiTimeFormat(updated)}`}
+              </Text>
+              <View style={{ borderWidth: 1, borderColor: "#EBEFF2" }} />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  paddingVertical: 12,
+                }}
+              >
+                เหตุผลที่ยกเลิก
+                {cancelByWording(status)}
+              </Text>
+              <Text
+                style={{ fontSize: 14, color: "#6B7995", paddingBottom: 12 }}
+              >
+                {remark}
+              </Text>
+            </View>
+          </View>
+        ) : null}
+
         <View style={styled.upperContainer}>
           <View style={styled.innerUpperContainer}>
             <View style={styled.orderNumberContainer}>
