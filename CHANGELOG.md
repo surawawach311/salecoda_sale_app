@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.50.0] - 2020-04-22
+
+- fixed Negative numbers on product screen
+
 ## Enahcne [v1.49.0] - 2020-04-21
 
 - resize check box co
