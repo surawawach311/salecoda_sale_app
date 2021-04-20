@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.49.0] - 2020-04-21
+
+- resize check box co
+
 ## Enahcne [v1.48.0] - 2020-04-20
 
 - add cancel state in order screen
