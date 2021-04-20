@@ -151,16 +151,26 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
             <View style={styled.wrapBottom}>
               <View style={styled.safeAreaBottom}>
                 <View style={styled.warpQuantity}>
-                  <TouchableOpacity
-                    onPress={async () => {
-                      addCart("minus");
-                    }}
-                  >
-                    <Image
-                      style={styled.imgIcon}
-                      source={require("../../../assets/minus-cart.png")}
-                    />
-                  </TouchableOpacity>
+                  {quantity <= 0 ? (
+                    <TouchableOpacity disabled>
+                      <Image
+                        style={styled.imgIcon}
+                        source={require("../../../assets/minus-cart.png")}
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={async () => {
+                        addCart("minus");
+                      }}
+                    >
+                      <Image
+                        style={styled.imgIcon}
+                        source={require("../../../assets/minus-cart.png")}
+                      />
+                    </TouchableOpacity>
+                  )}
+
                   <TextInput
                     style={{
                       marginHorizontal: 10,
