@@ -535,7 +535,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           checked={useSubsidize}
                           onPress={() => handleUseSubsidize(!useSubsidize)}
                           color="#FF5D5D"
-                          style={{ borderRadius: 4 }}
+                          style={{
+                            borderRadius: 4,
+                            width: 20,
+                            height: 20,
+                            alignItems: "center",
+                          }}
                         />
                         <Text style={{ marginLeft: 15, color: "#6B7995" }}>
                           ใช้ส่วนลด
