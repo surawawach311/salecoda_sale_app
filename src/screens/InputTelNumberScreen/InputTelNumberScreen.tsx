@@ -119,12 +119,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#FBFBFB",
   },
   backgroundImage: {
-    backgroundColor: "#FBFBFB",
-    width: "100%",
+    top:-10,
+    width: "100%",  
+    height: 250,
     resizeMode: "contain",
-    position: "absolute",
   },
-  wrapText: { flex: 1, padding: 20, marginTop: "30%" },
+  wrapText: { flex: 1, padding: 20 ,top:-50},
   btnContainer: {
     flex: 0.01,
     flexDirection: "row",

@@ -100,10 +100,11 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
+    width:"100%",
+    height:240,
+    resizeMode: "contain",
   },
-  wrapText: { flex: 1, padding: 20, marginTop: 190 },
+  wrapText: { padding: 20, marginTop: 190 },
   title: {
     color: "#000000",
     fontSize: 28,
