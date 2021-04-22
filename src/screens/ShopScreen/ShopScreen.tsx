@@ -55,6 +55,23 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         />
         <View style={styles.shopInfo}>
           <Text style={styles.textShopName}>{route.params.shop.name}</Text>
+          <View
+            style={{
+              borderWidth: 2,
+              borderColor: "white",
+              borderRadius: 60,
+              backgroundColor: "white",
+              padding: 5,
+            }}
+          >
+            <Image
+              style={{
+                width: 60,
+                height: 60,
+              }}
+              source={require("../../../assets/shop-empty.png")}
+            />
+          </View>
         </View>
       </View>
       <View style={styles.warpChangeShop}>
@@ -64,7 +81,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         <FlatList
           data={productList}
           numColumns={2}
-          columnWrapperStyle={{justifyContent:'space-between'}}
+          columnWrapperStyle={{ justifyContent: "space-between" }}
           renderItem={({ item }) => (
             <TouchableOpacity
               key={item.id}
@@ -109,12 +126,15 @@ const styles = StyleSheet.create({
   },
   shopInfo: {
     flexDirection: "row",
+    paddingTop: 40,
     padding: 60,
     paddingLeft: 25,
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   wrapProduct: {
     flex: 1,
-    marginHorizontal:"6%",
+    marginHorizontal: "6%",
     flexDirection: "row",
     justifyContent: "center",
   },
