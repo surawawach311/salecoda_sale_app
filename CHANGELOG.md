@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.53.0] - 2020-04-22
+
+- Added search shop 
+
 ## Fix [v1.52.1] - 2020-04-22
 
 - fixed datetime format
