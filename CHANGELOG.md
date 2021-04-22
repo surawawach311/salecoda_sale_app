@@ -2,7 +2,11 @@
 
 ## [Version - 1]
 
-## Enahcne [v1.51] - 2020-04-21
+## Enahcne [v1.52.0] - 2020-04-22
+
+- Added shop image 
+
+## Enahcne [v1.51.0] - 2020-04-21
 
 - change image login
 
