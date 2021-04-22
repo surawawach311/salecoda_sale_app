@@ -8,6 +8,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { AppLoading } from "expo";
 import { StackScreenProps } from "@react-navigation/stack";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
+import Search from "../../components/Search";
+import { ShopDataSource } from "../../datasource/ShopDataSource";
 
 type ShopListScreenRouteProp = StackScreenProps<
   PurchaseStackParamList,
@@ -21,6 +23,12 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
   const [] = useState(false);
   const [shopData, setShopData] = useState<ShopEntity[]>();
 
+  const searchShop = (keywords: string) => {
+    ShopDataSource.getShop(route.params.territory, keywords).then((res) =>
+      setShopData(res.data)
+    );
+  };
+
   useEffect(() => {
     ShopFacade.getShopListData(route.params.territory).then((res) =>
       setShopData(res)
@@ -29,12 +37,18 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
 
   return (
     <View style={styles.container}>
+      <View style={{ backgroundColor: "white" }}>
+        <Search placeholder="ค้นหาร้านค้า" onChange={(e) => searchShop(e)} />
+      </View>
       {route.params != undefined &&
       shopData != undefined &&
       shopData.length > 0 ? (
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           <List>
-            <ListItem itemHeader>
+            <ListItem style={{ backgroundColor: "#E5E5E5" }} itemHeader>
               <Text
                 style={styles.textHeader}
               >{`ร้านค้าในเขต ${route.params.territory}`}</Text>
@@ -43,7 +57,10 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
               <ListItem
                 key={data.name}
                 onPress={() => {
-                  navigation.navigate("Shop", { shop: data,company: route.params.company });
+                  navigation.navigate("Shop", {
+                    shop: data,
+                    company: route.params.company,
+                  });
                 }}
               >
                 <Text key={data.name}>{data.name}</Text>
