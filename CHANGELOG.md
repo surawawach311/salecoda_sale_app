@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.52.1] - 2020-04-22
+
+- fixed datetime format
+
 ## Enahcne [v1.52.0] - 2020-04-22
 
 - Added shop image 
