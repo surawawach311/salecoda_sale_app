@@ -57,7 +57,7 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({
               <ListItem
                 key={data.name}
                 onPress={() => {
-                  navigation.navigate("Shop", {
+                  navigation.navigate("Brand", {
                     shop: data,
                     company: route.params.company,
                   });

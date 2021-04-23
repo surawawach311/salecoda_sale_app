@@ -16,13 +16,15 @@ import { ThaiDateFormat } from "../utilities/ThaiDateFormat";
 import { CartEntity } from "../entities/CartEntity";
 import SpecialRequestScreen from "../screens/SpecialRequestScreen/SpecialRequestScreen";
 import { ItemSpecialRequest } from "../models/SpecialRequestModel";
+import BrandScreen from "../screens/BrandScreen/BrandScreen";
 
 export type PurchaseStackParamList = {
   ShopList: { territory: string; company: string };
-  Shop: { shop: ShopEntity; company: string };
+  Brand: { shop: ShopEntity; company: string };
+  Shop: { shop: ShopEntity; company: string; productBrand?: string };
   ProductInfo: { product: ProductEntity; shop: ShopEntity };
   Cart: { shop: ShopEntity };
-  OrderSuccess: { data: OrderEntity, cart?: CartEntity };
+  OrderSuccess: { data: OrderEntity; cart?: CartEntity };
   SuccessDetail: { data: OrderEntity };
   SpecialRequest: {
     cart: CartEntity;
@@ -59,6 +61,18 @@ const PurchaseNavigator: React.FC = () => {
               <Image
                 style={styled.cart}
                 source={require("../../assets/shopping-cart.png")}
+              />
+            </TouchableOpacity>
+          ),
+          headerLeft: (props) => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("ShopList", { shop: route.params.shop })
+              }
+            >
+              <Image
+                style={styled.cart}
+                source={require("../../assets/left.png")}
               />
             </TouchableOpacity>
           ),
@@ -104,6 +118,12 @@ const PurchaseNavigator: React.FC = () => {
         name="SpecialRequest"
         component={SpecialRequestScreen}
         options={{ title: "ขอส่วนลดพิเศษ" }}
+      />
+
+      <PurchaseStack.Screen
+        name="Brand"
+        component={BrandScreen}
+        options={{ title: "เลือกแบรนด์" }}
       />
     </PurchaseStack.Navigator>
   );
