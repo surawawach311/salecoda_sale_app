@@ -20,12 +20,22 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }, []);
 
   const fecthData = async () => {
-    await ShopDataSource.getProduct(
-      route.params.shop.id,
-      route.params.company
-    ).then((res) => {
-      setProductList(res);
-    });
+    if (route.params.productBrand) {
+      await ShopDataSource.getProductWithBrand(
+        route.params.shop.id,
+        route.params.company,
+        route.params.productBrand
+      ).then((res) => {
+        setProductList(res);
+      });
+    } else {
+      await ShopDataSource.getProduct(
+        route.params.shop.id,
+        route.params.company
+      ).then((res) => {
+        setProductList(res);
+      });
+    }
   };
 
   const searchProduct = (keywords: string) => {

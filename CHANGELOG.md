@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.54.0] - 2020-04-23
+
+- Added Product Brand
+
 ## Enahcne [v1.53.0] - 2020-04-22
 
 - Added search shop 
