@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Modal,
-  SafeAreaView,
   StyleSheet,
   Image,
   Text,
@@ -11,24 +10,80 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { ShipmentAddress, ShipmentEntity } from "../entities/ShipmentEntity";
 
-import { ShopEntity } from "../entities/ShopEntity";
 interface ModalDeliveryMethodProps {
   visible: boolean;
   onClose: () => void;
-  onOk: (value: string, shop: ShopEntity) => void;
-  address: ShopEntity;
-  company: string;
+  onOk: (
+    value: string,
+    shippingAddress: ShipmentAddress | undefined,
+    deliveryMethod: string | undefined
+  ) => void;
+  availableShipmnet?: ShipmentEntity;
 }
 
 export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
   visible,
   onClose,
   onOk,
-  address,
-  company,
+  availableShipmnet,
 }) => {
   const [remark, setRemark] = useState("");
+  const [method, setMethod] = useState(
+    availableShipmnet?.available_shipments[0].shipping_method
+  );
+  const [address, setAddress] = useState<ShipmentAddress>();
+  const shipmentMethod = (shipment: string) => {
+    if (shipment == "delivery") {
+      return (
+        <TouchableOpacity
+          key={shipment}
+          onPress={() => {
+            setMethod(shipment);
+            availableShipmnet?.available_shipments
+              .filter((item) => item.shipping_method == shipment)
+              .map((shipment) =>
+                shipment.addresses.map((address) => setAddress(address))
+              );
+          }}
+        >
+          <Image
+            style={styled.iconClose}
+            source={require("../../assets/home.png")}
+          />
+          <Text style={styled.deliveryTextIcon}>จัดส่งที่ร้าน</Text>
+        </TouchableOpacity>
+      );
+    } else if (shipment == "factory") {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setMethod(shipment);
+            availableShipmnet?.available_shipments
+              .filter((item) => item.shipping_method == shipment)
+              .map((shipment) =>
+                shipment.addresses.map((address) => setAddress(address))
+              );
+          }}
+          key={shipment}
+          style={{ marginLeft: 15 }}
+        >
+          <Image
+            style={{
+              width: 60,
+              height: 20,
+              resizeMode: "contain",
+              alignSelf: "center",
+              marginBottom: 10,
+            }}
+            source={require("../../assets/factory.png")}
+          />
+          <Text style={styled.deliveryTextIcon}>รับที่โรงงาน</Text>
+        </TouchableOpacity>
+      );
+    }
+  };
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
       <KeyboardAvoidingView
@@ -51,49 +106,32 @@ export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
               <Text style={styled.deliveryTextHeader}>เลือกการจัดส่ง</Text>
             </View>
           </View>
-          {company == "icpl" ? (
-            <View style={styled.deliveryMethodIcon}>
-              <View>
-                <Image
-                  style={styled.iconClose}
-                  source={require("../../assets/home.png")}
-                />
-                <Text style={styled.deliveryTextIcon}>จัดส่งที่ร้าน</Text>
-              </View>
-            </View>
-          ) : (
-            <View style={styled.deliveryMethodIcon}>
-              <View>
-                <Image
-                  style={{
-                    width: 60,
-                    height: 20,
-                    resizeMode: "contain",
-                    alignSelf: "center",
-                    marginBottom: 10,
-                  }}
-                  source={require("../../assets/factory.png")}
-                />
-                <Text style={styled.deliveryTextIcon}>รับที่โรงงาน</Text>
-              </View>
-            </View>
-          )}
+          <View style={styled.deliveryMethodIcon}>
+            {availableShipmnet?.available_shipments.map((shipment) => {
+              return shipmentMethod(shipment.shipping_method);
+            })}
+          </View>
           <View style={styled.deliveryAddressContainer}>
             <Text style={styled.textHeaderPayment}>ที่อยู่จัดส่ง</Text>
             <View style={styled.deliveryAddressInnnerContainer}>
               <View style={styled.iconPin} />
-              {address ? (
-                <>
-                  <View style={styled.textAddress}>
-                    <Text style={styled.deliveryTextShopName}>
-                      {address.name}
-                    </Text>
-                    <Text>
-                      {`${address.address} ${address.sub_district} \n ${address.district} ${address.province} ${address.post_code}`}
-                    </Text>
-                  </View>
-                </>
-              ) : null}
+              {availableShipmnet?.available_shipments
+                .filter((item) => item.shipping_method == method)
+                .map((shipment) => {
+                  return shipment.addresses.map((address) => {
+                    return (
+                      <View key={address.address} style={styled.textAddress}>
+                        <Text style={styled.deliveryTextShopName}>
+                          {address.name}
+                        </Text>
+                        <Text>
+                          {`${address.address} ${address.sub_district} \n ${address.district} ${address.province} ${address.post_code}`}
+                        </Text>
+                      </View>
+                    );
+                  });
+                })}
+              <></>
             </View>
             <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
 
@@ -108,7 +146,7 @@ export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
           <View style={styled.deliveryButtonContainer}>
             <TouchableOpacity
               style={styled.deliveryButton}
-              onPress={() => onOk(remark, address)}
+              onPress={() => onOk(remark, address, method)}
             >
               <Text style={styled.deliveryButtonText}>ยืนยัน</Text>
             </TouchableOpacity>
