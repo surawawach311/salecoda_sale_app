@@ -49,6 +49,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
       route.params.shop.id,
       route.params.product.id,
       nextQuantity,
+      undefined,
+      undefined,
       route.params.productBrand,
     );
   };
@@ -60,6 +62,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
         route.params.shop.id,
         route.params.product.id,
         quantity,
+        undefined,
+        undefined,
         route.params.productBrand,
       );
     } else {
