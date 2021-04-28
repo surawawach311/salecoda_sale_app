@@ -48,7 +48,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
     CartDataSource.addToCartByShopId(
       route.params.shop.id,
       route.params.product.id,
-      nextQuantity
+      nextQuantity,
+      route.params.productBrand,
     );
   };
 
@@ -58,7 +59,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
       CartDataSource.addToCartByShopId(
         route.params.shop.id,
         route.params.product.id,
-        quantity
+        quantity,
+        route.params.productBrand,
       );
     } else {
       alert("Number Only");
@@ -202,7 +204,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                 </View>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate("Cart", { shop: route.params.shop })
+                    navigation.navigate("Cart", { shop: route.params.shop, productBrand: route.params.productBrand })
                   }
                 >
                   <View style={styled.buttonCheckout}>

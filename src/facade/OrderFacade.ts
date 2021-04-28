@@ -8,7 +8,7 @@ import { ShopOrderCardModel } from "../models/ShopOrderCard";
 
 export class OrderFacade {
 
-    static confirmOrder(company: string, shop: ShopEntity, deliveryMethod: string, shippingAddress: ShopEntity, cart: CartEntity, subsidize: number = 0, shippingRemark: string = ''): Promise<OrderEntity> {
+    static confirmOrder(company: string, shop: ShopEntity, deliveryMethod: string, shippingAddress: ShopEntity, cart: CartEntity, subsidize: number = 0, shippingRemark: string = '', productBrand?: string): Promise<OrderEntity> {
         let items: OrderItemModel[] = cart.items.map((item: ItemCart) => {
             return {
                 id: item.id,
@@ -67,6 +67,7 @@ export class OrderFacade {
             special_request_id: cart.special_request_id,
             special_request_remark: cart.special_request_remark,
             subsidize: subsidize,
+            product_brand: productBrand,
         }
         return OrderDataSource.comfirmOrder(order)
     }

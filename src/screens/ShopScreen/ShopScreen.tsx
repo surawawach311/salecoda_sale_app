@@ -99,6 +99,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 navigation.navigate("ProductInfo", {
                   product: item,
                   shop: route.params.shop,
+                  productBrand: route.params.productBrand,
                 })
               }
             >

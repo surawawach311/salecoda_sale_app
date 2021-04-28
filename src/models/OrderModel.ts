@@ -17,6 +17,7 @@ export interface OrderModel {
     special_request_id: string,
     special_request_remark: string,
     subsidize: number,
+    product_brand?: string,
 }
 
 export interface OrderItemModel {
