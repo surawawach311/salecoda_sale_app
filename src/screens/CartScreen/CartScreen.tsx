@@ -277,7 +277,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         shippingAddress,
         cart,
         cart.subsidize_discount,
-        remark
+        remark,
+        route.params.productBrand,
       ).then((res: OrderEntity) => {
         CartDataSource.clearCart(shop.id, route.params.productBrand);
         navigation.navigate("OrderSuccess", { data: res, cart });
