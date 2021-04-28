@@ -207,9 +207,9 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                   </TouchableOpacity>
                 </View>
                 <TouchableOpacity
-                  // onPress={() =>
-                  //   navigation.navigate("Cart", { shop: route.params.shop, productBrand: route.params.productBrand })
-                  // }
+                  onPress={() =>
+                    navigation.navigate("Cart", { shop: route.params.shop, productBrand: route.params.productBrand })
+                  }
                 >
                   <View style={styled.buttonCheckout}>
                     <Text style={styled.textButton}>สั่งซื้อสินค้า</Text>
