@@ -49,6 +49,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
       route.params.shop.id,
       route.params.product.id,
       nextQuantity,
+      undefined,
+      undefined,
       route.params.productBrand,
     );
   };
@@ -60,6 +62,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
         route.params.shop.id,
         route.params.product.id,
         quantity,
+        undefined,
+        undefined,
         route.params.productBrand,
       );
     } else {
@@ -203,9 +207,9 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                   </TouchableOpacity>
                 </View>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Cart", { shop: route.params.shop, productBrand: route.params.productBrand })
-                  }
+                  // onPress={() =>
+                  //   navigation.navigate("Cart", { shop: route.params.shop, productBrand: route.params.productBrand })
+                  // }
                 >
                   <View style={styled.buttonCheckout}>
                     <Text style={styled.textButton}>สั่งซื้อสินค้า</Text>
