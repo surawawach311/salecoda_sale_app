@@ -197,6 +197,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
           (res: CartEntity) => {
             navigation.navigate("Cart", {
               shop: route.params.shop,
+              productBrand: route.params.productBrand,
             });
           }
         );
