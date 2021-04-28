@@ -4,8 +4,8 @@
 
 ## Enhance [v1.56.0] - 2020-04-28
 
-- Added product brand param to CartDataSource
-- Added product brad constraint flow to ProductInfoScreen, CartScreen and SpecialRequestScreen
+- Added product brand param to CartDataSource and OrderDataSource
+- Added product brand constraint flow to ProductInfoScreen, CartScreen and SpecialRequestScreen
 
 ## Enahcne [v1.55.0] - 2020-04-27
 
