@@ -38,14 +38,16 @@ import PremiumCard from "../../components/PremiumCard";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import { CheckBox } from "native-base";
 import { UserDataContext } from "../../provider/UserDataProvider";
+import { ShipmentAddress, ShipmentEntity } from "../../entities/ShipmentEntity";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
 const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [modalDelivery, setModalDelivery] = useState(false);
   const [remark, setRemark] = useState("");
-  const [shippingAddress, setShippingAddress] = useState<any>();
-  const [deliveryMethod, setDeliveryMethod] = useState<string>("");
+  const [shipmentAvailable, setshipmentAvailable] = useState<ShipmentEntity>();
+  const [shippingAddress, setShippingAddress] = useState<ShipmentAddress>();
+  const [deliveryMethod, setDeliveryMethod] = useState<string>();
   const [cart, setCart] = useState<CartEntity | undefined>();
   const [quantity, setQuantity] = useState(0);
   const [payment, setPayment] = useState<string | undefined>();
@@ -56,6 +58,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [useSubsidize, setUseSubsudize] = useState(false);
   const isFocused = useIsFocused();
   useEffect(() => {
+    getShipmentAvailable();
     getCart();
   }, [isFocused]);
   const userDataStore = useContext(UserDataContext);
@@ -74,7 +77,27 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     });
     return arrayOutput;
   };
+  const getShipmentAvailable = () => {
+    CartDataSource.getShipment(route.params.shop.id).then((res) => {
+      setshipmentAvailable(res);
+      if (userData.company == "icpl") {
+        res.available_shipments
+          .filter((item) => item.shipping_method == "delivery")
+          .map((shipment) =>
+            shipment.addresses.map((address) => setShippingAddress(address))
+          );
+        setDeliveryMethod("delivery");
+      } else {
+        res.available_shipments
+          .filter((item) => item.shipping_method == "factory")
+          .map((shipment) =>
+            shipment.addresses.map((address) => setShippingAddress(address))
+          );
 
+        setDeliveryMethod("factory");
+      }
+    });
+  };
   const getCart = async () => {
     CartDataSource.getCartByShop(route.params.shop.id).then(
       (res: CartEntity) => {
@@ -88,33 +111,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         setSpecialRequest(discountSpecial);
         setDiscoutPromo(discountProduct);
         setUseSubsudize(false);
-        if (userData.company == "icpl") {
-          const shipAddress = {
-            name: route.params.shop.name,
-            telephone: route.params.shop.telephone,
-            address: route.params.shop.address,
-            district: route.params.shop.district,
-            sub_district: route.params.shop.sub_district,
-            province: route.params.shop.province,
-            post_code: route.params.shop.post_code,
-          };
-          const delivery = "delivery";
-          setShippingAddress(shipAddress);
-          setDeliveryMethod(delivery);
-        } else {
-          const shipAddress = {
-            name: "บริษัท ไอ ซี พี เฟอทิไลเซอร์ จำกัด",
-            telephone: "0352467958",
-            address: "เลขที่ 2/1 หมู่ที่ 3",
-            district: "อำเภอนครหลวง",
-            sub_district: "ตำบลแม่ลา",
-            province: "จังหวัดพระนครศรีอยุธยา",
-            post_code: "13260",
-          };
-          const delivery = "factory";
-          setShippingAddress(shipAddress);
-          setDeliveryMethod(delivery);
-        }
       }
     );
   };
@@ -701,8 +697,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   visible={modalDelivery}
                   onClose={handleCloseModal}
                   onOk={handleOkDeliveryModal}
-                  address={shippingAddress}
-                  company={userData.company}
+                  availableShipmnet={shipmentAvailable}
                 />
               </ScrollView>
               <View

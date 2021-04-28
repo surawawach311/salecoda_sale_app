@@ -1,5 +1,6 @@
 import { baseURL } from "../config/develop-config";
 import { CartEntity } from "../entities/CartEntity";
+import { ShipmentEntity } from "../entities/ShipmentEntity";
 import { ItemSpecialRequest } from "../models/SpecialRequestModel";
 import { httpClient } from "../services/HttpClient";
 
@@ -95,6 +96,13 @@ export class CartDataSource {
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart?shopId=${shopId}`, data)
+            .then(res => res.data)
+            .catch(error => console.log(error))
+    }
+
+    static getShipment(shopId: string): Promise<ShipmentEntity> {
+        return httpClient
+            .get(`${baseURL}/v1/sellcoda/customers/dealers/${shopId}/available_shipments`)
             .then(res => res.data)
             .catch(error => console.log(error))
     }

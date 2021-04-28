@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enahcne [v1.55.0] - 2020-04-27
+
+- Fixed available method from API
+
 ## Enahcne [v1.54.0] - 2020-04-23
 
 - Added Product Brand
