@@ -99,7 +99,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     });
   };
   const getCart = async () => {
-    CartDataSource.getCartByShop(route.params.shop.id).then(
+    CartDataSource.getCartByShop(route.params.shop.id, route.params.productBrand).then(
       (res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -121,7 +121,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       itemId,
       quantity + 1,
       payment,
-      useSubsidize
+      useSubsidize,
+      route.params.productBrand,
     ).then((res: CartEntity) => {
       setCart(res);
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -141,7 +142,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       itemId,
       quantity - 1,
       payment,
-      useSubsidize
+      useSubsidize,
+      route.params.productBrand,
     ).then((res: CartEntity) => {
       setCart(res);
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -162,7 +164,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         itemId,
         quantity,
         payment,
-        useSubsidize
+        useSubsidize,
+        route.params.productBrand,
       ).then((res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -184,7 +187,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       route.params.shop.id,
       itemId,
       payment,
-      useSubsidize
+      useSubsidize,
+      route.params.productBrand,
     ).then((res: CartEntity) => {
       setCart(res);
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -213,7 +217,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       CartDataSource.calculate(
         route.params.shop.id,
         payment,
-        useSubsidize
+        useSubsidize,
+        route.params.productBrand,
       ).then((res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -230,7 +235,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       CartDataSource.calculate(
         route.params.shop.id,
         payment,
-        useSubsidize
+        useSubsidize,
+        route.params.productBrand,
       ).then((res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -246,7 +252,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const handleUseSubsidize = (b: boolean) => {
-    CartDataSource.calculate(route.params.shop.id, payment, b).then(
+    CartDataSource.calculate(route.params.shop.id, payment, b, route.params.productBrand).then(
       (res: CartEntity) => {
         setCart(res);
         setUseSubsudize(b);
@@ -273,7 +279,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         cart.subsidize_discount,
         remark
       ).then((res: OrderEntity) => {
-        CartDataSource.clearCart(shop.id);
+        CartDataSource.clearCart(shop.id, route.params.productBrand);
         navigation.navigate("OrderSuccess", { data: res, cart });
       });
     }

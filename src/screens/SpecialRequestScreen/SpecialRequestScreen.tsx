@@ -183,7 +183,8 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
     CartDataSource.calculateSpecialRequest(
       route.params.shop.id,
       productRequestDiscount,
-      remark
+      remark,
+      route.params.productBrand,
     ).then((res) => {
       setCart(res);
     });
@@ -192,7 +193,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
   const createSpecialRequest = () => {
     CartFacade.createSpecialRequest(route.params.shop.id, request, remark).then(
       (res) => {
-        CartDataSource.addSpecialRequest(route.params.shop.id, res).then(
+        CartDataSource.addSpecialRequest(route.params.shop.id, res, route.params.productBrand).then(
           (res: CartEntity) => {
             navigation.navigate("Cart", {
               shop: route.params.shop,

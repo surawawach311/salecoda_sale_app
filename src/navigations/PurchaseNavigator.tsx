@@ -22,14 +22,15 @@ export type PurchaseStackParamList = {
   ShopList: { territory: string; company: string };
   Brand: { shop: ShopEntity; company: string };
   Shop: { shop: ShopEntity; company: string; productBrand?: string };
-  ProductInfo: { product: ProductEntity; shop: ShopEntity };
-  Cart: { shop: ShopEntity };
+  ProductInfo: { product: ProductEntity; shop: ShopEntity, productBrand?: string };
+  Cart: { shop: ShopEntity; productBrand?: string };
   OrderSuccess: { data: OrderEntity; cart?: CartEntity };
   SuccessDetail: { data: OrderEntity };
   SpecialRequest: {
     cart: CartEntity;
     shop: ShopEntity;
     item: { item: string; price: number }[];
+    productBrand?: string;
   };
 };
 
@@ -55,7 +56,7 @@ const PurchaseNavigator: React.FC = () => {
           headerRight: (props) => (
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("Cart", { shop: route.params.shop })
+                navigation.navigate("Cart", { shop: route.params.shop, productBrand: route.params.productBrand })
               }
             >
               <Image
@@ -86,7 +87,7 @@ const PurchaseNavigator: React.FC = () => {
           headerRight: (props) => (
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("Cart", { shop: route.params.shop })
+                navigation.navigate("Cart", { shop: route.params.shop, productBrand: route.params.productBrand })
               }
             >
               <Image
@@ -111,7 +112,7 @@ const PurchaseNavigator: React.FC = () => {
         name="SuccessDetail"
         component={OrderSuccessDetail}
         options={({ navigation, route }) => ({
-          headerTitle: <Text>{ThaiDateFormat(route.params.data.created)}</Text>,
+          headerTitle: ThaiDateFormat(route.params.data.created),
         })}
       />
       <PurchaseStack.Screen
