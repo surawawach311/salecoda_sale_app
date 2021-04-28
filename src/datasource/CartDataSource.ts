@@ -8,15 +8,16 @@ export class CartDataSource {
     static getCartByShop(shopId: string, productBrand?: string): Promise<CartEntity> {
         const params = {
             shopId: shopId,
-            ...(productBrand ? { product_brand: productBrand } : {}),
+            ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
             .get(`${baseURL}/v1/sellcoda/cart`, { params })
             .then(res => res.data)
-            .catch(error => console.log(error))
+            .catch(error => console.log(error.response.data))
     }
 
     static addToCartByShopId(shopId: string, itemId: string, quantity: number, payment?: string, useSubsidize?: boolean, productBrand?: string) {
+        console.log("PAYMENT", payment)
         const data = {
             action: "adjust",
             item_id: itemId,
@@ -26,7 +27,7 @@ export class CartDataSource {
         }
         const params = {
             shopId: shopId,
-            ...(productBrand ? { product_brand: productBrand } : {}),
+            ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
@@ -43,7 +44,7 @@ export class CartDataSource {
         }
         const params = {
             shopId: shopId,
-            ...(productBrand ? { product_brand: productBrand } : {}),
+            ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
@@ -59,7 +60,7 @@ export class CartDataSource {
         }
         const params = {
             shopId: shopId,
-            ...(productBrand ? { product_brand: productBrand } : {}),
+            ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
@@ -71,7 +72,7 @@ export class CartDataSource {
         let arr = { discounts, remark }
         const params = {
             shopId: shopId,
-            ...(productBrand ? { product_brand: productBrand } : {}),
+            ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart/calculate_special_request`, arr, { params })
@@ -96,7 +97,7 @@ export class CartDataSource {
         }
         const params = {
             shopId: shopId,
-            ...(productBrand ? { product_brand: productBrand } : {}),
+            ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
@@ -112,7 +113,7 @@ export class CartDataSource {
         }
         const params = {
             shopId: shopId,
-            ...(productBrand ? { product_brand: productBrand } : {}),
+            ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
@@ -126,7 +127,7 @@ export class CartDataSource {
         }
         const params = {
             shopId: shopId,
-            ...(productBrand ? { product_brand: productBrand } : {}),
+            ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
             .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
