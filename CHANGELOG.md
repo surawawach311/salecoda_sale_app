@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.56.1] - 2020-04-28
+
+- Fixed typp for product brand param in CartDataSource
+
 ## Enhance [v1.56.0] - 2020-04-28
 
 - Added product brand param to CartDataSource and OrderDataSource
