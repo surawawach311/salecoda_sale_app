@@ -17,7 +17,6 @@ export class CartDataSource {
     }
 
     static addToCartByShopId(shopId: string, itemId: string, quantity: number, payment?: string, useSubsidize?: boolean, productBrand?: string) {
-        console.log("PAYMENT", payment)
         const data = {
             action: "adjust",
             item_id: itemId,
