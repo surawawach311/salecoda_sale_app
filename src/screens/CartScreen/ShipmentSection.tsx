@@ -87,7 +87,7 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange, withDefault }) => 
           availableMethods={methods}
           availableShipments={data}
           onOk={handleConfirmModal}
-          activeShipment={selected?.id}
+          activeShipment={selected}
           defaultRemark={selected?.remark}
         />
       )}

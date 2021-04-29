@@ -23,7 +23,7 @@ interface Props {
   onOk?: (value: Shipment) => void;
   availableMethods: string[];
   availableShipments: Shipment[];
-  activeShipment?: string;
+  activeShipment?: Shipment;
   defaultRemark?: string;
 }
 
@@ -37,14 +37,15 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
 }) => {
   const [remark, setRemark] = useState("");
   const [method, setMethod] = useState("");
-  const [activeId, setActiveId] = useState("");
+  const [active, setActive] = useState<Shipment>();
 
   useEffect(() => {
     if (availableMethods.length > 0) {
       setMethod(availableMethods[0]);
     }
     if (activeShipment) {
-      setActiveId(activeShipment);
+      setActive(activeShipment);
+      setMethod(activeShipment.method);
     }
     if (defaultRemark !== undefined) {
       setRemark(defaultRemark);
@@ -52,8 +53,8 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
   }, []);
 
   const handleConfirm = () => {
-    if (activeId) {
-      const value = availableShipments.find((s) => s.id === activeId);
+    if (active) {
+      const value = availableShipments.find((s) => s.id === active.id);
       value && onOk?.({ ...value, remark });
     }
   };
@@ -67,7 +68,7 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
   };
 
   const handleSelectShipment = (s: Shipment) => {
-    setActiveId(s.id);
+    setActive(s);
   };
 
   const renderMethodIcon = (m: string) => {
@@ -98,7 +99,7 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
     return shipments.map((a) => (
       <TouchableOpacity key={a.id} onPress={() => handleSelectShipment(a)}>
         <View style={styled.deliveryAddressInnnerContainer}>
-          <View style={activeId === a.id ? styled.iconPin : styled.iconUnPin} />
+          <View style={active?.id === a.id ? styled.iconPin : styled.iconUnPin} />
           <View style={styled.textAddress}>
             <Text style={styled.deliveryTextShopName}>{a.name}</Text>
             <Text>
@@ -140,9 +141,9 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
           </View>
           <View style={styled.deliveryButtonContainer}>
             <TouchableOpacity
-              style={activeId ? styled.deliveryButton : styled.disabbledDeliveryButton}
+              style={active ? styled.deliveryButton : styled.disabbledDeliveryButton}
               onPress={handleConfirm}
-              disabled={!activeId}
+              disabled={!active}
             >
               <Text style={styled.deliveryButtonText}>ยืนยัน</Text>
             </TouchableOpacity>
