@@ -1,22 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
-import { ModalDeliveryMethod } from "../../components/ModalDeliveryMethod";
+import { ModalDeliveryMethod } from "./ModalDeliveryMethod";
 import { SHIPPING_METHOD_MAPPING } from "../../definitions/ShippingMethod";
 import { CartDataSource } from "../../datasource/CartDataSource";
-import { ShipmentEntity, Shipment as AvailableShipment } from "../../entities/ShipmentEntity";
-
-export interface Shipment {
-  id: string;
-  method: string;
-  name: string;
-  telephone: string;
-  address: string;
-  district: string;
-  subDistrict: string;
-  province: string;
-  postCode: string;
-  remark: string;
-}
+import { Shipment } from "./Shipment";
 
 interface Props {
   shopId: string;
@@ -25,11 +12,9 @@ interface Props {
 
 const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<ShipmentEntity>();
-  const [shipments, setShipments] = useState<Shipment[]>([]);
+  const [data, setData] = useState<Shipment[]>([]);
   const [methods, setMethods] = useState<string[]>([]);
   const [selected, setSelected] = useState<Shipment>();
-  const [shippingMethod, setShippingMethod] = useState("delivery");
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -50,10 +35,16 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
         }));
       });
       setMethods(availableMethods);
-      setShipments(availableShipments);
+      setData(availableShipments);
       setIsLoading(false);
     });
   }, []);
+
+  const handleConfirmModal = (s: Shipment) => {
+    setSelected(s);
+    setShowModal(false);
+    onChange?.(s);
+  };
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -77,7 +68,14 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
 
   return (
     <>
-      <ModalDeliveryMethod visible={showModal} onClose={handleCloseModal} />
+      <ModalDeliveryMethod
+        visible={showModal}
+        onClose={handleCloseModal}
+        availableMethods={methods}
+        availableShipments={data}
+        onOk={handleConfirmModal}
+        activeShipment={selected?.id}
+      />
       <View style={styled.container}>
         <View style={styled.headerDeliveryMethodtContainer}>
           <Text style={styled.textHeaderPayment}>สถานที่รับสินค้า/สถานที่จัดส่ง</Text>
@@ -98,9 +96,7 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
               <Image style={styled.iconLocation} source={require("../../../assets/location.png")} />
               <View style={styled.deliveryMethodtContainer}>
                 <Text style={styled.textDeliveryMethod}>
-                  {shippingMethod
-                    ? SHIPPING_METHOD_MAPPING[shippingMethod]
-                    : "unkown shipping method"}
+                  {SHIPPING_METHOD_MAPPING[selected.method]}
                 </Text>
                 <Text style={styled.textDeliveryPoint}>
                   <Text style={styled.deliveryTextShopName}>{`${selected.name}\n`}</Text>
@@ -186,25 +182,5 @@ const styled = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  iconPin: {
-    borderRadius: 50,
-    borderWidth: 5,
-    borderColor: "#4C95FF",
-    width: 20,
-    height: 20,
-    marginRight: 5,
-  },
-  iconUnPin: {
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: "#E5E5E5",
-    width: 20,
-    height: 20,
-    marginRight: 5,
-  },
-  methodChoiceContainer: {
-    flexDirection: "row",
-    marginBottom: 5,
   },
 });

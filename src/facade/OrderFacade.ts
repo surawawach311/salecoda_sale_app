@@ -5,10 +5,11 @@ import { OrderDataSource } from "../datasource/OrderDataSource";
 import { OrderEntity, PremiumOrderEntity } from "../entities/OrderEntity";
 import _, { Dictionary } from "lodash";
 import { ShopOrderCardModel } from "../models/ShopOrderCard";
+import { Shipment } from "../screens/CartScreen/Shipment";
 
 export class OrderFacade {
 
-    static confirmOrder(company: string, shop: ShopEntity, deliveryMethod: string, shippingAddress: ShopEntity, cart: CartEntity, subsidize: number = 0, shippingRemark: string = '', productBrand?: string): Promise<OrderEntity> {
+    static confirmOrder(company: string, shop: ShopEntity, shipment: Shipment, cart: CartEntity, subsidize: number = 0, productBrand?: string): Promise<OrderEntity> {
         let items: OrderItemModel[] = cart.items.map((item: ItemCart) => {
             return {
                 id: item.id,
@@ -52,16 +53,16 @@ export class OrderFacade {
             premium_memo: premium_items,
             discount_memo: cart.received_discounts,
             payment_method: cart.selected_payment.id,
-            shipping_method: deliveryMethod,
+            shipping_method: shipment.method,
             shipping_address: {
-                name: shippingAddress.name,
-                telephone: shippingAddress.telephone,
-                address: shippingAddress.address,
-                district: shippingAddress.district,
-                sub_district: shippingAddress.sub_district,
-                province: shippingAddress.province,
-                post_code: shippingAddress.post_code,
-                remark: shippingRemark,
+                name: shipment.name,
+                telephone: shipment.telephone,
+                address: shipment.address,
+                district: shipment.district,
+                sub_district: shipment.subDistrict,
+                province: shipment.province,
+                post_code: shipment.postCode,
+                remark: shipment.remark,
             },
             special_request_discounts: cart.received_special_request_discounts,
             special_request_id: cart.special_request_id,

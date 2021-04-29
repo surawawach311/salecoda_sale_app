@@ -10,25 +10,13 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { SHIPPING_METHOD_MAPPING } from "../definitions/ShippingMethod";
+import { SHIPPING_METHOD_MAPPING } from "../../definitions/ShippingMethod";
+import { Shipment } from "./Shipment";
 
 const ICONS: { [key: string]: any } = {
-  delivery: require("../../assets/home.png"),
-  factory: require("../../assets/factory.png"),
+  delivery: require("../../../assets/home.png"),
+  factory: require("../../../assets/factory.png"),
 };
-
-interface Shipment {
-  id: string;
-  method: string;
-  name: string;
-  telephone: string;
-  address: string;
-  district: string;
-  subDistrict: string;
-  province: string;
-  postCode: string;
-  remark: string;
-}
 
 interface Props {
   visible?: boolean;
@@ -58,12 +46,12 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
     if (activeShipment) {
       setActiveId(activeShipment);
     }
-  }, []);
+  }, [availableMethods]);
 
   const handleConfirm = () => {
     if (activeId) {
       const value = availableShipments.find((s) => s.id === activeId);
-      value && onOk?.(value);
+      value && onOk?.({ ...value, remark });
     }
   };
 
@@ -148,7 +136,11 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
             />
           </View>
           <View style={styled.deliveryButtonContainer}>
-            <TouchableOpacity style={styled.deliveryButton} onPress={handleConfirm}>
+            <TouchableOpacity
+              style={styled.deliveryButton}
+              onPress={handleConfirm}
+              disabled={!activeId}
+            >
               <Text style={styled.deliveryButtonText}>ยืนยัน</Text>
             </TouchableOpacity>
           </View>

@@ -37,24 +37,13 @@ import PremiumCard from "../../components/PremiumCard";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import { CheckBox } from "native-base";
 import { UserDataContext } from "../../provider/UserDataProvider";
-import { ShipmentAddress } from "../../entities/ShipmentEntity";
 import ShipmentSection from "./ShipmentSection"
-
-const MOCK_SHIPPING: ShipmentAddress = {
-  address: "MOCK",
-  district: "MOCK",
-  name: "MOCK",
-  post_code: "MOCK",
-  province: "MOCK",
-  sub_district: "MOCK",
-  telephone: "MOCK",
-}
+import { Shipment } from "./Shipment"
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
 const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
-  const [shippingAddress, setShippingAddress] = useState<ShipmentAddress>(MOCK_SHIPPING);
-  const [deliveryMethod, setDeliveryMethod] = useState<string>("factory");
+  const [shipment, setShipment] = useState<Shipment>();
   const [cart, setCart] = useState<CartEntity | undefined>();
   const [quantity, setQuantity] = useState(0);
   const [payment, setPayment] = useState<string | undefined>();
@@ -190,11 +179,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     });
   };
 
-  const handleShipmentChange = ({ ...shipment }) => {
-    console.log("shipment", shipment)
-    // setShippingAddress(shop);
-    // setRemark(value.trim());
-    // setModalDelivery(false);
+  const handleShipmentChange = (s: Shipment) => {
+    setShipment(s)
   };
 
   const handlePayment = (payment: string) => {
@@ -248,10 +234,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   const confirmOrder = (
     shop: ShopEntity,
-    shippingAddress?: ShipmentAddress,
     cart?: CartEntity
   ) => {
-    if (!shippingAddress) {
+    if (!shipment) {
       alert("กรุณาเลือกสถานที่จัดส่ง");
     } else if (!cart?.selected_payment) {
       alert("กรุณาเลือกวิธีการชำระเงิน");
@@ -259,11 +244,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       OrderFacade.confirmOrder(
         userData.company,
         shop,
-        deliveryMethod,
-        shippingAddress,
+        shipment,
         cart,
         cart.subsidize_discount,
-        remark,
         route.params.productBrand,
       ).then((res: OrderEntity) => {
         CartDataSource.clearCart(shop.id, route.params.productBrand);
@@ -653,7 +636,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 <TouchableOpacity
                   style={styled.confirmOrderButton}
                   onPress={() => {
-                    confirmOrder(route.params.shop, shippingAddress, cart);
+                    confirmOrder(route.params.shop, cart);
                   }}
                 >
                   <View style={styled.iconCartWarp}>
@@ -842,5 +825,25 @@ const styled = StyleSheet.create({
     marginTop: 10,
     backgroundColor: "#FFFFFF",
     marginBottom: 10,
+  },
+  iconPin: {
+    borderRadius: 50,
+    borderWidth: 5,
+    borderColor: "#4C95FF",
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
+  iconUnPin: {
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
+  methodChoiceContainer: {
+    flexDirection: "row",
+    marginBottom: 5,
   },
 });
