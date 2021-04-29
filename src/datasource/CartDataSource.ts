@@ -138,6 +138,5 @@ export class CartDataSource {
         return httpClient
             .get(`${baseURL}/v1/sellcoda/customers/dealers/${shopId}/available_shipments`)
             .then(res => res.data)
-            .catch(error => console.log(error))
     }
 }

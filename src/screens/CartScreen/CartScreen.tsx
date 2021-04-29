@@ -18,7 +18,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
-import { ModalDeliveryMethod } from "../../components/ModalDeliveryMethod";
 import { ShopEntity } from "../../entities/ShopEntity";
 import Dash from "react-native-dash";
 import {
@@ -38,16 +37,24 @@ import PremiumCard from "../../components/PremiumCard";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import { CheckBox } from "native-base";
 import { UserDataContext } from "../../provider/UserDataProvider";
-import { ShipmentAddress, ShipmentEntity } from "../../entities/ShipmentEntity";
+import { ShipmentAddress } from "../../entities/ShipmentEntity";
+import ShipmentSection from "./ShipmentSection"
+
+const MOCK_SHIPPING: ShipmentAddress = {
+  address: "MOCK",
+  district: "MOCK",
+  name: "MOCK",
+  post_code: "MOCK",
+  province: "MOCK",
+  sub_district: "MOCK",
+  telephone: "MOCK",
+}
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
 const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
-  const [modalDelivery, setModalDelivery] = useState(false);
-  const [remark, setRemark] = useState("");
-  const [shipmentAvailable, setshipmentAvailable] = useState<ShipmentEntity>();
-  const [shippingAddress, setShippingAddress] = useState<ShipmentAddress>();
-  const [deliveryMethod, setDeliveryMethod] = useState<string>();
+  const [shippingAddress, setShippingAddress] = useState<ShipmentAddress>(MOCK_SHIPPING);
+  const [deliveryMethod, setDeliveryMethod] = useState<string>("factory");
   const [cart, setCart] = useState<CartEntity | undefined>();
   const [quantity, setQuantity] = useState(0);
   const [payment, setPayment] = useState<string | undefined>();
@@ -57,12 +64,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
   const [useSubsidize, setUseSubsudize] = useState(false);
   const isFocused = useIsFocused();
-  useEffect(() => {
-    getShipmentAvailable();
-    getCart();
-  }, [isFocused]);
   const userDataStore = useContext(UserDataContext);
   const { userData } = userDataStore;
+
+  useEffect(() => {
+    getCart();
+  }, [isFocused]);
 
   // TODO: don't use any type
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
@@ -77,27 +84,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     });
     return arrayOutput;
   };
-  const getShipmentAvailable = () => {
-    CartDataSource.getShipment(route.params.shop.id).then((res) => {
-      setshipmentAvailable(res);
-      if (userData.company == "icpl") {
-        res.available_shipments
-          .filter((item) => item.shipping_method == "delivery")
-          .map((shipment) =>
-            shipment.addresses.map((address) => setShippingAddress(address))
-          );
-        setDeliveryMethod("delivery");
-      } else {
-        res.available_shipments
-          .filter((item) => item.shipping_method == "factory")
-          .map((shipment) =>
-            shipment.addresses.map((address) => setShippingAddress(address))
-          );
 
-        setDeliveryMethod("factory");
-      }
-    });
-  };
   const getCart = async () => {
     CartDataSource.getCartByShop(route.params.shop.id, route.params.productBrand).then(
       (res: CartEntity) => {
@@ -156,6 +143,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       setDiscoutPromo(discountProduct);
     });
   };
+
   const adjustProduct = async (itemId: string, quantity: number) => {
     const regexp = /^[0-9\b]+$/;
     if (quantity.toString() === "" || regexp.test(quantity.toString())) {
@@ -202,15 +190,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     });
   };
 
-  const handleCloseModal = () => {
-    setModalDelivery(false);
+  const handleShipmentChange = ({ ...shipment }) => {
+    console.log("shipment", shipment)
+    // setShippingAddress(shop);
+    // setRemark(value.trim());
+    // setModalDelivery(false);
   };
 
-  const handleOkDeliveryModal = (value: string, shop: ShopEntity) => {
-    setShippingAddress(shop);
-    setRemark(value.trim());
-    setModalDelivery(false);
-  };
   const handlePayment = (payment: string) => {
     if (payment == "cash") {
       setPayment("cash");
@@ -262,7 +248,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   const confirmOrder = (
     shop: ShopEntity,
-    shippingAddress?: any,
+    shippingAddress?: ShipmentAddress,
     cart?: CartEntity
   ) => {
     if (!shippingAddress) {
@@ -638,76 +624,15 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       {currencyFormat(cart.total_price, 2)}
                     </Text>
                   </View>
-                </View>
+                </View>     
                 <View style={styled.warpDelivery}>
-                  <View style={styled.headerDeliveryMethodtContainer}>
-                    <Text style={styled.textHeaderPayment}>
-                      สถานที่รับสินค้า/สถานที่จัดส่ง
-                    </Text>
-                    {!shippingAddress ? null : (
-                      <TouchableOpacity
-                        onPress={() => setModalDelivery(!modalDelivery)}
-                      >
-                        <Text style={styled.textChageDeliveryMethod}>
-                          เปลี่ยน
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                  <View style={styled.line} />
-                  {!shippingAddress ? (
-                    <TouchableOpacity
-                      style={styled.buttonDelivery}
-                      onPress={() => {
-                        setModalDelivery(!modalDelivery);
-                      }}
-                    >
-                      <Image
-                        style={styled.iconDelivery}
-                        source={require("../../../assets/delivery.png")}
-                      />
-                      <Text style={styled.textButtonDelivery}>
-                        เลือกการจัดส่ง
-                      </Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <View style={styled.deliveryPointContainer}>
-                      <Image
-                        style={styled.iconLocation}
-                        source={require("../../../assets/location.png")}
-                      />
-                      <View style={styled.deliveryMethodtContainer}>
-                        <Text style={styled.textDeliveryMethod}>
-                          {deliveryMethod == "delivery"
-                            ? "จัดส่งที่ร้าน"
-                            : "จัดส่งโรงงาน"}
-                        </Text>
-                        <Text style={styled.textDeliveryPoint}>
-                          <Text style={styled.deliveryTextShopName}>
-                            {`${shippingAddress.name} \n`}
-                          </Text>
-                          <Text>{`${shippingAddress.address} ${shippingAddress.sub_district} \n`}</Text>
-                          <Text>{`${shippingAddress.district} ${shippingAddress.province} ${shippingAddress.post_code}`}</Text>
-                        </Text>
-                      </View>
-                    </View>
-                  )}
-                  {remark ? (
-                    <>
-                      <View style={styled.line} />
-                      <View style={{ marginTop: 8 }}>
-                        <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
-                        <Text style={styled.textRemark}>{remark}</Text>
-                      </View>
-                    </>
-                  ) : null}
+                  <ShipmentSection 
+                    shopId={route.params.shop.id} 
+                    onChange={(v) => {
+                      if(v) handleShipmentChange(v)
+                    }}
+                  />
                 </View>
-                <ModalDeliveryMethod
-                  visible={modalDelivery}
-                  onClose={handleCloseModal}
-                  onOk={handleOkDeliveryModal}
-                  availableShipmnet={shipmentAvailable}
-                />
               </ScrollView>
               <View
                 style={{
@@ -781,29 +706,6 @@ const styled = StyleSheet.create({
   warpChangeShop: {
     padding: 10,
   },
-  warpDelivery: {
-    padding: 10,
-    marginTop: 9,
-    backgroundColor: "#FFFFFF",
-    marginBottom: 10,
-  },
-  buttonDelivery: {
-    flexDirection: "row",
-    borderRadius: 6,
-    backgroundColor: "#F0F8FF",
-    justifyContent: "center",
-    padding: 10,
-    marginTop: 20,
-    margin: 10,
-    alignItems: "center",
-  },
-  iconDelivery: {
-    width: 36,
-    height: 36,
-    resizeMode: "contain",
-  },
-  iconLocation: { width: 20, height: 20, resizeMode: "contain" },
-  textButtonDelivery: { color: "#4C95FF", fontSize: 14, fontWeight: "bold" },
   borderContainer: {
     flex: 2,
     backgroundColor: "#F8FAFF",
@@ -885,62 +787,9 @@ const styled = StyleSheet.create({
     fontWeight: "bold",
   },
   textDiscount: { fontSize: 14, color: "#6B7995" },
-
   textBeforeTotal: { fontSize: 16, color: "#6B7995" },
   textLabelTotalPrice: { fontSize: 16, color: "#314364", fontWeight: "bold" },
   textTotalPrice: { fontSize: 20, color: "#4C95FF", fontWeight: "bold" },
-  deliveryPointContainer: {
-    margin: 20,
-    flexDirection: "row",
-    marginBottom: 10,
-  },
-  deliveryTextShopName: { fontWeight: "bold" },
-  textChageDeliveryMethod: {
-    color: "#4C95FF",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  textDeliveryPoint: {
-    color: "#616A7B",
-    fontSize: 16,
-  },
-  textRemark: {
-    color: "#616A7B",
-    fontSize: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
-  },
-  deliveryMethodtContainer: { marginLeft: 10 },
-  textDeliveryMethod: {
-    color: "#616A7B",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  headerDeliveryMethodtContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  iconPin: {
-    borderRadius: 50,
-    borderWidth: 5,
-    borderColor: "#4C95FF",
-    width: 20,
-    height: 20,
-    marginRight: 5,
-  },
-  iconUnPin: {
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: "#E5E5E5",
-    width: 20,
-    height: 20,
-    marginRight: 5,
-  },
-  methodChoiceContainer: {
-    flexDirection: "row",
-    marginBottom: 5,
-  },
   confirmOrderButton: {
     flexDirection: "row",
     borderRadius: 6,
@@ -950,6 +799,7 @@ const styled = StyleSheet.create({
     alignItems: "center",
     height: 50,
   },
+  iconLocation: { width: 20, height: 20, resizeMode: "contain" },
   iconCartWarp: {
     marginRight: 100,
     marginLeft: 10,
@@ -987,5 +837,10 @@ const styled = StyleSheet.create({
     marginTop: 10,
     padding: 20,
     backgroundColor: "#FFFFFF",
+  },
+  warpDelivery: {
+    marginTop: 10,
+    backgroundColor: "#FFFFFF",
+    marginBottom: 10,
   },
 });
