@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Modal,
@@ -10,30 +10,113 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { ShipmentAddress, ShipmentEntity } from "../entities/ShipmentEntity";
+import { SHIPPING_METHOD_MAPPING } from "../definitions/ShippingMethod";
 
-const ICONS: { [key: string]: string } = {
-  delivery: "../../assets/home.png",
-  factory: "../../assets/factory.png",
+const ICONS: { [key: string]: any } = {
+  delivery: require("../../assets/home.png"),
+  factory: require("../../assets/factory.png"),
 };
 
-interface ModalDeliveryMethodProps {
-  visible?: boolean;
-  onClose?: () => void;
-  onOk?: () => void;
+interface Shipment {
+  id: string;
+  method: string;
+  name: string;
+  telephone: string;
+  address: string;
+  district: string;
+  subDistrict: string;
+  province: string;
+  postCode: string;
+  remark: string;
 }
 
-export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
+interface Props {
+  visible?: boolean;
+  onClose?: () => void;
+  onOk?: (value: Shipment) => void;
+  availableMethods: string[];
+  availableShipments: Shipment[];
+  activeShipment?: string;
+}
+
+export const ModalDeliveryMethod: React.FC<Props> = ({
   visible,
   onClose,
   onOk,
+  availableMethods,
+  availableShipments,
+  activeShipment,
 }) => {
   const [remark, setRemark] = useState("");
-  const [method, setMethod] = useState();
-  const [address, setAddress] = useState<ShipmentAddress>();
+  const [method, setMethod] = useState("");
+  const [activeId, setActiveId] = useState("");
+
+  useEffect(() => {
+    if (availableMethods.length > 0) {
+      setMethod(availableMethods[0]);
+    }
+    if (activeShipment) {
+      setActiveId(activeShipment);
+    }
+  }, []);
+
+  const handleConfirm = () => {
+    if (activeId) {
+      const value = availableShipments.find((s) => s.id === activeId);
+      value && onOk?.(value);
+    }
+  };
 
   const handleClose = () => {
     onClose?.();
+  };
+
+  const handleSelectMethod = (m: string) => {
+    setMethod(m);
+  };
+
+  const handleSelectShipment = (s: Shipment) => {
+    setActiveId(s.id);
+  };
+
+  const renderMethodIcon = (m: string) => {
+    const activeOpac = m === method ? 1 : 0.5;
+    return (
+      <TouchableOpacity key={m} onPress={() => handleSelectMethod(m)}>
+        <View style={{ marginRight: 8, opacity: activeOpac }}>
+          <Image style={styled.iconClose} source={ICONS[m]} />
+          <Text style={styled.deliveryTextIcon}>{SHIPPING_METHOD_MAPPING[m]}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderAddressList = () => {
+    const shipments = availableShipments.filter((s) => s.method === method);
+
+    if (shipments.length === 0) {
+      return (
+        <View style={styled.deliveryAddressInnnerContainer}>
+          <View style={styled.textAddress}>
+            <Text>ไม่พบที่อยู่ที่รองรับ</Text>
+          </View>
+        </View>
+      );
+    }
+
+    return shipments.map((a) => (
+      <TouchableOpacity key={a.id} onPress={() => handleSelectShipment(a)}>
+        <View style={styled.deliveryAddressInnnerContainer}>
+          <View style={activeId === a.id ? styled.iconPin : styled.iconUnPin} />
+          <View style={styled.textAddress}>
+            <Text style={styled.deliveryTextShopName}>{a.name}</Text>
+            <Text>
+              {`${a.address} ${a.subDistrict}\n${a.district} ${a.province} ${a.postCode}`}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    ));
   };
 
   return (
@@ -51,23 +134,10 @@ export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
               <Text style={styled.deliveryTextHeader}>เลือกการจัดส่ง</Text>
             </View>
           </View>
-          <View style={styled.deliveryMethodIcon}>
-            <TouchableOpacity>
-              <Image style={styled.iconClose} source={require("../../assets/home.png")} />
-              <Text style={styled.deliveryTextIcon}>จัดส่งที่ร้าน</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={styled.deliveryMethodIcon}>{availableMethods.map(renderMethodIcon)}</View>
           <View style={styled.deliveryAddressContainer}>
             <Text style={styled.textHeaderPayment}>ที่อยู่จัดส่ง</Text>
-            <View style={styled.deliveryAddressInnnerContainer}>
-              <View style={styled.iconPin} />
-              <View style={styled.textAddress}>
-                <Text style={styled.deliveryTextShopName}>{"NAME"}</Text>
-                <Text>
-                  {`${"ADDRESS_LINE"} ${"SUB_DISCTRICT"} \n ${"DISTRICT"} ${"PROVINCE"} ${"POSTCODE"}`}
-                </Text>
-              </View>
-            </View>
+            {renderAddressList()}
             <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
             <TextInput
               style={styled.deliveryInputRemark}
@@ -78,7 +148,7 @@ export const ModalDeliveryMethod: React.FC<ModalDeliveryMethodProps> = ({
             />
           </View>
           <View style={styled.deliveryButtonContainer}>
-            <TouchableOpacity style={styled.deliveryButton}>
+            <TouchableOpacity style={styled.deliveryButton} onPress={handleConfirm}>
               <Text style={styled.deliveryButtonText}>ยืนยัน</Text>
             </TouchableOpacity>
           </View>
@@ -178,5 +248,12 @@ const styled = StyleSheet.create({
     width: 20,
     height: 20,
   },
-  textAddress: { marginLeft: 10 },
+  iconUnPin: {
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+    width: 20,
+    height: 20,
+  },
+  textAddress: { marginHorizontal: 10 },
 });
