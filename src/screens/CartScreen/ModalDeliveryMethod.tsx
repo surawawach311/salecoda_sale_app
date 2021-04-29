@@ -19,21 +19,21 @@ const ICONS: { [key: string]: any } = {
 };
 
 interface Props {
-  visible?: boolean;
   onClose?: () => void;
   onOk?: (value: Shipment) => void;
   availableMethods: string[];
   availableShipments: Shipment[];
   activeShipment?: string;
+  defaultRemark?: string;
 }
 
 export const ModalDeliveryMethod: React.FC<Props> = ({
-  visible,
   onClose,
   onOk,
   availableMethods,
   availableShipments,
   activeShipment,
+  defaultRemark,
 }) => {
   const [remark, setRemark] = useState("");
   const [method, setMethod] = useState("");
@@ -45,6 +45,9 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
     }
     if (activeShipment) {
       setActiveId(activeShipment);
+    }
+    if (defaultRemark !== undefined) {
+      setRemark(defaultRemark);
     }
   }, []);
 
@@ -108,7 +111,7 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
   };
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visible}>
+    <Modal animationType="slide" transparent={true} visible={true}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styled.container}
@@ -137,7 +140,7 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
           </View>
           <View style={styled.deliveryButtonContainer}>
             <TouchableOpacity
-              style={styled.deliveryButton}
+              style={activeId ? styled.deliveryButton : styled.disabbledDeliveryButton}
               onPress={handleConfirm}
               disabled={!activeId}
             >
@@ -227,6 +230,13 @@ const styled = StyleSheet.create({
     backgroundColor: "#4C95FF",
     justifyContent: "center",
     borderRadius: 8,
+  },
+  disabbledDeliveryButton: {
+    height: 50,
+    backgroundColor: "#4C95FF",
+    justifyContent: "center",
+    borderRadius: 8,
+    opacity: 0.5,
   },
   deliveryButtonText: {
     color: "#FFF",

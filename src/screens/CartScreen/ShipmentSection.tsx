@@ -8,9 +8,10 @@ import { Shipment } from "./Shipment";
 interface Props {
   shopId: string;
   onChange?: (value?: Shipment) => void;
+  withDefault?: boolean;
 }
 
-const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
+const ShipmentSection: React.FC<Props> = ({ shopId, onChange, withDefault }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<Shipment[]>([]);
   const [methods, setMethods] = useState<string[]>([]);
@@ -34,7 +35,7 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
           remark: "",
         }));
       });
-      selectDefault(availableMethods, availableShipments);
+      withDefault && selectDefault(availableMethods, availableShipments);
       setMethods(availableMethods);
       setData(availableShipments);
       setIsLoading(false);
@@ -80,14 +81,14 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
 
   return (
     <>
-      {!isLoading && (
+      {showModal && (
         <ModalDeliveryMethod
-          visible={showModal}
           onClose={handleCloseModal}
           availableMethods={methods}
           availableShipments={data}
           onOk={handleConfirmModal}
           activeShipment={selected?.id}
+          defaultRemark={selected?.remark}
         />
       )}
       <View style={styled.container}>
