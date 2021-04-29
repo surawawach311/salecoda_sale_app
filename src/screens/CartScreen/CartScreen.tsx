@@ -614,6 +614,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     onChange={(v) => {
                       if(v) handleShipmentChange(v)
                     }}
+                    withDefault={true}
                   />
                 </View>
               </ScrollView>

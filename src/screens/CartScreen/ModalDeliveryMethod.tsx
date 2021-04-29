@@ -72,10 +72,10 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
   };
 
   const renderMethodIcon = (m: string) => {
-    const activeOpac = m === method ? 1 : 0.5;
+    const activeOpac = m === method ? 1 : 0.3;
     return (
       <TouchableOpacity key={m} onPress={() => handleSelectMethod(m)}>
-        <View style={{ marginRight: 8, opacity: activeOpac }}>
+        <View style={{ marginRight: 16, opacity: activeOpac }}>
           <Image style={styled.iconClose} source={ICONS[m]} />
           <Text style={styled.deliveryTextIcon}>{SHIPPING_METHOD_MAPPING[m]}</Text>
         </View>
