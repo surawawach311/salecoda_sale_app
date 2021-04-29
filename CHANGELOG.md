@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.56.2] - 2020-04-29
+
+- Fixed product brand param passing between CartScreen and SpecialRequestScreen
+
 ## Fix [v1.56.1] - 2020-04-28
 
 - Fixed typp for product brand param in CartDataSource
