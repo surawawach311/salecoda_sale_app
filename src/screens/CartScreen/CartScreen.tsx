@@ -390,6 +390,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                             cart: cart,
                             shop: route.params.shop,
                             item: specialRequest,
+                            productBrand: route.params.productBrand,
                           })
                         }
                       >
@@ -419,6 +420,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         cart: cart,
                         shop: route.params.shop,
                         item: specialRequest,
+                        productBrand: route.params.productBrand,
                       })
                     }
                     style={styled.buttonSpecialRequestContainer}
