@@ -34,11 +34,23 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
           remark: "",
         }));
       });
+      selectDefault(availableMethods, availableShipments);
       setMethods(availableMethods);
       setData(availableShipments);
       setIsLoading(false);
     });
   }, []);
+
+  const selectDefault = (availableMethods: string[], availableShipments: Shipment[]) => {
+    if (availableMethods.length > 0) {
+      let m = availableMethods[0];
+      let s = availableShipments.find((x) => x.method === m);
+      if (s) {
+        setSelected(s);
+        onChange?.(s);
+      }
+    }
+  };
 
   const handleConfirmModal = (s: Shipment) => {
     setSelected(s);
@@ -68,22 +80,24 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange }) => {
 
   return (
     <>
-      <ModalDeliveryMethod
-        visible={showModal}
-        onClose={handleCloseModal}
-        availableMethods={methods}
-        availableShipments={data}
-        onOk={handleConfirmModal}
-        activeShipment={selected?.id}
-      />
+      {!isLoading && (
+        <ModalDeliveryMethod
+          visible={showModal}
+          onClose={handleCloseModal}
+          availableMethods={methods}
+          availableShipments={data}
+          onOk={handleConfirmModal}
+          activeShipment={selected?.id}
+        />
+      )}
       <View style={styled.container}>
         <View style={styled.headerDeliveryMethodtContainer}>
           <Text style={styled.textHeaderPayment}>สถานที่รับสินค้า/สถานที่จัดส่ง</Text>
-          {selected ? (
+          {selected && (
             <TouchableOpacity onPress={handleOpenModal}>
               <Text style={styled.textChageDeliveryMethod}>เปลี่ยน</Text>
             </TouchableOpacity>
-          ) : null}
+          )}
         </View>
         <View style={styled.line} />
         {isLoading ? (

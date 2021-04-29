@@ -236,10 +236,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     shop: ShopEntity,
     cart?: CartEntity
   ) => {
-    if (!shipment) {
-      alert("กรุณาเลือกสถานที่จัดส่ง");
-    } else if (!cart?.selected_payment) {
+    if (!cart?.selected_payment) {
       alert("กรุณาเลือกวิธีการชำระเงิน");
+    } else if (!shipment) {
+      alert("กรุณาเลือกสถานที่จัดส่ง");
     } else {
       OrderFacade.confirmOrder(
         userData.company,

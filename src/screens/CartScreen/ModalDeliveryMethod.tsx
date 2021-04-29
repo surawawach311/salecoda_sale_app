@@ -46,7 +46,7 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
     if (activeShipment) {
       setActiveId(activeShipment);
     }
-  }, [availableMethods]);
+  }, []);
 
   const handleConfirm = () => {
     if (activeId) {
@@ -116,7 +116,7 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
         <View style={styled.centerSubContainer}>
           <View style={styled.deliveryHeader}>
             <TouchableOpacity onPress={handleClose}>
-              <Image style={styled.iconClose} source={require("../../assets/close.png")} />
+              <Image style={styled.iconClose} source={require("../../../assets/close.png")} />
             </TouchableOpacity>
             <View style={styled.deliveryHeaderContainer}>
               <Text style={styled.deliveryTextHeader}>เลือกการจัดส่ง</Text>
