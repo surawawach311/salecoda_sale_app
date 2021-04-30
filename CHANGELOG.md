@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.57.0] - 2020-04-30
+
+- Added default address when switching shipping method on ModalDeliveryMethod
+
 ## Fix [v1.56.4] - 2020-04-30
 
 - Fixed prefix address in order screen
