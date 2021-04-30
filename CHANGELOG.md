@@ -2,9 +2,14 @@
 
 ## [Version - 1]
 
+## Fix [v1.56.4] - 2020-04-30
+
+- Fixed prefix address in order screen
+
 ## Fix [v1.56.3] - 2020-04-29
 
 - Fixed shipping method selection in CartScreen
+
 ## Fix [v1.56.2] - 2020-04-29
 
 - Fixed product brand param passing between CartScreen and SpecialRequestScreen
