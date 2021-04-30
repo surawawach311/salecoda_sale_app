@@ -52,7 +52,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
           />
           {address ? (
             <Text style={styled.textCompanyAddress}>
-              {`${address.name} \n${address.address} ตำบล${address.sub_district} อำเภอ${address.district} ${address.province} ${address.post_code} `}
+              {`${address.name} \n${address.address} ${address.sub_district} ${address.district} ${address.province} ${address.post_code} `}
             </Text>
           ) : (
             <Text style={styled.textCompanyAddress}>undefined</Text>
