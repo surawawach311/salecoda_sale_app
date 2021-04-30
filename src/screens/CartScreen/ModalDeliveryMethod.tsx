@@ -42,6 +42,7 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
   useEffect(() => {
     if (availableMethods.length > 0) {
       setMethod(availableMethods[0]);
+      setDefaultAddrForMethod(availableMethods[0])
     }
     if (activeShipment) {
       setActive(activeShipment);
