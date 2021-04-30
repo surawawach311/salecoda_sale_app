@@ -65,10 +65,18 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
 
   const handleSelectMethod = (m: string) => {
     setMethod(m);
+    setDefaultAddrForMethod(m);
   };
 
   const handleSelectShipment = (s: Shipment) => {
     setActive(s);
+  };
+
+  const setDefaultAddrForMethod = (m: string) => {
+    const addresses = availableShipments.filter((s) => s.method === m);
+    if (addresses.length > 0) {
+      setActive(addresses[0]);
+    }
   };
 
   const renderMethodIcon = (m: string) => {
