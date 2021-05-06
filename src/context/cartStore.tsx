@@ -1,40 +1,37 @@
-import React, { createContext, useReducer, Dispatch, useState } from "react";
-import { productReducer, ProductActions } from "../context/cartReducer";
-import { CartDataSource } from "../datasource/CartDataSource";
+import React, { createContext, useReducer, Dispatch } from "react";
+import { cartReducer, CartActions } from "../context/cartReducer";
 
-type ProductType = {
+type CartType = {
   id: string;
   quantity: number;
   shopId: string;
 };
 
 type InitialStateType = {
-  products: ProductType[];
+  carts: CartType[];
 };
 
 const initialState = {
-  products: []
+  carts: []
 };
 
 const CartContext = createContext<{
   state: InitialStateType;
-  dispatch: Dispatch<ProductActions>;
+  dispatch: Dispatch<CartActions>;
 }>({
   state: initialState,
   dispatch: () => null,
 });
 
 const mainReducer = (
-  { products }: InitialStateType,
-  action: ProductActions
+  { carts }: InitialStateType,
+  action: CartActions
 ) => ({
-  products: productReducer(products, action),
+  carts: cartReducer(carts, action),
 });
 
 const CartProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(mainReducer, initialState);
-  const [cart,setCart] = useState<ProductType[]>([])
-
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>

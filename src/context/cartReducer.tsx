@@ -11,18 +11,16 @@ type ActionMap<M extends { [index: string]: any }> = {
 
 export enum Types {
   Adjust = "ADJUST",
-  Delete = "DELETE_PRODUCT",
+  Delete = "DELETE",
 }
 
-// Product
-
-type ProductType = {
+type CartType = {
   id: string;
   quantity: number;
   shopId: string;
 };
 
-type ProductPayload = {
+type CartPayload = {
   [Types.Adjust]: {
     id: string;
     quantity: number;
@@ -34,12 +32,9 @@ type ProductPayload = {
   };
 };
 
-export type ProductActions = ActionMap<ProductPayload>[keyof ActionMap<ProductPayload>];
+export type CartActions = ActionMap<CartPayload>[keyof ActionMap<CartPayload>];
 
-export const productReducer = (
-  state: ProductType[],
-  action: ProductActions
-) => {
+export const cartReducer = (state: CartType[], action: CartActions) => {
   switch (action.type) {
     case Types.Adjust:
       return [
@@ -53,35 +48,12 @@ export const productReducer = (
     case Types.Delete:
       return [
         ...state.filter(
-          (product) =>
-            product.id !== action.payload.id &&
-            product.shopId == action.payload.shopId
+          (item) =>
+            item.id !== action.payload.id &&
+            item.shopId == action.payload.shopId
         ),
       ];
     default:
       return state;
   }
 };
-
-// ShoppingCart
-
-// type ShoppingCartPayload = {
-//   [Types.Increase]: undefined;
-//   [Types.Dencrease]: undefined;
-// };
-
-// export type ShoppingCartActions = ActionMap<ShoppingCartPayload>[keyof ActionMap<ShoppingCartPayload>];
-
-// export const shoppingCartReducer = (
-//   state: number,
-//   action: ProductActions | ShoppingCartActions
-// ) => {
-//   switch (action.type) {
-//     case Types.Increase:
-//       return state + 1;
-//     case Types.Dencrease:
-//       return state - 1;
-//     default:
-//       return state;
-//   }
-// };
