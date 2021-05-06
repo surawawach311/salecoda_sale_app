@@ -1,6 +1,6 @@
 import { useIsFocused } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Button } from "native-base";
+import { Button, Item } from "native-base";
 import React, { useContext, useEffect, useState } from "react";
 import {
   View,
@@ -45,18 +45,16 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
       route.params.shop.id,
       route.params.productBrand
     ).then((res) => {
-      const itemQuantity = res.items
-        .filter((item) => item.id === route.params.product.id)
-        .map((item) => {
-          return item.quantity;
-        });
-      if (itemQuantity[0] > 0) {
-        setQuantity(itemQuantity[0]);
+      const itemQuantity = res.items.find(
+        (item) => item.id === route.params.product.id
+      );
+      if (itemQuantity) {
+        setQuantity(itemQuantity.quantity);
         dispatch({
           type: Types.Adjust,
           payload: {
             id: route.params.product.id,
-            quantity: itemQuantity[0],
+            quantity: itemQuantity.quantity,
             shopId: route.params.shop.id,
           },
         });
