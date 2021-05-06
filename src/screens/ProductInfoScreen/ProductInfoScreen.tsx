@@ -1,5 +1,7 @@
+import { useIsFocused } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useEffect, useState } from "react";
+import { Button } from "native-base";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -11,6 +13,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { Types } from "../../context/cartReducer";
+import { CartContext } from "../../context/cartStore";
 import { CartDataSource } from "../../datasource/CartDataSource";
 import { ProductDataSource } from "../../datasource/ProductDataSource";
 import { ProductEntity, PromotionEntity } from "../../entities/ProductEntity";
@@ -28,10 +32,39 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
 }) => {
   const [quantity, setQuantity] = useState(0);
   const [product, setProduct] = useState<ProductEntity>();
+  const { state, dispatch } = useContext(CartContext);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
+    initialQuantity();
     getProduct();
-  }, []);
+  }, [isFocused]);
+
+  const initialQuantity = () => {
+    CartDataSource.getCartByShop(
+      route.params.shop.id,
+      route.params.productBrand
+    ).then((res) => {
+      const itemQuantity = res.items
+        .filter((item) => item.id === route.params.product.id)
+        .map((item) => {
+          return item.quantity;
+        });
+      if (itemQuantity[0] > 0) {
+        setQuantity(itemQuantity[0]);
+        dispatch({
+          type: Types.Adjust,
+          payload: {
+            id: route.params.product.id,
+            quantity: itemQuantity[0],
+            shopId: route.params.shop.id,
+          },
+        });
+      } else {
+        setQuantity(0);
+      }
+    });
+  };
 
   const getProduct = async () => {
     await ProductDataSource.getNameProduct(
@@ -44,6 +77,14 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
 
   const addCart = (action: string) => {
     const nextQuantity = action === "plus" ? quantity + 5 : quantity - 5;
+    dispatch({
+      type: Types.Adjust,
+      payload: {
+        id: route.params.product.id,
+        quantity: nextQuantity,
+        shopId: route.params.shop.id,
+      },
+    });
     setQuantity(nextQuantity);
     CartDataSource.addToCartByShopId(
       route.params.shop.id,
@@ -51,7 +92,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
       nextQuantity,
       undefined,
       undefined,
-      route.params.productBrand,
+      route.params.productBrand
     );
   };
 
@@ -64,7 +105,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
         quantity,
         undefined,
         undefined,
-        route.params.productBrand,
+        route.params.productBrand
       );
     } else {
       alert("Number Only");
@@ -196,7 +237,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                     keyboardType="number-pad"
                   />
                   <TouchableOpacity
-                    onPress={async () => {
+                    onPress={() => {
                       addCart("plus");
                     }}
                   >
@@ -208,7 +249,10 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                 </View>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate("Cart", { shop: route.params.shop, productBrand: route.params.productBrand })
+                    navigation.navigate("Cart", {
+                      shop: route.params.shop,
+                      productBrand: route.params.productBrand,
+                    })
                   }
                 >
                   <View style={styled.buttonCheckout}>
