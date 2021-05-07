@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.58.0] - 2020-04-06
+
+- Added cart store and enhance flow cart
+
 ## Enhance [v1.57.0] - 2020-04-30
 
 - Added default address when switching shipping method on ModalDeliveryMethod
