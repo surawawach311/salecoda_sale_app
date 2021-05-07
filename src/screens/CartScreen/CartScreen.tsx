@@ -37,8 +37,10 @@ import PremiumCard from "../../components/PremiumCard";
 import { AccrodionPriceModel } from "../../models/AccrodionPriceModel";
 import { CheckBox } from "native-base";
 import { UserDataContext } from "../../provider/UserDataProvider";
-import ShipmentSection from "./ShipmentSection"
-import { Shipment } from "./Shipment"
+import ShipmentSection from "./ShipmentSection";
+import { Shipment } from "./Shipment";
+import { CartContext } from "../../context/cartStore";
+import { Types } from "../../context/cartReducer";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
@@ -55,6 +57,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const userDataStore = useContext(UserDataContext);
   const { userData } = userDataStore;
+  const { state, dispatch } = useContext(CartContext);
 
   useEffect(() => {
     getCart();
@@ -75,32 +78,42 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const getCart = async () => {
-    CartDataSource.getCartByShop(route.params.shop.id, route.params.productBrand).then(
-      (res: CartEntity) => {
-        setCart(res);
-        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
-          res.received_special_request_discounts
-        );
-        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-          res.received_discounts.filter((item) => item.item_id != null)
-        );
-        setSpecialRequest(discountSpecial);
-        setDiscoutPromo(discountProduct);
-        setUseSubsudize(false);
-      }
-    );
+    CartDataSource.getCartByShop(
+      route.params.shop.id,
+      route.params.productBrand
+    ).then((res: CartEntity) => {
+      setCart(res);
+      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+        res.received_special_request_discounts
+      );
+      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+        res.received_discounts.filter((item) => item.item_id != null)
+      );
+      setSpecialRequest(discountSpecial);
+      setDiscoutPromo(discountProduct);
+      setUseSubsudize(false);
+    });
   };
 
   const increaseProduct = async (itemId: string, quantity: number) => {
+    dispatch({
+      type: Types.Adjust,
+      payload: {
+        id: itemId,
+        quantity: quantity + 1,
+        shopId: route.params.shop.id,
+      },
+    });
     await CartDataSource.addToCartByShopId(
       route.params.shop.id,
       itemId,
       quantity + 1,
       payment,
       useSubsidize,
-      route.params.productBrand,
+      route.params.productBrand
     ).then((res: CartEntity) => {
       setCart(res);
+
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
         res.received_special_request_discounts
       );
@@ -119,7 +132,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       quantity - 1,
       payment,
       useSubsidize,
-      route.params.productBrand,
+      route.params.productBrand
     ).then((res: CartEntity) => {
       setCart(res);
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -142,7 +155,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         quantity,
         payment,
         useSubsidize,
-        route.params.productBrand,
+        route.params.productBrand
       ).then((res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -160,12 +173,19 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const removeItem = async (itemId: string) => {
+    dispatch({
+      type: Types.Delete,
+      payload: {
+        id: itemId,
+        shopId: route.params.shop.id,
+      },
+    });
     CartDataSource.removeItem(
       route.params.shop.id,
       itemId,
       payment,
       useSubsidize,
-      route.params.productBrand,
+      route.params.productBrand
     ).then((res: CartEntity) => {
       setCart(res);
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -180,7 +200,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const handleShipmentChange = (s: Shipment) => {
-    setShipment(s)
+    setShipment(s);
   };
 
   const handlePayment = (payment: string) => {
@@ -190,7 +210,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         route.params.shop.id,
         payment,
         useSubsidize,
-        route.params.productBrand,
+        route.params.productBrand
       ).then((res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -208,7 +228,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         route.params.shop.id,
         payment,
         useSubsidize,
-        route.params.productBrand,
+        route.params.productBrand
       ).then((res: CartEntity) => {
         setCart(res);
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
@@ -224,18 +244,18 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const handleUseSubsidize = (b: boolean) => {
-    CartDataSource.calculate(route.params.shop.id, payment, b, route.params.productBrand).then(
-      (res: CartEntity) => {
-        setCart(res);
-        setUseSubsudize(b);
-      }
-    );
+    CartDataSource.calculate(
+      route.params.shop.id,
+      payment,
+      b,
+      route.params.productBrand
+    ).then((res: CartEntity) => {
+      setCart(res);
+      setUseSubsudize(b);
+    });
   };
 
-  const confirmOrder = (
-    shop: ShopEntity,
-    cart?: CartEntity
-  ) => {
+  const confirmOrder = (shop: ShopEntity, cart?: CartEntity) => {
     if (!cart?.selected_payment) {
       alert("กรุณาเลือกวิธีการชำระเงิน");
     } else if (!shipment) {
@@ -247,7 +267,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         shipment,
         cart,
         cart.subsidize_discount,
-        route.params.productBrand,
+        route.params.productBrand
       ).then((res: OrderEntity) => {
         CartDataSource.clearCart(shop.id, route.params.productBrand);
         navigation.navigate("OrderSuccess", { data: res, cart });
@@ -607,12 +627,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       {currencyFormat(cart.total_price, 2)}
                     </Text>
                   </View>
-                </View>     
+                </View>
                 <View style={styled.warpDelivery}>
-                  <ShipmentSection 
-                    shopId={route.params.shop.id} 
+                  <ShipmentSection
+                    shopId={route.params.shop.id}
                     onChange={(v) => {
-                      if(v) handleShipmentChange(v)
+                      if (v) handleShipmentChange(v);
                     }}
                     withDefault={true}
                   />
