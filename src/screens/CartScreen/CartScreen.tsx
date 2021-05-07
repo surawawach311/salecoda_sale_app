@@ -511,9 +511,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   >
                     <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
                     <Text style={{ color: "#616A7B" }}>
-                      {cart.available_subsidize > 0
-                        ? currencyFormat(cart.available_subsidize, 2)
-                        : ""}
+                      {useSubsidize
+                        ? currencyFormat(
+                            cart.available_subsidize - cart.usable_subsidize,
+                            2
+                          )
+                        : currencyFormat(cart.available_subsidize, 2)}
                     </Text>
                   </View>
                   <View

@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.59.0] - 2020-04-07
+
+- Added calculate co wallet
+
 ## Enhance [v1.58.0] - 2020-04-06
 
 - Added cart store and enhance flow cart
