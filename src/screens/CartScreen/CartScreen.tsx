@@ -52,6 +52,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   );
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([]);
   const [useSubsidize, setUseSubsudize] = useState(false);
+  const [coWallet, setCoWallet] = useState<number>(0);
   const isFocused = useIsFocused();
   const userDataStore = useContext(UserDataContext);
   const { userData } = userDataStore;
@@ -75,20 +76,22 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const getCart = async () => {
-    CartDataSource.getCartByShop(route.params.shop.id, route.params.productBrand).then(
-      (res: CartEntity) => {
-        setCart(res);
-        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
-          res.received_special_request_discounts
-        );
-        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-          res.received_discounts.filter((item) => item.item_id != null)
-        );
-        setSpecialRequest(discountSpecial);
-        setDiscoutPromo(discountProduct);
-        setUseSubsudize(false);
-      }
-    );
+    CartDataSource.getCartByShop(
+      route.params.shop.id,
+      route.params.productBrand
+    ).then((res: CartEntity) => {
+      setCart(res);
+      setCoWallet(res.available_subsidize);
+      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+        res.received_special_request_discounts
+      );
+      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+        res.received_discounts.filter((item) => item.item_id != null)
+      );
+      setSpecialRequest(discountSpecial);
+      setDiscoutPromo(discountProduct);
+      setUseSubsudize(false);
+    });
   };
 
   const increaseProduct = async (itemId: string, quantity: number) => {
@@ -224,12 +227,22 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   };
 
   const handleUseSubsidize = (b: boolean) => {
-    CartDataSource.calculate(route.params.shop.id, payment, b, route.params.productBrand).then(
-      (res: CartEntity) => {
-        setCart(res);
-        setUseSubsudize(b);
-      }
-    );
+    if (coWallet && cart?.usable_subsidize && b && cart?.available_subsidize) {
+      const remainWallet = coWallet - cart?.usable_subsidize;
+      setCoWallet(remainWallet);
+    } else {
+      let wallet = cart?.available_subsidize ? cart.available_subsidize : 0;
+      setCoWallet(wallet);
+    }
+    CartDataSource.calculate(
+      route.params.shop.id,
+      payment,
+      b,
+      route.params.productBrand
+    ).then((res: CartEntity) => {
+      setCart(res);
+      setUseSubsudize(b);
+    });
   };
 
   const confirmOrder = (
@@ -491,9 +504,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   >
                     <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
                     <Text style={{ color: "#616A7B" }}>
-                      {cart.available_subsidize > 0
-                        ? currencyFormat(cart.available_subsidize, 2)
-                        : ""}
+                      {coWallet > 0 ? currencyFormat(coWallet, 2) : ""}
                     </Text>
                   </View>
                   <View
