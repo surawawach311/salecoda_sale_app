@@ -5,7 +5,7 @@ export interface CartEntity {
     summary_qty_with_unit: QuantityWithUnit[]
     available_promotions: PromotionCart[]
     applied_promotions: AppliedPromotionCart[]
-    available_payments: []
+    available_payments: paymentCartEntity[]
     selected_payment: paymentCartEntity
     before_discount: number
     total_discount: number
