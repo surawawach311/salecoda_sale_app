@@ -4,6 +4,10 @@
 
 ## Enhance [v1.59.0] - 2020-04-07
 
+- set default payment method
+
+## Enhance [v1.59.0] - 2020-04-07
+
 - Added calculate co wallet
 
 ## Enhance [v1.58.0] - 2020-04-06

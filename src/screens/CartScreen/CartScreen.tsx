@@ -41,6 +41,7 @@ import ShipmentSection from "./ShipmentSection";
 import { Shipment } from "./Shipment";
 import { CartContext } from "../../context/cartStore";
 import { Types } from "../../context/cartReducer";
+import PaymentSection from "./PaymentSection";
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, "Cart">;
 
@@ -57,7 +58,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const userDataStore = useContext(UserDataContext);
   const { userData } = userDataStore;
-  const { state, dispatch } = useContext(CartContext);
+  const { dispatch } = useContext(CartContext);
 
   useEffect(() => {
     getCart();
@@ -92,6 +93,17 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       setSpecialRequest(discountSpecial);
       setDiscoutPromo(discountProduct);
       setUseSubsudize(false);
+      if (res?.available_payments && res?.available_payments.length <= 1) {
+        res?.available_payments.map((item) => {
+          setPayment(item.id);
+          CartDataSource.calculate(
+            route.params.shop.id,
+            item.id,
+            useSubsidize,
+            route.params.productBrand
+          ).then((res) => setCart(res));
+        });
+      }
     });
   };
 
@@ -447,58 +459,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     </View>
                   </View>
                 ) : null}
-                <View style={styled.paymentContainer}>
-                  <Text style={styled.textHeaderPayment}>วิธีชำระเงิน</Text>
-                  <View style={styled.paymentMethod}>
-                    {cart.available_payments.map(
-                      (method: paymentCartEntity) => {
-                        return method.name == "เงินสด" ? (
-                          <View
-                            key={method.name}
-                            style={styled.methodChoiceContainer}
-                          >
-                            <TouchableWithoutFeedback
-                              onPress={() => handlePayment("cash")}
-                            >
-                              {payment == "cash" ? (
-                                <View style={styled.iconPin} />
-                              ) : (
-                                <View style={styled.iconUnPin} />
-                              )}
-                            </TouchableWithoutFeedback>
-                            <Text style={styled.textBodyPayment}>
-                              {method.name}
-                              {method.discount_rate
-                                ? `(รับส่วนลดเพิ่ม ${method.discount_rate} %)`
-                                : null}
-                            </Text>
-                          </View>
-                        ) : (
-                          <View
-                            key={method.name}
-                            style={styled.methodChoiceContainer}
-                          >
-                            <TouchableWithoutFeedback
-                              onPress={() => handlePayment("credit")}
-                            >
-                              {payment == "credit" ? (
-                                <View style={styled.iconPin} />
-                              ) : (
-                                <View style={styled.iconUnPin} />
-                              )}
-                            </TouchableWithoutFeedback>
-
-                            <Text style={styled.textBodyPayment}>
-                              {method.name}
-                              {/* (คงเหลือ{" "}
-                              {currencyFormat(method.remain_credit, 2)}) */}
-                            </Text>
-                          </View>
-                        );
-                      }
-                    )}
-                  </View>
-                </View>
+                <PaymentSection
+                  payments={cart.available_payments}
+                  onChange={(e) => {
+                    handlePayment(e);
+                  }}
+                />
                 <View
                   style={{ paddingHorizontal: 15, backgroundColor: "white" }}
                 >
