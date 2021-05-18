@@ -27,8 +27,9 @@ export type PurchaseStackParamList = {
     product: ProductEntity;
     shop: ShopEntity;
     productBrand?: string;
+    company: string;
   };
-  Cart: { shop: ShopEntity; productBrand?: string };
+  Cart: { shop: ShopEntity; productBrand?: string; company: string };
   OrderSuccess: { data: OrderEntity; cart?: CartEntity };
   SuccessDetail: { data: OrderEntity };
   SpecialRequest: {
@@ -36,6 +37,7 @@ export type PurchaseStackParamList = {
     shop: ShopEntity;
     item: { item: string; price: number }[];
     productBrand?: string;
+    company: string;
   };
 };
 

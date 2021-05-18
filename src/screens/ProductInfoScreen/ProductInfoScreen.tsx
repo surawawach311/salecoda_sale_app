@@ -42,6 +42,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
 
   const initialQuantity = () => {
     CartDataSource.getCartByShop(
+      route.params.company,
       route.params.shop.id,
       route.params.productBrand
     ).then((res) => {
@@ -85,6 +86,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
     });
     setQuantity(nextQuantity);
     CartDataSource.addToCartByShopId(
+      route.params.company,
       route.params.shop.id,
       route.params.product.id,
       nextQuantity,
@@ -98,6 +100,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
     const regexp = /^[0-9\b]+$/;
     if (quantity.toString() === "" || regexp.test(quantity.toString())) {
       CartDataSource.addToCartByShopId(
+        route.params.company,
         route.params.shop.id,
         route.params.product.id,
         quantity,
@@ -250,6 +253,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                     navigation.navigate("Cart", {
                       shop: route.params.shop,
                       productBrand: route.params.productBrand,
+                      company: route.params.company,
                     })
                   }
                 >

@@ -2,15 +2,20 @@
 
 ## [Version - 1]
 
-## Enhance [v1.59.0] - 2020-04-07
+## Enhance [v1.61.0] - 2020-05-17
+
+- Added company param to api cart
+- Updated company param passing throughout PurchaseStack navigation
+
+## Enhance [v1.60.0] - 2020-05-07
 
 - set default payment method
 
-## Enhance [v1.59.0] - 2020-04-07
+## Enhance [v1.59.0] - 2020-05-07
 
 - Added calculate co wallet
 
-## Enhance [v1.58.0] - 2020-04-06
+## Enhance [v1.58.0] - 2020-05-06
 
 - Added cart store and enhance flow cart
 
