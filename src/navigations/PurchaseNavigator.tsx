@@ -67,6 +67,7 @@ const PurchaseNavigator: React.FC = () => {
                   navigation.navigate("Cart", {
                     shop: route.params.shop,
                     productBrand: route.params.productBrand,
+                    company: route.params.company,
                   })
                 }
               >
@@ -101,6 +102,7 @@ const PurchaseNavigator: React.FC = () => {
                   navigation.navigate("Cart", {
                     shop: route.params.shop,
                     productBrand: route.params.productBrand,
+                    company: route.params.company,
                   })
                 }
               >
