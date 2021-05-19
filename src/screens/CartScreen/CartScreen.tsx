@@ -610,6 +610,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 </View>
                 <View style={styled.warpDelivery}>
                   <ShipmentSection
+                    company={route.params.company}
                     shopId={route.params.shop.id}
                     onChange={(v) => {
                       if (v) handleShipmentChange(v);

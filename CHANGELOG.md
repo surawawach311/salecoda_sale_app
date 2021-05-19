@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.62.0] - 2020-05-19
+
+- Added company param to api get shipments
+
 ## Fix [v1.61.1] - 2020-05-18
 
 - Fixed missng company param passing for some screens

@@ -5,7 +5,7 @@ import { ItemSpecialRequest } from "../models/SpecialRequestModel";
 import { httpClient } from "../services/HttpClient";
 
 export class CartDataSource {
-    static getCartByShop(company:string, shopId: string, productBrand?: string): Promise<CartEntity> {
+    static getCartByShop(company: string, shopId: string, productBrand?: string): Promise<CartEntity> {
         const params = {
             shopId: shopId,
             company,
@@ -17,7 +17,7 @@ export class CartDataSource {
             .catch(error => console.log(error.response.data))
     }
 
-    static addToCartByShopId(company:string, shopId: string, itemId: string, quantity: number, payment?: string, useSubsidize?: boolean, productBrand?: string) {
+    static addToCartByShopId(company: string, shopId: string, itemId: string, quantity: number, payment?: string, useSubsidize?: boolean, productBrand?: string) {
         const data = {
             action: "adjust",
             item_id: itemId,
@@ -36,7 +36,7 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static removeItem(company:string, shopId: string, itemId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
+    static removeItem(company: string, shopId: string, itemId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
         const data = {
             action: "remove",
             item_id: itemId,
@@ -54,7 +54,7 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static calculate(company:string, shopId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
+    static calculate(company: string, shopId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
         const data = {
             action: "calculate",
             payment_method: payment,
@@ -71,7 +71,7 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static calculateSpecialRequest(company:string, shopId: string, discounts: ItemSpecialRequest[], remark: string, productBrand?: string) {
+    static calculateSpecialRequest(company: string, shopId: string, discounts: ItemSpecialRequest[], remark: string, productBrand?: string) {
         let arr = { discounts, remark }
         const params = {
             shopId: shopId,
@@ -92,7 +92,7 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static addSpecialRequest(company:string, shopId: string, specialId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
+    static addSpecialRequest(company: string, shopId: string, specialId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
         const data = {
             action: "add_special_request",
             special_request_id: specialId,
@@ -110,7 +110,7 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static clearSpecialRequest(company:string, shopId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
+    static clearSpecialRequest(company: string, shopId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
         const data = {
             action: "remove_special_request",
             payment_method: payment,
@@ -127,7 +127,7 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static clearCart(company:string, shopId: string, productBrand?: string) {
+    static clearCart(company: string, shopId: string, productBrand?: string) {
         const data = {
             action: "clear",
         }
@@ -142,9 +142,10 @@ export class CartDataSource {
             .catch(error => console.log(error))
     }
 
-    static getShipment(shopId: string): Promise<ShipmentEntity> {
+    static getShipment(company: string, shopId: string): Promise<ShipmentEntity> {
+        const params = { company }
         return httpClient
-            .get(`${baseURL}/v1/sellcoda/customers/dealers/${shopId}/available_shipments`)
+            .get(`${baseURL}/v1/sellcoda/customers/dealers/${shopId}/available_shipments`, { params })
             .then(res => res.data)
     }
 }

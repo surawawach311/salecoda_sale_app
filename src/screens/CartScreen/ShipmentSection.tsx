@@ -6,12 +6,13 @@ import { CartDataSource } from "../../datasource/CartDataSource";
 import { Shipment } from "./Shipment";
 
 interface Props {
+  company: string;
   shopId: string;
   onChange?: (value?: Shipment) => void;
   withDefault?: boolean;
 }
 
-const ShipmentSection: React.FC<Props> = ({ shopId, onChange, withDefault }) => {
+const ShipmentSection: React.FC<Props> = ({ company, shopId, onChange, withDefault }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<Shipment[]>([]);
   const [methods, setMethods] = useState<string[]>([]);
@@ -19,7 +20,7 @@ const ShipmentSection: React.FC<Props> = ({ shopId, onChange, withDefault }) => 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    CartDataSource.getShipment(shopId).then((d) => {
+    CartDataSource.getShipment(company, shopId).then((d) => {
       const availableMethods: string[] = d.available_shipments.map((s) => s.shipping_method);
       const availableShipments: Shipment[] = d.available_shipments.flatMap((s) => {
         return s.addresses.map((a, i) => ({
