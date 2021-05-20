@@ -1,4 +1,4 @@
-import { baseURL, BASE_URL_POPORING, BASE_URL_WHISPER } from "../config/config";
+import { BASE_URL_SOHEE, BASE_URL_POPORING, BASE_URL_WHISPER } from "../config/config";
 import { OrderEntity } from "../entities/OrderEntity";
 import { OrderModel } from "../models/OrderModel";
 import { httpClient } from "../services/HttpClient";

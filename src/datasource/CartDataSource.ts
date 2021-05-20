@@ -1,4 +1,4 @@
-import { baseURL } from "../config/config";
+import { BASE_URL_SOHEE } from "../config/config";
 import { CartEntity } from "../entities/CartEntity";
 import { ShipmentEntity } from "../entities/ShipmentEntity";
 import { ItemSpecialRequest } from "../models/SpecialRequestModel";
@@ -12,7 +12,7 @@ export class CartDataSource {
             ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
-            .get(`${baseURL}/v1/sellcoda/cart`, { params })
+            .get(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, { params })
             .then(res => res.data)
             .catch(error => console.log(error.response.data))
     }
@@ -31,7 +31,7 @@ export class CartDataSource {
             ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
-            .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
+            .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
             .then(res => res.data)
             .catch(error => console.log(error))
     }
@@ -49,7 +49,7 @@ export class CartDataSource {
             ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
-            .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
+            .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
             .then(res => res.data)
             .catch(error => console.log(error))
     }
@@ -66,7 +66,7 @@ export class CartDataSource {
             ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
-            .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
+            .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
             .then(res => res.data)
             .catch(error => console.log(error))
     }
@@ -79,7 +79,7 @@ export class CartDataSource {
             ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
-            .post(`${baseURL}/v1/sellcoda/cart/calculate_special_request`, arr, { params })
+            .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart/calculate_special_request`, arr, { params })
             .then(res => res.data)
             .catch(error => console.log(error))
     }
@@ -87,7 +87,7 @@ export class CartDataSource {
     static createSpecialRequest(shopId: string, discounts: ItemSpecialRequest[], remark: string): Promise<string> {
         let arr = { discounts, remark }
         return httpClient
-            .post(`${baseURL}/v1/sellcoda/cart/special_request?shopId=${shopId}`, arr)
+            .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart/special_request?shopId=${shopId}`, arr)
             .then(res => res.data.id)
             .catch(error => console.log(error))
     }
@@ -105,7 +105,7 @@ export class CartDataSource {
             ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
-            .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
+            .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
             .then(res => res.data)
             .catch(error => console.log(error))
     }
@@ -122,7 +122,7 @@ export class CartDataSource {
             ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
-            .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
+            .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
             .then(res => res.data)
             .catch(error => console.log(error))
     }
@@ -137,7 +137,7 @@ export class CartDataSource {
             ...(productBrand ? { productBrand: productBrand } : {}),
         }
         return httpClient
-            .post(`${baseURL}/v1/sellcoda/cart`, data, { params })
+            .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
             .then(res => res.data)
             .catch(error => console.log(error))
     }
@@ -145,7 +145,7 @@ export class CartDataSource {
     static getShipment(company: string, shopId: string): Promise<ShipmentEntity> {
         const params = { company }
         return httpClient
-            .get(`${baseURL}/v1/sellcoda/customers/dealers/${shopId}/available_shipments`, { params })
+            .get(`${BASE_URL_SOHEE}/v1/sellcoda/customers/dealers/${shopId}/available_shipments`, { params })
             .then(res => res.data)
     }
 }
