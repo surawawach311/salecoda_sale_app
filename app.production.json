@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "morroc - production",
+    "slug": "morroc-production",
+    "extra": {
+      "environment": "production",
+      "apiUrl": "https://app.iconkaset.com"
+    },
+    "icon": "./assets/icon.png",
+    "android": {
+      "package": "com.iconkaset.morroc"
+    }
+  }
+}

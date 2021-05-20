@@ -1,11 +1,11 @@
 import { UserEntity } from "../entities/userEntity"
-import { baseURL, BASE_URL_NPC, baseURL_key_of_underground_v1 } from "../config/develop-config";
+import { BASE_URL_SOHEE, BASE_URL_NPC, BASE_URL_KEY_OF_UNDERGROUND } from "../config/config";
 import { TokenEntity } from "../entities/TokenEntity";
 import { httpClient } from "../services/HttpClient";
 
 export class VerifiesDataSource {
     static verifyPhoneNo(tel: string): Promise<UserEntity> {
-        return httpClient.post(`${baseURL}/v1/sellcoda/staffs/verify_mobile`, { 'telephone': tel })
+        return httpClient.post(`${BASE_URL_SOHEE}/v1/sellcoda/staffs/verify_mobile`, { 'telephone': tel })
             .then((response) => {
                 return response.data;
             })
@@ -27,7 +27,7 @@ export class VerifiesDataSource {
 
     static login(userProfile: UserEntity): Promise<TokenEntity> {
         return httpClient
-            .post(`${baseURL_key_of_underground_v1}/sellcoda/auth/login/mobile`,
+            .post(`${BASE_URL_KEY_OF_UNDERGROUND}/v1/sellcoda/auth/login/mobile`,
                 {
                     'user_id': userProfile.id,
                     'name': userProfile.name,
@@ -45,7 +45,7 @@ export class VerifiesDataSource {
 
     static getProfile(): Promise<UserEntity> {
         return httpClient
-            .get(`${baseURL}/v1/sellcoda/staffs/profile`)
+            .get(`${BASE_URL_SOHEE}/v1/sellcoda/staffs/profile`)
             .then((response) => {
                 return response.data
             })
