@@ -1,5 +1,5 @@
 import { UserEntity } from "../entities/userEntity"
-import { baseURL, BASE_URL_NPC, baseURL_key_of_underground_v1 } from "../config/develop-config";
+import { baseURL, BASE_URL_NPC, baseURL_key_of_underground_v1 } from "../config/config";
 import { TokenEntity } from "../entities/TokenEntity";
 import { httpClient } from "../services/HttpClient";
 

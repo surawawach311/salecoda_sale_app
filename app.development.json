@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "morroc - dev",
+    "slug": "morroc",
+    "extra": {
+      "environment": "development",
+      "apiUrl": "https://dev-app.iconkaset.com"
+    },
+    "icon": "./assets/icon.png",
+    "android": {
+      "package": "com.iconkaset.dev.morroc"
+    }
+  }
+}

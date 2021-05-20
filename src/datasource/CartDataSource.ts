@@ -1,4 +1,4 @@
-import { baseURL } from "../config/develop-config";
+import { baseURL } from "../config/config";
 import { CartEntity } from "../entities/CartEntity";
 import { ShipmentEntity } from "../entities/ShipmentEntity";
 import { ItemSpecialRequest } from "../models/SpecialRequestModel";

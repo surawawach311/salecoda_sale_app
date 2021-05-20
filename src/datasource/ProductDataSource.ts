@@ -1,4 +1,4 @@
-import { baseURL } from "../config/develop-config";
+import { baseURL } from "../config/config";
 import { ProductEntity } from "../entities/ProductEntity";
 import { httpClient } from "../services/HttpClient";
 
