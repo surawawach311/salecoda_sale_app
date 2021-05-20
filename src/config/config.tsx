@@ -11,4 +11,4 @@ export const BASE_URL_DARK_FRAME = `${API_URL}/dark_frame`
 export const BASE_URL_WHISPER = `${API_URL}/whisper`
 export const BASE_URL_DEVILING = `${API_URL}`
 export const BASE_URL_NPC = `${API_URL}/npc`
-export const BASE_URL_KEY_OF_UNDERGROUND = `${API_URL}/key_of_underground/v1`
+export const BASE_URL_KEY_OF_UNDERGROUND = `${API_URL}/key_of_underground`
