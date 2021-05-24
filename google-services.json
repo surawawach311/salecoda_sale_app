@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "427194649680",
+    "project_id": "iconkaset-app",
+    "storage_bucket": "iconkaset-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427194649680:android:14e4d5411186497c1fd555",
+        "android_client_info": {
+          "package_name": "com.iconkaset.alberta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427194649680:android:894b2d6a529921921fd555",
+        "android_client_info": {
+          "package_name": "com.iconkaset.dev.alberta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427194649680:android:69f90516087b23f41fd555",
+        "android_client_info": {
+          "package_name": "com.iconkaset.dev.morroc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427194649680:android:fdff732ba6a72a441fd555",
+        "android_client_info": {
+          "package_name": "com.iconkaset.morroc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

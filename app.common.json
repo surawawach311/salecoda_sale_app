@@ -8,6 +8,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "android": {
+      "googleServicesFile": "./google-services.json",
       "permissions": ["NOTIFICATION"],
       "splash": {
         "ldpi": "./assets/img/splash-screens/andriod/drawable-ldpi/splash.png",
