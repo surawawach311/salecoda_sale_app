@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "morroc - production",
+    "name": "SellCoda Sales",
     "slug": "morroc-production",
     "extra": {
       "environment": "production",
@@ -9,6 +9,9 @@
     "icon": "./assets/icon.png",
     "android": {
       "package": "com.iconkaset.morroc"
+    },
+    "ios": {
+      "bundleIdentifier": "com.iconkaset.morroc"
     }
   }
 }
