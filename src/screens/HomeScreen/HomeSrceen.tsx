@@ -7,7 +7,7 @@ import { UserLocalStorageService } from "../../services/UserLocalStorageService"
 import { HomeStackParamList } from "../../navigations/HomeNavigator";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
 import { UserEntity } from "../../entities/userEntity";
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading'
 
 type HomeScreenRouteProp = RouteProp<HomeStackParamList, "Home">;
 

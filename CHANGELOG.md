@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.63.0] - 2020-05-24
+
+- Upgrade SDK 40 and change splash screen
+
 ## Enhance [v1.62.0] - 2020-05-19
 
 - Added company param to api get shipments
