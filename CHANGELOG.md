@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fix [v1.65.2] - 2020-05-25
+- fix position
+
 ## Fix [v1.65.1] - 2020-05-25
 - fix conditon bypass to include
 

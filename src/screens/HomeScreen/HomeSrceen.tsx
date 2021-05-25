@@ -54,7 +54,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
               <Text
                 style={styles.WelcomeHeader}
               >{`Hello, ${profile.name}`}</Text>
-              <Text style={styles.positionText}>Sale, Marketing executive</Text>
+              <Text style={styles.positionText}>{profile.position}</Text>
             </View>
             <View style={styles.innerImgContainer}>
               <Image
