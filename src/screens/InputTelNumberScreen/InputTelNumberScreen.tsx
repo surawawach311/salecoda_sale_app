@@ -58,7 +58,7 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
         setIsError(true)
       } else {
         setIsError(false)
-        if (bypassTelephone.indexOf(tel)) {
+        if (bypassTelephone.includes(tel)) {
           navigation.navigate('LoginSuccess', { userProfile: res })
         } else {
           navigation.navigate('InputOtp', { userProfile: res })
