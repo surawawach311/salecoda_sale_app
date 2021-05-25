@@ -5,7 +5,7 @@ import { ShopEntity } from "../../entities/ShopEntity";
 import { ShopFacade } from "../../facade/Shopfacade";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading'
 import { StackScreenProps } from "@react-navigation/stack";
 import { PurchaseStackParamList } from "../../navigations/PurchaseNavigator";
 import Search from "../../components/Search";

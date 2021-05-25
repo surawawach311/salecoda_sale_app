@@ -7,7 +7,7 @@ import { UserLocalStorageService } from "../../services/UserLocalStorageService"
 import { HomeStackParamList } from "../../navigations/HomeNavigator";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
 import { UserEntity } from "../../entities/userEntity";
-import { AppLoading } from "expo";
+import AppLoading from 'expo-app-loading'
 
 type HomeScreenRouteProp = RouteProp<HomeStackParamList, "Home">;
 
@@ -54,7 +54,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
               <Text
                 style={styles.WelcomeHeader}
               >{`Hello, ${profile.name}`}</Text>
-              <Text style={styles.positionText}>Sale, Marketing executive</Text>
+              <Text style={styles.positionText}>{profile.position}</Text>
             </View>
             <View style={styles.innerImgContainer}>
               <Image

@@ -2,15 +2,45 @@
 
 ## [Version - 1]
 
-## Enhance [v1.59.0] - 2020-04-07
+## Fix [v1.65.2] - 2020-05-25
+- fix position
+
+## Fix [v1.65.1] - 2020-05-25
+- fix conditon bypass to include
+
+## Feature [v1.65.0] - 2020-05-25
+- added bypass telephone number for test data
+
+## Enhance [v1.64.0] - 2020-05-24
+
+- register FCM for notification
+
+## Enhance [v1.63.0] - 2020-05-24
+
+- Upgrade SDK 40 and change splash screen
+
+## Enhance [v1.62.0] - 2020-05-19
+
+- Added company param to api get shipments
+
+## Fix [v1.61.1] - 2020-05-18
+
+- Fixed missng company param passing for some screens
+
+## Enhance [v1.61.0] - 2020-05-17
+
+- Added company param to api cart
+- Updated company param passing throughout PurchaseStack navigation
+
+## Enhance [v1.60.0] - 2020-05-07
 
 - set default payment method
 
-## Enhance [v1.59.0] - 2020-04-07
+## Enhance [v1.59.0] - 2020-05-07
 
 - Added calculate co wallet
 
-## Enhance [v1.58.0] - 2020-04-06
+## Enhance [v1.58.0] - 2020-05-06
 
 - Added cart store and enhance flow cart
 

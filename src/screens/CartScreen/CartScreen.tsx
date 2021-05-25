@@ -80,6 +80,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   const getCart = async () => {
     CartDataSource.getCartByShop(
+      route.params.company,
       route.params.shop.id,
       route.params.productBrand
     ).then((res: CartEntity) => {
@@ -97,6 +98,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         res?.available_payments.map((item) => {
           setPayment(item.id);
           CartDataSource.calculate(
+            route.params.company,
             route.params.shop.id,
             item.id,
             useSubsidize,
@@ -117,6 +119,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       },
     });
     await CartDataSource.addToCartByShopId(
+      route.params.company,
       route.params.shop.id,
       itemId,
       quantity + 1,
@@ -139,6 +142,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   const decreaseProduct = async (itemId: string, quantity: number) => {
     await CartDataSource.addToCartByShopId(
+      route.params.company,
       route.params.shop.id,
       itemId,
       quantity - 1,
@@ -162,6 +166,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     const regexp = /^[0-9\b]+$/;
     if (quantity.toString() === "" || regexp.test(quantity.toString())) {
       CartDataSource.addToCartByShopId(
+        route.params.company,
         route.params.shop.id,
         itemId,
         quantity,
@@ -193,6 +198,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       },
     });
     CartDataSource.removeItem(
+      route.params.company,
       route.params.shop.id,
       itemId,
       payment,
@@ -219,6 +225,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     if (payment == "cash") {
       setPayment("cash");
       CartDataSource.calculate(
+        route.params.company,
         route.params.shop.id,
         payment,
         useSubsidize,
@@ -237,6 +244,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else {
       setPayment("credit");
       CartDataSource.calculate(
+        route.params.company,
         route.params.shop.id,
         payment,
         useSubsidize,
@@ -257,6 +265,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   const handleUseSubsidize = (b: boolean) => {
     CartDataSource.calculate(
+      route.params.company,
       route.params.shop.id,
       payment,
       b,
@@ -281,7 +290,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         cart.subsidize_discount,
         route.params.productBrand
       ).then((res: OrderEntity) => {
-        CartDataSource.clearCart(shop.id, route.params.productBrand);
+        CartDataSource.clearCart(route.params.company, shop.id, route.params.productBrand);
         navigation.navigate("OrderSuccess", { data: res, cart });
       });
     }
@@ -392,6 +401,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                             shop: route.params.shop,
                             item: specialRequest,
                             productBrand: route.params.productBrand,
+                            company: route.params.company,
                           })
                         }
                       >
@@ -422,6 +432,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         shop: route.params.shop,
                         item: specialRequest,
                         productBrand: route.params.productBrand,
+                        company: route.params.company,
                       })
                     }
                     style={styled.buttonSpecialRequestContainer}
@@ -599,6 +610,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                 </View>
                 <View style={styled.warpDelivery}>
                   <ShipmentSection
+                    company={route.params.company}
                     shopId={route.params.shop.id}
                     onChange={(v) => {
                       if (v) handleShipmentChange(v);
