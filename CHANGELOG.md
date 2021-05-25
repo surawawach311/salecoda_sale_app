@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Feature [v1.65.0] - 2020-05-25
+- added bypass telephone number for test data
+
 ## Enhance [v1.64.0] - 2020-05-24
 
 - register FCM for notification
