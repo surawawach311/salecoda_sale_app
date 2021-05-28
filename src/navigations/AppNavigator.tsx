@@ -28,6 +28,7 @@ export default function App() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        gestureEnabled: false
       }}
     >
       <Stack.Screen name="Main" component={MainNavigator} />

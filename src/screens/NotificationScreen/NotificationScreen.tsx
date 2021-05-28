@@ -1,135 +1,250 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { useIsFocused } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
+import React, { useState, useEffect, useContext } from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  Animated,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from 'react-native'
+import { AppNotificationDataSource } from '../../datasource/AppNotificationDataSource'
+import { OrderDataSource } from '../../datasource/OrderDataSource'
+import { NotificationEntity, NotificationListEntity } from '../../entities/NotificationEntity'
+import { OrderEntity } from '../../entities/OrderEntity'
+import { HomeStackParamList } from '../../navigations/HomeNavigator'
+import { UserDataContext } from '../../provider/UserDataProvider'
+import { NavigationState, SceneRendererProps, TabBar, TabView } from 'react-native-tab-view'
+import NotificationFeedCard from '../../components/NotificationFeedCard'
 
-const NotificationScreen: React.FC = () => {
-  return (
-    <View style={{ flex: 1, paddingTop: "10%", backgroundColor: "#FFFFFF" }}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>การแจ้งเตือน</Text>
-      </View>
-      <View
-        style={{
-          width: "100%",
-          marginVertical: 10,
-          padding: 10,
-          flexDirection: "row",
-        }}
-      >
-        <View style={styled.badgeStatus}>
-          <Text style={{ fontSize: 16, fontWeight: "600", color: "#4C95FF" }}>
-            คำสั่งซื้อ
-          </Text>
-        </View>
-        <View
-          style={{
-            paddingHorizontal: 25,
-            padding: 15,
-            borderRadius: 25,
-            marginLeft: 10,
-          }}
-        >
-          <Text style={{ fontSize: 16, fontWeight: "600", color: "#6B7995" }}>
-            โปรโมชั่น
-          </Text>
-        </View>
-      </View>
-      <ScrollView style={{backgroundColor:"#F8FAFF"}}>
-        <TouchableOpacity
-          style={{
-            padding: 20,
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: "#F4FBFF",
-            justifyContent: "space-around",
-          }}
-        >
-          <View
-            style={{
-              marginLeft: 10,
-              borderRadius: 50,
-              width: 10,
-              height: 10,
-              backgroundColor: "#FF5D5D",
-              borderColor: "#FF5D5D",
-              alignSelf: "flex-start",
-              marginTop: 9,
-            }}
-          />
+type NotificationScreenRouteProp = StackScreenProps<HomeStackParamList, 'Notification'>
+type Pagination = {
+  total: number
+  limit: number
+  offset: number
+}
 
-          <View style={{ marginHorizontal: 30 }}>
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-              บริษัท ไอ ซี พี เฟอทิไลเซอร์ มีคำสั่งซื้อ รอให้คุณ ยืนยันอยู่
-            </Text>
-            <Text style={{ marginTop: 15, color: "#6B7995", fontSize: 16 }}>
-              คำสั่งซื้อ SP020110024 จากบริษัท ไอ ซี พีเฟอทิไลเซอร์ ในแบรนด์
-              ม้าบิน กำลัง ”รอยืนยันคำสั่งซื้อ” จากคุณ
-            </Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                style={styled.iconPackage}
-                source={require("../../../assets/package.png")}
-              />
-              <Text style={{ marginLeft: 9, fontSize: 14, color: "#6B7995" }}>
-                2 รายการ
-              </Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#CBD4DF",
-                  borderRadius: 4,
-                  padding: 5,
-                  backgroundColor: "#FFFFFF",
-                }}
-              >
-                <Image
-                  style={{ width: 40, height: 40, resizeMode: "contain" }}
-                  source={require("../../../assets/empty-product.png")}
-                />
-              </View>
-            </View>
-            <Text style={{ color: "#6B7995", fontSize: 12, marginTop: 5 }}>
-              13 พ.ย. 2563 - 12:40.
-            </Text>
+const defaultPagination: Pagination = {
+  total: 0,
+  limit: 10,
+  offset: 0,
+}
+const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation, route }) => {
+  const [index, setIndex] = React.useState(0)
+
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [pager, setPager] = useState<Pagination>(defaultPagination)
+  const [feed, setFeed] = useState<NotificationEntity[]>()
+  const userDataStore = useContext(UserDataContext)
+  const { userData } = userDataStore
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    AppNotificationDataSource.feeds().then((feed: NotificationListEntity) => {
+      setFeed(feed.data)
+    })
+  }, [isFocused])
+
+  type SceneProp = SceneRendererProps & {
+    route: { key: string; title: string }
+  }
+
+  type TabBarProp = SceneRendererProps & {
+    navigationState: NavigationState<{
+      key: string
+      title: string
+    }>
+  }
+
+  enum Menu {
+    Orders = 'orders',
+    Promotions = 'promotions',
+  }
+
+  const [routes] = React.useState([
+    { key: Menu.Orders, title: 'คำสั่งซื้อ' },
+    { key: Menu.Promotions, title: 'โปรโมชั่น' },
+  ])
+
+  type TabBarIndicatorProp = TabBarProp & {
+    getTabWidth: (i: number) => number
+  }
+
+  const handlePullToRefresh = () => {
+    setIsRefreshing(true)
+
+    AppNotificationDataSource.feeds()
+      .then((feed) => {
+        setFeed(feed.data)
+        setPager({ total: feed.count, limit: defaultPagination.limit, offset: defaultPagination.offset })
+        setIsRefreshing(false)
+      })
+      .catch((err) => alert(err))
+  }
+
+  const handleClick = (notiId: string, orderNo: string, dealerId: string) => {
+    OrderDataSource.getOrderDetail(userData.company, dealerId, orderNo).then((order: OrderEntity) => {
+      AppNotificationDataSource.read(notiId).then(() => {
+        // @ts-ignore
+        navigation.navigate('Purchase', {
+          screen: 'SuccessDetail',
+          params: { data: order },
+        })
+      })
+    })
+  }
+
+  const renderTabBar = (props: TabBarProp) => {
+    return (
+      <TabBar
+      scrollEnabled
+        {...props}
+        renderLabel={({ focused, route }) => (
+          <Text style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>{route.title}</Text>
+        )}
+        renderIndicator={renderIndicator}
+        pressColor="transparent"
+        tabStyle={{ width: 'auto', padding: 16 }}
+        contentContainerStyle={{ marginHorizontal: 16 }}
+        indicatorContainerStyle={{ marginHorizontal: 16 }}
+        style={{
+          backgroundColor: '#FFF',
+          borderBottomWidth: 4,
+          borderColor: '#FFF',
+        }}
+      />
+    )
+  }
+  const renderIndicator = (props: TabBarIndicatorProp) => {
+    const { position, navigationState, getTabWidth } = props
+    const inputRange = routes.map((_, i) => i)
+    const translateX = position.interpolate({
+      inputRange: inputRange,
+      outputRange: routes.reduce<number[]>((acc, _, i) => {
+        if (i === 0) return [0]
+        return [...acc, acc[i - 1] + getTabWidth(i - 1)]
+      }, []),
+    })
+
+    return (
+      <Animated.View
+        style={{
+          flex: 1,
+          backgroundColor: '#E3F0FF',
+          borderRadius: 20,
+          marginVertical: 8,
+          width: getTabWidth(navigationState.index),
+          transform: [{ translateX }],
+        }}
+      />
+    )
+  }
+
+  const renderScene = ({ route }: SceneProp) => {
+    switch (route.key) {
+      case Menu.Orders:
+        return (
+          <View style={{paddingHorizontal:5}}>
+            <FlatList
+              style={{ paddingTop: 20 }}
+              data={feed}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => {
+                    handleClick(item.id, item.order_no, item.buyer_id)
+                  }}
+                >
+                  <NotificationFeedCard
+                    title={item.title}
+                    body={item.body}
+                    description={item.body}
+                    created={item.created}
+                    items={item.order_item}
+                    isRead={item.is_read}
+                  />
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item.id}
+              onRefresh={handlePullToRefresh}
+              refreshing={isRefreshing}
+            />
           </View>
-          <Image
-            style={styled.iconRight}
-            source={require("../../../assets/right.png")}
-          />
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
-  );
-};
+        )
+      case Menu.Promotions:
+        return (
+          <>
+            <View style={{ justifyContent: 'center', backgroundColor: '#F8FAFF', alignItems: 'center', flex: 1 }}>
+              <Image
+                style={{ height: 100, resizeMode: 'contain' }}
+                source={require('../../../assets/empty-state/notification.png')}
+              />
+              <Text style={{ fontSize: 18, color: '#C2C6CE' }}>ไม่มีรายการแจ้งเตือน</Text>
+            </View>
+          </>
+        )
+    }
+  }
 
-export default NotificationScreen;
+  return (
+    <View style={styled.container}>
+      <SafeAreaView style={styled.headerSafeArea}>
+        <View style={styled.headerWraper}>
+          <Text style={styled.headerText}>การแจ้งเตือน</Text>
+        </View>
+      </SafeAreaView>
+      <TabView
+        lazy
+        navigationState={{ index, routes }}
+        renderTabBar={renderTabBar}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+      />
+    </View>
+  )
+}
+
+export default NotificationScreen
 
 const styled = StyleSheet.create({
-  badgeStatus: {
-    backgroundColor: "#E3F0FF",
+  container: { flex: 1, paddingTop: '10%', backgroundColor: '#FFFFFF' },
+  tabSelected: {
+    backgroundColor: '#E3F0FF',
     paddingHorizontal: 25,
     padding: 15,
     borderRadius: 25,
     marginLeft: 10,
   },
-  iconRight: {
-    width: 20,
-    height: 20,
-    resizeMode: "contain",
-    alignSelf: "flex-start",
-    marginTop: 5,
+  tabSectionContainer: {
+    width: '100%',
+    marginVertical: 10,
+    padding: 10,
+    flexDirection: 'row',
   },
-  iconPackage: {
-    height: 13,
-    width: 14,
-    resizeMode: "contain",
-    marginVertical: 9,
+  tabUnselected: {
+    paddingHorizontal: 25,
+    padding: 15,
+    borderRadius: 25,
+    marginLeft: 10,
   },
-});
+  headerSafeArea: {
+    backgroundColor: '#FFF',
+    paddingTop: StatusBar.currentHeight,
+  },
+  headerWraper: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  activeTabLabel: { color: '#4C95FF', fontWeight: 'bold' },
+  inactiveTabLabel: { color: '#616A7B', fontWeight: 'bold' },
+})

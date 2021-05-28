@@ -29,5 +29,11 @@ export class OrderDataSource {
                 .catch(error => console.log(error))
         }
     }
+
+    static getOrderDetail(companyId: string, shopId: string, orderNo: string): Promise<OrderEntity> {
+        return httpClient.get(`${BASE_URL_POPORING}/v4/orders/sellcoda/${orderNo}?company_id=${companyId}&dealer_id=${shopId}`)
+            .then(res => res.data)
+            .catch(error => console.log(error))
+    }
 }
 
