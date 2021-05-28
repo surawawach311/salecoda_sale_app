@@ -2,6 +2,13 @@
 
 ## [Version - 1]
 
+
+## Enhance [v1.66.0] - 2020-05-28
+
+- notification use native tab
+- prevent swipe back after logout
+- improve design notification
+
 ## Fix [v1.65.2] - 2020-05-25
 - fix position
 
