@@ -15,6 +15,7 @@ export type HomeStackParamList = {
   Order: undefined
   Profile: undefined
   Notification: undefined
+  History:undefined
 }
 const HomeNavigator: React.FC = () => {
   const Tab = createBottomTabNavigator()

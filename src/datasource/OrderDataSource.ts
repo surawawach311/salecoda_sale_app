@@ -1,5 +1,6 @@
-import { BASE_URL_SOHEE, BASE_URL_POPORING, BASE_URL_WHISPER } from "../config/config";
+import { BASE_URL_POPORING, BASE_URL_WHISPER } from "../config/config";
 import { OrderEntity } from "../entities/OrderEntity";
+import { OrderListEntity } from "../entities/OrderListEntity";
 import { OrderModel } from "../models/OrderModel";
 import { httpClient } from "../services/HttpClient";
 
@@ -35,5 +36,18 @@ export class OrderDataSource {
             .then(res => res.data)
             .catch(error => console.log(error))
     }
+
+    static async listOrder(
+        status: string,
+        company: string,
+        limit: number = 10,
+        offset = 0,
+        territory?: string
+    ): Promise<OrderListEntity> {
+        return httpClient
+            .get(`${BASE_URL_POPORING}/v4/orders/sellcoda/territory?company_id=${company}&territory=${territory}&status=${status}`)
+            .then((res) => res.data)
+    }
+
 }
 

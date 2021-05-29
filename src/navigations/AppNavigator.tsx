@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { UserLocalStorageService } from "../services/UserLocalStorageService";
-
+import { accountStore } from '../stores/AccountStore'
 import AppAuthNavigator from "./AppAuthNavigator";
 import MainNavigator from "./MainNavigator";
 
@@ -12,6 +12,7 @@ export default function App() {
 
   React.useEffect(() => {
     checkAuthToken();
+    accountStore.load()
   }, [isLogin]);
 
   const checkAuthToken = async () => {
