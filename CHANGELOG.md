@@ -2,6 +2,8 @@
 
 ## [Version - 1]
 
+## Feature [v1.67.0] - 2020-05-30
+- Add history order
 
 ## Enhance [v1.66.0] - 2020-05-28
 
