@@ -39,31 +39,14 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
   const [pager, setPager] = useState<Pagination>(defaultPagination)
   const isFocused = useIsFocused()
 
-  const dataLoader = (
-    status: StatusFilter,
-    company: string,
-    limit: number,
-    offset: number,
-    territory?: string,
-  ) => {
-
-    
-    // switch (status) {
-      // case StatusFilter.WaitingConfirm:
-        return OrderDataSource.listOrder(status,company, limit, offset, territory)
-    //   case StatusFilter.Confirmed:
-    //     return OrderDataSource.listConfirmed(company, limit, offset, territory)
-    //   case StatusFilter.Delivered:
-    //     return OrderDataSource.listDelivered(company, limit, offset)
-    //   case StatusFilter.Canceled:
-    //     return OrderDataSource.listCanceled(company, limit, offset)
-    // }
+  const dataLoader = (status: StatusFilter, company: string, limit: number, offset: number, territory?: string) => {
+    return OrderDataSource.listOrder(status, company, limit, offset, territory)
   }
 
   const loadData = (limit: number, offset: number) => {
     const comp = accountStore.account?.company ? accountStore.account?.company : ''
     const territory = accountStore.account?.territory
-    return dataLoader(statusFilter, comp, limit, offset,territory)
+    return dataLoader(statusFilter, comp, limit, offset, territory)
   }
 
   const handlePullToRefresh = () => {
