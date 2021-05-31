@@ -115,7 +115,7 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
               orderNumber={item.order_no}
               createDatetime={item.created}
               quantity={item.items.length}
-              productIconList={item.items}
+              productIconList={item.items.map(i => i.cover)}
               totalAmount={item.total_price}
               isComplete={isComplete}
             />

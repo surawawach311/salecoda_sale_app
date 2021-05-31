@@ -10,9 +10,10 @@ interface OrderHistoryCardProps {
   orderNumber: string
   createDatetime: string
   quantity: number
-  productIconList: OrderItemEnitity[]
+  productIconList: string[]
   totalAmount: number
   isComplete: boolean
+
 }
 
 const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
@@ -46,10 +47,10 @@ const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
           {productIconList.map((p,a) =>
             p ? (
               <Image
-                key={p.id}
+                key={p}
                 style={styled.iconProduct}
                 source={{
-                  uri: p.cover,
+                  uri: p,
                 }}
                 resizeMethod={Platform.OS === 'android' ? 'resize' : 'auto'}
               />
