@@ -2,8 +2,14 @@
 
 ## [Version - 1]
 
-## Fix [v1.65.3] - 2020-05-27
-- fixed new line for special request remark input on SpecialRequestScreen
+## Feature [v1.67.0] - 2020-05-30
+- Add history order
+
+## Enhance [v1.66.0] - 2020-05-28
+
+- notification use native tab
+- prevent swipe back after logout
+- improve design notification
 
 ## Fix [v1.65.2] - 2020-05-25
 - fix position
