@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet, Text } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import ShopListScreen from '../screens/ShopListScreen/ShopListScreen'
@@ -15,7 +15,6 @@ import OrderSuccessDetail from '../screens/OrderSuccessScreenDetail/OrderSuccess
 import { ThaiDateFormat } from '../utilities/ThaiDateFormat'
 import { CartEntity } from '../entities/CartEntity'
 import SpecialRequestScreen from '../screens/SpecialRequestScreen/SpecialRequestScreen'
-import { ItemSpecialRequest } from '../models/SpecialRequestModel'
 import BrandScreen from '../screens/BrandScreen/BrandScreen'
 import { CartProvider } from '../context/cartStore'
 

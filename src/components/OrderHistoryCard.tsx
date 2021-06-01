@@ -10,9 +10,10 @@ interface OrderHistoryCardProps {
   orderNumber: string
   createDatetime: string
   quantity: number
-  productIconList: OrderItemEnitity[]
+  productIconList: string[]
   totalAmount: number
   isComplete: boolean
+  shopName: string
 }
 
 const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
@@ -22,6 +23,7 @@ const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
   productIconList,
   totalAmount,
   isComplete,
+  shopName,
 }) => {
   return (
     <View style={styled.orderCard}>
@@ -43,13 +45,13 @@ const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
           <Text style={styled.itemQuantity}>{`${quantity} รายการ`}</Text>
         </View>
         <ScrollView style={styled.productList} horizontal>
-          {productIconList.map((p,a) =>
+          {productIconList.map((p) =>
             p ? (
               <Image
-                key={p.id}
+                key={p}
                 style={styled.iconProduct}
                 source={{
-                  uri: p.cover,
+                  uri: p,
                 }}
                 resizeMethod={Platform.OS === 'android' ? 'resize' : 'auto'}
               />
@@ -58,8 +60,8 @@ const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
         </ScrollView>
         <View style={styled.statusContainer}>
           <View style={styled.cardFooter}>
-            <Image style={styled.imageCardFooter} source={require('../../assets/icon-cash.png')} />
-            <Text style={styled.textCardFooter}>ชำระ {currencyFormat(totalAmount)}</Text>
+            <Image style={styled.imageCardFooter} source={require('../../assets/location3.png')} />
+            <Text style={styled.textCardFooter}>{shopName}</Text>
           </View>
           <View style={styled.cardFooter}>{!isComplete && <OrderCardStatus isComplete={isComplete} />}</View>
         </View>

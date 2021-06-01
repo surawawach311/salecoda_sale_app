@@ -250,6 +250,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({
             value={remark}
             placeholder="ใส่หมายเหตุ..."
             onChangeText={setRemark}
+            multiline
           />
         </View>
       </ScrollView>
