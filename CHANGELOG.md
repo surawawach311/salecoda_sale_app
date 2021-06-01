@@ -3,7 +3,7 @@
 ## [Version - 1]
 
 ## Fix [v1.67.1] - 2020-06-1
-ี- update splash screen
+- update splash screen
 
 ## Feature [v1.67.0] - 2020-05-30
 - Add history order
