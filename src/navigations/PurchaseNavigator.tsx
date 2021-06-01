@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet, Text } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import ShopListScreen from '../screens/ShopListScreen/ShopListScreen'
