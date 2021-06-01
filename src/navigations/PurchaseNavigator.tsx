@@ -15,7 +15,6 @@ import OrderSuccessDetail from '../screens/OrderSuccessScreenDetail/OrderSuccess
 import { ThaiDateFormat } from '../utilities/ThaiDateFormat'
 import { CartEntity } from '../entities/CartEntity'
 import SpecialRequestScreen from '../screens/SpecialRequestScreen/SpecialRequestScreen'
-import { ItemSpecialRequest } from '../models/SpecialRequestModel'
 import BrandScreen from '../screens/BrandScreen/BrandScreen'
 import { CartProvider } from '../context/cartStore'
 
