@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fix [v1.67.2] - 2020-06-1
+- refactored catch error on datasource
+
 ## Fix [v1.67.1] - 2020-06-1
 - update splash screen
 

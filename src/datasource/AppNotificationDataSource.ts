@@ -11,9 +11,7 @@ export class AppNotificationDataSource {
       .then((response) => {
         return response.data
       })
-      .catch((error) => {
-        console.log(`error on AppNotificationDataSource.bind`, error)
-      })
+      .catch((error) => console.error(`error on AppNotificationDataSource.bind`, error))
   }
 
   static feeds(): Promise<NotificationListEntity> {
@@ -22,9 +20,7 @@ export class AppNotificationDataSource {
       .then((response) => {
         return response.data
       })
-      .catch((error) => {
-        console.log(`error on AppNotificationDataSource.feeds`, error)
-      })
+      .catch((error) => console.error(`error on AppNotificationDataSource.feeds`, error))
   }
 
   static read(notificationId: String): Promise<NotificationListEntity> {
@@ -33,8 +29,6 @@ export class AppNotificationDataSource {
       .then((response) => {
         return response.data
       })
-      .catch((error) => {
-        console.log(`error on AppNotificationDataSource.read`, error)
-      })
+      .catch((error) => console.error(`error on AppNotificationDataSource.read`, error))
   }
 }
