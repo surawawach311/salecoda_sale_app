@@ -4,6 +4,7 @@ import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackScreenProps } from "@react-navigation/stack";
 import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
+import NotificationFacade from "../../facade/NotificationFacade";
 
 type LoginSuccessScreenNavigationProp = StackScreenProps<
   AppAuthParamList,
@@ -20,6 +21,7 @@ const LoginSuccessScreen = ({
   const Login = () => {
     VerifiesDataSource.login(route.params.userProfile).then((res) => {
       AsyncStorage.setItem("access_token", res.access_token);
+      NotificationFacade.bindToken()
       setTimeout(() => {
         navigation.navigate("App");
       }, 3000);
