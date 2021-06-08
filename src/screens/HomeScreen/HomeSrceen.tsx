@@ -1,106 +1,120 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { UserLocalStorageService } from "../../services/UserLocalStorageService";
-import { HomeStackParamList } from "../../navigations/HomeNavigator";
-import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
-import { UserEntity } from "../../entities/userEntity";
+import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, Image, StyleSheet } from 'react-native'
+import { RouteProp } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { UserLocalStorageService } from '../../services/UserLocalStorageService'
+import { HomeStackParamList } from '../../navigations/HomeNavigator'
+import { VerifiesDataSource } from '../../datasource/VerifiesDataSource'
+import { UserEntity } from '../../entities/userEntity'
 import AppLoading from 'expo-app-loading'
+import NotificationFacade from '../../facade/NotificationFacade'
+import { NotificationResponseEntity } from '../../entities/MessageResponseEntity'
+import * as Notifications from 'expo-notifications'
+import { OrderDataSource } from '../../datasource/OrderDataSource'
+import { OrderEntity } from '../../entities/OrderEntity'
+import { UserDataContext } from '../../provider/UserDataProvider'
+import { AppNotificationDataSource } from '../../datasource/AppNotificationDataSource'
 
-type HomeScreenRouteProp = RouteProp<HomeStackParamList, "Home">;
+type HomeScreenRouteProp = RouteProp<HomeStackParamList, 'Home'>
 
-type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList, "Home">;
+type HomeScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Home'>
 type Props = {
-  route: HomeScreenRouteProp;
-  navigation: HomeScreenNavigationProp;
-};
+  route: HomeScreenRouteProp
+  navigation: HomeScreenNavigationProp
+}
 
 const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
-  const [profile, setProfile] = useState<UserEntity>();
+  const [profile, setProfile] = useState<UserEntity>()
+  const userDataStore = useContext(UserDataContext)
+  const { userData } = userDataStore
 
   useEffect(() => {
-    checkAuthToken();
-    getProfile();
-  }, []);
+    checkAuthToken()
+    getProfile()
+  }, [])
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+  })
+
+  NotificationFacade.setOnResponse((response: NotificationResponseEntity) => {
+    console.log(response)
+    OrderDataSource.getOrderDetail(userData.company, response.buyer_id, response.order_no).then(
+      (order: OrderEntity) => {
+        // @ts-ignore
+        navigation.navigate('Purchase', {
+          screen: 'SuccessDetail',
+          params: { data: order },
+        })
+      },
+    )
+  })
+
   const checkAuthToken = async () => {
     const auth = await UserLocalStorageService.haveAccessToken().then((res) => {
-      return res;
-    });
+      return res
+    })
     if (!auth) {
-      navigation.navigate("Auth", {
-        screen: "InputTelNumber",
-      });
+      navigation.navigate('Auth', {
+        screen: 'InputTelNumber',
+      })
     }
-  };
+  }
 
   const getProfile = async () => {
     await VerifiesDataSource.getProfile().then((respone: UserEntity) => {
-      setProfile(respone);
-    });
-  };
+      setProfile(respone)
+    })
+  }
 
   return (
     <View style={styles.container}>
       {profile ? (
         <>
           <View style={styles.profileWarp}>
-            <Image
-              style={styles.bgImage}
-              source={require("../../../assets/bgShop.png")}
-            />
+            <Image style={styles.bgImage} source={require('../../../assets/bgShop.png')} />
             <View style={styles.innerTextContainer}>
-              <Text
-                style={styles.WelcomeHeader}
-              >{`Hello, ${profile.name}`}</Text>
+              <Text style={styles.WelcomeHeader}>{`Hello, ${profile.name}`}</Text>
               <Text style={styles.positionText}>{profile.position}</Text>
             </View>
             <View style={styles.innerImgContainer}>
-              <Image
-                style={styles.imageProfile}
-                source={require("../../../assets/image-profile-default.png")}
-              />
+              <Image style={styles.imageProfile} source={require('../../../assets/image-profile-default.png')} />
             </View>
           </View>
           <View style={styles.menuWarp}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("Purchase", {
-                  screen: "ShopList",
+                navigation.navigate('Purchase', {
+                  screen: 'ShopList',
                   params: {
                     territory: profile.territory,
                     company: profile.company,
                   },
-                });
+                })
               }}
             >
-              <Image
-                style={styles.menuIcon}
-                source={require("../../../assets/menu-icon/order.png")}
-              />
+              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/order.png')} />
               <Text style={styles.textMenu}>สั่งสินค้า</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                alert("อยู่ระหว่างการพัฒนาระบบ");
+                alert('อยู่ระหว่างการพัฒนาระบบ')
               }}
             >
-              <Image
-                style={styles.menuIcon}
-                source={require("../../../assets/menu-icon/promotion.png")}
-              />
+              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/promotion.png')} />
               <Text style={styles.textMenu}>โปรโมชั่น</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                alert("อยู่ระหว่างการพัฒนาระบบ");
+                alert('อยู่ระหว่างการพัฒนาระบบ')
               }}
             >
-              <Image
-                style={styles.menuIcon}
-                source={require("../../../assets/menu-icon/report.png")}
-              />
+              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/report.png')} />
               <Text style={styles.textMenu}>รายงานการขาย</Text>
             </TouchableOpacity>
           </View>
@@ -109,9 +123,9 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
         <AppLoading />
       )}
     </View>
-  );
-};
-export default HomeScreen;
+  )
+}
+export default HomeScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -119,49 +133,49 @@ const styles = StyleSheet.create({
   },
   profileWarp: {
     // flex: 0.4,
-    height: "30%",
-    backgroundColor: "#4C95FF",
-    flexDirection: "row",
-    alignItems: "center",
+    height: '30%',
+    backgroundColor: '#4C95FF',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   innerImgContainer: {
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
     paddingRight: 20,
   },
   innerTextContainer: {
     flex: 1,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     paddingLeft: 20,
   },
 
   WelcomeHeader: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 24,
   },
   positionText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
   },
   imageProfile: {
     height: 80,
     width: 80,
     borderRadius: 40,
-    borderColor: "#FFFFFF",
+    borderColor: '#FFFFFF',
     borderWidth: 1,
   },
   bgImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-    position: "absolute",
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    position: 'absolute',
   },
   menuWarp: {
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    backgroundColor: "#FBFBFB",
-    flexDirection: "row",
+    backgroundColor: '#FBFBFB',
+    flexDirection: 'row',
     top: -20,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingBottom: 10,
   },
   menuIcon: {
@@ -171,9 +185,9 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   textMenu: {
-    color: "#616A7B",
+    color: '#616A7B',
     marginTop: -20,
-    alignSelf: "center",
+    alignSelf: 'center',
     fontSize: 16,
   },
-});
+})

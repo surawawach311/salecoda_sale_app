@@ -2,8 +2,13 @@ import { MessageResponseEntity } from '../entities/MessageResponseEntity'
 import { httpClient } from '../services/HttpClient'
 import { BASE_URL_POPORING } from '../config/config'
 import { NotificationListEntity } from '../entities/NotificationEntity'
+import { Platform } from 'react-native'
+import * as Notifications from 'expo-notifications'
+import Constants from 'expo-constants'
+
 
 export class AppNotificationDataSource {
+
   static bindingToken(notificationToken: String): Promise<MessageResponseEntity> {
     console.log('requesting binding with token', notificationToken)
     return httpClient

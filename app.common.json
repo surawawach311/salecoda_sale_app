@@ -8,8 +8,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "android": {
-      "versionCode": 3,
+      "versionCode": 4,
       "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
       "permissions": ["NOTIFICATION"],
       "splash": {
         "ldpi": "./assets/img/splash-screens/andriod/drawable-ldpi/splash.png",
