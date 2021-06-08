@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Enhance [v1.68.0] - 2020-06-8
+- notification route
+
 ## Fix [v1.67.2] - 2020-06-1
 - refactored catch error on datasource
 
