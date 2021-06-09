@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fix [v1.68.1] - 2020-06-9
+- fix product unit in product info
+
 ## Enhance [v1.68.0] - 2020-06-8
 - notification route
 

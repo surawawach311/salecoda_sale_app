@@ -150,7 +150,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({
                     <Text style={styled.textSize}>{`${
                       product.packing_size
                     } | ${currencyFormat(product.price_per_sale_unit)}/${
-                      product.product_volume_unit
+                      product.sale_unit
                     }`}</Text>
                   </View>
                 </View>
