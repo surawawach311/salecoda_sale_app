@@ -19,7 +19,7 @@ export class ShopDataSource {
   }
   static getProduct(shopId: string, company: string, product_brand?: string): Promise<ProductEntity[]> {
     return httpClient
-      .get(`${BASE_URL_SOHEE}/v1/sellcoda/shops/${shopId}/products/prices?limit=100&company=${company}`)
+      .get(`${BASE_URL_SOHEE}/v1/sellcoda/shops/${shopId}/products/prices?limit=1000&company=${company}`)
       .then((res) => res.data.products)
       .catch((error) => console.error(`error on CartDataSource.getProduct`, error))
   }
@@ -27,7 +27,7 @@ export class ShopDataSource {
   static getProductWithBrand(shopId: string, company: string, product_brand?: string): Promise<ProductEntity[]> {
     return httpClient
       .get(
-        `${BASE_URL_SOHEE}/v1/sellcoda/shops/${shopId}/products/prices?limit=100&company=${company}&product_brand=${product_brand}`,
+        `${BASE_URL_SOHEE}/v1/sellcoda/shops/${shopId}/products/prices?limit=1000&company=${company}&product_brand=${product_brand}`,
       )
       .then((res) => res.data.products)
       .catch((error) => console.error(`error on CartDataSource.getProductWithBrand`, error))
