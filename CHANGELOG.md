@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.68.2] - 2020-06-10
+- fix limit product list
+- hide scroll bar
+
 ## Fix [v1.68.1] - 2020-06-9
 - fix product unit in product info
 
