@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fix [v1.68.3] - 2020-06-10
+- fix layout premium in cart screen 
+
 ## Fix [v1.68.2] - 2020-06-10
 - fix limit product list
 - hide scroll bar
