@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Image, StyleSheet } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -13,8 +13,6 @@ import { NotificationResponseEntity } from '../../entities/MessageResponseEntity
 import * as Notifications from 'expo-notifications'
 import { OrderDataSource } from '../../datasource/OrderDataSource'
 import { OrderEntity } from '../../entities/OrderEntity'
-import { UserDataContext } from '../../provider/UserDataProvider'
-import { AppNotificationDataSource } from '../../datasource/AppNotificationDataSource'
 
 type HomeScreenRouteProp = RouteProp<HomeStackParamList, 'Home'>
 
@@ -24,10 +22,8 @@ type Props = {
   navigation: HomeScreenNavigationProp
 }
 
-const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
+const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [profile, setProfile] = useState<UserEntity>()
-  const userDataStore = useContext(UserDataContext)
-  const { userData } = userDataStore
 
   useEffect(() => {
     checkAuthToken()
@@ -43,10 +39,8 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
   })
 
   NotificationFacade.setOnResponse((response: NotificationResponseEntity) => {
-    console.log(response)
-    OrderDataSource.getOrderDetail(userData.company, response.buyer_id, response.order_no).then(
+    OrderDataSource.getOrderDetail(response.company, response.buyer_id, response.order_no).then(
       (order: OrderEntity) => {
-        // @ts-ignore
         navigation.navigate('Purchase', {
           screen: 'SuccessDetail',
           params: { data: order },
@@ -60,6 +54,7 @@ const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
       return res
     })
     if (!auth) {
+      // @ts-ignore
       navigation.navigate('Auth', {
         screen: 'InputTelNumber',
       })
