@@ -93,24 +93,24 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 })
               }}
             >
-              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/order.png')} />
+              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/icon-shopping.png')} />
               <Text style={styles.textMenu}>สั่งสินค้า</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                alert('อยู่ระหว่างการพัฒนาระบบ')
+                navigation.navigate("History")
               }}
             >
-              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/promotion.png')} />
-              <Text style={styles.textMenu}>โปรโมชั่น</Text>
+              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/IconHistory.png')} />
+              <Text style={styles.textMenu}>ประวัติ</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                alert('อยู่ระหว่างการพัฒนาระบบ')
+                navigation.navigate("Order")
               }}
             >
-              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/report.png')} />
-              <Text style={styles.textMenu}>รายงานการขาย</Text>
+              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/IconConfirmOrder.png')} />
+              <Text style={styles.textMenu}>ยืนยันคำสั่งซื้อ</Text>
             </TouchableOpacity>
           </View>
         </>
