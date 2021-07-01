@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, Image, StyleSheet, FlatList } from 'react-native'
-import { Container, View } from 'native-base'
+import { Text, Image, StyleSheet, FlatList, View } from 'react-native'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import { StackScreenProps } from '@react-navigation/stack'
 import Search from '../../components/Search'
@@ -42,7 +41,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   return (
-    <Container>
+    <View style={{ flex: 1,backgroundColor:"#FFFFFF" }}>
       <View style={styles.wrapSearch}>
         <Search
           placeholder="ค้นหาสินค้า"
@@ -110,7 +109,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           keyExtractor={(item) => item.id}
         />
       </View>
-    </Container>
+    </View>
   )
 }
 

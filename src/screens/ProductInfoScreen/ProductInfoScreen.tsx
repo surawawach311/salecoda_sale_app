@@ -1,6 +1,5 @@
 import { useIsFocused } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Button, Item } from "native-base";
 import React, { useContext, useEffect, useState } from "react";
 import {
   View,
