@@ -28,7 +28,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.iconkaset.dev.alberta",
+      "bundleIdentifier": "com.iconkaset.dev.morroc",
       "splash": {
         "image":"./assets/img/splash-screens/ios/splash.png",
         "resizeMode":"cover"

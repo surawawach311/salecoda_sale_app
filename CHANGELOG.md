@@ -2,6 +2,11 @@
 
 ## [Version - 1]
 
+## Fix [v1.68.4] - 2020-06-20
+- add icon for dev app
+- delete unused in home screen 
+- change button in home screen
+
 ## Fix [v1.68.3] - 2020-06-10
 - fix layout premium in cart screen 
 

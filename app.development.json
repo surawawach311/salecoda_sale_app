@@ -6,7 +6,7 @@
       "environment": "development",
       "apiUrl": "https://dev-app.iconkaset.com"
     },
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-dev.png",
     "android": {
       "package": "com.iconkaset.dev.morroc"
     }
