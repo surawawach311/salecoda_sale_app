@@ -9,7 +9,7 @@ import { CartDataSource } from '../../datasource/CartDataSource'
 import { FlatList, ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { ShopEntity } from '../../entities/ShopEntity'
 import Dash from 'react-native-dash'
-import { CartEntity, ItemCart, PremiumEntity } from '../../entities/CartEntity'
+import { CartEntity, ItemCart } from '../../entities/CartEntity'
 import { OrderFacade } from '../../facade/OrderFacade'
 import { OrderEntity } from '../../entities/OrderEntity'
 import { currencyFormat } from '../../utilities/CurrencyFormat'
@@ -19,7 +19,7 @@ import AccrodingPrice from '../../components/AccrodingPrice'
 import { useIsFocused } from '@react-navigation/native'
 import PremiumCard from '../../components/PremiumCard'
 import { AccrodionPriceModel } from '../../models/AccrodionPriceModel'
-import { CheckBox } from 'native-base'
+import { Checkbox } from 'native-base'
 import { UserDataContext } from '../../provider/UserDataProvider'
 import ShipmentSection from './ShipmentSection'
 import { Shipment } from './Shipment'
@@ -444,10 +444,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   >
                     {cart.available_subsidize > 0 ? (
                       <>
-                        <CheckBox
-                          checked={useSubsidize}
-                          onPress={() => handleUseSubsidize(!useSubsidize)}
-                          color="#FF5D5D"
+                        <Checkbox
+                          value="test"
+                          onChange={() => handleUseSubsidize(!useSubsidize)}
+                          colorScheme="rgba(255, 93, 93, 1)"
                           style={{
                             borderRadius: 4,
                             width: 20,

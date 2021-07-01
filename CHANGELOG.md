@@ -2,6 +2,11 @@
 
 ## [Version - 1]
 
+## Enhance [v1.69.0] - 2020-07-1
+- migrate native base
+- enhance payment method ui
+- enhance co discount ui
+
 ## Fix [v1.68.4] - 2020-06-20
 - add icon for dev app
 - delete unused in home screen 
