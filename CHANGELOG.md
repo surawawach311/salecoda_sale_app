@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Enhance [v1.70.0] - 2020-07-7
+- Fix accrodion price
+
 ## Enhance [v1.69.0] - 2020-07-1
 - migrate native base
 - enhance payment method ui
