@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Fix [v1.70.1] - 2020-07-7
+- Fix input remark intercept by keyboard
+
 ## Enhance [v1.70.0] - 2020-07-7
 - Fix accrodion price
 
