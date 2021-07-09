@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -16,7 +16,10 @@ import { ThaiDateFormat } from '../utilities/ThaiDateFormat'
 import { CartEntity } from '../entities/CartEntity'
 import SpecialRequestScreen from '../screens/SpecialRequestScreen/SpecialRequestScreen'
 import BrandScreen from '../screens/BrandScreen/BrandScreen'
-import { CartProvider } from '../context/cartStore'
+import { CartContext, CartProvider } from '../context/cartStore'
+import MiniCart from '../components/MiniCart'
+import { Types } from '../context/cartReducer'
+
 
 export type PurchaseStackParamList = {
   ShopList: { territory: string; company: string }
@@ -41,10 +44,12 @@ export type PurchaseStackParamList = {
 }
 
 const PurchaseNavigator: React.FC = () => {
+  const { state } = useContext(CartContext)
   const PurchaseStack = createStackNavigator<PurchaseStackParamList>()
 
   return (
     <CartProvider>
+      
       <PurchaseStack.Navigator
         screenOptions={{
           headerBackTitleVisible: false,
@@ -67,7 +72,8 @@ const PurchaseNavigator: React.FC = () => {
                   })
                 }
               >
-                <Image style={styled.cart} source={require('../../assets/shopping-cart.png')} />
+               {/*  <MiniCart itemCount={state.carts.length} /> */}
+                
               </TouchableOpacity>
             ),
             headerLeft: (props) => (
@@ -77,6 +83,8 @@ const PurchaseNavigator: React.FC = () => {
             ),
           })}
         />
+        {console.log(state,'store')
+        }
         <PurchaseStack.Screen
           name="ProductInfo"
           component={ProductInfoScreen}

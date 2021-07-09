@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, StyleSheet, KeyboardAvoidingView, Image, Platform } from 'react-native'
+import { Text, View, StyleSheet, KeyboardAvoidingView, Image, Platform, Alert } from 'react-native'
 import ButtonShop from '../../components/ButtonShop'
 import { StackScreenProps } from '@react-navigation/stack'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
@@ -162,29 +162,40 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   const removeItem = async (itemId: string) => {
-    dispatch({
-      type: Types.Delete,
-      payload: {
-        id: itemId,
-        shopId: route.params.shop.id,
+    Alert.alert('ต้องการลบสินค้าใช่หรือไม่', '', [
+      {
+        text: 'ยกเลิก',
+        style: 'cancel',
       },
-    })
-    CartDataSource.removeItem(
-      route.params.company,
-      route.params.shop.id,
-      itemId,
-      payment,
-      useSubsidize,
-      route.params.productBrand,
-    ).then((res: CartEntity) => {
-      setCart(res)
-      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-        res.received_discounts.filter((item) => item.item_id != null),
-      )
-      setSpecialRequest(discountSpecial)
-      setDiscoutPromo(discountProduct)
-    })
+      {
+        text: 'ยืนยัน',
+        onPress: () => {
+          dispatch({
+            type: Types.Delete,
+            payload: {
+              id: itemId,
+              shopId: route.params.shop.id,
+            },
+          })
+          CartDataSource.removeItem(
+            route.params.company,
+            route.params.shop.id,
+            itemId,
+            payment,
+            useSubsidize,
+            route.params.productBrand,
+          ).then((res: CartEntity) => {
+            setCart(res)
+            let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
+            let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+              res.received_discounts.filter((item) => item.item_id != null),
+            )
+            setSpecialRequest(discountSpecial)
+            setDiscoutPromo(discountProduct)
+          })
+        },
+      },
+    ])
   }
 
   const handleShipmentChange = (s: Shipment) => {
@@ -244,17 +255,28 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else if (!shipment) {
       alert('กรุณาเลือกสถานที่จัดส่ง')
     } else {
-      OrderFacade.confirmOrder(
-        userData.company,
-        shop,
-        shipment,
-        cart,
-        cart.subsidize_discount,
-        route.params.productBrand,
-      ).then((res: OrderEntity) => {
-        CartDataSource.clearCart(route.params.company, shop.id, route.params.productBrand)
-        navigation.navigate('OrderSuccess', { data: res, cart })
-      })
+      Alert.alert('ยืนยันคำสั่งซื้อใช่หรือไม่', '', [
+        {
+          text: 'ยกเลิก',
+          style: 'cancel',
+        },
+        {
+          text: 'ยืนยัน',
+          onPress: () => {
+            OrderFacade.confirmOrder(
+              userData.company,
+              shop,
+              shipment,
+              cart,
+              cart.subsidize_discount,
+              route.params.productBrand,
+            ).then((res: OrderEntity) => {
+              CartDataSource.clearCart(route.params.company, shop.id, route.params.productBrand)
+              navigation.navigate('OrderSuccess', { data: res, cart })
+            })
+          },
+        },
+      ])
     }
   }
 
@@ -321,7 +343,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   data={cart.available_premiums}
-                  style={{ backgroundColor: "#FFFFFF" ,marginHorizontal:4}}
+                  style={{ backgroundColor: '#FFFFFF', marginHorizontal: 4 }}
                   renderItem={({ item }) => (
                     <PremiumCard
                       title={item.name}
