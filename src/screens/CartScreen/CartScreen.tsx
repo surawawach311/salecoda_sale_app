@@ -163,11 +163,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     }
   }
   const handleRemark = (remark: string) => {
-    CartDataSource.addOrderRemark(remark, route.params.company, route.params.shop.id, route.params.productBrand).then(
-      (res: CartEntity) => {
+    CartDataSource.addOrderRemark(remark, route.params.company, route.params.shop.id, route.params.productBrand)
+      .then((res: CartEntity) => {
         setCart(res)
-      },
-    )
+      })
+      .catch((err) => {
+        alert('Something went wrong' + err)
+      })
   }
 
   const removeItem = async (itemId: string) => {
@@ -349,7 +351,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     value={remark}
                     placeholder="ใส่หมายเหตุ..."
                     onChangeText={setRemark}
-                    onEndEditing={(e) => handleRemark(e)}
+                    onEndEditing={(e) => handleRemark(e.nativeEvent.text)}
                     multiline
                   />
                 </View>
