@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Enhance [v1.71.0] - 2020-07-09
+- added sale co remark
+
 ## Fix [v1.70.1] - 2020-07-7
 - Fix input remark intercept by keyboard
 

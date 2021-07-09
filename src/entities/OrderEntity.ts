@@ -27,6 +27,7 @@ export interface OrderEntity {
     special_request_discounts: SpecialOrderEntity[]
     subsidize: number
     special_request_remark: string
+    sale_co_remark: string
 }
 
 export interface OrderItemEnitity {
