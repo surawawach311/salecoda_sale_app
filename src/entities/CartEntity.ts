@@ -19,6 +19,7 @@ export interface CartEntity {
     usable_subsidize: number
     available_subsidize: number
     subsidize_discount: number
+    sale_co_remark:string
 }
 
 export interface ItemCart {
