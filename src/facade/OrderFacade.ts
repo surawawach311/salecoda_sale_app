@@ -69,6 +69,7 @@ export class OrderFacade {
             special_request_remark: cart.special_request_remark,
             subsidize: subsidize,
             product_brand: productBrand,
+            sale_co_remark:cart.sale_co_remark
         }
         return OrderDataSource.comfirmOrder(order)
     }

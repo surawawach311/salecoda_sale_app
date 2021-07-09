@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, StyleSheet, KeyboardAvoidingView, Image, Platform } from 'react-native'
+import { Text, View, StyleSheet, KeyboardAvoidingView, Image, Platform, TextInput } from 'react-native'
 import ButtonShop from '../../components/ButtonShop'
 import { StackScreenProps } from '@react-navigation/stack'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
@@ -34,6 +34,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [cart, setCart] = useState<CartEntity | undefined>()
   const [quantity, setQuantity] = useState(0)
   const [payment, setPayment] = useState<string | undefined>()
+  const [remark, setRemark] = useState<string | undefined>()
   const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>([])
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([])
   const [useSubsidize, setUseSubsudize] = useState(false)
@@ -64,6 +65,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     CartDataSource.getCartByShop(route.params.company, route.params.shop.id, route.params.productBrand).then(
       (res: CartEntity) => {
         setCart(res)
+        setRemark(res.sale_co_remark)
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
         let discountProduct: AccrodionPriceModel[] = formatAccrodion(
           res.received_discounts.filter((item) => item.item_id != null),
@@ -159,6 +161,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else {
       alert('Number Only')
     }
+  }
+  const handleRemark = (remark: string) => {
+    CartDataSource.addOrderRemark(remark, route.params.company, route.params.shop.id, route.params.productBrand).then(
+      (res: CartEntity) => {
+        setCart(res)
+      },
+    )
   }
 
   const removeItem = async (itemId: string) => {
@@ -321,7 +330,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   data={cart.available_premiums}
-                  style={{ backgroundColor: "#FFFFFF" ,marginHorizontal:4}}
+                  style={{ backgroundColor: '#FFFFFF', marginHorizontal: 4, marginTop: 5 }}
                   renderItem={({ item }) => (
                     <PremiumCard
                       title={item.name}
@@ -333,6 +342,17 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   )}
                   keyExtractor={(item) => item.id}
                 />
+                <View style={styled.remarkWrapper}>
+                  <Text style={styled.specialLabelFont}>หมายเหตุ (สำหรับ Sale Co)</Text>
+                  <TextInput
+                    style={styled.remarkTextInput}
+                    value={remark}
+                    placeholder="ใส่หมายเหตุ..."
+                    onChangeText={setRemark}
+                    onEndEditing={(e) => handleRemark(e)}
+                    multiline
+                  />
+                </View>
                 {specialRequest.length > 0 ? (
                   <View style={styled.specialRequestContainer}>
                     <View
@@ -716,7 +736,7 @@ const styled = StyleSheet.create({
   },
   buttonSpecialRequestContainer: {
     backgroundColor: '#FFFFFF',
-    marginTop: 10,
+    marginTop: 5,
     padding: 20,
   },
   buttonSpecialRequest: {
@@ -739,7 +759,7 @@ const styled = StyleSheet.create({
     padding: 20,
   },
   specialRequestContainer: {
-    marginTop: 10,
+    marginTop: 5,
     padding: 20,
     backgroundColor: '#FFFFFF',
   },
@@ -767,5 +787,20 @@ const styled = StyleSheet.create({
   methodChoiceContainer: {
     flexDirection: 'row',
     marginBottom: 5,
+  },
+  remarkWrapper: {
+    padding: 16,
+    backgroundColor: '#FFFFFF',
+    marginVertical: 5,
+  },
+  specialLabelFont: { fontSize: 17, fontWeight: 'bold' },
+  remarkTextInput: {
+    height: 128,
+    padding: 16,
+    borderWidth: 1,
+    borderRadius: 12,
+    borderColor: '#E1E7F6',
+    marginTop: 12,
+    textAlignVertical: 'top',
   },
 })
