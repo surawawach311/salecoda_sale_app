@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.72.0] - 2020-07-12
+- added confirm modal
+- added number item in cart
+
 ## Fix [v1.71.1] - 2020-07-09
 - fix input sale co remark
 
