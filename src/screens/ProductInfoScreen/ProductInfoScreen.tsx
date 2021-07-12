@@ -1,6 +1,6 @@
-import { useIsFocused } from "@react-navigation/native";
-import { StackScreenProps } from "@react-navigation/stack";
-import React, { useContext, useEffect, useState } from "react";
+import { useIsFocused } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
+import React, { useContext, useEffect, useState } from 'react'
 
 import {
   View,
@@ -21,12 +21,15 @@ import { ProductEntity, PromotionEntity } from '../../entities/ProductEntity'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import { currencyFormat } from '../../utilities/CurrencyFormat'
 import Toast from 'react-native-root-toast'
+import MiniCart from '../../components/MiniCart'
+import CustomHeader from '../../components/CustomHeader'
 
 type ProductInfoScreenNavigationProp = StackScreenProps<PurchaseStackParamList, 'ProductInfo'>
 
 const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(0)
   const [product, setProduct] = useState<ProductEntity>()
+  const [totalItem, setTotalItem] = useState(0)
   const { state, dispatch } = useContext(CartContext)
   const isFocused = useIsFocused()
   const [loading, setLoading] = useState(false)
@@ -39,6 +42,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
   const initialQuantity = () => {
     CartDataSource.getCartByShop(route.params.company, route.params.shop.id, route.params.productBrand).then((res) => {
       const itemQuantity = res.items.find((item) => item.id === route.params.product.id)
+      setTotalItem(res.total_item)
       if (itemQuantity) {
         setQuantity(itemQuantity.quantity)
         dispatch({
@@ -87,7 +91,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
         setTimeout(() => {
           let toast = Toast.show('เพิ่มสินค้าไปยังตะกร้าแล้ว', {
             duration: Toast.durations.LONG,
-            position: Toast.positions.CENTER,
+            position: 750,
             shadow: true,
             animation: true,
             hideOnPress: true,
@@ -100,6 +104,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
         }, 1500)
       }
     }
+    setTotalItem(res.total_item)
   }
 
   const adjustProduct = async (quantity: number) => {
@@ -119,12 +124,27 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
     }
   }
 
+  const renderMiniCart = () => {
+    return (
+      <MiniCart
+        itemCount={totalItem}
+        onPress={() =>
+          navigation.navigate('Cart', {
+            shop: route.params.shop,
+            productBrand: route.params.productBrand,
+            company: route.params.company,
+          })
+        }
+      />
+    )
+  }
+
   return (
     <>
       {product ? (
         <>
           <ScrollView style={styled.container}>
-           
+            <CustomHeader showBackBtn onPressBack={() => navigation.goBack()} headerRight={renderMiniCart} />
             <View>
               <View style={styled.wrapInfo}>
                 <View style={styled.imageInfo}>

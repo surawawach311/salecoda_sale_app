@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import AccrodingPrice from '../../components/AccrodingPrice'
+import CustomHeader from '../../components/CustomHeader'
 import SpecialRequestProductCard from '../../components/SpecialProductCard'
 import { CartDataSource } from '../../datasource/CartDataSource'
 import { CartEntity } from '../../entities/CartEntity'
@@ -181,6 +182,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({ naviga
 
   return (
     <>
+      <CustomHeader title={'ขอส่วนลดพิเศษ'} showBackBtn onPressBack={() => navigation.goBack()} />
       <ScrollView keyboardShouldPersistTaps="handled" style={styled.container}>
         <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={90}>
           <View style={styled.specialLabel}>
@@ -283,7 +285,7 @@ export default SpecialRequestScreen
 
 const styled = StyleSheet.create({
   container: {},
-  specialLabel: { padding: 16, backgroundColor: '#FFFFFF', marginBottom: 5 },
+  specialLabel: { padding: 16, backgroundColor: '#FFFFFF', marginBottom: 5, marginTop: 1 },
   remarkWrapper: {
     padding: 16,
     backgroundColor: '#FFFFFF',

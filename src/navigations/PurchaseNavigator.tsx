@@ -20,7 +20,6 @@ import { CartContext, CartProvider } from '../context/cartStore'
 import MiniCart from '../components/MiniCart'
 import { Types } from '../context/cartReducer'
 
-
 export type PurchaseStackParamList = {
   ShopList: { territory: string; company: string }
   Brand: { shop: ShopEntity; company: string }
@@ -49,78 +48,15 @@ const PurchaseNavigator: React.FC = () => {
 
   return (
     <CartProvider>
-      
       <PurchaseStack.Navigator
         screenOptions={{
-          headerBackTitleVisible: false,
-          gestureEnabled: false,
+          headerShown: false,
         }}
       >
-        <PurchaseStack.Screen name="ShopList" component={ShopListScreen} options={{ title: 'เลือกร้านค้า' }} />
-        <PurchaseStack.Screen
-          name="Shop"
-          component={ShopScreen}
-          options={({ navigation, route }) => ({
-            title: 'สั่งสินค้า',
-            headerRight: (props) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Cart', {
-                    shop: route.params.shop,
-                    productBrand: route.params.productBrand,
-                    company: route.params.company,
-                  })
-                }
-              >
-               {/*  <MiniCart itemCount={state.carts.length} /> */}
-                
-              </TouchableOpacity>
-            ),
-            headerLeft: (props) => (
-              <TouchableOpacity onPress={() => navigation.navigate('ShopList', { shop: route.params.shop })}>
-                <Image style={styled.cart} source={require('../../assets/left.png')} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        {console.log(state,'store')
-        }
-        <PurchaseStack.Screen
-          name="ProductInfo"
-          component={ProductInfoScreen}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerRight: (props) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Cart', {
-                    shop: route.params.shop,
-                    productBrand: route.params.productBrand,
-                    company: route.params.company,
-                  })
-                }
-              >
-                <Image style={styled.cart} source={require('../../assets/shopping-cart.png')} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <PurchaseStack.Screen name="Cart" component={CartScreen} options={{ title: 'ตะกร้าสินค้า' }} />
-        <PurchaseStack.Screen name="OrderSuccess" component={OrderSuccessScreen} options={{ headerShown: false }} />
-        <PurchaseStack.Screen
-          name="SuccessDetail"
-          component={OrderSuccessDetail}
-          options={({ navigation, route }) => ({
-            headerTitle: ThaiDateFormat(route.params.data.created),
-          })}
-        />
-        <PurchaseStack.Screen
-          name="SpecialRequest"
-          component={SpecialRequestScreen}
-          options={{ title: 'ขอส่วนลดพิเศษ' }}
-        />
-
-        <PurchaseStack.Screen name="Brand" component={BrandScreen} options={{ title: 'เลือกแบรนด์' }} />
+        <PurchaseStack.Screen name="ShopList" component={ShopListScreen} />
+        <PurchaseStack.Screen name="Shop" component={ShopScreen} />
+        <PurchaseStack.Screen name="SpecialRequest" component={SpecialRequestScreen} />
+        <PurchaseStack.Screen name="Brand" component={BrandScreen} />
       </PurchaseStack.Navigator>
     </CartProvider>
   )

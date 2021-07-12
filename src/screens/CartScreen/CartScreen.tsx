@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, StyleSheet, KeyboardAvoidingView, Image, Platform, Alert,TextInput} from 'react-native'
+import { Text, View, StyleSheet, KeyboardAvoidingView, Image, Platform, Alert, TextInput } from 'react-native'
 import ButtonShop from '../../components/ButtonShop'
 import { StackScreenProps } from '@react-navigation/stack'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
@@ -26,6 +26,7 @@ import { Shipment } from './Shipment'
 import { CartContext } from '../../context/cartStore'
 import { Types } from '../../context/cartReducer'
 import PaymentSection from './PaymentSection'
+import CustomHeader from '../../components/CustomHeader'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Cart'>
 
@@ -302,151 +303,185 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={styled.container}
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={80}
-    >
-      <View style={styled.warpChangeShop}>
-        <ButtonShop shopName={route.params.shop.name} onPress={() => navigation.navigate('ShopList')} />
-      </View>
-      {cart !== undefined ? (
-        <View style={styled.borderContainer}>
-          {cart.items.length > 0 ? (
-            <>
-              <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styled.productContainer}>
-                  <Text style={styled.textProduct}>สินค้า</Text>
-                  {cart.items.map((item: ItemCart, index: number) => {
-                    let discount = getPromoDiscountForItem(cart, item.id)
-                    return (
-                      <ProductCartCard
-                        key={item.id}
-                        title={item.title}
-                        pricePerVolume={item.price_per_volume}
-                        volumeUnit={item.volume_unit}
-                        packingSize={item.packing_size}
+    <>
+      <CustomHeader title={'ตะกร้าสินค้า'} showBackBtn onPressBack={() => navigation.goBack()} />
+      <KeyboardAvoidingView
+        style={styled.container}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={80}
+      >
+        <View style={styled.warpChangeShop}>
+          <ButtonShop shopName={route.params.shop.name} onPress={() => navigation.navigate('ShopList')} />
+        </View>
+        {cart !== undefined ? (
+          <View style={styled.borderContainer}>
+            {cart.items.length > 0 ? (
+              <>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  <View style={styled.productContainer}>
+                    <Text style={styled.textProduct}>สินค้า</Text>
+                    {cart.items.map((item: ItemCart, index: number) => {
+                      let discount = getPromoDiscountForItem(cart, item.id)
+                      return (
+                        <ProductCartCard
+                          key={item.id}
+                          title={item.title}
+                          pricePerVolume={item.price_per_volume}
+                          volumeUnit={item.volume_unit}
+                          packingSize={item.packing_size}
+                          image={item.image}
+                          pricePerUnit={item.price}
+                          saleUnit={item.sale_unit}
+                          quantity={item.quantity}
+                          priceTotal={item.total_price + discount}
+                          onDelete={() => removeItem(item.id)}
+                          mode="cart"
+                          discount={Math.abs(discount)}
+                          originalPrice={item.total_price}
+                        >
+                          <InputNumber
+                            key={item.title}
+                            value={item.quantity.toString()}
+                            onPlus={() => increaseProduct(item.id, item.quantity)}
+                            onMinus={() => decreaseProduct(item.id, item.quantity)}
+                            onChangeText={(e: any) => {
+                              setQuantity((cart.items[index].quantity = e))
+                            }}
+                            onBlur={() => adjustProduct(item.id, quantity)}
+                          />
+                        </ProductCartCard>
+                      )
+                    })}
+                  </View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={cart.available_premiums}
+                    style={{ backgroundColor: '#FFFFFF', marginHorizontal: 4, marginTop: 5 }}
+                    renderItem={({ item }) => (
+                      <PremiumCard
+                        title={item.name}
+                        desc={item.packing_size}
                         image={item.image}
-                        pricePerUnit={item.price}
-                        saleUnit={item.sale_unit}
                         quantity={item.quantity}
-                        priceTotal={item.total_price + discount}
-                        onDelete={() => removeItem(item.id)}
-                        mode="cart"
-                        discount={Math.abs(discount)}
-                        originalPrice={item.total_price}
-                      >
-                        <InputNumber
-                          key={item.title}
-                          value={item.quantity.toString()}
-                          onPlus={() => increaseProduct(item.id, item.quantity)}
-                          onMinus={() => decreaseProduct(item.id, item.quantity)}
-                          onChangeText={(e: any) => {
-                            setQuantity((cart.items[index].quantity = e))
-                          }}
-                          onBlur={() => adjustProduct(item.id, quantity)}
-                        />
-                      </ProductCartCard>
-                    )
-                  })}
-                </View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={cart.available_premiums}
-                  style={{ backgroundColor: '#FFFFFF', marginHorizontal: 4, marginTop: 5 }}
-                  renderItem={({ item }) => (
-                    <PremiumCard
-                      title={item.name}
-                      desc={item.packing_size}
-                      image={item.image}
-                      quantity={item.quantity}
-                      unit={item.unit}
-                    />
-                  )}
-                  keyExtractor={(item) => item.id}
-                />
-                <View style={styled.remarkWrapper}>
-                  <Text style={styled.specialLabelFont}>หมายเหตุ (สำหรับ Sale Co)</Text>
-                  <TextInput
-                    style={styled.remarkTextInput}
-                    value={remark}
-                    placeholder="ใส่หมายเหตุ..."
-                    onChangeText={setRemark}
-                    onEndEditing={(e) => handleRemark(e.nativeEvent.text)}
-                    multiline
+                        unit={item.unit}
+                      />
+                    )}
+                    keyExtractor={(item) => item.id}
                   />
-                </View>
-                {specialRequest.length > 0 ? (
-                  <View style={styled.specialRequestContainer}>
+                  <View style={styled.remarkWrapper}>
+                    <Text style={styled.specialLabelFont}>หมายเหตุ (สำหรับ Sale Co)</Text>
+                    <TextInput
+                      style={styled.remarkTextInput}
+                      value={remark}
+                      placeholder="ใส่หมายเหตุ..."
+                      onChangeText={setRemark}
+                      onEndEditing={(e) => handleRemark(e.nativeEvent.text)}
+                      multiline
+                    />
+                  </View>
+                  {specialRequest.length > 0 ? (
+                    <View style={styled.specialRequestContainer}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Text style={styled.textHeaderPayment}>Special Request</Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate('SpecialRequest', {
+                              cart: cart,
+                              shop: route.params.shop,
+                              item: specialRequest,
+                              productBrand: route.params.productBrand,
+                              company: route.params.company,
+                            })
+                          }
+                        >
+                          <Text
+                            style={{
+                              color: '#4C95FF',
+                              fontWeight: '500',
+                              fontSize: 14,
+                            }}
+                          >
+                            แก้ไข
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styled.line} />
+                      <AccrodingPrice
+                        title="ขอส่วนลดพิเศษเพิ่ม"
+                        total={cart.total_received_special_request_discount}
+                        detail={specialRequest}
+                        price_color={'#BB6BD9'}
+                      />
+                    </View>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('SpecialRequest', {
+                          cart: cart,
+                          shop: route.params.shop,
+                          item: specialRequest,
+                          productBrand: route.params.productBrand,
+                          company: route.params.company,
+                        })
+                      }
+                      style={styled.buttonSpecialRequestContainer}
+                    >
+                      <View style={styled.buttonSpecialRequest}>
+                        <Image
+                          style={{ width: 25, height: 25 }}
+                          source={require('../../../assets/special_request.png')}
+                        />
+                        <Text style={styled.textButtonSpecialRequest}>Special Request</Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+
+                  {cart.special_request_remark ? (
+                    <View
+                      style={{
+                        paddingLeft: 20,
+                        backgroundColor: '#FFFFFF',
+                      }}
+                    >
+                      <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          marginVertical: 12,
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Text style={{ color: '#6B7995' }}>{cart.special_request_remark}</Text>
+                      </View>
+                    </View>
+                  ) : null}
+                  <PaymentSection
+                    payments={cart.available_payments}
+                    onChange={(e) => {
+                      handlePayment(e)
+                    }}
+                  />
+                  <View style={{ paddingHorizontal: 15, backgroundColor: 'white' }}>
                     <View
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
+                        alignItems: 'center',
                       }}
                     >
-                      <Text style={styled.textHeaderPayment}>Special Request</Text>
-                      <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('SpecialRequest', {
-                            cart: cart,
-                            shop: route.params.shop,
-                            item: specialRequest,
-                            productBrand: route.params.productBrand,
-                            company: route.params.company,
-                          })
-                        }
-                      >
-                        <Text
-                          style={{
-                            color: '#4C95FF',
-                            fontWeight: '500',
-                            fontSize: 14,
-                          }}
-                        >
-                          แก้ไข
-                        </Text>
-                      </TouchableOpacity>
+                      <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
+                      <Text style={{ color: '#616A7B' }}>
+                        {useSubsidize
+                          ? currencyFormat(cart.available_subsidize - cart.usable_subsidize, 2)
+                          : currencyFormat(cart.available_subsidize, 2)}
+                      </Text>
                     </View>
-                    <View style={styled.line} />
-                    <AccrodingPrice
-                      title="ขอส่วนลดพิเศษเพิ่ม"
-                      total={cart.total_received_special_request_discount}
-                      detail={specialRequest}
-                      price_color={'#BB6BD9'}
-                    />
-                  </View>
-                ) : (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('SpecialRequest', {
-                        cart: cart,
-                        shop: route.params.shop,
-                        item: specialRequest,
-                        productBrand: route.params.productBrand,
-                        company: route.params.company,
-                      })
-                    }
-                    style={styled.buttonSpecialRequestContainer}
-                  >
-                    <View style={styled.buttonSpecialRequest}>
-                      <Image
-                        style={{ width: 25, height: 25 }}
-                        source={require('../../../assets/special_request.png')}
-                      />
-                      <Text style={styled.textButtonSpecialRequest}>Special Request</Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
-
-                {cart.special_request_remark ? (
-                  <View
-                    style={{
-                      paddingLeft: 20,
-                      backgroundColor: '#FFFFFF',
-                    }}
-                  >
-                    <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -454,197 +489,166 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         alignItems: 'center',
                       }}
                     >
-                      <Text style={{ color: '#6B7995' }}>{cart.special_request_remark}</Text>
+                      {cart.available_subsidize > 0 ? (
+                        <>
+                          <Checkbox
+                            value="test"
+                            onChange={() => handleUseSubsidize(!useSubsidize)}
+                            colorScheme="rgba(255, 93, 93, 1)"
+                            style={{
+                              borderRadius: 4,
+                              width: 20,
+                              height: 20,
+                              alignItems: 'center',
+                            }}
+                          />
+                          <Text style={{ marginLeft: 15, color: '#6B7995' }}>ใช้ส่วนลด</Text>
+                          <Text style={{ color: '#FF5D5D', fontWeight: 'bold' }}>
+                            {' ' + currencyFormat(cart.usable_subsidize, 2)}
+                          </Text>
+                        </>
+                      ) : (
+                        <Text style={{ color: '#6B7995' }}>ไม่มีวงเงินที่สามารถใช้ได้</Text>
+                      )}
                     </View>
                   </View>
-                ) : null}
-                <PaymentSection
-                  payments={cart.available_payments}
-                  onChange={(e) => {
-                    handlePayment(e)
-                  }}
-                />
-                <View style={{ paddingHorizontal: 15, backgroundColor: 'white' }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
-                    <Text style={{ color: '#616A7B' }}>
-                      {useSubsidize
-                        ? currencyFormat(cart.available_subsidize - cart.usable_subsidize, 2)
-                        : currencyFormat(cart.available_subsidize, 2)}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginVertical: 12,
-                      alignItems: 'center',
-                    }}
-                  >
-                    {cart.available_subsidize > 0 ? (
-                      <>
-                        <Checkbox
-                          value="test"
-                          onChange={() => handleUseSubsidize(!useSubsidize)}
-                          colorScheme="rgba(255, 93, 93, 1)"
-                          style={{
-                            borderRadius: 4,
-                            width: 20,
-                            height: 20,
-                            alignItems: 'center',
-                          }}
-                        />
-                        <Text style={{ marginLeft: 15, color: '#6B7995' }}>ใช้ส่วนลด</Text>
-                        <Text style={{ color: '#FF5D5D', fontWeight: 'bold' }}>
-                          {' ' + currencyFormat(cart.usable_subsidize, 2)}
-                        </Text>
-                      </>
-                    ) : (
-                      <Text style={{ color: '#6B7995' }}>ไม่มีวงเงินที่สามารถใช้ได้</Text>
-                    )}
-                  </View>
-                </View>
-                <Dash
-                  dashGap={2}
-                  dashLength={4}
-                  dashThickness={4}
-                  style={{ width: '100%', height: 1 }}
-                  dashColor="#C8CDD6"
-                />
-                <View style={styled.totalPriceContainer}>
-                  <View style={styled.warpPrice}>
-                    <Text style={styled.textDiscount}>ราคาก่อนลด</Text>
-                    <Text style={styled.textBeforeDiscount}>{currencyFormat(cart.before_discount, 2)}</Text>
-                  </View>
-
-                  {cart.received_discounts.filter((item) => item.item_id != null).length > 0 ? (
-                    <AccrodingPrice
-                      title="ส่วนลดรายการ"
-                      total={cart?.received_discounts
-                        .filter((item) => item.item_id != null)
-                        .reduce((sum, item) => sum + item.total, 0)}
-                      detail={discoutPromo}
-                      price_color={'#3AAE49'}
-                    />
-                  ) : null}
-                  {cart.received_special_request_discounts.length > 0 ? (
-                    <AccrodingPrice
-                      title="ขอส่วนลดพิเศษเพิ่ม"
-                      total={cart.total_received_special_request_discount}
-                      detail={specialRequest}
-                      price_color={'#BB6BD9'}
-                    />
-                  ) : null}
-                  {cart.subsidize_discount != 0 ? (
-                    <View style={styled.warpPrice}>
-                      <Text style={styled.textDiscount}>ส่วนลดดูแลราคา</Text>
-                      <Text style={styled.textSubsidizeDiscount}>{currencyFormat(cart.subsidize_discount, 2)}</Text>
-                    </View>
-                  ) : null}
-                  {getCashDiscount(cart) != 0 ? (
-                    <View style={styled.warpPrice}>
-                      <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
-                      <Text
-                        style={{
-                          color: '#FF8329',
-                          fontSize: 16,
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {currencyFormat(getCashDiscount(cart), 2)}
-                      </Text>
-                    </View>
-                  ) : null}
-                  <View
-                    style={{
-                      backgroundColor: '#FBFBFB',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginVertical: 5,
-                      padding: 5,
-                    }}
-                  >
-                    <Text style={styled.textBeforeTotal}>ส่วนลดรวม</Text>
-                    <Text style={styled.textTotalDiscount}>{currencyFormat(cart.total_discount, 2)}</Text>
-                  </View>
-                  <View style={styled.warpPrice}>
-                    <Text style={styled.textLabelTotalPrice}>ราคารวม</Text>
-                    <Text style={styled.textTotalPrice}>{currencyFormat(cart.total_price, 2)}</Text>
-                  </View>
-                </View>
-                <View style={styled.warpDelivery}>
-                  <ShipmentSection
-                    company={route.params.company}
-                    shopId={route.params.shop.id}
-                    onChange={(v) => {
-                      if (v) handleShipmentChange(v)
-                    }}
-                    withDefault={true}
+                  <Dash
+                    dashGap={2}
+                    dashLength={4}
+                    dashThickness={4}
+                    style={{ width: '100%', height: 1 }}
+                    dashColor="#C8CDD6"
                   />
-                </View>
-              </ScrollView>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  backgroundColor: '#FFFFFF',
-                  flexDirection: 'column',
-                  height: 90,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 6,
-                  },
-                  shadowOpacity: 0.39,
-                  shadowRadius: 8.3,
-                  elevation: 13,
-                }}
-              >
-                <TouchableOpacity
-                  style={styled.confirmOrderButton}
-                  onPress={() => {
-                    confirmOrder(route.params.shop, cart)
+                  <View style={styled.totalPriceContainer}>
+                    <View style={styled.warpPrice}>
+                      <Text style={styled.textDiscount}>ราคาก่อนลด</Text>
+                      <Text style={styled.textBeforeDiscount}>{currencyFormat(cart.before_discount, 2)}</Text>
+                    </View>
+
+                    {cart.received_discounts.filter((item) => item.item_id != null).length > 0 ? (
+                      <AccrodingPrice
+                        title="ส่วนลดรายการ"
+                        total={cart?.received_discounts
+                          .filter((item) => item.item_id != null)
+                          .reduce((sum, item) => sum + item.total, 0)}
+                        detail={discoutPromo}
+                        price_color={'#3AAE49'}
+                      />
+                    ) : null}
+                    {cart.received_special_request_discounts.length > 0 ? (
+                      <AccrodingPrice
+                        title="ขอส่วนลดพิเศษเพิ่ม"
+                        total={cart.total_received_special_request_discount}
+                        detail={specialRequest}
+                        price_color={'#BB6BD9'}
+                      />
+                    ) : null}
+                    {cart.subsidize_discount != 0 ? (
+                      <View style={styled.warpPrice}>
+                        <Text style={styled.textDiscount}>ส่วนลดดูแลราคา</Text>
+                        <Text style={styled.textSubsidizeDiscount}>{currencyFormat(cart.subsidize_discount, 2)}</Text>
+                      </View>
+                    ) : null}
+                    {getCashDiscount(cart) != 0 ? (
+                      <View style={styled.warpPrice}>
+                        <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
+                        <Text
+                          style={{
+                            color: '#FF8329',
+                            fontSize: 16,
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {currencyFormat(getCashDiscount(cart), 2)}
+                        </Text>
+                      </View>
+                    ) : null}
+                    <View
+                      style={{
+                        backgroundColor: '#FBFBFB',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginVertical: 5,
+                        padding: 5,
+                      }}
+                    >
+                      <Text style={styled.textBeforeTotal}>ส่วนลดรวม</Text>
+                      <Text style={styled.textTotalDiscount}>{currencyFormat(cart.total_discount, 2)}</Text>
+                    </View>
+                    <View style={styled.warpPrice}>
+                      <Text style={styled.textLabelTotalPrice}>ราคารวม</Text>
+                      <Text style={styled.textTotalPrice}>{currencyFormat(cart.total_price, 2)}</Text>
+                    </View>
+                  </View>
+                  <View style={styled.warpDelivery}>
+                    <ShipmentSection
+                      company={route.params.company}
+                      shopId={route.params.shop.id}
+                      onChange={(v) => {
+                        if (v) handleShipmentChange(v)
+                      }}
+                      withDefault={true}
+                    />
+                  </View>
+                </ScrollView>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    backgroundColor: '#FFFFFF',
+                    flexDirection: 'column',
+                    height: 90,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 6,
+                    },
+                    shadowOpacity: 0.39,
+                    shadowRadius: 8.3,
+                    elevation: 13,
                   }}
                 >
-                  <View style={styled.iconCartWarp}>
-                    <Image style={styled.iconLocation} source={require('../../../assets/order-cart.png')} />
-                  </View>
-                  <Text style={styled.textconfirmOrderButton}>ยืนยันคำสั่งซื้อ</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          ) : (
-            <CartEmptyState />
-          )}
-        </View>
-      ) : (
-        <>
-          <View style={styled.productContainer}>
-            <Text style={styled.textProduct}>สินค้า</Text>
-            <SkeletonPlaceholder>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ width: 60, height: 60 }} />
-                <View style={{ marginLeft: 20 }}>
-                  <View style={{ width: 120, height: 20, borderRadius: 4 }} />
-                  <View
-                    style={{
-                      marginTop: 6,
-                      width: 80,
-                      height: 20,
-                      borderRadius: 4,
+                  <TouchableOpacity
+                    style={styled.confirmOrderButton}
+                    onPress={() => {
+                      confirmOrder(route.params.shop, cart)
                     }}
-                  />
+                  >
+                    <View style={styled.iconCartWarp}>
+                      <Image style={styled.iconLocation} source={require('../../../assets/order-cart.png')} />
+                    </View>
+                    <Text style={styled.textconfirmOrderButton}>ยืนยันคำสั่งซื้อ</Text>
+                  </TouchableOpacity>
                 </View>
-              </View>
-            </SkeletonPlaceholder>
+              </>
+            ) : (
+              <CartEmptyState />
+            )}
           </View>
-        </>
-      )}
-    </KeyboardAvoidingView>
+        ) : (
+          <>
+            <View style={styled.productContainer}>
+              <Text style={styled.textProduct}>สินค้า</Text>
+              <SkeletonPlaceholder>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ width: 60, height: 60 }} />
+                  <View style={{ marginLeft: 20 }}>
+                    <View style={{ width: 120, height: 20, borderRadius: 4 }} />
+                    <View
+                      style={{
+                        marginTop: 6,
+                        width: 80,
+                        height: 20,
+                        borderRadius: 4,
+                      }}
+                    />
+                  </View>
+                </View>
+              </SkeletonPlaceholder>
+            </View>
+          </>
+        )}
+      </KeyboardAvoidingView>
+    </>
   )
 }
 

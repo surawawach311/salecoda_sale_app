@@ -9,6 +9,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import Search from '../../components/Search'
 import { ShopDataSource } from '../../datasource/ShopDataSource'
+import CustomHeader from '../../components/CustomHeader'
 
 type ShopListScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'ShopList'>
 
@@ -26,6 +27,7 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({ navigation, route }
 
   return (
     <View style={styles.container}>
+      <CustomHeader title={'เลือกร้านค้า'} showBackBtn onPressBack={() => navigation.goBack()} />
       <View style={{ backgroundColor: 'white' }}>
         <Search placeholder="ค้นหาร้านค้า" onChange={(e) => searchShop(e)} />
       </View>
