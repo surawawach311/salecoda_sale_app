@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
+  TouchableOpacity,
 } from 'react-native'
 import { InputPhone } from '../../components/InputPhone'
 import { VerifiesDataSource } from '../../datasource/VerifiesDataSource'
@@ -52,19 +53,23 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
   }
 
   const verifyPhoneNo = (tel: string) => {
-    const telephoneNo = fillZero(tel)
-    VerifiesDataSource.verifyPhoneNo(telephoneNo).then((res) => {
-      if (res == undefined) {
-        setIsError(true)
-      } else {
-        setIsError(false)
-        if (bypassTelephone.includes(tel)) {
-          navigation.navigate('LoginSuccess', { userProfile: res })
+    if (tel === '') {
+      alert('กรุณาใส่หมายเลขโทรศัพท์')
+    } else {
+      const telephoneNo = fillZero(tel)
+      VerifiesDataSource.verifyPhoneNo(telephoneNo).then((res) => {
+        if (res == undefined) {
+          setIsError(true)
         } else {
-          navigation.navigate('InputOtp', { userProfile: res })
+          setIsError(false)
+          if (bypassTelephone.includes(tel)) {
+            navigation.navigate('LoginSuccess', { userProfile: res })
+          } else {
+            navigation.navigate('InputOtp', { userProfile: res })
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   return (
@@ -84,7 +89,7 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
             />
           </View>
           <View style={styles.btnContainer}>
-            <Button
+            <TouchableOpacity
               style={styles.button}
               onPress={() => {
                 Keyboard.dismiss()
@@ -92,7 +97,7 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
               }}
             >
               <Text style={styles.textButton}>ขอรหัสOTP</Text>
-            </Button>
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -117,7 +122,6 @@ const styles = StyleSheet.create({
   },
   wrapText: { flex: 1, padding: 20, top: -50 },
   btnContainer: {
-    flex: 0.01,
     flexDirection: 'row',
     alignItems: 'flex-end',
   },
@@ -142,6 +146,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#4C95FF',
     justifyContent: 'center',
     alignSelf: 'flex-end',
+    flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center',
+    height: 50,
   },
 })
 

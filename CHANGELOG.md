@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Enhance [v1.72.1] - 2020-07-13
+- fix UI request OTP button
+
 ## Enhance [v1.72.0] - 2020-07-12
 - added confirm modal
 - added number item in cart
