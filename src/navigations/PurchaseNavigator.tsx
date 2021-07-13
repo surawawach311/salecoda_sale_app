@@ -47,8 +47,7 @@ const PurchaseNavigator: React.FC = () => {
     <CartProvider>
       <PurchaseStack.Navigator
         screenOptions={{
-          headerBackTitleVisible: false,
-          gestureEnabled: false,
+          headerShown: false,
         }}
       >
         <PurchaseStack.Screen name="ShopList" component={ShopListScreen} options={{ title: 'เลือกร้านค้า' }} />

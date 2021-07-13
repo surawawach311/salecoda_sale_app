@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Text, Image, StyleSheet, FlatList, View } from 'react-native'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -9,14 +9,41 @@ import { ShopDataSource } from '../../datasource/ShopDataSource'
 import { ProductEntity } from '../../entities/ProductEntity'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ProductDataSource } from '../../datasource/ProductDataSource'
+import { CartContext } from '../../context/cartStore'
+import CustomHeader from '../../components/CustomHeader'
+import MiniCart from '../../components/MiniCart'
+import { CartDataSource } from '../../datasource/CartDataSource'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Shop'>
 
 const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [productList, setProductList] = useState<ProductEntity[]>()
+  const { state } = useContext(CartContext)
+  const [totalItem, setTotalItem] = useState(0)
   useEffect(() => {
     fecthData()
+    initialQuantity()
   }, [])
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      initialQuantity()
+    })
+    return unsubscribe
+  }, [navigation])
+
+  const initialQuantity = async () => {
+    try {
+      const res = await CartDataSource.getCartByShop(
+        route.params.company,
+        route.params.shop.id,
+        route.params.productBrand,
+      )
+      setTotalItem(res.total_item)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const fecthData = async () => {
     if (route.params.productBrand) {
@@ -40,8 +67,29 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     })
   }
 
+  const renderMiniCart = () => {
+    return (
+      <MiniCart
+        itemCount={totalItem}
+        onPress={() =>
+          navigation.navigate('Cart', {
+            shop: route.params.shop,
+            productBrand: route.params.productBrand,
+            company: route.params.company,
+          })
+        }
+      />
+    )
+  }
+
   return (
-    <View style={{ flex: 1,backgroundColor:"#FFFFFF" }}>
+    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <CustomHeader
+        title={'สั่งสินค้า'}
+        showBackBtn
+        onPressBack={() => navigation.goBack()}
+        headerRight={renderMiniCart}
+      />
       <View style={styles.wrapSearch}>
         <Search
           placeholder="ค้นหาสินค้า"

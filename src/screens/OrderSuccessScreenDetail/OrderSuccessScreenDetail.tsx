@@ -16,6 +16,7 @@ import { AccrodionPriceModel } from '../../models/AccrodionPriceModel'
 import TagStatus from '../../components/TagStatus'
 import { UserDataContext } from '../../provider/UserDataProvider'
 import { SHIPPING_METHOD_MAPPING } from '../../definitions/ShippingMethod'
+import CustomHeader from '../../components/CustomHeader'
 
 type OrderSuccessScreenDetailRouteProp = StackScreenProps<PurchaseStackParamList, 'SuccessDetail'>
 
@@ -130,6 +131,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
   } = route.params.data
   return (
     <View style={styled.container}>
+      <CustomHeader title={ThaiDateFormat(created)} showBackBtn onPressBack={() => navigation.navigate('Home')} />
       <ScrollView>
         {status == 'sale_executive_rejected' || status == 'customer_canceled' || status == 'company_canceled' ? (
           <View style={{ paddingHorizontal: 20 }}>
