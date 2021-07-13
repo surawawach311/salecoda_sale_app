@@ -1,6 +1,5 @@
-import { View } from 'react-native'
 import React from 'react'
-import { Text, Image, TouchableOpacity, ViewStyle, StyleSheet } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ViewStyle, StyleSheet } from 'react-native'
 
 interface Prop {
   itemCount?: number
