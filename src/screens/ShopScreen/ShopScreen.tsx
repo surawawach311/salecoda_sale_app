@@ -87,7 +87,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       <CustomHeader
         title={'สั่งสินค้า'}
         showBackBtn
-        onPressBack={() => navigation.goBack()}
+        onPressBack={() => navigation.popToTop()}
         headerRight={renderMiniCart}
       />
       <View style={styles.wrapSearch}>
