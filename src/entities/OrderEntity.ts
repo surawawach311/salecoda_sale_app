@@ -87,6 +87,7 @@ export interface SpecialOrderEntity {
     id: string
     image: string
     item_id: string
+    item_no: string
     name: string
     price: number
     quantity: number

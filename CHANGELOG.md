@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## fix [v1.72.3] - 2020-07-13
+- add item_no in CartEntity
+
 ## fix [v1.72.2] - 2020-07-13
 - fix shop back button to select brand
 
