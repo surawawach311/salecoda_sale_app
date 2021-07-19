@@ -19,7 +19,7 @@ export interface CartEntity {
     usable_subsidize: number
     available_subsidize: number
     subsidize_discount: number
-    sale_co_remark:string
+    sale_co_remark: string
 }
 
 export interface ItemCart {
@@ -70,6 +70,7 @@ export interface DiscountEntity {
     id: string
     image: string
     item_id: string
+    item_no: string
     name: string
     price: number
     promotion_id: string
@@ -107,6 +108,7 @@ export interface SpecialRequestEnity {
     special_request_id: string
     image: string
     item_id: string
+    item_no: string
     total: number
     packing_size: string
     sale_unit: string
