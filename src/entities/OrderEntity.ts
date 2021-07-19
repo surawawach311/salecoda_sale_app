@@ -81,6 +81,7 @@ export interface DiscountOrderEntity {
     promotion_name: string
     promotion_image: string
     item_id: string
+    item_no: string
 }
 
 export interface SpecialOrderEntity {
