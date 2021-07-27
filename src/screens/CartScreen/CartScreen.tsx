@@ -27,6 +27,8 @@ import { CartContext } from '../../context/cartStore'
 import { Types } from '../../context/cartReducer'
 import PaymentSection from './PaymentSection'
 import CustomHeader from '../../components/CustomHeader'
+import { ExclusdePromotionModel } from '../../models/ExcludePromotion'
+import _ from 'lodash'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Cart'>
 
@@ -39,6 +41,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>([])
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([])
   const [useSubsidize, setUseSubsudize] = useState(false)
+  const [excludePromotion, setExcludePromotion] = useState<ExclusdePromotionModel[]>([])
   const isFocused = useIsFocused()
   const userDataStore = useContext(UserDataContext)
   const { userData } = userDataStore
@@ -47,6 +50,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   useEffect(() => {
     getCart()
   }, [isFocused])
+
+  useEffect(() => {
+    filterExcludePromotion(cart?.available_promotions, cart?.applied_promotions)
+  }, [cart])
 
   // TODO: don't use any type
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
@@ -302,6 +309,64 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     return discountItem ? discountItem.price * discountItem.quantity : 0
   }
 
+  const callUpdateExcludePromotion = (e: ExclusdePromotionModel) => {
+    let newExcludePromotion = excludePromotion.map((p) => ({
+      ...p,
+      checked: e.promotion_id === p.promotion_id ? !p.checked : p.checked,
+    }))
+    setExcludePromotion(newExcludePromotion)
+    let arrUncheckPromotion: Array<string> = newExcludePromotion.filter((p) => !p.checked).map((p) => p.promotion_id)
+
+    CartDataSource.updateExcludePromotion(
+      arrUncheckPromotion,
+      route.params.company,
+      route.params.shop.id,
+      route.params.productBrand,
+    )
+      .then((res: CartEntity) => {
+        setCart(res)
+        filterExcludePromotion(res.available_promotions, res.applied_promotions)
+      })
+      .catch((err) => {
+        alert('Something went wrong' + err)
+      })
+  }
+
+  const checkAllExcludePromotion = () => {
+    let promotionIdAll: Array<string>
+    if (excludePromotion.every((e) => e.checked)) {
+      promotionIdAll = excludePromotion.map((e) => e.promotion_id)
+    } else {
+      promotionIdAll = []
+    }
+    CartDataSource.updateExcludePromotion(
+      promotionIdAll,
+      route.params.company,
+      route.params.shop.id,
+      route.params.productBrand,
+    )
+      .then((res: CartEntity) => {
+        setCart(res)
+        filterExcludePromotion(res.available_promotions, res.applied_promotions)
+      })
+      .catch((err) => {
+        alert('Something went wrong' + err)
+      })
+  }
+
+  const filterExcludePromotion = (
+    AvailablePromotions: Array<ExclusdePromotionModel>,
+    AppliedPromotions: Array<ExclusdePromotionModel>,
+  ) => {
+    const uniqAvailablePromotions = _.uniqBy(AvailablePromotions, 'promotion_id')
+    const uniqAppliedPromotions = _.uniqBy(AppliedPromotions, 'promotion_id')
+    const applyFilter = uniqAppliedPromotions.length ? uniqAppliedPromotions.map((ap) => ap.promotion_id) : []
+    const newAvaliable = uniqAvailablePromotions.map((av) => ({
+      ...av,
+      checked: applyFilter.includes(av.promotion_id),
+    }))
+    setExcludePromotion(newAvaliable)
+  }
   return (
     <>
       <CustomHeader title={'ตะกร้าสินค้า'} showBackBtn onPressBack={() => navigation.goBack()} />
@@ -369,6 +434,40 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     )}
                     keyExtractor={(item) => item.id}
                   />
+
+                  {excludePromotion.length > 0 ? (
+                    <View style={styled.remarkWrapper}>
+                      <Text style={styled.specialLabelFont}>โปรโมชั่นที่ร่วมรายการ</Text>
+                      <View style={styled.promotionCheckbox}>
+                        <Checkbox
+                          value={'checkAll'}
+                          colorScheme="rgba(76, 149, 255,1)"
+                          style={{ marginVertical: 10 }}
+                          onChange={() => checkAllExcludePromotion()}
+                          isChecked={excludePromotion.every((e) => e.checked)}
+                        >
+                          <Text style={{ fontSize: 18, color: '#6B7995', marginLeft: 10 }}>
+                            เข้าร่วมโปรโมชั่นทั้งหมด
+                          </Text>
+                        </Checkbox>
+
+                        {excludePromotion.map((e, i) => (
+                          <View style={styled.excludePromotionWrapper} key={i}>
+                            <View style={styled.textExcludeContainer}>
+                              <Text style={styled.textExclud}>{e.promotion_name}</Text>
+                            </View>
+                            <Checkbox
+                              value={'exclude Promotion'}
+                              colorScheme="rgba(76, 149, 255,1)"
+                              isChecked={e.checked}
+                              onChange={() => callUpdateExcludePromotion(e)}
+                            />
+                          </View>
+                        ))}
+                      </View>
+                    </View>
+                  ) : null}
+
                   <View style={styled.remarkWrapper}>
                     <Text style={styled.specialLabelFont}>หมายเหตุ (สำหรับ Sale Co)</Text>
                     <TextInput
@@ -830,5 +929,24 @@ const styled = StyleSheet.create({
     borderColor: '#E1E7F6',
     marginTop: 12,
     textAlignVertical: 'top',
+  },
+  promotionCheckbox: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  excludePromotionWrapper: {
+    backgroundColor: '#FBFBFB',
+    padding: 10,
+    borderBottomColor: '#EBEFF2',
+    borderBottomWidth: 0.5,
+    width: '100%',
+    flexDirection: 'row',
+  },
+  textExcludeContainer: {
+    width: '80%',
+  },
+  textExclud: {
+    fontSize: 16,
+    color: '#6B7995',
   },
 })

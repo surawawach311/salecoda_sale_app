@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Version - 1]
+## Enhance [v1.73.0] - 2020-07-26
+- added exclude promotion
 
 ## fix [v1.72.3] - 2020-07-13
 - add item_no in CartEntity

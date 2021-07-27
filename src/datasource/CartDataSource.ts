@@ -187,7 +187,7 @@ export class CartDataSource {
   static addOrderRemark = (remark: string, company: string, shopId: string, productBrand?: string) => {
     const data = {
       action: 'update_sale_co_remark',
-      sale_co_remark: remark
+      sale_co_remark: remark,
     }
     const params = {
       shopId: shopId,
@@ -195,8 +195,30 @@ export class CartDataSource {
       ...(productBrand ? { productBrand: productBrand } : {}),
     }
 
-    return httpClient.post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+    return httpClient
+      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
       .then((res) => res.data)
-      .catch((err: Error) => alert("Error:" + err.message))
+      .catch((err: Error) => alert('Error:' + err.message))
+  }
+
+  static updateExcludePromotion = (
+    promotionId: Array<string | null>,
+    company: string,
+    shopId: string,
+    productBrand?: string,
+  ) => {
+    const data = {
+      action: 'update_exclude_promotions',
+      exclude_promotions: promotionId,
+    }
+    const params = {
+      shopId: shopId,
+      company,
+      ...(productBrand ? { productBrand: productBrand } : {}),
+    }
+    return httpClient
+      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .then((res) => res.data)
+      .catch((err: Error) => alert('Error:' + err.message))
   }
 }
