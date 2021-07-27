@@ -81,7 +81,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         setSpecialRequest(discountSpecial)
         setDiscoutPromo(discountProduct)
         setUseSubsudize(false)
-        /*  filterExcludePromotion(res.available_promotions,res.applied_promotions,) */
         if (res?.available_payments && res?.available_payments.length <= 1) {
           res?.available_payments.map((item) => {
             setPayment(item.id)
