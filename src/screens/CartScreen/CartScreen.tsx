@@ -19,7 +19,7 @@ import AccrodingPrice from '../../components/AccrodingPrice'
 import { useIsFocused } from '@react-navigation/native'
 import PremiumCard from '../../components/PremiumCard'
 import { AccrodionPriceModel } from '../../models/AccrodionPriceModel'
-import { Button, Checkbox } from 'native-base'
+import { Checkbox } from 'native-base'
 import { UserDataContext } from '../../provider/UserDataProvider'
 import ShipmentSection from './ShipmentSection'
 import { Shipment } from './Shipment'
@@ -438,7 +438,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
                   {excludePromotion.length > 0 ? (
                     <View style={styled.remarkWrapper}>
-                      {/* <Button onPress={()=>callUpdateExcludePromotion()} >test</Button> */}
                       <Text style={styled.specialLabelFont}>โปรโมชั่นที่ร่วมรายการ</Text>
                       <View style={styled.promotionCheckbox}>
                         <Checkbox
