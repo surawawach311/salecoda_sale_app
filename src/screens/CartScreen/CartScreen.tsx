@@ -73,6 +73,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     CartDataSource.getCartByShop(route.params.company, route.params.shop.id, route.params.productBrand).then(
       (res: CartEntity) => {
         setCart(res)
+        setRemark(res.sale_co_remark)
         handlePayment(res.selected_payment.id)
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
         let discountProduct: AccrodionPriceModel[] = formatAccrodion(
