@@ -36,7 +36,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [shipment, setShipment] = useState<Shipment>()
   const [cart, setCart] = useState<CartEntity | undefined>()
   const [quantity, setQuantity] = useState(0)
-  const [payment, setPayment] = useState<string | undefined>()
+  const [payment, setPayment] = useState<string>()
   const [remark, setRemark] = useState<string | undefined>()
   const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>([])
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([])
@@ -74,6 +74,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       (res: CartEntity) => {
         setCart(res)
         setRemark(res.sale_co_remark)
+        handlePayment(res.selected_payment?.id)
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
         let discountProduct: AccrodionPriceModel[] = formatAccrodion(
           res.received_discounts.filter((item) => item.item_id != null),
@@ -221,40 +222,56 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     setShipment(s)
   }
 
-  const handlePayment = (payment: string) => {
-    if (payment == 'cash') {
+  const handlePayment = (p: string) => {
+    if (p == 'cash') {
       setPayment('cash')
-      CartDataSource.calculate(
+      CartDataSource.updatePaymentMethods(
+        'cash',
         route.params.company,
         route.params.shop.id,
-        payment,
-        useSubsidize,
         route.params.productBrand,
       ).then((res: CartEntity) => {
-        setCart(res)
-        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-          res.received_discounts.filter((item) => item.item_id != null),
-        )
-        setSpecialRequest(discountSpecial)
-        setDiscoutPromo(discountProduct)
+        CartDataSource.calculate(
+          route.params.company,
+          route.params.shop.id,
+          res.selected_payment.id,
+          useSubsidize,
+          route.params.productBrand,
+        ).then((res: CartEntity) => {
+          setCart(res)
+          let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
+          let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+            res.received_discounts.filter((item) => item.item_id != null),
+          )
+          setPayment(res.selected_payment.id)
+          setSpecialRequest(discountSpecial)
+          setDiscoutPromo(discountProduct)
+        })
       })
     } else {
       setPayment('credit')
-      CartDataSource.calculate(
+      CartDataSource.updatePaymentMethods(
+        'credit',
         route.params.company,
         route.params.shop.id,
-        payment,
-        useSubsidize,
         route.params.productBrand,
       ).then((res: CartEntity) => {
-        setCart(res)
-        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-          res.received_discounts.filter((item) => item.item_id != null),
-        )
-        setSpecialRequest(discountSpecial)
-        setDiscoutPromo(discountProduct)
+        CartDataSource.calculate(
+          route.params.company,
+          route.params.shop.id,
+          res.selected_payment.id,
+          useSubsidize,
+          route.params.productBrand,
+        ).then((res: CartEntity) => {
+          setCart(res)
+          let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
+          let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+            res.received_discounts.filter((item) => item.item_id != null),
+          )
+          setPayment(res.selected_payment.id)
+          setSpecialRequest(discountSpecial)
+          setDiscoutPromo(discountProduct)
+        })
       })
     }
   }
@@ -268,8 +285,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     )
   }
 
-  const confirmOrder = (shop: ShopEntity, cart?: CartEntity) => {
-    if (!cart?.selected_payment) {
+  const confirmOrder = (shop: ShopEntity, cart: CartEntity) => {
+    if (!cart.selected_payment) {
       alert('กรุณาเลือกวิธีการชำระเงิน')
     } else if (!shipment) {
       alert('กรุณาเลือกสถานที่จัดส่ง')
@@ -370,11 +387,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   return (
     <>
       <CustomHeader title={'ตะกร้าสินค้า'} showBackBtn onPressBack={() => navigation.goBack()} />
-      <KeyboardAvoidingView
-        style={styled.container}
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={80}
-      >
+      <KeyboardAvoidingView style={styled.container} behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <View style={styled.warpChangeShop}>
           <ButtonShop shopName={route.params.shop.name} onPress={() => navigation.navigate('ShopList')} />
         </View>
@@ -418,22 +431,30 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       )
                     })}
                   </View>
-                  <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={cart.available_premiums}
-                    style={{ backgroundColor: '#FFFFFF', marginHorizontal: 4, marginTop: 5 }}
-                    renderItem={({ item }) => (
-                      <PremiumCard
-                        title={item.name}
-                        desc={item.packing_size}
-                        image={item.image}
-                        quantity={item.quantity}
-                        unit={item.unit}
+
+                  {cart.available_premiums.length > 0 ? (
+                    <View style={styled.remarkWrapper}>
+                      <View>
+                        <Text style={styled.specialLabelFont}>ของแถมที่ได้รับ</Text>
+                      </View>
+
+                      <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={cart.available_premiums}
+                        renderItem={({ item }) => (
+                          <PremiumCard
+                            title={item.name}
+                            desc={item.packing_size}
+                            image={item.image}
+                            quantity={item.quantity}
+                            unit={item.unit}
+                          />
+                        )}
+                        keyExtractor={(item) => item.id}
                       />
-                    )}
-                    keyExtractor={(item) => item.id}
-                  />
+                    </View>
+                  ) : null}
 
                   {excludePromotion.length > 0 ? (
                     <View style={styled.remarkWrapper}>
@@ -454,7 +475,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         {excludePromotion.map((e, i) => (
                           <View style={styled.excludePromotionWrapper} key={i}>
                             <View style={styled.textExcludeContainer}>
-                              <Text style={styled.textExclud}>{e.promotion_name}</Text>
+                              <TouchableOpacity onPress={() => callUpdateExcludePromotion(e)}>
+                                <Text style={styled.textExclud}>{e.promotion_name}</Text>
+                              </TouchableOpacity>
                             </View>
                             <Checkbox
                               value={'exclude Promotion'}
@@ -561,6 +584,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     </View>
                   ) : null}
                   <PaymentSection
+                    selectPayment={cart.selected_payment?.id}
                     payments={cart.available_payments}
                     onChange={(e) => {
                       handlePayment(e)
@@ -849,7 +873,6 @@ const styled = StyleSheet.create({
     padding: 10,
     margin: 20,
     alignItems: 'center',
-    height: 50,
   },
   iconLocation: { width: 20, height: 20, resizeMode: 'contain' },
   iconCartWarp: {
@@ -943,7 +966,7 @@ const styled = StyleSheet.create({
     flexDirection: 'row',
   },
   textExcludeContainer: {
-    width: '80%',
+    width: '95%',
   },
   textExclud: {
     fontSize: 16,

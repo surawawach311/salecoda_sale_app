@@ -6,10 +6,10 @@ import { paymentCartEntity } from '../../entities/CartEntity'
 interface PaymentSectionProps {
   onChange: (method: string) => void
   payments: paymentCartEntity[]
+  selectPayment?: string
 }
 
-const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange }) => {
-  const [payment, setPayment] = useState<string>()
+const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange, selectPayment }) => {
 
   useEffect(() => {
     initailPayment()
@@ -17,7 +17,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange }) =
 
   const initailPayment = () => {
     if (payments.length <= 1) {
-      payments.map((item) => setPayment(item.id))
+      payments.map((item) => onChange(item.id))
     }
   }
 
@@ -31,13 +31,12 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange }) =
             <TouchableOpacity
               key={method.name}
               style={styled.methodChoiceContainer}
-              onPress={() => {
-                setPayment('cash')
+              onPress={() => {               
                 onChange('cash')
               }}
             >
               <TouchableWithoutFeedback>
-                {payment == 'cash' ? <View style={styled.iconPin} /> : <View style={styled.iconUnPin} />}
+                {selectPayment == 'cash' ? <View style={styled.iconPin} /> : <View style={styled.iconUnPin} />}
               </TouchableWithoutFeedback>
               <Text style={styled.textBodyPayment}>
                 {method.name}
@@ -47,13 +46,12 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange }) =
           ) : (
             <TouchableOpacity
               onPress={() => {
-                setPayment('credit')
                 onChange('credit')
               }}
               key={method.name}
               style={styled.methodChoiceContainer}
             >
-              {payment == 'credit' ? <View style={styled.iconPin} /> : <View style={styled.iconUnPin} />}
+              {selectPayment == 'credit' ? <View style={styled.iconPin} /> : <View style={styled.iconUnPin} />}
 
               <Text style={styled.textBodyPayment}>
                 {method.name}

@@ -196,7 +196,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
               </View>
             </View>
           </ScrollView>
-          <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={90}>
+          <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
             <View style={styled.wrapBottom}>
               <View style={styled.safeAreaBottom}>
                 <View style={styled.warpQuantity}>
