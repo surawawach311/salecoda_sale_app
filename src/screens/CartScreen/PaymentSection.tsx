@@ -6,7 +6,7 @@ import { paymentCartEntity } from '../../entities/CartEntity'
 interface PaymentSectionProps {
   onChange: (method: string) => void
   payments: paymentCartEntity[]
-  selectPayment: string
+  selectPayment?: string
 }
 
 const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange, selectPayment }) => {

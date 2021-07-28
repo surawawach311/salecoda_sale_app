@@ -74,7 +74,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       (res: CartEntity) => {
         setCart(res)
         setRemark(res.sale_co_remark)
-        handlePayment(res.selected_payment.id)
+        handlePayment(res.selected_payment?.id)
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
         let discountProduct: AccrodionPriceModel[] = formatAccrodion(
           res.received_discounts.filter((item) => item.item_id != null),
@@ -584,7 +584,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     </View>
                   ) : null}
                   <PaymentSection
-                    selectPayment={cart.selected_payment.id}
+                    selectPayment={cart.selected_payment?.id}
                     payments={cart.available_payments}
                     onChange={(e) => {
                       handlePayment(e)
@@ -873,7 +873,6 @@ const styled = StyleSheet.create({
     padding: 10,
     margin: 20,
     alignItems: 'center',
-    height: 50,
   },
   iconLocation: { width: 20, height: 20, resizeMode: 'contain' },
   iconCartWarp: {
