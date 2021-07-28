@@ -370,11 +370,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   return (
     <>
       <CustomHeader title={'ตะกร้าสินค้า'} showBackBtn onPressBack={() => navigation.goBack()} />
-      <KeyboardAvoidingView
-        style={styled.container}
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={80}
-      >
+      <KeyboardAvoidingView style={styled.container} behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
         <View style={styled.warpChangeShop}>
           <ButtonShop shopName={route.params.shop.name} onPress={() => navigation.navigate('ShopList')} />
         </View>
@@ -418,22 +414,27 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       )
                     })}
                   </View>
-                  <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={cart.available_premiums}
-                    style={{ backgroundColor: '#FFFFFF', marginHorizontal: 4, marginTop: 5 }}
-                    renderItem={({ item }) => (
-                      <PremiumCard
-                        title={item.name}
-                        desc={item.packing_size}
-                        image={item.image}
-                        quantity={item.quantity}
-                        unit={item.unit}
-                      />
-                    )}
-                    keyExtractor={(item) => item.id}
-                  />
+                  <View style={styled.remarkWrapper}>
+                    <View>
+                      <Text style={styled.specialLabelFont}>ของแถมที่ได้รับ</Text>
+                    </View>
+
+                    <FlatList
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      data={cart.available_premiums}
+                      renderItem={({ item }) => (
+                        <PremiumCard
+                          title={item.name}
+                          desc={item.packing_size}
+                          image={item.image}
+                          quantity={item.quantity}
+                          unit={item.unit}
+                        />
+                      )}
+                      keyExtractor={(item) => item.id}
+                    />
+                  </View>
 
                   {excludePromotion.length > 0 ? (
                     <View style={styled.remarkWrapper}>
@@ -454,7 +455,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         {excludePromotion.map((e, i) => (
                           <View style={styled.excludePromotionWrapper} key={i}>
                             <View style={styled.textExcludeContainer}>
+                              <TouchableOpacity onPress={()=>callUpdateExcludePromotion(e)}>
                               <Text style={styled.textExclud}>{e.promotion_name}</Text>
+                              </TouchableOpacity>
                             </View>
                             <Checkbox
                               value={'exclude Promotion'}
@@ -943,7 +946,7 @@ const styled = StyleSheet.create({
     flexDirection: 'row',
   },
   textExcludeContainer: {
-    width: '80%',
+    width: '95%',
   },
   textExclud: {
     fontSize: 16,
