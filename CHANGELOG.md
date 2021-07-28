@@ -4,6 +4,8 @@
 ## fix [v1.73.1] - 2020-07-28
 - fix layout keyboard 
 - add space for tap exclude promotion
+- fix bug when add special request
+- add api for save payment method
 
 ## Enhance [v1.73.0] - 2020-07-26
 - added exclude promotion
