@@ -221,4 +221,21 @@ export class CartDataSource {
       .then((res) => res.data)
       .catch((err: Error) => alert('Error:' + err.message))
   }
+
+  static updatePaymentMethods = (payment: string, company: string, shopId: string, productBrand?: string) => {
+    const data = {
+      action: 'update_payment_method',
+      payment_method: payment,
+    }
+    const params = {
+      shopId: shopId,
+      company,
+      ...(productBrand ? { productBrand: productBrand } : {}),
+    }
+
+    return httpClient
+      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .then((res) => res.data)
+      .catch((err: Error) => alert('Error:' + err.message))
+  }
 }
