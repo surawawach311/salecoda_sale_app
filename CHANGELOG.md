@@ -1,6 +1,11 @@
 # Changelog
 
-## [Version - 1]
+## [Version - 1] 
+
+## fix [v1.73.2] - 2020-07-29
+- hide scroll bar in product info
+- fix header in product info
+
 ## fix [v1.73.1] - 2020-07-28
 - fix layout keyboard 
 - add space for tap exclude promotion

@@ -143,8 +143,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
     <>
       {product ? (
         <>
-          <ScrollView style={styled.container}>
-            <CustomHeader showBackBtn onPressBack={() => navigation.goBack()} headerRight={renderMiniCart} />
+        <CustomHeader showBackBtn onPressBack={() => navigation.goBack()} headerRight={renderMiniCart} />
+          <ScrollView style={styled.container} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>  
             <View>
               <View style={styled.wrapInfo}>
                 <View style={styled.imageInfo}>
