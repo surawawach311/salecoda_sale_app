@@ -343,6 +343,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       .then((res: CartEntity) => {
         setCart(res)
         filterExcludePromotion(res.available_promotions, res.applied_promotions)
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.received_discounts.filter((item) => item.item_id != null),
+        )
+        setSpecialRequest(discountSpecial)
+        setDiscoutPromo(discountProduct)
       })
       .catch((err) => {
         alert('Something went wrong' + err)
@@ -365,6 +371,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       .then((res: CartEntity) => {
         setCart(res)
         filterExcludePromotion(res.available_promotions, res.applied_promotions)
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.received_discounts.filter((item) => item.item_id != null),
+        )
+        setSpecialRequest(discountSpecial)
+        setDiscoutPromo(discountProduct)
       })
       .catch((err) => {
         alert('Something went wrong' + err)
