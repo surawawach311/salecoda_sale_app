@@ -2,6 +2,9 @@
 
 ## [Version - 1] 
 
+## fix [v1.73.3] - 2020-08-09
+- fix filter history delivered to success
+
 ## fix [v1.73.2] - 2020-07-29
 - hide scroll bar in product info
 - fix header in product info

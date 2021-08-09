@@ -10,7 +10,7 @@ import { OrderEntity } from '../entities/OrderEntity'
 export enum StatusFilter {
   WaitingConfirm = 'waiting_order_confirm',
   Confirmed = 'opened',
-  Delivered = 'delivering',
+  Delivered = 'success',
   Canceled = 'canceled',
 }
 
