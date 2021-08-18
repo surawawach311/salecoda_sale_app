@@ -62,7 +62,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   const searchProduct = (keywords: string) => {
-    ProductDataSource.getProductList(route.params.shop.id, route.params.company, keywords).then((res) => {
+    ProductDataSource.getProductList(route.params.shop.id, route.params.company,route.params.productBrand, keywords).then((res) => {
       setProductList(res)
     })
   }
