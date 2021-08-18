@@ -2,6 +2,12 @@
 
 ## [Version - 1] 
 
+## fix [v1.73.5] - 2020-08-18
+- remove demical all prices in app
+
+## fix [v1.73.4] - 2020-08-18
+- fix search product brand in case icpf company
+
 ## fix [v1.73.3] - 2020-08-09
 - fix filter history delivered to success
 
