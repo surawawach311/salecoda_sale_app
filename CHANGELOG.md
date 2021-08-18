@@ -1,6 +1,9 @@
 # Changelog
 
-## [Version - 1] 
+## [Version - 1]
+
+## fix [v1.73.6] - 2020-08-18
+- Revert to show decimal all prices in app
 
 ## fix [v1.73.5] - 2020-08-18
 - remove demical all prices in app
@@ -16,7 +19,7 @@
 - fix header in product info
 
 ## fix [v1.73.1] - 2020-07-28
-- fix layout keyboard 
+- fix layout keyboard
 - add space for tap exclude promotion
 - fix bug when add special request
 - add api for save payment method
@@ -56,11 +59,11 @@
 
 ## Fix [v1.68.4] - 2020-06-20
 - add icon for dev app
-- delete unused in home screen 
+- delete unused in home screen
 - change button in home screen
 
 ## Fix [v1.68.3] - 2020-06-10
-- fix layout premium in cart screen 
+- fix layout premium in cart screen
 
 ## Fix [v1.68.2] - 2020-06-10
 - fix limit product list
@@ -164,7 +167,7 @@
 
 ## Enahcne [v1.53.0] - 2020-04-22
 
-- Added search shop 
+- Added search shop
 
 ## Fix [v1.52.1] - 2020-04-22
 
@@ -172,7 +175,7 @@
 
 ## Enahcne [v1.52.0] - 2020-04-22
 
-- Added shop image 
+- Added shop image
 
 ## Enahcne [v1.51.0] - 2020-04-21
 
@@ -311,7 +314,7 @@
 
 ## Enhance [v1.26.0] - 2020-3-29
 
-- Hide Discount rate 
+- Hide Discount rate
 
 ## Enhance [v1.25.0] - 2020-3-29
 
@@ -390,7 +393,7 @@
 ## Enhance [v1.17.0] - 2020-3-09
 
 - Added SVG transformer lib
-- Added promotion-tag svg icon 
+- Added promotion-tag svg icon
 - Updated promotion tag in ProductCard
 
 ## Enhance [v1.16.0] - 2020-3-09
@@ -428,14 +431,14 @@
 
 ## Fixed [v1.11.3] - 2020-2-23
 
-- Fixed Can't submit special request amount 0 
+- Fixed Can't submit special request amount 0
 
 ## Added [v1.11.2] - 2020-2-23
 
 - Improve Special Request in Cart Screen
 
 ## Added [v1.11.1] - 2020-2-18
- 
+
  - fix buyer undefined
 
 ## Added [v1.11.0] - 2020-2-18
