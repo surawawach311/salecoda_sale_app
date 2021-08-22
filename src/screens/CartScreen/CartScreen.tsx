@@ -628,6 +628,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         <>
                           <Checkbox
                             value="test"
+                            isChecked={useSubsidize}
                             onChange={() => handleUseSubsidize(!useSubsidize)}
                             colorScheme="rgba(255, 93, 93, 1)"
                             style={{

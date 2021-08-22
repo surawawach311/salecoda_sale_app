@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## fix [v1.73.7] - 2020-08-22
+- fix subsidize checkbox state in CartScreen 
+
 ## fix [v1.73.6] - 2020-08-18
 - Revert to show decimal all prices in app
 
