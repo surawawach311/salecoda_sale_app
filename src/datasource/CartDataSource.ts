@@ -86,6 +86,23 @@ export class CartDataSource {
       .catch((error) => console.error(`error on CartDataSource.calculate`, error))
   }
 
+  static updateSubidizeDiscount(company: string, shopId: string, useSubsidize?: boolean, productBrand?: string) {
+
+    const data = {
+      action: 'update_is_subsidize',
+      is_subsidize: useSubsidize,
+    }
+    const params = {
+      shopId: shopId,
+      company,
+      ...(productBrand ? { productBrand: productBrand } : {}),
+    }
+    return httpClient
+      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .then((res) => res.data)
+      .catch((error) => console.error(`error on CartDataSource.update_is_subsidize`, error))
+  }
+
   static calculateSpecialRequest(
     company: string,
     shopId: string,
