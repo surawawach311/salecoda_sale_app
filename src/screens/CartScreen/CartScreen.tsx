@@ -81,7 +81,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         )
         setSpecialRequest(discountSpecial)
         setDiscoutPromo(discountProduct)
-        setUseSubsudize(false)
+        if (res.subsidize_discount !== 0) {
+          setUseSubsudize(true)
+        }
         if (res?.available_payments && res?.available_payments.length <= 1) {
           res?.available_payments.map((item) => {
             setPayment(item.id)
@@ -277,12 +279,15 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   const handleUseSubsidize = (b: boolean) => {
-    CartDataSource.calculate(route.params.company, route.params.shop.id, payment, b, route.params.productBrand).then(
-      (res: CartEntity) => {
-        setCart(res)
-        setUseSubsudize(b)
-      },
-    )
+    CartDataSource.updateSubidizeDiscount(
+      route.params.company,
+      route.params.shop.id,
+      b,
+      route.params.productBrand,
+    ).then((res: CartEntity) => {
+      setCart(res)
+      setUseSubsudize(b)
+    })
   }
 
   const confirmOrder = (shop: ShopEntity, cart: CartEntity) => {
@@ -627,7 +632,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       {cart.available_subsidize > 0 ? (
                         <>
                           <Checkbox
-                            value="test"
+                            value=""
                             isChecked={useSubsidize}
                             onChange={() => handleUseSubsidize(!useSubsidize)}
                             colorScheme="rgba(255, 93, 93, 1)"

@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## fix [v1.73.8] - 2020-08-23
+- change api co wallet api for save 
+
 ## fix [v1.73.7] - 2020-08-22
 - fix subsidize checkbox state in CartScreen 
 
