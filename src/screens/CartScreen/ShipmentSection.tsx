@@ -73,7 +73,7 @@ const ShipmentSection: React.FC<Props> = ({ company, shopId, onChange, withDefau
       <>
         <View style={styled.line} />
         <View style={{ marginTop: 8 }}>
-          <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
+          <Text style={styled.textHeaderPayment}>หมายเหตุ(สำหรับลูกค้า)</Text>
           <Text style={styled.textRemark}>{s.remark}</Text>
         </View>
       </>

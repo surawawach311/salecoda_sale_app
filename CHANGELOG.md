@@ -2,7 +2,10 @@
 
 ## [Version - 1]
 
-## fix [v1.74.0] - 2020-09-03
+## fix [v1.74.1] - 2020-09-03
+- change wording shipment remark
+
+## enhnace [v1.74.0] - 2020-09-03
 - change icon dev
 
 ## fix [v1.73.8] - 2020-08-23
