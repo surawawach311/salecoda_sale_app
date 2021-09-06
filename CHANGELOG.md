@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## fix [v1.74.2] - 2020-09-06
+- change wording shipment remark in shipment section
+
 ## fix [v1.74.1] - 2020-09-03
 - change wording shipment remark
 
