@@ -10,6 +10,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useState } from "react";
 import { VerifiesDataSource } from "../../datasource/VerifiesDataSource";
 import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
+import Heading2 from "../../components/Font/Heading2";
+import Paragraph1 from "../../components/Font/Paragraph1";
 
 type InputOtpScreenRouteProp = StackScreenProps<AppAuthParamList, "InputOtp">;
 
@@ -48,11 +50,11 @@ const InputOTPScreen = ({ navigation, route }: InputOtpScreenRouteProp) => {
         source={require("../../../assets/bgOtp.png")}
       >
         <View style={styles.wrapText}>
-          <Text style={styles.title}>ใส่รหัส OTP</Text>
-          <Text style={styles.text}>
+          <Heading2 style={styles.title}>ใส่รหัส OTP</Heading2>
+          <Paragraph1 style={styles.text}>
             กรุณาใส่รหัสยืนยันตัวตนที่ถูกส่งไปยัง {"\n"}หมายเลข{" "}
             {route.params.userProfile.telephone}
-          </Text>
+          </Paragraph1>
           <CodeField
             ref={ref}
             {...props}
@@ -107,14 +109,10 @@ const styles = StyleSheet.create({
   wrapText: { padding: 20, marginTop: 190 },
   title: {
     color: "#000000",
-    fontSize: 28,
-    fontWeight: "bold",
     textAlign: "left",
   },
   text: {
     color: "#828282",
-    fontSize: 16,
-    fontWeight: "bold",
     textAlign: "left",
   },
   root: { flex: 1, padding: 20 },

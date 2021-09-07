@@ -5,6 +5,8 @@ import { HomeStackParamList } from '../../navigations/HomeNavigator'
 import { NavigationState, SceneRendererProps, TabBar, TabView } from 'react-native-tab-view'
 import OrderList, { StatusFilter } from '../../components/OrderList'
 import { OrderEntity } from '../../entities/OrderEntity'
+import Subheading3 from '../../components/Font/Subheading3'
+import Text1 from '../../components/Font/Text1'
 type NotificationScreenRouteProp = StackScreenProps<HomeStackParamList, 'History'>
 
 type TabBarProp = SceneRendererProps & {
@@ -42,9 +44,9 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
         scrollEnabled
         {...props}
         renderLabel={({ focused, route }) => (
-          <Text style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>
+          <Subheading3 style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>
             {route.title}
-          </Text>
+          </Subheading3>
         )}
         renderIndicator={renderIndicator}
         pressColor="transparent"
@@ -97,7 +99,7 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
     return (
       <>
         <Image style={styled.emptyImage} source={require("../../../assets/empty-state/order.png")} />
-        <Text style={styled.emptyText}>ยังไม่มีประวัติการสั่งซื้อ</Text>
+        <Text1 style={styled.emptyText}>ยังไม่มีประวัติการสั่งซื้อ</Text1>
       </>
     );
   };

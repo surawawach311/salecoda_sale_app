@@ -1,17 +1,20 @@
-import React from "react";
-import { View, StyleSheet, Image, Text, Platform } from "react-native";
-import PromoTag from "../../assets/svg/promotion-tag.svg";
-import { currencyFormat } from "../utilities/CurrencyFormat";
+import React from 'react'
+import { View, StyleSheet, Image, Text, Platform } from 'react-native'
+import PromoTag from '../../assets/svg/promotion-tag.svg'
+import { currencyFormat } from '../utilities/CurrencyFormat'
+import Heading2 from './Font/Heading2'
+import Heading3 from './Font/Heading3'
+import Paragraph2 from './Font/Paragraph2'
 
 interface ProductCardProps {
-  imagePath: string;
-  thName: string;
-  enName: string;
-  productInfo: string;
-  price: number;
-  havePromo: boolean;
-  unit: string;
-  saleUnitPrice: number;
+  imagePath: string
+  thName: string
+  enName: string
+  productInfo: string
+  price: number
+  havePromo: boolean
+  unit: string
+  saleUnitPrice: number
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -28,39 +31,34 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <View style={styleds.container}>
       <View style={styleds.border}>
         <View style={styleds.warpImage}>
-          {imagePath != "" ? (
+          {imagePath != '' ? (
             <>
               <Image
                 source={{ uri: imagePath }}
                 style={styleds.imageProduct}
-                resizeMethod={Platform.OS === "android" ? "resize" : "auto"}
+                resizeMethod={Platform.OS === 'android' ? 'resize' : 'auto'}
               />
             </>
           ) : (
             <>
-              <Image
-                style={styleds.imageNotFound}
-                source={require("../../assets/empty-product.png")}
-              />
+              <Image style={styleds.imageNotFound} source={require('../../assets/empty-product.png')} />
             </>
           )}
         </View>
         <View style={styleds.warpInfo}>
-          <Text numberOfLines={1} style={styleds.textThName}>
+          <Heading3 numberOfLines={1} style={styleds.textThName}>
             {thName}
-          </Text>
-          <Text numberOfLines={1} style={styleds.textEnName}>
+          </Heading3>
+          <Paragraph2 numberOfLines={1} style={styleds.textEnName}>
             {enName}
-          </Text>
-          <Text style={styleds.textEnName}>
+          </Paragraph2>
+          <Paragraph2 style={styleds.textEnName}>
             {productInfo}
-            {saleUnitPrice != price
-              ? " | " + currencyFormat(saleUnitPrice) + "/" + unit
-              : null}
-          </Text>
+            {saleUnitPrice != price ? ' | ' + currencyFormat(saleUnitPrice) + '/' + unit : null}
+          </Paragraph2>
         </View>
         <View style={styleds.warpPrice}>
-          <Text style={styleds.textPrice}>{currencyFormat(price)}</Text>
+          <Heading3 style={styleds.textPrice}>{currencyFormat(price)}</Heading3>
         </View>
       </View>
       {havePromo && (
@@ -69,17 +67,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const styleds = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   border: {
-    borderColor: "#EFF3FD",
+    borderColor: '#EFF3FD',
     borderWidth: 1,
     height: 230,
     width: 160,
@@ -92,48 +90,43 @@ const styleds = StyleSheet.create({
   imageProduct: {
     height: 80,
     width: 80,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   imageNotFound: {
     height: 80,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   warpImage: {
     marginTop: 15,
     margin: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   warpInfo: {
     margin: 10,
-    alignItems: "center",
-    justifyContent: "flex-start",
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   textThName: {
-    fontSize: 18,
-    alignSelf: "flex-start",
-    color: "#181725",
-    fontWeight: "bold",
+    alignSelf: 'flex-start',
+    color: '#181725',
   },
   textEnName: {
-    fontSize: 14,
-    alignSelf: "flex-start",
-    color: "#333333",
+    alignSelf: 'flex-start',
+    color: '#333333',
   },
   warpPrice: {
     marginTop: 7,
     marginLeft: 10,
   },
   textPrice: {
-    fontSize: 20,
-    color: "#333333",
-    fontWeight: "bold",
+    color: '#333333',
   },
-  textInfo: { fontSize: 14, color: "#616A7B" },
+  textInfo: { fontSize: 14, color: '#616A7B' },
   warpPromoTag: {
-    position: "absolute",
+    position: 'absolute',
     top: 12,
     right: 14,
   },
-});
-export default ProductCard;
+})
+export default ProductCard

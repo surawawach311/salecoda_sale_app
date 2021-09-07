@@ -20,6 +20,9 @@ import { HomeStackParamList } from '../../navigations/HomeNavigator'
 import { UserDataContext } from '../../provider/UserDataProvider'
 import { NavigationState, SceneRendererProps, TabBar, TabView } from 'react-native-tab-view'
 import NotificationFeedCard from '../../components/NotificationFeedCard'
+import Subheading3 from '../../components/Font/Subheading3'
+import Text1 from '../../components/Font/Text1'
+import Heading3 from '../../components/Font/Heading3'
 
 type NotificationScreenRouteProp = StackScreenProps<HomeStackParamList, 'Notification'>
 type Pagination = {
@@ -101,10 +104,10 @@ const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation,
   const renderTabBar = (props: TabBarProp) => {
     return (
       <TabBar
-      scrollEnabled
+        scrollEnabled
         {...props}
         renderLabel={({ focused, route }) => (
-          <Text style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>{route.title}</Text>
+          <Subheading3 style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>{route.title}</Subheading3>
         )}
         renderIndicator={renderIndicator}
         pressColor="transparent"
@@ -148,7 +151,7 @@ const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation,
     switch (route.key) {
       case Menu.Orders:
         return (
-          <View style={{paddingHorizontal:5}}>
+          <View style={{ paddingHorizontal: 5 }}>
             <FlatList
               style={{ paddingTop: 20 }}
               data={feed}
@@ -183,7 +186,7 @@ const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation,
                 style={{ height: 100, resizeMode: 'contain' }}
                 source={require('../../../assets/empty-state/notification.png')}
               />
-              <Text style={{ fontSize: 18, color: '#C2C6CE' }}>ไม่มีรายการแจ้งเตือน</Text>
+              <Text1 style={{ color: '#C2C6CE' }}>ไม่มีรายการแจ้งเตือน</Text1>
             </View>
           </>
         )
@@ -194,7 +197,7 @@ const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation,
     <View style={styled.container}>
       <SafeAreaView style={styled.headerSafeArea}>
         <View style={styled.headerWraper}>
-          <Text style={styled.headerText}>การแจ้งเตือน</Text>
+          <Heading3>การแจ้งเตือน</Heading3>
         </View>
       </SafeAreaView>
       <TabView
@@ -240,10 +243,6 @@ const styled = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 10,
     marginBottom: 10,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
   activeTabLabel: { color: '#4C95FF', fontWeight: 'bold' },
   inactiveTabLabel: { color: '#616A7B', fontWeight: 'bold' },

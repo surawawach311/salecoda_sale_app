@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import Subheading4 from "./Font/Subheading4";
 
 interface TagStatusProps {
   status: string;
@@ -9,53 +10,53 @@ const TagStatus: React.FC<TagStatusProps> = ({ status }) => {
   if (status == "waiting_confirm") {
     return (
       <View style={[styled.containerBadge, styled.badgeYellow]}>
-        <Text style={styled.textYellow}>รอยืนยันคำสั่งซื้อ</Text>
+        <Subheading4 style={styled.textYellow}>รอยืนยันคำสั่งซื้อ</Subheading4>
       </View>
     );
   } else if (status == "waiting_sale_approve") {
     return (
       <View style={[styled.containerBadge, styled.badgeRed]}>
-        <Text style={styled.textRed}>รออนุมัติคำสั่งซื้อ</Text>
+        <Subheading4 style={styled.textRed}>รออนุมัติคำสั่งซื้อ</Subheading4>
       </View>
     );
   } else if (status == "confirmed") {
     return (
       <View style={[styled.containerBadge, styled.badgeBlue]}>
-        <Text style={styled.textBlue}>ยืนยันแล้ว</Text>
+        <Subheading4 style={styled.textBlue}>ยืนยันแล้ว</Subheading4>
       </View>
     );
   } else if (status == "opened") {
     return (
       <View style={[styled.containerBadge, styled.badgeYellow]}>
-        <Text style={styled.textYellow}>กำลังดำเนินการ</Text>
+        <Subheading4 style={styled.textYellow}>กำลังดำเนินการ</Subheading4>
       </View>
     );
   } else if (status == "delivering") {
     return (
       <View style={[styled.containerBadge, styled.badgeRed]}>
-        <Text style={styled.textRed}>กำลังจัดส่ง</Text>
+        <Subheading4 style={styled.textRed}>กำลังจัดส่ง</Subheading4>
       </View>
     );
   } else if (status == "company_canceled") {
     return (
       <View style={[styled.containerBadge, styled.badgeRed]}>
-        <Text style={styled.textRed}>ยกเลิกคำสั่งซื้อโดยบริษัท</Text>
+        <Subheading4 style={styled.textRed}>ยกเลิกคำสั่งซื้อโดยบริษัท</Subheading4>
       </View>
     );
   } else if (status == "customer_canceled") {
     return (
       <View style={[styled.containerBadge, styled.badgeRed]}>
-        <Text style={styled.textRed}>ยกเลิกคำสั่งซื้อโดยร้านค้า</Text>
+        <Subheading4 style={styled.textRed}>ยกเลิกคำสั่งซื้อโดยร้านค้า</Subheading4>
       </View>
     );
   } else if (status == "sale_executive_rejected") {
     return (
       <View style={[styled.containerBadge, styled.badgeRed]}>
-        <Text style={styled.textRed}>ไม่อนุมัติคำสั่งซื้อ</Text>
+        <Subheading4 style={styled.textRed}>ไม่อนุมัติคำสั่งซื้อ</Subheading4>
       </View>
     );
   } else {
-    return <Text>unknow</Text>;
+    return <Subheading4>unknow</Subheading4>;
   }
 };
 export default TagStatus;

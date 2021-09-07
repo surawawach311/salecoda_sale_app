@@ -1,6 +1,10 @@
 import React from 'react'
 import { View, Text, Image, StyleSheet } from 'react-native'
 import { OrderItem } from '../entities/NotificationEntity'
+import Heading3 from './Font/Heading3'
+import Paragraph3 from './Font/Paragraph3'
+import Text1 from './Font/Text1'
+import Text2 from './Font/Text2'
 
 interface NotificationFeedCardProps {
   title: string
@@ -23,35 +27,37 @@ const NotificationFeedCard: React.FC<NotificationFeedCardProps> = ({ title, body
         !isRead ? { backgroundColor: '#F4FBFF' } : { backgroundColor: '#FFFFFF' },
       ]}
     >
-      <View style={{ width:20, marginLeft: 10, alignSelf: 'flex-start', marginTop: 9 }}>
-        {!isRead ? <View style={styled.orangeDot} /> : null}
-      </View>
-      <View style={{ marginHorizontal: 10 }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{title}</Text>
-        <Text style={{ marginTop: 15, color: '#6B7995', fontSize: 16 }}>{body}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image style={styled.iconPackage} source={require('../../assets/package.png')} />
-          <Text style={{ marginLeft: 9, fontSize: 14, color: '#6B7995' }}>{items.length} รายการ</Text>
+      <View style={{ flexDirection: 'row', flex: 1, padding: 10 }}>
+        <View style={{ alignSelf: 'flex-start', marginTop: 9, flex: 0.1 }}>
+          {!isRead ? <View style={styled.orangeDot} /> : null}
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 5,
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
-          <View style={{ flexDirection: 'row' }}>
-            {items.map((item: OrderItem) => {
-              return (
-                <View key={item.title} style={styled.productFrame}>
-                  <Image style={styled.productImage} source={{ uri: item.cover }} />
-                </View>
-              )
-            })}
+        <View style={{ flex: 0.9 }}>
+          <Heading3>{title}</Heading3>
+          <Text1 style={{ marginTop: 15, color: '#6B7995' }}>{body}</Text1>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image style={styled.iconPackage} source={require('../../assets/package.png')} />
+            <Text2 style={{ marginLeft: 9, color: '#6B7995' }}>{items.length} รายการ</Text2>
           </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 5,
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              {items.map((item: OrderItem) => {
+                return (
+                  <View key={item.title} style={styled.productFrame}>
+                    <Image style={styled.productImage} source={{ uri: item.cover }} />
+                  </View>
+                )
+              })}
+            </View>
+          </View>
+          <Paragraph3 style={{ color: '#6B7995', marginTop: 5 }}>{created}</Paragraph3>
         </View>
-        <Text style={{ color: '#6B7995', fontSize: 12, marginTop: 5 }}>{created}</Text>
       </View>
     </View>
   )

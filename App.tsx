@@ -21,7 +21,7 @@ export default class App extends React.Component<{}, AppState> {
       NotoSansThaiBold: require('./assets/font/NotoSansThai-Bold.ttf'),
       NotoSansThaiSemiBold: require('./assets/font/NotoSansThai-SemiBold.ttf'),
       NotoSansThaiMedium: require('./assets/font/NotoSansThai-Medium.ttf'),
-      THSarabun: require('./assets/font/THSarabun.ttf'),
+      THSarabun: require('./assets/font/Sarabun-Regular.ttf'),
     })
 
     this.setState({ isReady: true })

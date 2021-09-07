@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, StatusBar, ViewProps } from 'react-native'
+import Heading3 from './Font/Heading3'
 
 interface Prop {
   title?: string
@@ -26,7 +27,7 @@ const CustomHeader: React.FC<Prop> = ({ style, title, showBackBtn, onPressBack, 
           {headerLeft?.()}
         </View>
         <View style={styles.headerTitleWraper}>
-          <Text style={styles.headerTitle}>{title}</Text>
+          <Heading3 style={styles.headerTitle}>{title}</Heading3>
         </View>
         <View style={styles.headerRightWrapper}>{headerRight?.()}</View>
       </View>

@@ -1,7 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { Button } from 'native-base'
+import React, { useEffect } from 'react'
 import {
-  Text,
   StyleSheet,
   View,
   KeyboardAvoidingView,
@@ -17,6 +15,9 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { AppAuthParamList } from '../../navigations/AppAuthNavigator'
 import { UserLocalStorageService } from '../../services/UserLocalStorageService'
 import { bypassTelephone } from '../../definitions/BypassDataTest'
+import Heading2 from '../../components/Font/Heading2'
+import Paragraph1 from '../../components/Font/Paragraph1'
+import Subheading2 from '../../components/Font/Subheading2'
 
 type InputOtpScreenNavigationProp = StackScreenProps<AppAuthParamList, 'InputTelNumber'>
 
@@ -78,8 +79,8 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
         <View style={styles.inner}>
           <Image style={styles.backgroundImage} source={require('../../../assets/bgOtp.png')} />
           <View style={styles.wrapText}>
-            <Text style={styles.title}>เข้าสู่ระบบพนักงานขาย</Text>
-            <Text style={styles.text}>ใส่หมายเลขโทรศัพท์ของคุณเพื่อรับ รหัส OTP ยืนยันการลงทะเบียน</Text>
+            <Heading2 style={styles.title}>เข้าสู่ระบบพนักงานขาย</Heading2>
+            <Paragraph1 style={styles.text}>ใส่หมายเลขโทรศัพท์ของคุณเพื่อรับ รหัส OTP ยืนยันการลงทะเบียน</Paragraph1>
             <InputPhone
               value={value}
               onChangeText={(e: string) => setValue(e)}
@@ -96,7 +97,7 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
                 verifyPhoneNo(value)
               }}
             >
-              <Text style={styles.textButton}>ขอรหัสOTP</Text>
+              <Subheading2 style={styles.textButton}>ขอรหัสOTP</Subheading2>
             </TouchableOpacity>
           </View>
         </View>
@@ -133,8 +134,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#828282',
-    fontSize: 16,
-    fontWeight: 'bold',
     textAlign: 'left',
   },
   textButton: {

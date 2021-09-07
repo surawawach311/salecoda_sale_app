@@ -13,6 +13,9 @@ import { NotificationResponseEntity } from '../../entities/MessageResponseEntity
 import * as Notifications from 'expo-notifications'
 import { OrderDataSource } from '../../datasource/OrderDataSource'
 import { OrderEntity } from '../../entities/OrderEntity'
+import Heading2 from '../../components/Font/Heading2'
+import Text2 from '../../components/Font/Text2'
+import Text1 from '../../components/Font/Text1'
 
 type HomeScreenRouteProp = RouteProp<HomeStackParamList, 'Home'>
 
@@ -74,8 +77,8 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <View style={styles.profileWarp}>
             <Image style={styles.bgImage} source={require('../../../assets/bgShop.png')} />
             <View style={styles.innerTextContainer}>
-              <Text style={styles.WelcomeHeader}>{`Hello, ${profile.name}`}</Text>
-              <Text style={styles.positionText}>{profile.position}</Text>
+              <Heading2 style={styles.WelcomeHeader}>{`Hello, ${profile.name}`}</Heading2>
+              <Text2 style={styles.positionText}>{profile.position}</Text2>
             </View>
             <View style={styles.innerImgContainer}>
               <Image style={styles.imageProfile} source={require('../../../assets/image-profile-default.png')} />
@@ -94,23 +97,23 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
               }}
             >
               <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/icon-shopping.png')} />
-              <Text style={styles.textMenu}>สั่งสินค้า</Text>
+              <Text1 style={styles.textMenu}>สั่งสินค้า</Text1>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("History")
+                navigation.navigate('History')
               }}
             >
               <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/IconHistory.png')} />
-              <Text style={styles.textMenu}>ประวัติ</Text>
+              <Text1 style={styles.textMenu}>ประวัติ</Text1>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("Order")
+                navigation.navigate('Order')
               }}
             >
               <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/IconConfirmOrder.png')} />
-              <Text style={styles.textMenu}>ยืนยันคำสั่งซื้อ</Text>
+              <Text1 style={styles.textMenu}>ยืนยันคำสั่งซื้อ</Text1>
             </TouchableOpacity>
           </View>
         </>
@@ -145,11 +148,9 @@ const styles = StyleSheet.create({
 
   WelcomeHeader: {
     color: '#FFFFFF',
-    fontSize: 24,
   },
   positionText: {
     color: '#FFFFFF',
-    fontSize: 14,
   },
   imageProfile: {
     height: 80,
@@ -183,6 +184,5 @@ const styles = StyleSheet.create({
     color: '#616A7B',
     marginTop: -20,
     alignSelf: 'center',
-    fontSize: 16,
   },
 })
