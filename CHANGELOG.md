@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## enhnace [v1.75.0] - 2020-09-07
+- change font all screen
+
 ## fix [v1.74.2] - 2020-09-06
 - change wording shipment remark in shipment section
 
