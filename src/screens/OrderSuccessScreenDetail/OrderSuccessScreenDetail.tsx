@@ -17,6 +17,14 @@ import TagStatus from '../../components/TagStatus'
 import { UserDataContext } from '../../provider/UserDataProvider'
 import { SHIPPING_METHOD_MAPPING } from '../../definitions/ShippingMethod'
 import CustomHeader from '../../components/CustomHeader'
+import Text1 from '../../components/Font/Text1'
+import Subheading1 from '../../components/Font/Subheading1'
+import Subheading2 from '../../components/Font/Subheading2'
+import Paragraph1 from '../../components/Font/Paragraph1'
+import Heading3 from '../../components/Font/Heading3'
+import Heading2 from '../../components/Font/Heading2'
+import Text2 from '../../components/Font/Text2'
+import Heading4 from '../../components/Font/Heading4'
 
 type OrderSuccessScreenDetailRouteProp = StackScreenProps<PurchaseStackParamList, 'SuccessDetail'>
 
@@ -146,23 +154,21 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                 borderRadius: 12,
               }}
             >
-              <Text style={{ fontSize: 16, fontWeight: 'bold', paddingBottom: 12 }}>รายละเอียดการยกเลิก</Text>
-              <Text style={{ fontSize: 14, color: '#6B7995', paddingBottom: 4 }}>หมายเลขคำสั่งซื้อ : {order_no}</Text>
-              <Text style={{ fontSize: 14, color: '#6B7995', paddingBottom: 12 }}>
+              <Heading3 style={{ paddingBottom: 12 }}>รายละเอียดการยกเลิก</Heading3>
+              <Text1 style={{ color: '#6B7995', paddingBottom: 4 }}>หมายเลขคำสั่งซื้อ : {order_no}</Text1>
+              <Text1 style={{ color: '#6B7995', paddingBottom: 12 }}>
                 ขอยกเลิก : {`${ThaiDateFormat(updated)} ${ThaiTimeFormat(updated)}`}
-              </Text>
+              </Text1>
               <View style={{ borderWidth: 1, borderColor: '#EBEFF2' }} />
-              <Text
+              <Heading3
                 style={{
-                  fontSize: 16,
-                  fontWeight: 'bold',
                   paddingVertical: 12,
                 }}
               >
                 เหตุผลที่ยกเลิก
                 {cancelByWording(status)}
-              </Text>
-              <Text style={{ fontSize: 14, color: '#6B7995', paddingBottom: 12 }}>{remark}</Text>
+              </Heading3>
+              <Text1 style={{ color: '#6B7995', paddingBottom: 12 }}>{remark}</Text1>
             </View>
           </View>
         ) : null}
@@ -177,17 +183,17 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           </View>
           <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
           <View>
-            <Text style={styled.textGrayLabel}>ออเดอร์ของ</Text>
+            <Text1 style={styled.textGrayLabel}>ออเดอร์ของ</Text1>
 
             {shop ? (
-              <Text style={styled.textBlack}>{shop.name}</Text>
+              <Subheading1>{shop.name}</Subheading1>
             ) : (
               <SkeletonPlaceholder>
                 <SkeletonPlaceholder.Item marginTop={3} width="70%" height={30} borderRadius={4} />
               </SkeletonPlaceholder>
             )}
-            <Text style={styled.textGrayLabel}>เวลาที่เปิดออเดอร์</Text>
-            <Text style={styled.textBlack}>{`${ThaiDateFormat(created)} ${ThaiTimeFormat(created)}`}</Text>
+            <Text1 style={styled.textGrayLabel}>เวลาที่เปิดออเดอร์</Text1>
+            <Subheading1>{`${ThaiDateFormat(created)} ${ThaiTimeFormat(created)}`}</Subheading1>
           </View>
         </View>
         <View style={styled.sectionBreak}>
@@ -204,11 +210,11 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             paddingHorizontal: 20,
           }}
         >
-          <Text style={styled.textGrayLabel}>การจัดส่ง</Text>
-          <Text style={styled.textBlack}>{SHIPPING_METHOD_MAPPING[shipping_method]}</Text>
+          <Text1 style={styled.textGrayLabel}>การจัดส่ง</Text1>
+          <Subheading1>{SHIPPING_METHOD_MAPPING[shipping_method]}</Subheading1>
           <View style={{ marginVertical: 10 }}>
             {shop ? (
-              <Text style={styled.textBlack}>{shipping_address.line_one + '\n' + shipping_address.line_two}</Text>
+              <Paragraph1>{shipping_address.line_one + '\n' + shipping_address.line_two}</Paragraph1>
             ) : (
               <SkeletonPlaceholder>
                 <SkeletonPlaceholder.Item marginTop={3} width="100%" height={30} borderRadius={4} />
@@ -218,11 +224,11 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           </View>
           <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
           <View style={{ marginVertical: 10 }}>
-            <Text style={styled.textGrayLabel}>หมายเหตุ</Text>
-            <Text style={styled.textBlack}>{shipping_address.remark ? shipping_address.remark.trim() : '-'}</Text>
+            <Text1 style={styled.textGrayLabel}>หมายเหตุ</Text1>
+            <Text>{shipping_address.remark ? shipping_address.remark.trim() : '-'}</Text>
           </View>
           <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
-          <Text style={styled.textGrayLabel}>รายละเอียดสินค้า</Text>
+          <Text1 style={styled.textGrayLabel}>รายละเอียดสินค้า</Text1>
           {route.params.data != undefined
             ? items.map((product) => {
                 return (
@@ -241,23 +247,23 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               })
             : null}
           <View style={styled.totalQuantity}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>จำนวนรวม</Text>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{`${totalQuantity} ${totalQuantityUnit()}`}</Text>
+            <Heading3>จำนวนรวม</Heading3>
+            <Heading3>{`${totalQuantity} ${totalQuantityUnit()}`}</Heading3>
           </View>
           <View style={{ marginVertical: 10 }}>
-            <Text style={styled.textGrayLabel}>หมายเหตุการขอส่วนลดพิเศษ</Text>
-            <Text style={styled.textBlack}>{special_request_remark ? special_request_remark.trim() : '-'}</Text>
+            <Text1 style={styled.textGrayLabel}>หมายเหตุการขอส่วนลดพิเศษ</Text1>
+            <Text1>{special_request_remark ? special_request_remark.trim() : '-'}</Text1>
           </View>
           <View style={{ marginVertical: 10 }}>
-            <Text style={styled.textGrayLabel}>หมายเหตุ(Sale Co.) </Text>
-            <Text style={styled.textBlack}>{sale_co_remark ? sale_co_remark.trim() : '-'}</Text>
+            <Text1 style={styled.textGrayLabel}>หมายเหตุ(Sale Co.) </Text1>
+            <Text1>{sale_co_remark ? sale_co_remark.trim() : '-'}</Text1>
           </View>
           <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
-          <Text style={styled.textGrayLabel}>วิธีชำระเงิน</Text>
-          <Text style={styled.textBlack}>{payment_method == 'cash' ? PaymentMethod.cash : PaymentMethod.credit}</Text>
+          <Text1 style={styled.textGrayLabel}>วิธีชำระเงิน</Text1>
+          <Text1>{payment_method == 'cash' ? PaymentMethod.cash : PaymentMethod.credit}</Text1>
           <View style={styled.productTextWarp}>
-            <Text style={{ fontSize: 14, color: '#6B7995' }}>ราคาก่อนลด</Text>
-            <Text style={styled.textPrice}>{currencyFormat(before_discount, 2)}</Text>
+            <Text1 style={{ color: '#6B7995' }}>ราคาก่อนลด</Text1>
+            <Subheading2 style={{ color: '#616A7B' }}>{currencyFormat(before_discount, 2)}</Subheading2>
           </View>
 
           {discount_memo.filter((item) => item.item_id != null).length > 0 ? (
@@ -280,8 +286,8 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
           ) : null}
           {subsidize != 0 ? (
             <View style={styled.productTextWarp}>
-              <Text style={{ fontSize: 14, color: '#6B7995' }}>ส่วนลดดูแลราคา</Text>
-              <Text style={{ color: '#FF5D5D', fontSize: 16, fontWeight: 'bold' }}>{currencyFormat(subsidize, 2)}</Text>
+              <Text1 style={{ color: '#6B7995' }}>ส่วนลดดูแลราคา</Text1>
+              <Subheading2 style={{ color: '#FF5D5D' }}>{currencyFormat(subsidize, 2)}</Subheading2>
             </View>
           ) : null}
           {discount_memo.length > 0
@@ -298,26 +304,24 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                         marginTop: 10,
                       }}
                     >
-                      <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
-                      <Text style={styled.textDiscountFromCash}>{currencyFormat(item.price, 2)}</Text>
+                      <Text1 style={{ color: '#6B7995' }}>ส่วนลดเงินสด</Text1>
+                      <Subheading2 style={{ color: '#FF8329' }}>{currencyFormat(item.price, 2)}</Subheading2>
                     </View>
                   )
                 })
             : null}
           <View style={styled.productTextWarp}>
-            <Text style={{ fontSize: 14, color: '#6B7995' }}>ส่วนลดรวม</Text>
-            <Text style={{ color: '#616A7B', fontSize: 16, fontWeight: 'bold' }}>
-              {currencyFormat(total_discount, 2)}
-            </Text>
+            <Text1 style={{ color: '#6B7995' }}>ส่วนลดรวม</Text1>
+            <Subheading2 style={{ color: '#616A7B' }}>{currencyFormat(total_discount, 2)}</Subheading2>
           </View>
           <View style={{ borderWidth: 1, borderColor: '#EBEFF2' }} />
           <View style={styled.totalPrice}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#616A7B' }}>ราคารวม</Text>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#4C95FF' }}>{currencyFormat(total_price, 2)}</Text>
+            <Subheading2 style={{ color: '#616A7B' }}>ราคารวม</Subheading2>
+            <Heading2 style={{ color: '#4C95FF' }}>{currencyFormat(total_price, 2)}</Heading2>
           </View>
           <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
           <View style={styled.emptyPremiumContainer}>
-            <Text style={styled.textProductHeader}>ของแถมที่ได้รับ</Text>
+            <Text1>ของแถมที่ได้รับ</Text1>
             {premium_memo.length > 0 ? (
               <View style={{ marginTop: 10 }}>
                 {premium_memo.map((item) => {
@@ -329,6 +333,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                         padding: 10,
                         paddingLeft: 5,
                         flexDirection: 'row',
+                        width:299
                       }}
                     >
                       <Image
@@ -345,24 +350,9 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                           justifyContent: 'space-around',
                         }}
                       >
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: '#616A7B',
-                            fontWeight: '600',
-                          }}
-                        >
-                          {item.name}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#616A7B',
-                          }}
-                        >
-                          {item.packing_size}
-                        </Text>
-                        <Text style={{ fontWeight: 'bold', fontSize: 11 }}>{`${item.quantity} ${item.unit}`}</Text>
+                        <Text1 numberOfLines={1} style={{ color: '#616A7B' }}>{item.name}</Text1>
+                        <Text1 style={{ color: '#616A7B' }}>{item.packing_size}</Text1>
+                        <Heading4>{`${item.quantity} ${item.unit}`}</Heading4>
                       </View>
                     </View>
                   )
@@ -424,14 +414,9 @@ const styled = StyleSheet.create({
     alignSelf: 'center',
   },
   textGrayLabel: {
-    fontSize: 14,
     color: '#6B7995',
     marginVertical: 15,
   },
-  textBlack: {
-    fontSize: 20,
-  },
-  textProductHeader: { fontSize: 18, fontWeight: 'bold' },
   borderLeftCircle: {
     backgroundColor: '#E5E5E5',
     borderRadius: 13,
@@ -503,12 +488,5 @@ const styled = StyleSheet.create({
     justifyContent: 'space-between',
   },
   textLabelTotal: { fontSize: 16, fontWeight: 'bold' },
-  textDiscount: { fontSize: 14, color: '#6B7995' },
-  textDiscountFromCash: {
-    color: '#FF8329',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  textPrice: { fontSize: 16, color: '#616A7B' },
   textTotal: { fontSize: 20, fontWeight: 'bold', color: '#4C95FF' },
 })

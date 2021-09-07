@@ -29,6 +29,12 @@ import PaymentSection from './PaymentSection'
 import CustomHeader from '../../components/CustomHeader'
 import { ExclusdePromotionModel } from '../../models/ExcludePromotion'
 import _ from 'lodash'
+import Heading3 from '../../components/Font/Heading3'
+import Text1 from '../../components/Font/Text1'
+import Subheading2 from '../../components/Font/Subheading2'
+import Heading2 from '../../components/Font/Heading2'
+import Paragraph2 from '../../components/Font/Paragraph2'
+import Text2 from '../../components/Font/Text2'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Cart'>
 
@@ -414,7 +420,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
               <>
                 <ScrollView showsVerticalScrollIndicator={false}>
                   <View style={styled.productContainer}>
-                    <Text style={styled.textProduct}>สินค้า</Text>
+                    <Heading3 style={styled.textProduct}>สินค้า</Heading3>
                     {cart.items.map((item: ItemCart, index: number) => {
                       let discount = getPromoDiscountForItem(cart, item.id)
                       return (
@@ -452,7 +458,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   {cart.available_premiums.length > 0 ? (
                     <View style={styled.remarkWrapper}>
                       <View>
-                        <Text style={styled.specialLabelFont}>ของแถมที่ได้รับ</Text>
+                        <Heading3>ของแถมที่ได้รับ</Heading3>
                       </View>
 
                       <FlatList
@@ -475,7 +481,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
                   {excludePromotion.length > 0 ? (
                     <View style={styled.remarkWrapper}>
-                      <Text style={styled.specialLabelFont}>โปรโมชั่นที่ร่วมรายการ</Text>
+                      <Heading3>โปรโมชั่นที่ร่วมรายการ</Heading3>
                       <View style={styled.promotionCheckbox}>
                         <Checkbox
                           value={'checkAll'}
@@ -484,16 +490,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           onChange={() => checkAllExcludePromotion()}
                           isChecked={excludePromotion.every((e) => e.checked)}
                         >
-                          <Text style={{ fontSize: 18, color: '#6B7995', marginLeft: 10 }}>
-                            เข้าร่วมโปรโมชั่นทั้งหมด
-                          </Text>
+                          <Text1 style={{ color: '#6B7995', marginLeft: 10 }}>เข้าร่วมโปรโมชั่นทั้งหมด</Text1>
                         </Checkbox>
 
                         {excludePromotion.map((e, i) => (
                           <View style={styled.excludePromotionWrapper} key={i}>
                             <View style={styled.textExcludeContainer}>
                               <TouchableOpacity onPress={() => callUpdateExcludePromotion(e)}>
-                                <Text style={styled.textExclud}>{e.promotion_name}</Text>
+                                <Paragraph2 style={{ color: '#6B7995' }}>{e.promotion_name}</Paragraph2>
                               </TouchableOpacity>
                             </View>
                             <Checkbox
@@ -509,7 +513,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   ) : null}
 
                   <View style={styled.remarkWrapper}>
-                    <Text style={styled.specialLabelFont}>หมายเหตุ (สำหรับ Sale Co)</Text>
+                    <Heading3>หมายเหตุ (สำหรับ Sale Co)</Heading3>
                     <TextInput
                       style={styled.remarkTextInput}
                       value={remark}
@@ -527,7 +531,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           justifyContent: 'space-between',
                         }}
                       >
-                        <Text style={styled.textHeaderPayment}>Special Request</Text>
+                        <Heading3>Special Request</Heading3>
                         <TouchableOpacity
                           onPress={() =>
                             navigation.navigate('SpecialRequest', {
@@ -539,15 +543,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                             })
                           }
                         >
-                          <Text
+                          <Paragraph2
                             style={{
                               color: '#4C95FF',
-                              fontWeight: '500',
-                              fontSize: 14,
                             }}
                           >
                             แก้ไข
-                          </Text>
+                          </Paragraph2>
                         </TouchableOpacity>
                       </View>
                       <View style={styled.line} />
@@ -576,7 +578,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           style={{ width: 25, height: 25 }}
                           source={require('../../../assets/special_request.png')}
                         />
-                        <Text style={styled.textButtonSpecialRequest}>Special Request</Text>
+                        <Heading3 style={styled.textButtonSpecialRequest}>Special Request</Heading3>
                       </View>
                     </TouchableOpacity>
                   )}
@@ -588,7 +590,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         backgroundColor: '#FFFFFF',
                       }}
                     >
-                      <Text style={styled.textHeaderPayment}>หมายเหตุ</Text>
+                      <Heading3>หมายเหตุ</Heading3>
                       <View
                         style={{
                           flexDirection: 'row',
@@ -596,7 +598,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           alignItems: 'center',
                         }}
                       >
-                        <Text style={{ color: '#6B7995' }}>{cart.special_request_remark}</Text>
+                        <Heading3 style={{ color: '#6B7995' }}>{cart.special_request_remark}</Heading3>
                       </View>
                     </View>
                   ) : null}
@@ -615,12 +617,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         alignItems: 'center',
                       }}
                     >
-                      <Text style={styled.textHeaderPayment}>ส่วนลดดูแลราคา</Text>
-                      <Text style={{ color: '#616A7B' }}>
+                      <Heading3>ส่วนลดดูแลราคา</Heading3>
+                      <Text2 style={{ color: '#616A7B' }}>
                         {useSubsidize
                           ? currencyFormat(cart.available_subsidize - cart.usable_subsidize, 2)
                           : currencyFormat(cart.available_subsidize, 2)}
-                      </Text>
+                      </Text2>
                     </View>
                     <View
                       style={{
@@ -643,13 +645,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                               alignItems: 'center',
                             }}
                           />
-                          <Text style={{ marginLeft: 15, color: '#6B7995' }}>ใช้ส่วนลด</Text>
-                          <Text style={{ color: '#FF5D5D', fontWeight: 'bold' }}>
+                          <Subheading2 style={{ marginLeft: 15, color: '#6B7995' }}>ใช้ส่วนลด</Subheading2>
+                          <Subheading2 style={{ color: '#FF5D5D', fontWeight: 'bold' }}>
                             {' ' + currencyFormat(cart.usable_subsidize, 2)}
-                          </Text>
+                          </Subheading2>
                         </>
                       ) : (
-                        <Text style={{ color: '#6B7995' }}>ไม่มีวงเงินที่สามารถใช้ได้</Text>
+                        <Subheading2 style={{ color: '#6B7995' }}>ไม่มีวงเงินที่สามารถใช้ได้</Subheading2>
                       )}
                     </View>
                   </View>
@@ -662,8 +664,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   />
                   <View style={styled.totalPriceContainer}>
                     <View style={styled.warpPrice}>
-                      <Text style={styled.textDiscount}>ราคาก่อนลด</Text>
-                      <Text style={styled.textBeforeDiscount}>{currencyFormat(cart.before_discount, 2)}</Text>
+                      <Text1 style={{ color: '#6B7995' }}>ราคาก่อนลด</Text1>
+                      <Text1 style={{ color: '#6B7995' }}>{currencyFormat(cart.before_discount, 2)}</Text1>
                     </View>
 
                     {cart.received_discounts.filter((item) => item.item_id != null).length > 0 ? (
@@ -686,22 +688,22 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     ) : null}
                     {cart.subsidize_discount != 0 ? (
                       <View style={styled.warpPrice}>
-                        <Text style={styled.textDiscount}>ส่วนลดดูแลราคา</Text>
-                        <Text style={styled.textSubsidizeDiscount}>{currencyFormat(cart.subsidize_discount, 2)}</Text>
+                        <Text1 style={{ color: '#6B7995' }}>ส่วนลดดูแลราคา</Text1>
+                        <Subheading2 style={{ color: '#FF5D5D' }}>
+                          {currencyFormat(cart.subsidize_discount, 2)}
+                        </Subheading2>
                       </View>
                     ) : null}
                     {getCashDiscount(cart) != 0 ? (
                       <View style={styled.warpPrice}>
-                        <Text style={styled.textDiscount}>ส่วนลดเงินสด</Text>
-                        <Text
+                        <Text1 style={{ color: '#6B7995' }}>ส่วนลดเงินสด</Text1>
+                        <Subheading2
                           style={{
                             color: '#FF8329',
-                            fontSize: 16,
-                            fontWeight: 'bold',
                           }}
                         >
                           {currencyFormat(getCashDiscount(cart), 2)}
-                        </Text>
+                        </Subheading2>
                       </View>
                     ) : null}
                     <View
@@ -713,12 +715,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         padding: 5,
                       }}
                     >
-                      <Text style={styled.textBeforeTotal}>ส่วนลดรวม</Text>
-                      <Text style={styled.textTotalDiscount}>{currencyFormat(cart.total_discount, 2)}</Text>
+                      <Text1 style={{ color: '#6B7995' }}>ส่วนลดรวม</Text1>
+                      <Subheading2 style={styled.textTotalDiscount}>
+                        {currencyFormat(cart.total_discount, 2)}
+                      </Subheading2>
                     </View>
                     <View style={styled.warpPrice}>
-                      <Text style={styled.textLabelTotalPrice}>ราคารวม</Text>
-                      <Text style={styled.textTotalPrice}>{currencyFormat(cart.total_price, 2)}</Text>
+                      <Heading3 style={{ color: '#616A7B' }}>ราคารวม</Heading3>
+                      <Heading2 style={{ color: '#4C95FF' }}>{currencyFormat(cart.total_price, 2)}</Heading2>
                     </View>
                   </View>
                   <View style={styled.warpDelivery}>
@@ -757,7 +761,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     <View style={styled.iconCartWarp}>
                       <Image style={styled.iconLocation} source={require('../../../assets/order-cart.png')} />
                     </View>
-                    <Text style={styled.textconfirmOrderButton}>ยืนยันคำสั่งซื้อ</Text>
+                    <Heading3 style={styled.textconfirmOrderButton}>ยืนยันคำสั่งซื้อ</Heading3>
                   </TouchableOpacity>
                 </View>
               </>
@@ -768,7 +772,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         ) : (
           <>
             <View style={styled.productContainer}>
-              <Text style={styled.textProduct}>สินค้า</Text>
+              <Heading3 style={styled.textProduct}>สินค้า</Heading3>
               <SkeletonPlaceholder>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ width: 60, height: 60 }} />
@@ -809,7 +813,7 @@ const styled = StyleSheet.create({
     padding: 15,
   },
   innerProductContainer: { marginTop: 10 },
-  textProduct: { fontSize: 18, marginBottom: 10 },
+  textProduct: { marginBottom: 10 },
   paymentContainer: {
     marginTop: 10,
     padding: 15,
@@ -823,10 +827,6 @@ const styled = StyleSheet.create({
     borderTopWidth: 2,
     borderRadius: 3,
     padding: 20,
-  },
-  textHeaderPayment: {
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   textBodyPayment: {
     fontSize: 16,
@@ -856,10 +856,6 @@ const styled = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 5,
   },
-  textBeforeDiscount: {
-    color: '#6B7995',
-    fontSize: 16,
-  },
   textSubsidizeDiscount: {
     color: '#FF5D5D',
     fontSize: 16,
@@ -877,13 +873,7 @@ const styled = StyleSheet.create({
   },
   textTotalDiscount: {
     color: '#616A7B',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
-  textDiscount: { fontSize: 14, color: '#6B7995' },
-  textBeforeTotal: { fontSize: 16, color: '#6B7995' },
-  textLabelTotalPrice: { fontSize: 16, color: '#314364', fontWeight: 'bold' },
-  textTotalPrice: { fontSize: 20, color: '#4C95FF', fontWeight: 'bold' },
   confirmOrderButton: {
     flexDirection: 'row',
     borderRadius: 6,
@@ -916,9 +906,7 @@ const styled = StyleSheet.create({
     justifyContent: 'center',
   },
   textButtonSpecialRequest: {
-    fontSize: 16,
     color: '#4C95FF',
-    fontWeight: 'bold',
     marginLeft: 10,
   },
   PremiumContainer: {
@@ -961,7 +949,6 @@ const styled = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     marginVertical: 5,
   },
-  specialLabelFont: { fontSize: 17, fontWeight: 'bold' },
   remarkTextInput: {
     height: 128,
     padding: 16,
@@ -985,9 +972,5 @@ const styled = StyleSheet.create({
   },
   textExcludeContainer: {
     width: '95%',
-  },
-  textExclud: {
-    fontSize: 16,
-    color: '#6B7995',
   },
 })

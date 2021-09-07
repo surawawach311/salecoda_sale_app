@@ -10,6 +10,8 @@ import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import Search from '../../components/Search'
 import { ShopDataSource } from '../../datasource/ShopDataSource'
 import CustomHeader from '../../components/CustomHeader'
+import Subheading2 from '../../components/Font/Subheading2'
+import Text1 from '../../components/Font/Text1'
 
 type ShopListScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'ShopList'>
 
@@ -35,7 +37,7 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({ navigation, route }
         <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
           <View>
             <View style={{ padding: 20, backgroundColor: '#F6F9FF' }}>
-              <Text style={styles.textHeader}>{`ร้านค้าในเขต ${route.params.territory}`}</Text>
+              <Subheading2 style={styles.textHeader}>{`ร้านค้าในเขต ${route.params.territory}`}</Subheading2>
             </View>
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -51,9 +53,9 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({ navigation, route }
                     })
                   }}
                 >
-                  <Text style={{ fontSize: 17, paddingLeft: 20 }} key={item.name}>
+                  <Text1 style={{ paddingLeft: 20 }} key={item.name}>
                     {item.name}
-                  </Text>
+                  </Text1>
                   <View style={styles.line} />
                 </TouchableOpacity>
               )}
@@ -72,10 +74,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-  },
-  textHeader: {
-    fontWeight: 'bold',
-    fontSize: 18,
   },
   line: {
     marginTop: 20,

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Image, Text } from "react-native";
+import Text1 from "./Font/Text1";
 
 const EmptyState: React.FC = () => {
   return (
@@ -16,9 +17,9 @@ const EmptyState: React.FC = () => {
         source={require("../../assets/empty-cart.png")}
       />
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ color: "#C2C6CE", fontSize: 14 }}>
+        <Text1 style={{ color: "#C2C6CE", fontSize: 14 }}>
           ไม่มีคำสั่งซื้อ
-        </Text>
+        </Text1>
       </View>
     </View>
   );

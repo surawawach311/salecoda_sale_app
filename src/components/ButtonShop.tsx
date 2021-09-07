@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
 } from "react-native";
+import Subheading3 from "./Font/Subheading3";
 
 interface ButtonShopProps {
   shopName?: string;
@@ -25,14 +26,14 @@ const ButtonShop: React.FC<ButtonShopProps> = ({ onPress, shopName }) => {
             source={require("../../assets/shop.png")}
           />
           {shopName ? (
-            <Text style={styles.shopName}>{shopName.length > 30 ? shopName.substring(0, 30) + "..." : shopName}</Text>
+            <Subheading3 style={styles.shopName}>{shopName.length > 30 ? shopName.substring(0, 30) + "..." : shopName}</Subheading3>
           ) : (
-            <Text style={styles.textChangeShop}>เปลี่ยนร้านค้า</Text>
+            <Subheading3 style={styles.textChangeShop}>เปลี่ยนร้านค้า</Subheading3>
           )}
         </View>
         <View style={{ flexDirection: "row" }}>
           {shopName ? (
-            <Text style={styles.textChangeShop}>เปลี่ยนร้านค้า</Text>
+            <Subheading3 style={styles.textChangeShop}>เปลี่ยนร้านค้า</Subheading3>
           ) : null}
           <Image
             style={styles.iconRight}

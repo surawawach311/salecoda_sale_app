@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableWithoutFeedback, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import Heading3 from '../../components/Font/Heading3'
+import Text1 from '../../components/Font/Text1'
 import { paymentCartEntity } from '../../entities/CartEntity'
 
 interface PaymentSectionProps {
@@ -10,7 +12,6 @@ interface PaymentSectionProps {
 }
 
 const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange, selectPayment }) => {
-
   useEffect(() => {
     initailPayment()
   }, [])
@@ -23,25 +24,24 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange, sel
 
   return (
     <View style={styled.paymentContainer}>
-      {}
-      <Text style={styled.textHeaderPayment}>วิธีชำระเงิน</Text>
+      <Heading3>วิธีชำระเงิน</Heading3>
       <View style={styled.paymentMethod}>
         {payments.map((method: paymentCartEntity) => {
           return method.name == 'เงินสด' ? (
             <TouchableOpacity
               key={method.name}
               style={styled.methodChoiceContainer}
-              onPress={() => {               
+              onPress={() => {
                 onChange('cash')
               }}
             >
               <TouchableWithoutFeedback>
                 {selectPayment == 'cash' ? <View style={styled.iconPin} /> : <View style={styled.iconUnPin} />}
               </TouchableWithoutFeedback>
-              <Text style={styled.textBodyPayment}>
+              <Text1 style={{ color: '#616A7B' }}>
                 {method.name}
-                {method.discount_rate ? `(รับส่วนลดเพิ่ม ${method.discount_rate} %)` : null}
-              </Text>
+                {method.discount_rate ? `(รับส่วนลดเพิ่ม ${method.discount_rate}%)` : null}
+              </Text1>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -53,11 +53,11 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({ payments, onChange, sel
             >
               {selectPayment == 'credit' ? <View style={styled.iconPin} /> : <View style={styled.iconUnPin} />}
 
-              <Text style={styled.textBodyPayment}>
+              <Text1 style={{ color: '#616A7B' }}>
                 {method.name}
                 {/* (คงเหลือ{" "}
               {currencyFormat(method.remain_credit, 2)}) */}
-              </Text>
+              </Text1>
             </TouchableOpacity>
           )
         })}
@@ -74,10 +74,6 @@ const styled = StyleSheet.create({
     padding: 15,
     backgroundColor: 'white',
   },
-  textHeaderPayment: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   paymentMethod: {
     marginTop: 10,
     borderBottomColor: '#EBEFF2',
@@ -90,7 +86,7 @@ const styled = StyleSheet.create({
   methodChoiceContainer: {
     flexDirection: 'row',
     marginBottom: 5,
-    padding:5,
+    padding: 5,
     // backgroundColor:"red"
   },
   iconPin: {
@@ -108,9 +104,5 @@ const styled = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 5,
-  },
-  textBodyPayment: {
-    fontSize: 16,
-    color: '#616A7B',
   },
 })

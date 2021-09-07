@@ -4,6 +4,11 @@ import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platfor
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import AccrodingPrice from '../../components/AccrodingPrice'
 import CustomHeader from '../../components/CustomHeader'
+import Heading2 from '../../components/Font/Heading2'
+import Heading3 from '../../components/Font/Heading3'
+import Paragraph1 from '../../components/Font/Paragraph1'
+import Subheading2 from '../../components/Font/Subheading2'
+import Text1 from '../../components/Font/Text1'
 import SpecialRequestProductCard from '../../components/SpecialProductCard'
 import { CartDataSource } from '../../datasource/CartDataSource'
 import { CartEntity } from '../../entities/CartEntity'
@@ -183,10 +188,10 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({ naviga
   return (
     <>
       <CustomHeader title={'ขอส่วนลดพิเศษ'} showBackBtn onPressBack={() => navigation.goBack()} />
-      <ScrollView keyboardShouldPersistTaps="handled" style={styled.container}>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={90}>
           <View style={styled.specialLabel}>
-            <Text style={styled.specialLabelFont}>สินค้าที่ขอลดราคา</Text>
+            <Heading3>สินค้าที่ขอลดราคา</Heading3>
           </View>
           {products
             ? products.map((product) => {
@@ -209,7 +214,7 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({ naviga
             : null}
 
           <View style={styled.remarkWrapper}>
-            <Text style={styled.specialLabelFont}>หมายเหตุ</Text>
+            <Heading3>หมายเหตุ</Heading3>
             <TextInput
               style={styled.remarkTextInput}
               value={remark}
@@ -241,8 +246,8 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({ naviga
           }}
         >
           <View style={styled.warpSummary}>
-            <Text style={styled.fontBottomSumary}>ราคาก่อนลด</Text>
-            <Text style={styled.fontBottomSumary}>{currencyFormat(cart?.before_discount, 2)}</Text>
+            <Text1 style={{ color: '#6B7995' }}>ราคาก่อนลด</Text1>
+            <Subheading2 style={{ color: '#6B7995' }}>{currencyFormat(cart?.before_discount, 2)}</Subheading2>
           </View>
 
           <AccrodingPrice
@@ -267,14 +272,12 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({ naviga
             }}
           />
           <View style={styled.warpSummary}>
-            <Text style={{ fontWeight: 'bold', fontSize: 16, color: '#616A7B' }}>ราคารวม</Text>
-            <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#4C95FF' }}>
-              {currencyFormat(cart?.total_price)}
-            </Text>
+            <Subheading2 style={{ color: '#616A7B' }}>ราคารวม</Subheading2>
+            <Heading2 style={{ color: '#4C95FF' }}>{currencyFormat(cart?.total_price)}</Heading2>
           </View>
         </View>
         <TouchableOpacity style={styled.confirmOrderButton} onPress={() => handleConfirmSpecialRequest()}>
-          <Text style={styled.textconfirmOrderButton}>บันทึกส่วนลดพิเศษ</Text>
+          <Text1 style={{ color: '#FFFFFF' }}>บันทึกส่วนลดพิเศษ</Text1>
         </TouchableOpacity>
       </View>
     </>
@@ -284,7 +287,6 @@ const SpecialRequestScreen: React.FC<SpecialRequestScreennRouteProp> = ({ naviga
 export default SpecialRequestScreen
 
 const styled = StyleSheet.create({
-  container: {},
   specialLabel: { padding: 16, backgroundColor: '#FFFFFF', marginBottom: 5, marginTop: 1 },
   remarkWrapper: {
     padding: 16,
@@ -299,8 +301,9 @@ const styled = StyleSheet.create({
     borderColor: '#E1E7F6',
     marginTop: 12,
     textAlignVertical: 'top',
+    fontFamily: 'NotoSansThaiMedium',
+    fontSize: 16,
   },
-  specialLabelFont: { fontSize: 17, fontWeight: 'bold' },
   confirmOrderButton: {
     flexDirection: 'row',
     borderRadius: 8,
@@ -309,12 +312,6 @@ const styled = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textconfirmOrderButton: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  fontBottomSumary: { color: '#6B7995', fontSize: 16, fontWeight: '400' },
   warpSummary: {
     flexDirection: 'row',
     justifyContent: 'space-between',

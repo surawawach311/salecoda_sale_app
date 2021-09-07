@@ -13,6 +13,7 @@ import { CartContext } from '../../context/cartStore'
 import CustomHeader from '../../components/CustomHeader'
 import MiniCart from '../../components/MiniCart'
 import { CartDataSource } from '../../datasource/CartDataSource'
+import Heading3 from '../../components/Font/Heading3'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Shop'>
 
@@ -62,7 +63,12 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   const searchProduct = (keywords: string) => {
-    ProductDataSource.getProductList(route.params.shop.id, route.params.company,route.params.productBrand, keywords).then((res) => {
+    ProductDataSource.getProductList(
+      route.params.shop.id,
+      route.params.company,
+      route.params.productBrand,
+      keywords,
+    ).then((res) => {
       setProductList(res)
     })
   }
@@ -101,7 +107,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       <View style={styles.warpShopHeader}>
         <Image style={styles.bgImage} source={require('../../../assets/bgShop.png')} />
         <View style={styles.shopInfo}>
-          <Text style={styles.textShopName}>{route.params.shop.name}</Text>
+          <Heading3 style={{ color: '#FFFFFF' }}>{route.params.shop.name}</Heading3>
           <View
             style={{
               borderWidth: 2,
@@ -197,10 +203,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 150,
     position: 'absolute',
-  },
-  textShopName: {
-    color: '#FFFFFF',
-    fontSize: 20,
   },
   shopPoint: {
     flexDirection: 'row',

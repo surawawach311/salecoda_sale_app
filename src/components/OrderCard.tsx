@@ -1,61 +1,50 @@
-import React from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
-import { ThaiDateFormat, ThaiTimeFormat } from "../utilities/ThaiDateFormat";
-import TagStatus from "./TagStatus";
+import React from 'react'
+import { View, Image, Text, StyleSheet } from 'react-native'
+import { ThaiDateFormat, ThaiTimeFormat } from '../utilities/ThaiDateFormat'
+import Heading4 from './Font/Heading4'
+import Paragraph2 from './Font/Paragraph2'
+import Paragraph3 from './Font/Paragraph3'
+import Text1 from './Font/Text1'
+import TagStatus from './TagStatus'
 
 interface OrderCardProps {
-  orderNumber: string;
-  createDatetime: string;
-  quantity: number;
-  address: any;
-  status: string;
+  orderNumber: string
+  createDatetime: string
+  quantity: number
+  address: any
+  status: string
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({
-  orderNumber,
-  createDatetime,
-  quantity,
-  address,
-  status,
-}) => {
+const OrderCard: React.FC<OrderCardProps> = ({ orderNumber, createDatetime, quantity, address, status }) => {
   return (
     <View style={styled.orderCard}>
       <View style={styled.headerCard}>
         <View style={styled.innerheaderLeftCard}>
-          <Image
-            style={styled.iconInvoice}
-            source={require("../../assets/invoice.png")}
-          />
-          <Text style={styled.textOrderNumber}>{orderNumber}</Text>
+          <Image style={styled.iconInvoice} source={require('../../assets/invoice.png')} />
+          <Heading4 style={{ marginLeft: 4 }}>{orderNumber}</Heading4>
         </View>
         <View style={styled.innerheaderRightCard}>
-          <Text style={styled.detail}>ดูรายละเอียด</Text>
-          <Text style={styled.textDate}>{`${ThaiDateFormat(
-            createDatetime
-          )} ${ThaiTimeFormat(createDatetime)}`}</Text>
+          <Paragraph2 style={styled.detail}>ดูรายละเอียด</Paragraph2>
+          <Paragraph3 style={{ color: '#6B7995' }}>{`${ThaiDateFormat(createDatetime)} ${ThaiTimeFormat(
+            createDatetime,
+          )}`}</Paragraph3>
           <View />
         </View>
       </View>
       <View style={styled.breakLine} />
       <View>
         <View style={styled.bodyCard}>
-          <Image
-            style={styled.iconPackage}
-            source={require("../../assets/package.png")}
-          />
-          <Text style={styled.itemQuantity}>{`${quantity} รายการ`}</Text>
+          <Image style={styled.iconPackage} source={require('../../assets/package.png')} />
+          <Text1 style={styled.itemQuantity}>{`${quantity} รายการ`}</Text1>
         </View>
         <View style={styled.companyAdress}>
-          <Image
-            style={styled.iconLocation}
-            source={require("../../assets/location3.png")}
-          />
+          <Image style={styled.iconLocation} source={require('../../assets/location3.png')} />
           {address ? (
-            <Text style={styled.textCompanyAddress}>
+            <Paragraph2 style={styled.textCompanyAddress}>
               {`${address.name} \n${address.address} ${address.sub_district} ${address.district} ${address.province} ${address.post_code} `}
-            </Text>
+            </Paragraph2>
           ) : (
-            <Text style={styled.textCompanyAddress}>undefined</Text>
+            <Paragraph2 style={styled.textCompanyAddress}>-</Paragraph2>
           )}
         </View>
         <View style={styled.statusContainer}>
@@ -63,16 +52,16 @@ const OrderCard: React.FC<OrderCardProps> = ({
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default OrderCard;
+export default OrderCard
 
 const styled = StyleSheet.create({
   orderCard: {
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -84,46 +73,42 @@ const styled = StyleSheet.create({
     marginBottom: 15,
     padding: 21,
   },
-  headerCard: { flexDirection: "row", justifyContent: "space-between" },
-  textOrderNumber: { fontSize: 14, fontWeight: "bold", marginLeft: 4 },
-  iconInvoice: { height: 20, width: 16, resizeMode: "contain" },
+  headerCard: { flexDirection: 'row', justifyContent: 'space-between' },
+  iconInvoice: { height: 20, width: 16, resizeMode: 'contain' },
   detail: {
-    color: "#4C95FF",
-    fontWeight: "bold",
-    fontSize: 14,
+    color: '#4C95FF',
     marginBottom: 5,
   },
   breakLine: {
     borderWidth: 1,
-    borderColor: "#EEEEEE",
+    borderColor: '#EEEEEE',
     marginVertical: 10,
   },
-  innerheaderLeftCard: { flexDirection: "row" },
-  innerheaderRightCard: { alignItems: "flex-end" },
-  textDate: { color: "#6B7995", fontWeight: "bold", fontSize: 12 },
+  innerheaderLeftCard: { flexDirection: 'row' },
+  innerheaderRightCard: { alignItems: 'flex-end' },
   bodyCard: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
   },
-  iconPackage: { height: 13, width: 14, resizeMode: "contain" },
-  itemQuantity: { color: "#6B7995", marginLeft: 5 },
+  iconPackage: { height: 13, width: 14, resizeMode: 'contain' },
+  itemQuantity: { color: '#6B7995', marginLeft: 5 },
   companyAdress: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 10,
   },
   iconLocation: {
     height: 15,
     width: 14,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
-  textCompanyAddress: { color: "#6B7995", marginLeft: 5 },
+  textCompanyAddress: { color: '#6B7995', marginLeft: 5 },
   statusBadge: {
-    backgroundColor: "#FFE9D8",
+    backgroundColor: '#FFE9D8',
     borderRadius: 18,
     padding: 10,
     marginLeft: 15,
   },
-  statusContainer: { flexDirection: "row", justifyContent: "space-between" },
-  textStatusBadge: { color: "#FF8824" },
-});
+  statusContainer: { flexDirection: 'row', justifyContent: 'space-between' },
+  textStatusBadge: { color: '#FF8824' },
+})

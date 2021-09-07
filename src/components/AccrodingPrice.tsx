@@ -2,6 +2,9 @@ import React from 'react'
 import { Accordion, Icon } from 'native-base'
 import { View, Text, StyleSheet } from 'react-native'
 import { currencyFormat } from '../utilities/CurrencyFormat'
+import Text1 from './Font/Text1'
+import Text2 from './Font/Text2'
+import Subheading2 from './Font/Subheading2'
 
 export interface AccrodingPriceProps {
   title: string
@@ -29,27 +32,26 @@ const AccrodingPrice: React.FC<AccrodingPriceProps> = ({ title, total, detail, p
         <Accordion.Summary
           _expanded={{ backgroundColor: '#FFFFFF' }}
           style={{
-            fontSize: 14,
             justifyContent: 'space-between',
             alignItem: 'center',
             marginBottom: -15,
-            marginHorizontal: -2
+            marginHorizontal: -2,
           }}
         >
           <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontSize: 14, color: '#6B7995' }}> {`${title}`}</Text>
+            <Text1 style={{ color: '#6B7995' }}> {`${title}`}</Text1>
             <Accordion.Icon style={{ color: 'black' }} />
           </View>
-          <Text style={[styled.textContentName, price_color ? { color: price_color } : { color: '#6B7995' }]}>
+          <Subheading2 style={[{color: '#6B7995'}, price_color ? { color: price_color } : { color: '#6B7995' }]}>
             {`${currencyFormat(total, 2)}`}
-          </Text>
+          </Subheading2>
         </Accordion.Summary>
         <Accordion.Details style={{ marginVertical: -10 }}>
           {detail.map((item: { item: React.ReactNode; price: number; quantity: number }, index: number) => {
             return (
               <View key={index} style={styled.textDetailContainer}>
-                <Text style={[styled.textDetail, { width: 220 }]}>{item.item}</Text>
-                <Text style={styled.textDetail}>{currencyFormat(item.price * item.quantity, 2)}</Text>
+                <Text2 style={[styled.textDetail, { width: 220 }]}>{item.item}</Text2>
+                <Text2 style={styled.textDetail}>{currencyFormat(item.price * item.quantity, 2)}</Text2>
               </View>
             )
           })}
@@ -62,11 +64,6 @@ const AccrodingPrice: React.FC<AccrodingPriceProps> = ({ title, total, detail, p
 export default AccrodingPrice
 
 const styled = StyleSheet.create({
-  textContentName: {
-    color: '#6B7995',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
   textDetailContainer: {
     backgroundColor: '#FBFBFB',
     flexDirection: 'row',
@@ -92,7 +89,6 @@ const styled = StyleSheet.create({
     color: 'rgba(107, 121, 149, 1)',
   },
   textDetail: {
-    fontSize: 14,
     color: 'rgba(156, 169, 197, 1)',
   },
 })

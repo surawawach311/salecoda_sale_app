@@ -1,12 +1,14 @@
-import { View, Image, Text } from "react-native";
-import React from "react";
+import { View, Image, Text } from 'react-native'
+import React from 'react'
+import Text2 from './Font/Text2'
+import Heading4 from './Font/Heading4'
 
 export interface PremiumCardProps {
-  image: string;
-  title: string;
-  desc: string;
-  quantity: number;
-  unit: string;
+  image: string
+  title: string
+  desc: string
+  quantity: number
+  unit: string
 }
 
 const PremiumCard: React.FC<PremiumCardProps> = ({ image, title, desc, quantity, unit }) => {
@@ -15,63 +17,62 @@ const PremiumCard: React.FC<PremiumCardProps> = ({ image, title, desc, quantity,
       <View
         style={{
           borderRadius: 6,
-          backgroundColor: "#F9F9F9",
+          backgroundColor: '#F9F9F9',
           width: 170,
           height: 80,
           marginVertical: 10,
-          marginHorizontal:2,
+          marginHorizontal: 2,
           padding: 10,
           paddingLeft: 5,
-          flexDirection: "row",
+          flexDirection: 'row',
         }}
       >
         <View
           style={{
-            backgroundColor: "#FFFFFF",
+            backgroundColor: '#FFFFFF',
             borderRadius: 4,
-            width: 60,
             height: 60,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Image
             style={{
               width: 50,
               height: 50,
-              resizeMode: "contain",
+              resizeMode: 'contain',
             }}
             source={{ uri: image }}
           />
         </View>
         <View
           style={{
+            flex: 1,
             marginLeft: 5,
-            justifyContent: "space-around",
+            justifyContent: 'space-around',
+            width: 120,
           }}
         >
-          <Text
+          <Text2
+            numberOfLines={1}
             style={{
-              fontSize: 14,
-              color: "#616A7B",
-              fontWeight: "600",
+              color: '#616A7B',
             }}
           >
             {title}
-          </Text>
-          <Text
+          </Text2>
+          <Text2
             style={{
-              fontSize: 12,
-              color: "#616A7B",
+              color: '#616A7B',
             }}
           >
             {desc}
-          </Text>
-          <Text style={{ fontWeight: "bold", fontSize: 11 }}>{`${quantity} ${unit}`}</Text>
+          </Text2>
+          <Heading4>{`${quantity} ${unit}`}</Heading4>
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default PremiumCard;
+export default PremiumCard

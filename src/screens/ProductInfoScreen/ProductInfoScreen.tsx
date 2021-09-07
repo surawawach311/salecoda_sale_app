@@ -23,6 +23,12 @@ import { currencyFormat } from '../../utilities/CurrencyFormat'
 import Toast from 'react-native-root-toast'
 import MiniCart from '../../components/MiniCart'
 import CustomHeader from '../../components/CustomHeader'
+import Heading2 from '../../components/Font/Heading2'
+import Paragraph2 from '../../components/Font/Paragraph2'
+import Paragraph1 from '../../components/Font/Paragraph1'
+import Subheading2 from '../../components/Font/Subheading2'
+import Heading3 from '../../components/Font/Heading3'
+import Subheading1 from '../../components/Font/Subheading1'
 
 type ProductInfoScreenNavigationProp = StackScreenProps<PurchaseStackParamList, 'ProductInfo'>
 
@@ -143,8 +149,12 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
     <>
       {product ? (
         <>
-        <CustomHeader showBackBtn onPressBack={() => navigation.goBack()} headerRight={renderMiniCart} />
-          <ScrollView style={styled.container} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>  
+          <CustomHeader showBackBtn onPressBack={() => navigation.goBack()} headerRight={renderMiniCart} />
+          <ScrollView
+            style={styled.container}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+          >
             <View>
               <View style={styled.wrapInfo}>
                 <View style={styled.imageInfo}>
@@ -157,28 +167,28 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
                 <View>
                   <View style={styled.wrapTitlePrice}>
                     <View style={{ width: '70%' }}>
-                      <Text style={styled.textH1}>{product?.title}</Text>
+                      <Heading2>{product?.title}</Heading2>
                     </View>
 
-                    <Text style={styled.textH1}>{currencyFormat(product?.price_per_volume, 0)}</Text>
+                    <Heading2>{currencyFormat(product?.price_per_volume, 0)}</Heading2>
                   </View>
                   <View>
-                    <Text style={styled.textCommon}>{product?.common_title}</Text>
-                    <Text style={styled.textSize}>{`${product.packing_size} | ${currencyFormat(
+                    <Paragraph1 style={styled.textCommon}>{product?.common_title}</Paragraph1>
+                    <Paragraph1 style={styled.textSize}>{`${product.packing_size} | ${currencyFormat(
                       product.price_per_sale_unit,
-                    )}/${product.sale_unit}`}</Text>
+                    )}/${product.sale_unit}`}</Paragraph1>
                   </View>
                 </View>
               </View>
               <View style={styled.containerDescription}>
                 <View style={styled.wrapDescriptionHeader}>
-                  <Text style={styled.textDescriptionHeader}>รายละเอียดสินค้า</Text>
+                  <Subheading2>รายละเอียดสินค้า</Subheading2>
                 </View>
                 <View style={styled.wrapDescription}>
-                  <Text style={styled.textH2}>สารสำคัญ</Text>
-                  <Text style={styled.textH5}>{product?.common_title}</Text>
-                  <Text style={styled.textH2}>คุณสมบัติและ ประโยชน์</Text>
-                  <Text style={styled.textH5}>{product.property ? product.property : '-'}</Text>
+                  <Subheading2>สารสำคัญ</Subheading2>
+                  <Paragraph1 style={styled.textH5}>{product?.common_title}</Paragraph1>
+                  <Subheading2>คุณสมบัติและ ประโยชน์</Subheading2>
+                  <Paragraph1 style={styled.textH5}>{product.property ? product.property : '-'}</Paragraph1>
                 </View>
                 {product?.promotions
                   ? product.promotions.map((promotion: PromotionEntity) => {
@@ -186,8 +196,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
                         <View key={promotion.id} style={styled.warpPromotion}>
                           <Image style={{ width: 25, height: 25 }} source={require('../../../assets/promotion.png')} />
                           <View style={{ marginLeft: 5 }}>
-                            <Text style={{ fontSize: 18, color: '#FFFFFF' }}>โปรโมชั่น</Text>
-                            <Text style={{ fontSize: 16, color: '#FFFFFF' }}>{promotion.desc}</Text>
+                            <Heading3 style={{ color: '#FFFFFF' }}>โปรโมชั่น</Heading3>
+                            <Paragraph1 style={{ color: '#FFFFFF' }}>{promotion.desc}</Paragraph1>
                           </View>
                         </View>
                       )
@@ -250,7 +260,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
                   }
                 >
                   <View style={styled.buttonCheckout}>
-                    <Text style={styled.textButton}>สั่งซื้อสินค้า</Text>
+                    <Subheading1 style={styled.textButton}>สั่งซื้อสินค้า</Subheading1>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -279,9 +289,6 @@ const styled = StyleSheet.create({
     justifyContent: 'space-between',
     fontWeight: 'bold',
   },
-  textH1: {
-    fontSize: 24,
-  },
   textCommon: { fontSize: 14, color: '#333333' },
   textSize: { fontSize: 16, color: '#616A7B', marginTop: 10 },
   image: {
@@ -300,15 +307,7 @@ const styled = StyleSheet.create({
     borderBottomWidth: 1,
     padding: 20,
   },
-  textDescriptionHeader: {
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-  textH2: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  textH5: { fontSize: 16, color: '#6B7995', marginTop: 20, marginBottom: 20 },
+  textH5: { color: '#6B7995', marginTop: 20, marginBottom: 20 },
   wrapDescription: {
     padding: 20,
   },
