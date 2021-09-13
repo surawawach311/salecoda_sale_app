@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, StyleSheet } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -29,7 +29,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [profile, setProfile] = useState<UserEntity>()
 
   useEffect(() => {
-    checkAuthToken()
     getProfile()
   }, [])
 
@@ -51,18 +50,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       },
     )
   })
-
-  const checkAuthToken = async () => {
-    const auth = await UserLocalStorageService.haveAccessToken().then((res) => {
-      return res
-    })
-    if (!auth) {
-      // @ts-ignore
-      navigation.navigate('Auth', {
-        screen: 'InputTelNumber',
-      })
-    }
-  }
 
   const getProfile = async () => {
     await VerifiesDataSource.getProfile().then((respone: UserEntity) => {
@@ -130,7 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileWarp: {
-    // flex: 0.4,
+
     height: '30%',
     backgroundColor: '#4C95FF',
     flexDirection: 'row',

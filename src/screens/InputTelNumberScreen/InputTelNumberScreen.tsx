@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   View,
@@ -13,37 +13,17 @@ import { InputPhone } from '../../components/InputPhone'
 import { VerifiesDataSource } from '../../datasource/VerifiesDataSource'
 import { StackScreenProps } from '@react-navigation/stack'
 import { AppAuthParamList } from '../../navigations/AppAuthNavigator'
-import { UserLocalStorageService } from '../../services/UserLocalStorageService'
 import { bypassTelephone } from '../../definitions/BypassDataTest'
 import Heading2 from '../../components/Font/Heading2'
 import Paragraph1 from '../../components/Font/Paragraph1'
 import Subheading2 from '../../components/Font/Subheading2'
-
 type InputOtpScreenNavigationProp = StackScreenProps<AppAuthParamList, 'InputTelNumber'>
 
-const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigation, route }) => {
+const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigation }) => {
   const [value, setValue] = React.useState<string>('')
   const [isError, setIsError] = React.useState(false)
   const [isLogin, setIsLogin] = React.useState(false)
 
-  useEffect(() => {
-    checkAuthToken()
-    if (isLogin) {
-      navigation.navigate('Main', {
-        screen: 'Home',
-      })
-    }
-  })
-
-  const checkAuthToken = async () => {
-    const auth = await UserLocalStorageService.haveAccessToken().then((res) => {
-      return res
-    })
-
-    if (auth) {
-      setIsLogin(true)
-    }
-  }
 
   const fillZero = (tel: string) => {
     if (tel.length < 10) {

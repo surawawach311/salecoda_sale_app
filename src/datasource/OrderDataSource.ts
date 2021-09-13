@@ -66,6 +66,5 @@ export class OrderDataSource {
         `${BASE_URL_POPORING}/v4/orders/sellcoda/territory?company_id=${company}&territory=${territory}&status=${status}`,
       )
       .then((res) => res.data)
-      .catch((error) => console.error(`error on CartDataSource.listOrder`, error))
   }
 }

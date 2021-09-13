@@ -43,6 +43,5 @@ export class VerifiesDataSource {
       .then((response) => {
         return response.data
       })
-      .catch((error) => console.error(`error on VerifiesDataSource.getProfile`, error))
   }
 }
