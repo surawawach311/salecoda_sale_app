@@ -58,7 +58,7 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
         setPager({ total: data.total, limit: defaultPagination.limit, offset: defaultPagination.offset })
         setIsRefreshing(false)
       })
-      .catch((err) => alert(err))
+      // .catch((err) => alert(err))
   }
 
   const handleLoadMore = () => {
@@ -70,7 +70,7 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
         setPager({ total: data.total, limit: pager.limit, offset: pager.offset + pager.limit })
         setIsLoading(false)
       })
-      .catch((err) => alert(err))
+      // .catch((err) => alert(err))
   }
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
         setPager({ total: data.total, limit: defaultPagination.limit, offset: defaultPagination.offset })
         setIsLoading(false)
       })
-      .catch((err) => alert(err))
+      // .catch((err) => alert(err))
   }, [isFocused])
 
   const isComplete = statusFilter !== StatusFilter.WaitingConfirm

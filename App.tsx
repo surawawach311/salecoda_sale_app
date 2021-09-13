@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { NativeBaseProvider } from 'native-base'
 import { RootSiblingParent } from 'react-native-root-siblings'
 import * as Font from 'expo-font'
+import { navigationRef } from './src/navigations/RootNavigation';
 
 export default class App extends React.Component<{}, AppState> {
   constructor(props: any) {
@@ -33,7 +34,7 @@ export default class App extends React.Component<{}, AppState> {
     } else {
       return (
         <RootSiblingParent>
-          <NavigationContainer>
+          <NavigationContainer ref={navigationRef}>
             <NativeBaseProvider>
               <AppNavigator />
             </NativeBaseProvider>
