@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## enhnace [v1.77.0] - 2020-09-14
+- use permissions disable co wallet,exclude promotion
+
 ## enhnace [v1.76.0] - 2020-09-14
 - use permissions render promotion label and promotion detail
 
