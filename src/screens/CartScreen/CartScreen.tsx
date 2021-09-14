@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View, StyleSheet, KeyboardAvoidingView, Image, Platform, Alert, TextInput } from 'react-native'
+import { View, StyleSheet, KeyboardAvoidingView, Image, Platform, Alert, TextInput } from 'react-native'
 import ButtonShop from '../../components/ButtonShop'
 import { StackScreenProps } from '@react-navigation/stack'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
@@ -50,7 +50,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [excludePromotion, setExcludePromotion] = useState<ExclusdePromotionModel[]>([])
   const isFocused = useIsFocused()
   const userDataStore = useContext(UserDataContext)
-  const { userData } = userDataStore
+  const { profile, permissions } = userDataStore
   const { dispatch } = useContext(CartContext)
 
   useEffect(() => {
@@ -311,7 +311,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           text: 'ยืนยัน',
           onPress: () => {
             OrderFacade.confirmOrder(
-              userData.company,
+              profile.company,
               shop,
               shipment,
               cart,
@@ -489,6 +489,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           style={{ marginVertical: 10 }}
                           onChange={() => checkAllExcludePromotion()}
                           isChecked={excludePromotion.every((e) => e.checked)}
+                          isDisabled={permissions.responseData.cartPage.checkJoinPromotion === 'disable' ? true : false}
                         >
                           <Text1 style={{ color: '#6B7995', marginLeft: 10 }}>เข้าร่วมโปรโมชั่นทั้งหมด</Text1>
                         </Checkbox>
@@ -496,7 +497,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                         {excludePromotion.map((e, i) => (
                           <View style={styled.excludePromotionWrapper} key={i}>
                             <View style={styled.textExcludeContainer}>
-                              <TouchableOpacity onPress={() => callUpdateExcludePromotion(e)}>
+                              <TouchableOpacity
+                                onPress={() => callUpdateExcludePromotion(e)}
+                                disabled={
+                                  permissions.responseData.cartPage.checkJoinPromotion === 'disable' ? true : false
+                                }
+                              >
                                 <Paragraph2 style={{ color: '#6B7995' }}>{e.promotion_name}</Paragraph2>
                               </TouchableOpacity>
                             </View>
@@ -505,6 +511,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                               colorScheme="rgba(76, 149, 255,1)"
                               isChecked={e.checked}
                               onChange={() => callUpdateExcludePromotion(e)}
+                              isDisabled={
+                                permissions.responseData.cartPage.checkJoinPromotion === 'disable' ? true : false
+                              }
                             />
                           </View>
                         ))}
@@ -644,6 +653,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                               height: 20,
                               alignItems: 'center',
                             }}
+                            isDisabled={
+                              permissions.responseData.cartPage.checkJoinCoDiscount === 'disable' ? true : false
+                            }
                           />
                           <Subheading2 style={{ marginLeft: 15, color: '#6B7995' }}>ใช้ส่วนลด</Subheading2>
                           <Subheading2 style={{ color: '#FF5D5D', fontWeight: 'bold' }}>
