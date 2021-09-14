@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, Image, StyleSheet, FlatList, View } from 'react-native'
+import { Image, StyleSheet, FlatList, View } from 'react-native'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import { StackScreenProps } from '@react-navigation/stack'
 import Search from '../../components/Search'
@@ -9,18 +9,20 @@ import { ShopDataSource } from '../../datasource/ShopDataSource'
 import { ProductEntity } from '../../entities/ProductEntity'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ProductDataSource } from '../../datasource/ProductDataSource'
-import { CartContext } from '../../context/cartStore'
 import CustomHeader from '../../components/CustomHeader'
 import MiniCart from '../../components/MiniCart'
 import { CartDataSource } from '../../datasource/CartDataSource'
 import Heading3 from '../../components/Font/Heading3'
+import { UserDataContext } from '../../provider/UserDataProvider'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Shop'>
 
 const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [productList, setProductList] = useState<ProductEntity[]>()
-  const { state } = useContext(CartContext)
   const [totalItem, setTotalItem] = useState(0)
+  const profile = useContext(UserDataContext)
+  const { permissions } = profile
+
   useEffect(() => {
     fecthData()
     initialQuantity()
@@ -52,12 +54,29 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         route.params.shop.id,
         route.params.company,
         route.params.productBrand,
-      ).then((res) => {
-        setProductList(res)
+      ).then((res: ProductEntity[]) => {
+        if (permissions.responseData.productPage.showProductPrice) {
+          setProductList(res)
+        } else {
+          let products = res.map((item) => {
+            item.is_have_promotion = false
+            item.promotions = []
+            return item
+          })
+          setProductList(products)
+        }
       })
     } else {
       await ShopDataSource.getProduct(route.params.shop.id, route.params.company).then((res) => {
-        setProductList(res)
+        if (permissions.responseData.productPage.showProductPrice) {
+          setProductList(res)
+        } else {
+          let products = res.map((item) => {
+            item.is_have_promotion = false
+            return item
+          })
+          setProductList(products)
+        }
       })
     }
   }
