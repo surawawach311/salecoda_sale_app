@@ -5,7 +5,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import {
   View,
   StyleSheet,
-  Text,
   Image,
   ScrollView,
   TextInput,
@@ -24,11 +23,11 @@ import Toast from 'react-native-root-toast'
 import MiniCart from '../../components/MiniCart'
 import CustomHeader from '../../components/CustomHeader'
 import Heading2 from '../../components/Font/Heading2'
-import Paragraph2 from '../../components/Font/Paragraph2'
 import Paragraph1 from '../../components/Font/Paragraph1'
 import Subheading2 from '../../components/Font/Subheading2'
 import Heading3 from '../../components/Font/Heading3'
 import Subheading1 from '../../components/Font/Subheading1'
+import { UserDataContext } from '../../provider/UserDataProvider'
 
 type ProductInfoScreenNavigationProp = StackScreenProps<PurchaseStackParamList, 'ProductInfo'>
 
@@ -39,6 +38,8 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
   const { state, dispatch } = useContext(CartContext)
   const isFocused = useIsFocused()
   const [loading, setLoading] = useState(false)
+  const profile = useContext(UserDataContext)
+  const { permissions } = profile
 
   useEffect(() => {
     initialQuantity()
@@ -66,8 +67,13 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
   }
 
   const getProduct = async () => {
-    await ProductDataSource.getNameProduct(route.params.shop.id, route.params.product.id).then((res) => {
-      setProduct(res)
+    await ProductDataSource.getNameProduct(route.params.shop.id, route.params.product.id).then((res: ProductEntity) => {
+      if (permissions.responseData.productDetail.showPromotionLabel) {
+        setProduct(res)
+      } else {
+        res.promotions = []
+        setProduct(res)
+      }
     })
   }
 

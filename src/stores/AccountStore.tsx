@@ -1,14 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { AccountEntity } from '../entities/AccountEntity'
-import { CompanyEntity } from '../entities/CompanyEntity'
-import { AccountDataSource } from '../datasource/AccountDataSource'
 import { VerifiesDataSource } from '../datasource/VerifiesDataSource'
 import { UserEntity } from '../entities/userEntity'
 
 export class AccountStore {
   public isLoading: boolean = true
   public account?: UserEntity = undefined
-  public company?: CompanyEntity = undefined
+  public company?: string = undefined
   public brand?: string = undefined
   public territory?: string = undefined
 
@@ -27,7 +24,7 @@ export class AccountStore {
     })
   }
 
-  selectCompany(selectedCompany: CompanyEntity): void {
+  selectCompany(selectedCompany: string): void {
     this.company = selectedCompany
   }
 

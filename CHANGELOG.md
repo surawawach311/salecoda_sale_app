@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## enhnace [v1.76.0] - 2020-09-14
+- use permissions render promotion label and promotion detail
+
 ## enhnace [v1.75.0] - 2020-09-07
 - change font all screen
 
