@@ -5,6 +5,7 @@ import InputOtp from '../screens/InputOtpScreen/InputOtpScreen'
 import LoginSuccessScreen from '../screens/LoginSuccessScreen/LoginSuccessScreen'
 import AppNavigator from '../navigations/AppNavigator'
 import { UserEntity } from '../entities/userEntity'
+import Unauthorized from '../screens/HttpError/Unauthorized'
 
 export type AppAuthParamList = {
   InputTelNumber: undefined
@@ -27,6 +28,7 @@ const AppAuthNavigator: React.FC = () => {
       <Stack.Screen name="InputOtp" component={InputOtp} />
       <Stack.Screen name="LoginSuccess" component={LoginSuccessScreen} />
       <Stack.Screen name="App" component={AppNavigator} />
+      <Stack.Screen name="Unauthorize" component={Unauthorized}/>
     </Stack.Navigator>
   )
 }

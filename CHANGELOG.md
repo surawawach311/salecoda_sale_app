@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## enhnace [v1.78.0] - 2020-09-17
+- Handle 401 with pop up
+
 ## enhnace [v1.77.0] - 2020-09-14
 - use permissions disable co wallet,exclude promotion
 
