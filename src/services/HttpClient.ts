@@ -1,8 +1,6 @@
-import React from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import * as RootNavigation from '../navigations/RootNavigation'
-import { Unauthorized } from '../components/HttpError/Unauthorized'
 
 axios.interceptors.request.use(async (config) => {
   const token = await AsyncStorage.getItem('access_token')
@@ -15,10 +13,16 @@ axios.interceptors.response.use(
   async function (response) {
     return response
   },
-  function (error) {
-    if (401 === error.response.status) {
+  async function (error) {
+    const token = await AsyncStorage.getItem('access_token')
+    if (401 === error.response.status && token === null) {
       RootNavigation.navigate('Auth', {
-        screen: 'InputTelNumber',
+        screen: "InputTelNumber",
+      })
+    }
+    if (401 === error.response.status && token !== null) {
+      RootNavigation.navigate('Auth', {
+        screen: "Unauthorize",
       })
     }
   },
