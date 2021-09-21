@@ -15,6 +15,11 @@ axios.interceptors.response.use(
   },
   async function (error) {
     const token = await AsyncStorage.getItem('access_token')
+    if (500 === error.response.status) {
+      RootNavigation.navigate('Auth', {
+        screen: "InternalServerError",
+      })
+    }
     if (401 === error.response.status && token === null) {
       RootNavigation.navigate('Auth', {
         screen: "InputTelNumber",
