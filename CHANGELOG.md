@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## enhnace [v1.79.0] - 2020-09-21
+- Handle 500 with pop up
+
 ## enhnace [v1.78.0] - 2020-09-17
 - Handle 401 with pop up
 
