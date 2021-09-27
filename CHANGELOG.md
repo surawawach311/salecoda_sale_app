@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## hotfix [v1.79.1] - 2020-09-27
+- fix crash on confirm order
+
 ## enhnace [v1.79.0] - 2020-09-21
 - Handle 500 with pop up
 
