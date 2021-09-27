@@ -50,7 +50,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [excludePromotion, setExcludePromotion] = useState<ExclusdePromotionModel[]>([])
   const isFocused = useIsFocused()
   const userDataStore = useContext(UserDataContext)
-  const { profile, permissions } = userDataStore
+  const { userData, permissions } = userDataStore
   const { dispatch } = useContext(CartContext)
 
   useEffect(() => {
@@ -311,7 +311,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
           text: 'ยืนยัน',
           onPress: () => {
             OrderFacade.confirmOrder(
-              profile.company,
+              userData.company,
               shop,
               shipment,
               cart,
