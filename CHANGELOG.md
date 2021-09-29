@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## fix [v1.79.2] - 2020-09-29
+- fix space on label customer remark
+
 ## hotfix [v1.79.1] - 2020-09-27
 - fix crash on confirm order
 
