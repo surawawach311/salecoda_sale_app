@@ -138,7 +138,7 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
           <View style={styled.deliveryAddressContainer}>
             <Heading3>ที่อยู่จัดส่ง</Heading3>
             {renderAddressList()}
-            <Heading3>หมายเหตุ(สำหรับลูกค้า)</Heading3>
+            <Heading3>หมายเหตุ (สำหรับลูกค้า)</Heading3>
             <TextInput
               style={styled.deliveryInputRemark}
               multiline={true}

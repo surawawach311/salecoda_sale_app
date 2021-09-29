@@ -77,7 +77,7 @@ const ShipmentSection: React.FC<Props> = ({ company, shopId, onChange, withDefau
       <>
         <View style={styled.line} />
         <View style={{ marginTop: 8 }}>
-          <Heading3>หมายเหตุ(สำหรับลูกค้า)</Heading3>
+          <Heading3>หมายเหตุ (สำหรับลูกค้า)</Heading3>
           <Text1 style={styled.textRemark}>{s.remark}</Text1>
         </View>
       </>
