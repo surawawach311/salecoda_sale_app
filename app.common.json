@@ -41,6 +41,18 @@
     "packagerOpts": {
       "config": "metro.config.js",
       "sourceExts": ["expo.ts", "expo.tsx", "expo.js", "expo.jsx", "ts", "tsx", "js", "jsx", "json", "wasm", "svg"]
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "ICONKASET",
+            "project": "sale-app",
+            "authToken": "7cf619c8ec0f482f8a3f5152ae6245e92d65fc26723f4f93b8e7df064271a58a"
+          }
+        }
+      ]
     }
   }
 }

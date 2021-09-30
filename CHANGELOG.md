@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## enhnace [v1.80.0] - 2020-09-30
+- setup sentry
+
 ## fix [v1.79.2] - 2020-09-29
 - fix space on label customer remark
 
