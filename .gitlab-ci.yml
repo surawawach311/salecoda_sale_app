@@ -3,11 +3,12 @@ stages:
   - schedule
 
 #===== DEVELOP =====
-deploy:
+deploy-develop:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop"'
   stage: deploy
   image: node:alpine
+  timeout: 20 minutes
   variables:
     APP_ENV: development
   cache:
