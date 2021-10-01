@@ -47,9 +47,9 @@
         {
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
-            "organization": "ICONKASET",
+            "organization": "iconkaset",
             "project": "sale-app",
-            "authToken": "7cf619c8ec0f482f8a3f5152ae6245e92d65fc26723f4f93b8e7df064271a58a"
+            "authToken": "43feb35cd0c34a72b04460ade88cf734084372e596504e0ba540d44c8c09a646"
           }
         }
       ]

@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileWarp: {
-
     height: '30%',
     backgroundColor: '#4C95FF',
     flexDirection: 'row',
