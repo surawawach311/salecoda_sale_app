@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## fix [v1.80.1] - 2020-09-30
+- add new auth token
+
 ## enhnace [v1.80.0] - 2020-09-30
 - setup sentry
 

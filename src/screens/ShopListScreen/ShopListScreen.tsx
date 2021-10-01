@@ -37,7 +37,7 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({ navigation, route }
         <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
           <View>
             <View style={{ padding: 20, backgroundColor: '#F6F9FF' }}>
-              <Subheading2 style={styles.textHeader}>{`ร้านค้าในเขต ${route.params.territory}`}</Subheading2>
+              <Subheading2>{`ร้านค้าในเขต ${route.params.territory}`}</Subheading2>
             </View>
             <FlatList
               showsVerticalScrollIndicator={false}

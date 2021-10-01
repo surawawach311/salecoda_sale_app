@@ -12,7 +12,7 @@ import * as Sentry from 'sentry-expo'
 Sentry.init({
   dsn: 'https://8cbfbe76b8374f7fb96d4f70abf2f7d3@o987290.ingest.sentry.io/5984244',
   enableInExpoDevelopment: true,
-  debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
+  debug: process.env.APP_ENV === 'production' ? false : true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
 })
 export default class App extends React.Component<{}, AppState> {
   constructor(props: any) {
