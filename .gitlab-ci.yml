@@ -29,8 +29,8 @@ schedule-morroc:
   stage: schedule
   script:
     - apk add --no-cache curl
-    # - echo "{\"content\":\"deploy success (development), open this link https://expo.io/@iconkaset/projects/morroc\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
-    # - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
+    - echo "{\"content\":\"deploy success (development), open this link https://expo.io/@iconkaset/projects/morroc\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
+    - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
 
 #===== STAGING =====
 deploy-staging:
@@ -59,8 +59,8 @@ schedule-morroc-staging:
   stage: schedule
   script:
     - apk add --no-cache curl
-    # - echo "{\"content\":\"deploy success (staging), open this link https://expo.io/@iconkaset/projects/SelllCodaSale-Staging\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
-    # - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
+    - echo "{\"content\":\"deploy success (staging), open this link https://expo.io/@iconkaset/projects/SelllCodaSale-Staging\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
+    - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
 
 #===== PRODUCTION =====
 deploy-production:

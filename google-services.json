@@ -21,6 +21,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        },
+        {
+          "current_key": "AIzaSyA-B-1YlIFCYM-EA4tvRxTwAwcq8swxeUQ"
         }
       ],
       "services": {
@@ -50,6 +53,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        },
+        {
+          "current_key": "AIzaSyA-B-1YlIFCYM-EA4tvRxTwAwcq8swxeUQ"
         }
       ],
       "services": {
@@ -79,6 +85,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        },
+        {
+          "current_key": "AIzaSyA-B-1YlIFCYM-EA4tvRxTwAwcq8swxeUQ"
         }
       ],
       "services": {
@@ -108,6 +117,73 @@
       "api_key": [
         {
           "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        },
+        {
+          "current_key": "AIzaSyA-B-1YlIFCYM-EA4tvRxTwAwcq8swxeUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427194649680:android:b4b5da9c06e28dd01fd555",
+        "android_client_info": {
+          "package_name": "com.iconkaset.staging.alberta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        },
+        {
+          "current_key": "AIzaSyA-B-1YlIFCYM-EA4tvRxTwAwcq8swxeUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427194649680:android:ce591fd228a15c091fd555",
+        "android_client_info": {
+          "package_name": "com.iconkaset.staging.morroc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427194649680-frihsda5p9jjp6no28ijvoa66vrmq64f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbP6PAvFLObIjN9aUQfAJY418nT04K_pM"
+        },
+        {
+          "current_key": "AIzaSyA-B-1YlIFCYM-EA4tvRxTwAwcq8swxeUQ"
         }
       ],
       "services": {
