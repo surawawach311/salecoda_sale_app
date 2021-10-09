@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "SellCoda Sales - staging",
+    "slug": "SelllCodaSale-Staging",
+    "extra": {
+      "environment": "staging",
+      "apiUrl": "https://dev-app.iconkaset.com"
+    },
+    "icon": "./assets/icon-staging.png",
+    "android": {
+      "package": "com.iconkaset.staging.morroc"
+    }
+  }
+}
