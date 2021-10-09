@@ -29,8 +29,38 @@ schedule-morroc:
   stage: schedule
   script:
     - apk add --no-cache curl
-    - echo "{\"content\":\"deploy success (development), open this link https://expo.io/@iconkaset/projects/morroc\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
-    - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
+    # - echo "{\"content\":\"deploy success (development), open this link https://expo.io/@iconkaset/projects/morroc\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
+    # - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
+
+#===== STAGING =====
+deploy-staging:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "staging"'
+  stage: deploy
+  image: node:alpine
+  timeout: 20 minutes
+  variables:
+    APP_ENV: staging
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - ~/.npm
+  before_script:
+    - yarn install --ignore-platform
+  script:
+    - apk add --no-cache bash
+    - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+    - npx expo publish --non-interactive
+
+schedule-morroc-staging:
+  image: alpine:3.7
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "staging"'
+  stage: schedule
+  script:
+    - apk add --no-cache curl
+    # - echo "{\"content\":\"deploy success (staging), open this link https://expo.io/@iconkaset/projects/SelllCodaSale-Staging\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
+    # - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
 
 #===== PRODUCTION =====
 deploy-production:
