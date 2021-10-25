@@ -3,7 +3,8 @@
     "name": "SellCoda Sales-dev",
     "extra": {
       "environment": "development",
-      "apiUrl": "https://dev-app.iconkaset.com"
+      "apiUrl": "https://dev-app.iconkaset.com",
+      "apiNewUrl":"https://dev-api.ickdevops.com"
     },
     "orientation": "portrait",
     "icon": "./assets/icon.png",

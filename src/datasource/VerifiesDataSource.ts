@@ -1,25 +1,26 @@
-import { UserEntity } from '../entities/userEntity'
-import { BASE_URL_SOHEE, BASE_URL_NPC, BASE_URL_KEY_OF_UNDERGROUND } from '../config/config'
+import { NewUserEntity, UserEntity } from '../entities/userEntity'
+import { BASE_URL_SOHEE, BASE_URL_KEY_OF_UNDERGROUND, API_NEW_URL } from '../config/config'
 import { TokenEntity } from '../entities/TokenEntity'
 import { httpClient } from '../services/HttpClient'
+import { ResponseEntity } from '../entities/ResponseEntity'
 
 export class VerifiesDataSource {
-  static verifyPhoneNo(tel: string): Promise<UserEntity> {
+  static verifyPhoneNo(tel: string): Promise<ResponseEntity<any>> {
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/staffs/verify_mobile`, { telephone: tel })
+      .post(`${API_NEW_URL}/auth/api/v1/login/request-otp`, { app_name: "saleapp", mobile: tel })
       .then((response) => {
         return response.data
       })
-      .catch((error) => console.error(`error on VerifiesDataSource.verifyPhoneNo`, error))
+      .catch((error) => { throw new Error(error.response) })
   }
 
-  static verifyOtp(phone: string, otp: string): Promise<UserEntity> {
+  static verifyOtp(phone: string, otp: string): Promise<ResponseEntity<NewUserEntity>> {
     return httpClient
-      .post(`${BASE_URL_NPC}/v1/sellcoda/otp/verify`, { phone: phone, otp: otp })
+      .post(`${API_NEW_URL}/auth/api/v1/login/verify-otp`, { app_name: "saleapp", mobile: phone, otp: otp })
       .then((response) => {
         return response.data
       })
-      .catch((error) => console.error(`error on VerifiesDataSource.verifyOtp`, error))
+      .catch((error) => { throw new Error(error.response) })
   }
 
   static login(userProfile: UserEntity): Promise<TokenEntity> {

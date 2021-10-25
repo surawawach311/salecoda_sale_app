@@ -4,6 +4,7 @@ export const APP_ENV = Constants.manifest.extra.environment
 export const APP_NAME = Constants.manifest.name
 export const APP_VERSION = Constants.manifest.version
 export const API_URL = Constants.manifest.extra.apiUrl
+export const API_NEW_URL = Constants.manifest.extra.apiNewUrl
 
 export const BASE_URL_SOHEE = `${API_URL}/sohee`
 export const BASE_URL_POPORING = `${API_URL}/poporing`

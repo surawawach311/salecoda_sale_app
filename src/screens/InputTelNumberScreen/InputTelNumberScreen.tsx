@@ -22,8 +22,8 @@ type InputOtpScreenNavigationProp = StackScreenProps<AppAuthParamList, 'InputTel
 const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigation }) => {
   const [value, setValue] = React.useState<string>('')
   const [isError, setIsError] = React.useState(false)
-  const [isLogin, setIsLogin] = React.useState(false)
 
+  const [message, setMessage] = React.useState<string>('')
 
   const fillZero = (tel: string) => {
     if (tel.length < 10) {
@@ -39,15 +39,18 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
     } else {
       const telephoneNo = fillZero(tel)
       VerifiesDataSource.verifyPhoneNo(telephoneNo).then((res) => {
-        if (res == undefined) {
-          setIsError(true)
-        } else {
+        console.log(res);
+        
+        if (res.success) {
           setIsError(false)
-          if (bypassTelephone.includes(tel)) {
-            navigation.navigate('LoginSuccess', { userProfile: res })
-          } else {
-            navigation.navigate('InputOtp', { userProfile: res })
-          }
+          // if (bypassTelephone.includes(tel)) {
+          //   navigation.navigate('LoginSuccess', { userProfile: res })
+          // } else {
+          navigation.navigate('InputOtp', { telephoneNo: value })
+          // }
+        } else {
+          setIsError(true)
+          setMessage(res.userMessage)
         }
       })
     }
@@ -67,6 +70,7 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
               maxLength={10}
               autoFocus={true}
               onError={isError}
+              errorMessage={message}
             />
           </View>
           <View style={styles.btnContainer}>

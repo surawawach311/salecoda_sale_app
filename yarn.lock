@@ -5860,7 +5860,7 @@ body-parser@1.18.3:
     raw-body "2.3.3"
     type-is "~1.6.16"
 
-body-parser@1.19.0, body-parser@^1.19.0:
+body-parser@1.19.0:
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.19.0.tgz"
   integrity sha512-dhEPs72UPbDnAQJ9ZKMNTP6ptJaionhP5cBb541nXPlW60Jepo9RV/a4fX4XWW9CuFNK22krhrj1+rgzifNCsw==
@@ -7098,6 +7098,11 @@ crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-es@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/crypto-es/-/crypto-es-1.2.7.tgz#754a6d52319a94fb4eb1f119297f17196b360f88"
+  integrity sha512-UUqiVJ2gUuZFmbFsKmud3uuLcNP2+Opt+5ysmljycFCyhA0+T16XJmo1ev/t5kMChMqWh7IEvURNCqsg+SjZGQ==
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
@@ -15009,14 +15014,6 @@ sentry-expo@^4.0.1:
     "@sentry/types" "^6.7.1"
     mkdirp "^1.0.3"
     rimraf "^2.6.1"
-
-sentry-testkit@^3.3.4:
-  version "3.3.4"
-  resolved "https://registry.yarnpkg.com/sentry-testkit/-/sentry-testkit-3.3.4.tgz#2c4fdffadc072a199b2868f30b9551a1fa3618d9"
-  integrity sha512-hDmRMiTozNbbmTpNjqIVPJbfyZJ8vH3fVwvjicK8BhKUYDhV/sBrS+K7VDrZI9uB7tOkgNibmDQvG0y5SyOFzA==
-  dependencies:
-    body-parser "^1.19.0"
-    express "^4.17.1"
 
 serialize-error@6.0.0:
   version "6.0.0"

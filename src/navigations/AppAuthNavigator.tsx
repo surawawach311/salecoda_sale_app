@@ -4,14 +4,14 @@ import InputTelNumberScreen from '../screens/InputTelNumberScreen/InputTelNumber
 import InputOtp from '../screens/InputOtpScreen/InputOtpScreen'
 import LoginSuccessScreen from '../screens/LoginSuccessScreen/LoginSuccessScreen'
 import AppNavigator from '../navigations/AppNavigator'
-import { UserEntity } from '../entities/userEntity'
+import { NewUserEntity, UserEntity } from '../entities/userEntity'
 import InternalServerError from '../screens/HttpError/InternalServerError'
 import Unauthorized from '../screens/HttpError/Unauthorized'
 
 export type AppAuthParamList = {
   InputTelNumber: undefined
-  InputOtp: { userProfile: UserEntity }
-  LoginSuccess: { userProfile: UserEntity }
+  InputOtp: { telephoneNo: string }
+  LoginSuccess: { userProfile: NewUserEntity }
   InternalServerError: undefined
   App: undefined
 }
@@ -30,7 +30,7 @@ const AppAuthNavigator: React.FC = () => {
       <Stack.Screen name="InputOtp" component={InputOtp} />
       <Stack.Screen name="LoginSuccess" component={LoginSuccessScreen} />
       <Stack.Screen name="App" component={AppNavigator} />
-      <Stack.Screen name="Unauthorize" component={Unauthorized}/>
+      <Stack.Screen name="Unauthorize" component={Unauthorized} />
       <Stack.Screen name="InternalServerError" component={InternalServerError} />
     </Stack.Navigator>
   )
