@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
 import { SafeAreaView, Text, StyleSheet, View, Image } from 'react-native'
-import { VerifiesDataSource } from '../../datasource/VerifiesDataSource'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 import { AppAuthParamList } from '../../navigations/AppAuthNavigator'
 import NotificationFacade from '../../facade/NotificationFacade'
-import CryptoES from 'crypto-es'
+import { UserLocalStorageService } from '../../services/UserLocalStorageService'
 
 type LoginSuccessScreenNavigationProp = StackScreenProps<AppAuthParamList, 'LoginSuccess'>
 
@@ -14,19 +12,11 @@ const LoginSuccessScreen = ({ navigation, route }: LoginSuccessScreenNavigationP
     Login()
   })
   const Login = () => {
-    const user_profile = JSON.stringify(route.params.userProfile)
-    const encrypted = CryptoES.AES.encrypt(user_profile, 'Secret Passphrase')
-    const decrypted = CryptoES.AES.decrypt(encrypted, 'Secret Passphrase')
-    console.log(JSON.parse(decrypted.toString(CryptoES.enc.Utf8)))
-
-    // AsyncStorage.setItem('user_profile', rst)
-    // VerifiesDataSource.login(route.params.userProfile).then((res) => {
-    //   AsyncStorage.setItem("access_token", res.access_token);
-    //   NotificationFacade.bindToken()
-    //   setTimeout(() => {
-    //     navigation.navigate("App");
-    //   }, 3000);
-    // });
+    UserLocalStorageService.putUserProfile(route.params.userProfile)
+    NotificationFacade.bindToken()
+    setTimeout(() => {
+      navigation.navigate('App')
+    }, 3000)
   }
 
   return (

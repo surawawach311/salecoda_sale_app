@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -17,6 +17,7 @@ import { bypassTelephone } from '../../definitions/BypassDataTest'
 import Heading2 from '../../components/Font/Heading2'
 import Paragraph1 from '../../components/Font/Paragraph1'
 import Subheading2 from '../../components/Font/Subheading2'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 type InputOtpScreenNavigationProp = StackScreenProps<AppAuthParamList, 'InputTelNumber'>
 
 const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigation }) => {
@@ -39,8 +40,6 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
     } else {
       const telephoneNo = fillZero(tel)
       VerifiesDataSource.verifyPhoneNo(telephoneNo).then((res) => {
-        console.log(res);
-        
         if (res.success) {
           setIsError(false)
           // if (bypassTelephone.includes(tel)) {

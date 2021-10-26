@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Image, StyleSheet } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { UserLocalStorageService } from '../../services/UserLocalStorageService'
 import { HomeStackParamList } from '../../navigations/HomeNavigator'
 import { VerifiesDataSource } from '../../datasource/VerifiesDataSource'
-import { UserEntity } from '../../entities/userEntity'
+import { NewUserEntity, UserEntity } from '../../entities/userEntity'
 import AppLoading from 'expo-app-loading'
 import NotificationFacade from '../../facade/NotificationFacade'
 import { NotificationResponseEntity } from '../../entities/MessageResponseEntity'
@@ -16,6 +16,7 @@ import { OrderEntity } from '../../entities/OrderEntity'
 import Heading2 from '../../components/Font/Heading2'
 import Text2 from '../../components/Font/Text2'
 import Text1 from '../../components/Font/Text1'
+import { UserDataContext } from '../../provider/UserDataProvider'
 
 type HomeScreenRouteProp = RouteProp<HomeStackParamList, 'Home'>
 
@@ -26,8 +27,9 @@ type Props = {
 }
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
-  const [profile, setProfile] = useState<UserEntity>()
-
+  const [profile, setProfile] = useState<NewUserEntity>()
+  const userDataStore = useContext(UserDataContext)
+  const { userData, permissions } = userDataStore
   useEffect(() => {
     getProfile()
   }, [])
@@ -52,9 +54,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   })
 
   const getProfile = async () => {
-    await VerifiesDataSource.getProfile().then((respone: UserEntity) => {
-      setProfile(respone)
-    })
+    await UserLocalStorageService.getUserProfile().then((res) => setProfile(res?.user_profile))
   }
 
   return (
@@ -64,11 +64,18 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <View style={styles.profileWarp}>
             <Image style={styles.bgImage} source={require('../../../assets/bgShop.png')} />
             <View style={styles.innerTextContainer}>
-              <Heading2 style={styles.WelcomeHeader}>{`Hello, ${profile.name}`}</Heading2>
-              <Text2 style={styles.positionText}>{profile.position}</Text2>
+              <Heading2 style={styles.WelcomeHeader}>{`Hello, ${profile.firstname} ${profile.lastname}`}</Heading2>
+              <Text2 style={styles.positionText}>{userData.position}</Text2>
             </View>
             <View style={styles.innerImgContainer}>
-              <Image style={styles.imageProfile} source={require('../../../assets/image-profile-default.png')} />
+              <Image
+                style={styles.imageProfile}
+                source={
+                  profile.picture === ''
+                    ? require('../../../assets/image-profile-default.png')
+                    : { uri: profile.picture }
+                }
+              />
             </View>
           </View>
           <View style={styles.menuWarp}>

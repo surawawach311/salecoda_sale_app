@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import * as RootNavigation from '../navigations/RootNavigation'
+import { UserLocalStorageService } from './UserLocalStorageService'
 
 axios.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem('access_token')
+  const token = await UserLocalStorageService.getAccessToken();
   if (token != null) {
     config.headers['X-Access-Token'] = `${token}`
   }

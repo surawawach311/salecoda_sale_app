@@ -26,8 +26,6 @@ const InputOTPScreen = ({ navigation, route }: InputOtpScreenRouteProp) => {
     setValue(value)
     if (value.length >= CELL_COUNT) {
       VerifiesDataSource.verifyOtp(route.params.telephoneNo, value).then((response) => {
-        console.log(response)
-
         if (response.success) {
           navigation.navigate('LoginSuccess', {
             userProfile: response.responseData,
