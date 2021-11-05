@@ -3,10 +3,10 @@ import { Image, StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import ShopListScreen from '../screens/ShopListScreen/ShopListScreen'
-import ShopScreen from '../screens/ShopScreen/ShopScreen'
+import ProductList from '../screens/ProductListScreen/ProductListScreen'
 import { ShopEntity } from '../entities/ShopEntity'
 import { ProductEntity } from '../entities/ProductEntity'
-import ProductInfoScreen from '../screens/ProductInfoScreen/ProductInfoScreen'
+import ProductDetailScreen from '../screens/ProductDetailScreen/ProductDetailScreen'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CartScreen from '../screens/CartScreen/CartScreen'
 import OrderSuccessScreen from '../screens/OrderSuccessScreen/OrderSuccessScreen'
@@ -19,10 +19,10 @@ import BrandScreen from '../screens/BrandScreen/BrandScreen'
 import { CartProvider } from '../context/cartStore'
 
 export type PurchaseStackParamList = {
-  ShopList: { territory: string; company: string }
+  ShopList: undefined
   Brand: { shop: ShopEntity; company: string }
-  Shop: { shop: ShopEntity; company: string; productBrand?: string }
-  ProductInfo: {
+  ProductList: { shop: ShopEntity; company: string; productBrand?: string }
+  ProductDetail: {
     product: ProductEntity
     shop: ShopEntity
     productBrand?: string
@@ -52,8 +52,8 @@ const PurchaseNavigator: React.FC = () => {
       >
         <PurchaseStack.Screen name="ShopList" component={ShopListScreen} options={{ title: 'เลือกร้านค้า' }} />
         <PurchaseStack.Screen
-          name="Shop"
-          component={ShopScreen}
+          name="ProductList"
+          component={ProductList}
           options={({ navigation, route }) => ({
             title: 'สั่งสินค้า',
             headerRight: (props) => (
@@ -77,8 +77,8 @@ const PurchaseNavigator: React.FC = () => {
           })}
         />
         <PurchaseStack.Screen
-          name="ProductInfo"
-          component={ProductInfoScreen}
+          name="ProductDetail"
+          component={ProductDetailScreen}
           options={({ navigation, route }) => ({
             title: '',
             headerRight: (props) => (

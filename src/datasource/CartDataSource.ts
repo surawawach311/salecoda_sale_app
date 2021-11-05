@@ -1,45 +1,44 @@
-import { BASE_URL_SOHEE } from '../config/config'
+import { API_NEW_URL, BASE_URL_SOHEE } from '../config/config'
 import { CartEntity } from '../entities/CartEntity'
+import { ResponseEntity } from '../entities/ResponseEntity'
 import { ShipmentEntity } from '../entities/ShipmentEntity'
 import { ItemSpecialRequest } from '../models/SpecialRequestModel'
 import { httpClient } from '../services/HttpClient'
 
 export class CartDataSource {
-  static getCartByShop(company: string, shopId: string, productBrand?: string): Promise<CartEntity> {
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
-    }
+  static getCartByShop(shopNo: string, brand?: string): Promise<ResponseEntity<CartEntity>> {
     return httpClient
-      .get(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, { params })
+      .get(`${API_NEW_URL}/promotion-order/api/v1/cart`, {
+        headers: {
+          "Brand-No": brand,
+          "Shop-No": shopNo
+        }
+      })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getCartByShop`, error))
   }
 
   static addToCartByShopId(
-    company: string,
-    shopId: string,
-    itemId: string,
+    shopNo: string,
+    brand: string | undefined,
+    prod_id: string,
     quantity: number,
-    payment?: string,
-    useSubsidize?: boolean,
-    productBrand?: string,
-  ) {
+  ): Promise<ResponseEntity<CartEntity>> {
+
     const data = {
-      action: 'adjust',
-      item_id: itemId,
+      action: 'add',
+      prod_id: prod_id,
       quantity: quantity,
-      payment_method: payment,
-      is_subsidize: useSubsidize,
     }
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
-    }
+    console.log(brand);
+    console.log(shopNo);
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, {
+        headers: {
+          "Brand-No": brand,
+          "Shop-No": shopNo
+        }
+      })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.addToCartByShopId`, error))
   }

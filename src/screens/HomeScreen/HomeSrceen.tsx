@@ -5,8 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { UserLocalStorageService } from '../../services/UserLocalStorageService'
 import { HomeStackParamList } from '../../navigations/HomeNavigator'
-import { VerifiesDataSource } from '../../datasource/VerifiesDataSource'
-import { NewUserEntity, UserEntity } from '../../entities/userEntity'
+import { NewUserEntity } from '../../entities/userEntity'
 import AppLoading from 'expo-app-loading'
 import NotificationFacade from '../../facade/NotificationFacade'
 import { NotificationResponseEntity } from '../../entities/MessageResponseEntity'
@@ -29,9 +28,10 @@ type Props = {
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [profile, setProfile] = useState<NewUserEntity>()
   const userDataStore = useContext(UserDataContext)
-  const { userData, permissions } = userDataStore
+  const { userData, permissions, brand } = userDataStore
   useEffect(() => {
     getProfile()
+    console.log(brand)
   }, [])
 
   Notifications.setNotificationHandler({
@@ -81,13 +81,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <View style={styles.menuWarp}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('Purchase', {
-                  screen: 'ShopList',
-                  params: {
-                    territory: profile.territory,
-                    company: profile.company,
-                  },
-                })
+                navigation.navigate('Purchase', { screen: 'ShopList' })
               }}
             >
               <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/icon-shopping.png')} />

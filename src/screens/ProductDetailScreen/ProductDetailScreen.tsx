@@ -28,10 +28,11 @@ import Subheading2 from '../../components/Font/Subheading2'
 import Heading3 from '../../components/Font/Heading3'
 import Subheading1 from '../../components/Font/Subheading1'
 import { UserDataContext } from '../../provider/UserDataProvider'
+import { ResponseEntity } from '../../entities/ResponseEntity'
 
-type ProductInfoScreenNavigationProp = StackScreenProps<PurchaseStackParamList, 'ProductInfo'>
+type ProductDetailScreenNavigationProp = StackScreenProps<PurchaseStackParamList, 'ProductDetail'>
 
-const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigation, route }) => {
+const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(0)
   const [product, setProduct] = useState<ProductEntity>()
   const [totalItem, setTotalItem] = useState(0)
@@ -39,17 +40,19 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
   const isFocused = useIsFocused()
   const [loading, setLoading] = useState(false)
   const profile = useContext(UserDataContext)
-  const { permissions } = profile
+  const { config, shopNo, brand } = profile
 
   useEffect(() => {
     initialQuantity()
     getProduct()
+    console.log(brand);
+    console.log(shopNo);
   }, [isFocused])
 
   const initialQuantity = () => {
-    CartDataSource.getCartByShop(route.params.company, route.params.shop.id, route.params.productBrand).then((res) => {
-      const itemQuantity = res.items.find((item) => item.id === route.params.product.id)
-      setTotalItem(res.total_item)
+    CartDataSource.getCartByShop(shopNo, brand).then((res) => {
+      const itemQuantity = res.responseData.items.find((item) => item.id === route.params.product.id)
+      setTotalItem(res.responseData.total_item)
       if (itemQuantity) {
         setQuantity(itemQuantity.quantity)
         dispatch({
@@ -67,14 +70,16 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
   }
 
   const getProduct = async () => {
-    await ProductDataSource.getNameProduct(route.params.shop.id, route.params.product.id).then((res: ProductEntity) => {
-      if (permissions.responseData.productDetail.showPromotionLabel) {
-        setProduct(res)
-      } else {
-        res.promotions = []
-        setProduct(res)
-      }
-    })
+    await ProductDataSource.getNameProduct(brand, shopNo, route.params.product.id).then(
+      (res: ResponseEntity<ProductEntity>) => {
+        if (config.productDetail.showPromotionLabel) {
+          setProduct(res.responseData)
+        } else {
+          res.responseData.promotions = []
+          setProduct(res.responseData)
+        }
+      },
+    )
   }
 
   const addCart = async (action: string) => {
@@ -88,15 +93,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
       },
     })
     setQuantity(nextQuantity)
-    const res = await CartDataSource.addToCartByShopId(
-      route.params.company,
-      route.params.shop.id,
-      route.params.product.id,
-      nextQuantity,
-      undefined,
-      undefined,
-      route.params.productBrand,
-    )
+    const res = await CartDataSource.addToCartByShopId(shopNo, brand, route.params.product.id, nextQuantity)
     if (res && action === 'plus') {
       if (!loading) {
         setLoading(true)
@@ -116,21 +113,13 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
         }, 1500)
       }
     }
-    setTotalItem(res.total_item)
+    setTotalItem(res.responseData.total_item)
   }
 
   const adjustProduct = async (quantity: number) => {
     const regexp = /^[0-9\b]+$/
     if (quantity.toString() === '' || regexp.test(quantity.toString())) {
-      CartDataSource.addToCartByShopId(
-        route.params.company,
-        route.params.shop.id,
-        route.params.product.id,
-        quantity,
-        undefined,
-        undefined,
-        route.params.productBrand,
-      )
+      CartDataSource.addToCartByShopId(shopNo, brand, route.params.product.id, quantity)
     } else {
       alert('Number Only')
     }
@@ -246,7 +235,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
                       setQuantity(Number(text))
                       adjustProduct(Number(text))
                     }}
-                    keyboardType="number-pad"
+                    keyboardType="decimal-pad"
                   />
                   <TouchableOpacity
                     onPress={() => {
@@ -278,7 +267,7 @@ const ProductInfoScreen: React.FC<ProductInfoScreenNavigationProp> = ({ navigati
   )
 }
 
-export default ProductInfoScreen
+export default ProductDetailScreen
 
 const styled = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8FAFF' },

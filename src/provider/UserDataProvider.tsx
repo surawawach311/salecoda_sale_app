@@ -11,6 +11,9 @@ export const UserDataContext = createContext<any>({})
 export const UserDataProvider: React.FC = ({ children }) => {
   const [userData, setUserData] = useState<NewUserEntity>({} as NewUserEntity)
   const [permissions, setPermissions] = useState<any>()
+  const [config, setConfig] = useState<any>()
+  const [brand, setBrand] = useState<any>()
+  const [shopNo, setshopNo] = useState<any>()
 
   useEffect(() => {
     getUserDataFromAPI()
@@ -21,12 +24,14 @@ export const UserDataProvider: React.FC = ({ children }) => {
       if (response) {
         setUserData(response.user_profile)
         setPermissions(response.user_permissions)
+        setConfig(response.app_setting)
       } else {
         RootNavigation.navigate('Auth', {
           screen: 'Unauthorize',
         })
       }
     })
+
     // await VerifiesDataSource.getProfile().then((respone: UserEntity) => {
     //   setUserData(respone)
     //   httpClient.get(`http://35.198.201.170:3000/api/company/v1/setting?companyId=${respone.company}`).then((res) => {
@@ -34,7 +39,14 @@ export const UserDataProvider: React.FC = ({ children }) => {
     //   })
     // })
   }
-  const store = { userData, permissions, getUserDataFromAPI }
+  const selectBrand = (brand: string) => {
+    setBrand(brand)
+  }
+
+  const selectShop = (shopNo: string) => {
+    setshopNo(shopNo)
+  }
+  const store = { userData, permissions, config, brand, shopNo, getUserDataFromAPI, selectBrand, selectShop }
 
   return <UserDataContext.Provider value={store}>{children}</UserDataContext.Provider>
 }

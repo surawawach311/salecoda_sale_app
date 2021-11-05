@@ -35,6 +35,7 @@ import Subheading2 from '../../components/Font/Subheading2'
 import Heading2 from '../../components/Font/Heading2'
 import Paragraph2 from '../../components/Font/Paragraph2'
 import Text2 from '../../components/Font/Text2'
+import { ResponseEntity } from '../../entities/ResponseEntity'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Cart'>
 
@@ -50,7 +51,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [excludePromotion, setExcludePromotion] = useState<ExclusdePromotionModel[]>([])
   const isFocused = useIsFocused()
   const userDataStore = useContext(UserDataContext)
-  const { userData, permissions } = userDataStore
+  const { userData, permissions, shopNo, brand } = userDataStore
   const { dispatch } = useContext(CartContext)
 
   useEffect(() => {
@@ -76,34 +77,32 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   const getCart = async () => {
-    CartDataSource.getCartByShop(route.params.company, route.params.shop.id, route.params.productBrand).then(
-      (res: CartEntity) => {
-        setCart(res)
-        setRemark(res.sale_co_remark)
-        handlePayment(res.selected_payment?.id)
-        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-          res.received_discounts.filter((item) => item.item_id != null),
-        )
-        setSpecialRequest(discountSpecial)
-        setDiscoutPromo(discountProduct)
-        if (res.subsidize_discount !== 0) {
-          setUseSubsudize(true)
-        }
-        if (res?.available_payments && res?.available_payments.length <= 1) {
-          res?.available_payments.map((item) => {
-            setPayment(item.id)
-            CartDataSource.calculate(
-              route.params.company,
-              route.params.shop.id,
-              item.id,
-              useSubsidize,
-              route.params.productBrand,
-            ).then((res) => setCart(res))
-          })
-        }
-      },
-    )
+    CartDataSource.getCartByShop(shopNo, brand).then((res: ResponseEntity<CartEntity>) => {
+      setCart(res.responseData)
+      setRemark(res.responseData.sale_co_remark)
+      handlePayment(res.responseData.selected_payment?.id)
+      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.responseData.received_special_request_discounts)
+      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+        res.responseData.received_discounts.filter((item) => item.item_id != null),
+      )
+      setSpecialRequest(discountSpecial)
+      setDiscoutPromo(discountProduct)
+      if (res.responseData.subsidize_discount !== 0) {
+        setUseSubsudize(true)
+      }
+      if (res?.responseData.available_payments && res?.responseData.available_payments.length <= 1) {
+        res?.responseData.available_payments.map((item) => {
+          setPayment(item.id)
+          CartDataSource.calculate(
+            route.params.company,
+            route.params.shop.id,
+            item.id,
+            useSubsidize,
+            route.params.productBrand,
+          ).then((res) => setCart(res))
+        })
+      }
+    })
   }
 
   const increaseProduct = async (itemId: string, quantity: number) => {

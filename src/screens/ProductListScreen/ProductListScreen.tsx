@@ -6,7 +6,7 @@ import Search from '../../components/Search'
 import ButtonShop from '../../components/ButtonShop'
 import ProductCard from '../../components/ProductCard'
 import { ShopDataSource } from '../../datasource/ShopDataSource'
-import { ProductEntity } from '../../entities/ProductEntity'
+import { ProductApiEntity, ProductEntity } from '../../entities/ProductEntity'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ProductDataSource } from '../../datasource/ProductDataSource'
 import CustomHeader from '../../components/CustomHeader'
@@ -14,18 +14,22 @@ import MiniCart from '../../components/MiniCart'
 import { CartDataSource } from '../../datasource/CartDataSource'
 import Heading3 from '../../components/Font/Heading3'
 import { UserDataContext } from '../../provider/UserDataProvider'
+import { ResponseEntity } from '../../entities/ResponseEntity'
 
-type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Shop'>
+type ProductListScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'ProductList'>
 
-const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
+const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, route }) => {
   const [productList, setProductList] = useState<ProductEntity[]>()
   const [totalItem, setTotalItem] = useState(0)
   const profile = useContext(UserDataContext)
-  const { permissions } = profile
+  const { config, brand, shopNo } = profile
 
   useEffect(() => {
-    fecthData()
+    getProductList()
     initialQuantity()
+    console.log(brand);
+    console.log(shopNo);
+    
   }, [])
 
   useEffect(() => {
@@ -37,28 +41,24 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   const initialQuantity = async () => {
     try {
-      const res = await CartDataSource.getCartByShop(
-        route.params.company,
-        route.params.shop.id,
-        route.params.productBrand,
-      )
-      setTotalItem(res.total_item)
+      const res = await CartDataSource.getCartByShop(shopNo, brand)
+      setTotalItem(res.responseData.total_item)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const fecthData = async () => {
+  const getProductList = async () => {
     if (route.params.productBrand) {
       await ShopDataSource.getProductWithBrand(
         route.params.shop.id,
         route.params.company,
         route.params.productBrand,
-      ).then((res: ProductEntity[]) => {
-        if (permissions.responseData.productPage.showProductPrice) {
-          setProductList(res)
+      ).then((res: ResponseEntity<ProductApiEntity>) => {
+        if (config.productPage.showProductPrice) {
+          setProductList(res.responseData.items)
         } else {
-          let products = res.map((item) => {
+          let products = res.responseData.items.map((item) => {
             item.is_have_promotion = false
             item.promotions = []
             return item
@@ -68,7 +68,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       })
     } else {
       await ShopDataSource.getProduct(route.params.shop.id, route.params.company).then((res) => {
-        if (permissions.responseData.productPage.showProductPrice) {
+        if (config.productPage.showProductPrice) {
           setProductList(res)
         } else {
           let products = res.map((item) => {
@@ -159,7 +159,7 @@ const ShopScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
             <TouchableOpacity
               key={item.id}
               onPress={() =>
-                navigation.navigate('ProductInfo', {
+                navigation.navigate('ProductDetail', {
                   product: item,
                   shop: route.params.shop,
                   productBrand: route.params.productBrand,
@@ -244,4 +244,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ShopScreen
+export default ProductListScreen
