@@ -98,7 +98,6 @@ export const ModalDeliveryMethod: React.FC<Props> = ({
 
   const renderAddressList = () => {
     const shipments = availableShipments.filter((s) => s.method === method)
-
     if (shipments.length === 0) {
       return (
         <View style={styled.deliveryAddressInnnerContainer}>

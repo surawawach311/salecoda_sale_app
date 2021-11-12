@@ -29,8 +29,8 @@ export type PurchaseStackParamList = {
     company: string
   }
   Cart: { shop: ShopEntity; productBrand?: string; company: string }
-  OrderSuccess: { data: OrderEntity; cart?: CartEntity }
-  SuccessDetail: { data: OrderEntity }
+  OrderSuccess: { orderId: string }
+  SuccessDetail: { orderId: string }
   SpecialRequest: {
     cart: CartEntity
     shop: ShopEntity
@@ -101,9 +101,6 @@ const PurchaseNavigator: React.FC = () => {
         <PurchaseStack.Screen
           name="SuccessDetail"
           component={OrderSuccessDetail}
-          options={({ navigation, route }) => ({
-            headerTitle: ThaiDateFormat(route.params.data.created),
-          })}
         />
         <PurchaseStack.Screen
           name="SpecialRequest"

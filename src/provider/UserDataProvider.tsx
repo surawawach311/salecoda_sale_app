@@ -27,7 +27,7 @@ export const UserDataProvider: React.FC = ({ children }) => {
         setConfig(response.app_setting)
       } else {
         RootNavigation.navigate('Auth', {
-          screen: 'Unauthorize',
+          screen: 'InputTelNumber',
         })
       }
     })

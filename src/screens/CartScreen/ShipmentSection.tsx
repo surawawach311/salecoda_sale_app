@@ -24,12 +24,13 @@ const ShipmentSection: React.FC<Props> = ({ company, shopId, onChange, withDefau
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    CartDataSource.getShipment(company, shopId).then((d) => {
-      const availableMethods: string[] = d.available_shipments.map((s) => s.shipping_method)
-      const availableShipments: Shipment[] = d.available_shipments.flatMap((s) => {
-        return s.addresses.map((a, i) => ({
-          id: `${s.shipping_method}-${i}`,
-          method: s.shipping_method,
+    CartDataSource.getShipment(company, shopId).then((response) => {
+      
+      const availableMethods: string[] = response.responseData.map((item) => item.shipping_method)
+      const availableShipments: Shipment[] = response.responseData.flatMap((item) => {
+        return item.addresses.map((a, i) => ({
+          id: `${item.shipping_method}-${i}`,
+          method: item.shipping_method,
           name: a.name,
           telephone: a.telephone,
           address: a.address,

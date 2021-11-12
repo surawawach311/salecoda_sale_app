@@ -31,7 +31,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const { userData, permissions, brand } = userDataStore
   useEffect(() => {
     getProfile()
-    console.log(brand)
   }, [])
 
   Notifications.setNotificationHandler({

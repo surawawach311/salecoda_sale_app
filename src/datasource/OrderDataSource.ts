@@ -1,13 +1,22 @@
-import { BASE_URL_POPORING, BASE_URL_WHISPER } from '../config/config'
-import { OrderEntity } from '../entities/OrderEntity'
+import { API_NEW_URL, BASE_URL_POPORING, BASE_URL_WHISPER } from '../config/config'
+import { OrderApiEntity, OrderEntity } from '../entities/OrderEntity'
 import { OrderListEntity } from '../entities/OrderListEntity'
+import { ResponseEntity } from '../entities/ResponseEntity'
 import { OrderModel } from '../models/OrderModel'
 import { httpClient } from '../services/HttpClient'
 
 export class OrderDataSource {
-  static comfirmOrder(data: OrderModel): Promise<OrderEntity> {
+  static comfirmOrder(shopNo: string, brand: string | undefined): Promise<ResponseEntity<OrderApiEntity>> {
+    const data = {
+      action: 'checkout'
+    }
     return httpClient
-      .post(`${BASE_URL_WHISPER}/v1/orders/sellcoda`, data)
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, {
+        headers: {
+          "Brand-No": brand,
+          "Shop-No": shopNo
+        }
+      })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.comfirmOrder`, error))
   }
@@ -47,9 +56,9 @@ export class OrderDataSource {
     }
   }
 
-  static getOrderDetail(companyId: string, shopId: string, orderNo: string): Promise<OrderEntity> {
+  static getOrderDetail(orderId: string): Promise<ResponseEntity<OrderEntity>> {
     return httpClient
-      .get(`${BASE_URL_POPORING}/v4/orders/sellcoda/${orderNo}?company_id=${companyId}&dealer_id=${shopId}`)
+      .get(`${API_NEW_URL}/promotion-order/api/v1/orders/${orderId}`)
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getOrderDetail`, error))
   }
