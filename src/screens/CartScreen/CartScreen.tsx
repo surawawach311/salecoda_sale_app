@@ -463,65 +463,67 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       multiline
                     />
                   </View>
-                  {specialRequest.length > 0 ? (
-                    <View style={styled.specialRequestContainer}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <Heading3>Special Request</Heading3>
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate('SpecialRequest', {
-                              cart: cart,
-                              shop: route.params.shop,
-                              item: specialRequest,
-                              productBrand: route.params.productBrand,
-                              company: route.params.company,
-                            })
-                          }
+                  {permissions.show_special_request ? (
+                    specialRequest.length > 0 ? (
+                      <View style={styled.specialRequestContainer}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
                         >
-                          <Paragraph2
-                            style={{
-                              color: '#4C95FF',
-                            }}
+                          <Heading3>Special Request</Heading3>
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate('SpecialRequest', {
+                                cart: cart,
+                                shop: route.params.shop,
+                                item: specialRequest,
+                                productBrand: route.params.productBrand,
+                                company: route.params.company,
+                              })
+                            }
                           >
-                            แก้ไข
-                          </Paragraph2>
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styled.line} />
-                      <AccrodingPrice
-                        title="ขอส่วนลดพิเศษเพิ่ม"
-                        total={cart.total_received_special_request_discount}
-                        detail={specialRequest}
-                        price_color={'#BB6BD9'}
-                      />
-                    </View>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('SpecialRequest', {
-                          cart: cart,
-                          shop: route.params.shop,
-                          item: specialRequest,
-                          productBrand: route.params.productBrand,
-                          company: route.params.company,
-                        })
-                      }
-                      style={styled.buttonSpecialRequestContainer}
-                    >
-                      <View style={styled.buttonSpecialRequest}>
-                        <Image
-                          style={{ width: 25, height: 25 }}
-                          source={require('../../../assets/special_request.png')}
+                            <Paragraph2
+                              style={{
+                                color: '#4C95FF',
+                              }}
+                            >
+                              แก้ไข
+                            </Paragraph2>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={styled.line} />
+                        <AccrodingPrice
+                          title="ขอส่วนลดพิเศษเพิ่ม"
+                          total={cart.total_received_special_request_discount}
+                          detail={specialRequest}
+                          price_color={'#BB6BD9'}
                         />
-                        <Heading3 style={styled.textButtonSpecialRequest}>Special Request</Heading3>
                       </View>
-                    </TouchableOpacity>
-                  )}
+                    ) : (
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('SpecialRequest', {
+                            cart: cart,
+                            shop: route.params.shop,
+                            item: specialRequest,
+                            productBrand: route.params.productBrand,
+                            company: route.params.company,
+                          })
+                        }
+                        style={styled.buttonSpecialRequestContainer}
+                      >
+                        <View style={styled.buttonSpecialRequest}>
+                          <Image
+                            style={{ width: 25, height: 25 }}
+                            source={require('../../../assets/special_request.png')}
+                          />
+                          <Heading3 style={styled.textButtonSpecialRequest}>Special Request</Heading3>
+                        </View>
+                      </TouchableOpacity>
+                    )
+                  ) : null}
 
                   {cart.special_request_remark ? (
                     <View

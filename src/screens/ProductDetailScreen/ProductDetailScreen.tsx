@@ -45,8 +45,6 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
   useEffect(() => {
     initialQuantity()
     getProduct()
-    console.log(brand);
-    console.log(shopNo);
   }, [isFocused])
 
   const initialQuantity = () => {

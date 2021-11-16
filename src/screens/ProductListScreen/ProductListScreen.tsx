@@ -27,9 +27,6 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
   useEffect(() => {
     getProductList()
     initialQuantity()
-    console.log(brand);
-    console.log(shopNo);
-    
   }, [])
 
   useEffect(() => {
