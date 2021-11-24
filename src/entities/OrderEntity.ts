@@ -1,5 +1,9 @@
 import { ShopEntity } from "./ShopEntity"
 
+export interface OrderApiEntity {
+    order_id: string
+}
+
 export interface OrderEntity {
     id: string
     order_no: string

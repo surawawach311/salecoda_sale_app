@@ -1,104 +1,89 @@
-import { BASE_URL_SOHEE } from '../config/config'
+import { API_NEW_URL, BASE_URL_SOHEE } from '../config/config'
 import { CartEntity } from '../entities/CartEntity'
+import { ResponseEntity } from '../entities/ResponseEntity'
 import { ShipmentEntity } from '../entities/ShipmentEntity'
 import { ItemSpecialRequest } from '../models/SpecialRequestModel'
 import { httpClient } from '../services/HttpClient'
 
 export class CartDataSource {
-  static getCartByShop(company: string, shopId: string, productBrand?: string): Promise<CartEntity> {
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
-    }
+  static getCartByShop(shopNo: string, brand?: string): Promise<ResponseEntity<CartEntity>> {
     return httpClient
-      .get(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, { params })
+      .get(`${API_NEW_URL}/promotion-order/api/v1/cart`, {
+        headers: {
+          "Brand-No": brand,
+          "Shop-No": shopNo
+        }
+      })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getCartByShop`, error))
   }
 
   static addToCartByShopId(
-    company: string,
-    shopId: string,
-    itemId: string,
+    shopNo: string,
+    brand: string | undefined,
+    prod_id: string,
     quantity: number,
-    payment?: string,
-    useSubsidize?: boolean,
-    productBrand?: string,
-  ) {
+  ): Promise<ResponseEntity<CartEntity>> {
     const data = {
-      action: 'adjust',
-      item_id: itemId,
+      action: 'add',
+      prod_id: prod_id,
       quantity: quantity,
-      payment_method: payment,
-      is_subsidize: useSubsidize,
-    }
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
     }
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, {
+        headers: {
+          "Brand-No": brand,
+          "Shop-No": shopNo
+        }
+      })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.addToCartByShopId`, error))
   }
 
-  static removeItem(
-    company: string,
-    shopId: string,
-    itemId: string,
-    payment?: string,
-    useSubsidize?: boolean,
-    productBrand?: string,
-  ) {
+  static removeItem(shopNo: string, itemId: string, brand?: string) {
     const data = {
       action: 'remove',
       item_id: itemId,
-      payment_method: payment,
-      is_subsidize: useSubsidize,
+
     }
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
+    const headers = {
+      "Shop-No": shopNo,
+      ...(brand ? { "Brand-No": brand } : {}),
     }
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { headers })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.removeItem`, error))
   }
 
-  static calculate(company: string, shopId: string, payment?: string, useSubsidize?: boolean, productBrand?: string) {
+  static calculate(shopNo: string, payment?: string, brand?: string): Promise<ResponseEntity<CartEntity>> {
     const data = {
       action: 'calculate',
       payment_method: payment,
-      is_subsidize: useSubsidize,
     }
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
+    const headers = {
+      "Shop-No": shopNo,
+      ...(brand ? { "Brand-No": brand } : {}),
     }
+    console.log(headers);
+
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { headers })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.calculate`, error))
   }
 
-  static updateSubidizeDiscount(company: string, shopId: string, useSubsidize?: boolean, productBrand?: string) {
-
+  static updateSubidizeDiscount(shopNo: string, useSubsidize?: boolean, Brand?: string) {
     const data = {
       action: 'update_is_subsidize',
       is_subsidize: useSubsidize,
     }
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
+    const headers = {
+      "Shop-No": shopNo,
+      ...(Brand ? { "Brand-No": Brand } : {})
     }
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, { headers })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.update_is_subsidize`, error))
   }
@@ -193,65 +178,58 @@ export class CartDataSource {
       .catch((error) => console.error(`error on CartDataSource.clearCart`, error))
   }
 
-  static getShipment(company: string, shopId: string): Promise<ShipmentEntity> {
-    const params = { company }
+  static getShipment(company: string, shopNo: string): Promise<ResponseEntity<ShipmentEntity[]>> {
     return httpClient
-      .get(`${BASE_URL_SOHEE}/v1/sellcoda/customers/dealers/${shopId}/available_shipments`, { params })
+      .get(`${API_NEW_URL}/api/v1/address/shipping-order`)
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getShipment`, error))
   }
 
-  static addOrderRemark = (remark: string, company: string, shopId: string, productBrand?: string) => {
+  static addOrderRemark = (remark: string, shopNo: string, Brand?: string): Promise<ResponseEntity<CartEntity>> => {
     const data = {
       action: 'update_sale_co_remark',
       sale_co_remark: remark,
     }
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
+    const headers = {
+      "Shop-No": shopNo,
+      ...(Brand ? { "Brand-No": Brand } : {})
     }
-
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, { headers })
       .then((res) => res.data)
-      .catch((err: Error) => alert('Error:' + err.message))
+      .catch((err: Error) => console.error(`error on CartDataSource.addOrderRemark`, err))
   }
 
   static updateExcludePromotion = (
     promotionId: Array<string | null>,
-    company: string,
-    shopId: string,
-    productBrand?: string,
+    shopNo: string,
+    Brand?: string
   ) => {
     const data = {
       action: 'update_exclude_promotions',
       exclude_promotions: promotionId,
     }
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
+    const headers = {
+      "Shop-No": shopNo,
+      ...(Brand ? { "Brand-No": Brand } : {})
     }
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, { headers })
       .then((res) => res.data)
       .catch((err: Error) => alert('Error:' + err.message))
   }
 
-  static updatePaymentMethods = (payment: string, company: string, shopId: string, productBrand?: string) => {
+  static updatePaymentMethods = (payment: string, shopNo: string, Brand?: string): Promise<ResponseEntity<CartEntity>> => {
     const data = {
       action: 'update_payment_method',
       payment_method: payment,
     }
-    const params = {
-      shopId: shopId,
-      company,
-      ...(productBrand ? { productBrand: productBrand } : {}),
+    const headers = {
+      "Shop-No": shopNo,
+      ...(Brand ? { "Brand-No": Brand } : {}),
     }
-
     return httpClient
-      .post(`${BASE_URL_SOHEE}/v1/sellcoda/cart`, data, { params })
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, { headers })
       .then((res) => res.data)
       .catch((err: Error) => alert('Error:' + err.message))
   }

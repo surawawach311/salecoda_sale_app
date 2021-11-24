@@ -1,42 +1,42 @@
-import { View, Text, Image, StatusBar, StyleSheet, SafeAreaView, Animated } from 'react-native'
-import React from 'react'
+import { View, Text, StatusBar, StyleSheet, SafeAreaView, Animated, useWindowDimensions } from 'react-native'
+import React, { useContext } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { HomeStackParamList } from '../../navigations/HomeNavigator'
-import { NavigationState, SceneRendererProps, TabBar, TabView } from 'react-native-tab-view'
-import OrderList, { StatusFilter } from '../../components/OrderList'
-import { OrderEntity } from '../../entities/OrderEntity'
-import Subheading3 from '../../components/Font/Subheading3'
-import Text1 from '../../components/Font/Text1'
+import { NavigationState, SceneMap, SceneRendererProps, TabBar, TabView } from 'react-native-tab-view'
+import TerritoryScene from './TerritoryScene'
+import ShopScene from './ShopScene'
+import Subheading2 from '../../components/Font/Subheading2'
+import { Entypo } from '@expo/vector-icons'
+import Search from '../../components/Search'
+import { UserDataContext } from '../../provider/UserDataProvider'
 type NotificationScreenRouteProp = StackScreenProps<HomeStackParamList, 'History'>
 
 type TabBarProp = SceneRendererProps & {
   navigationState: NavigationState<{
-    key: string;
-    title: string;
-  }>;
-};
-
-enum Menu {
-  Confirmed = 'confirmed',
-  Delivered = 'delivered',
-  Canceled = 'canceled',
+    key: string
+    title: string
+  }>
 }
 
-type SceneProp = SceneRendererProps & {
-  route: { key: string; title: string };
-};
-
 type TabBarIndicatorProp = TabBarProp & {
-  getTabWidth: (i: number) => number;
-};
+  getTabWidth: (i: number) => number
+}
 
 const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) => {
   const [index, setIndex] = React.useState(0)
-  const [routes] = React.useState([
-    { key: Menu.Confirmed, title: 'ยืนยันแล้ว' },
-    { key: Menu.Delivered, title: 'จัดส่งสำเร็จ' },
-    { key: Menu.Canceled, title: 'ยกเลิก' },
+  const [routes] = React.useState<
+    {
+      key: string
+      title: string
+    }[]
+  >([
+    { key: 'territory', title: 'รายเขต' },
+    { key: 'shop', title: 'รายร้าน' },
   ])
+  const userDataStore = useContext(UserDataContext)
+  const { userData } = userDataStore
+
+  const layout = useWindowDimensions()
 
   const renderTabBar = (props: TabBarProp) => {
     return (
@@ -44,107 +44,77 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
         scrollEnabled
         {...props}
         renderLabel={({ focused, route }) => (
-          <Subheading3 style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>
-            {route.title}
-          </Subheading3>
+          <Subheading2 style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>
+            {route.key === 'territory' ? `${route.title} (${userData.territory})` : route.title}
+          </Subheading2>
         )}
         renderIndicator={renderIndicator}
+        renderIcon={({ route, focused, color }) => (
+          <Entypo
+            style={{ marginRight: 6 }}
+            name={route.key === 'territory' ? 'location' : 'shop'}
+            color={focused ? '#4C95FF' : '#616A7B'}
+            size={24}
+          />
+        )}
         pressColor="transparent"
-        tabStyle={{ width: "auto", padding: 16 }}
+        tabStyle={{ width: 'auto', flexDirection: 'row' }}
         contentContainerStyle={{ marginHorizontal: 16 }}
         indicatorContainerStyle={{ marginHorizontal: 16 }}
         style={{
-          backgroundColor: "#FFF",
+          backgroundColor: '#FFF',
           borderBottomWidth: 4,
-          borderColor: "#FFF",
+          borderColor: '#FFF',
         }}
       />
-    );
-  };
+    )
+  }
 
   const renderIndicator = (props: TabBarIndicatorProp) => {
-    const { position, navigationState, getTabWidth } = props;
-    const inputRange = routes.map((_, i) => i);
+    const { position, navigationState, getTabWidth } = props
+    const inputRange = routes.map((_, i) => i)
     const translateX = position.interpolate({
       inputRange: inputRange,
       outputRange: routes.reduce<number[]>((acc, _, i) => {
-        if (i === 0) return [0];
-        return [...acc, acc[i - 1] + getTabWidth(i - 1)];
+        if (i === 0) return [0]
+        return [...acc, acc[i - 1] + getTabWidth(i - 1)]
       }, []),
-    });
+    })
 
     return (
       <Animated.View
         style={{
           flex: 1,
-          backgroundColor: "#E3F0FF",
-          borderRadius: 20,
           marginVertical: 8,
           width: getTabWidth(navigationState.index),
           transform: [{ translateX }],
         }}
       />
-    );
-  };
+    )
+  }
 
-  const handleItemClick = (order: OrderEntity) => {
-    // @ts-ignore
-    navigation.navigate("Purchase", {
-      screen: "SuccessDetail",
-      params: { data: order },
-    });
-  };
+  const Territory = () => <TerritoryScene />
+  const Shop = () => <ShopScene />
 
-  const renderEmptyList = () => {
-    return (
-      <>
-        <Image style={styled.emptyImage} source={require("../../../assets/empty-state/order.png")} />
-        <Text1 style={styled.emptyText}>ยังไม่มีประวัติการสั่งซื้อ</Text1>
-      </>
-    );
-  };
+  const renderScene = SceneMap({
+    territory: Territory,
+    shop: Shop,
+  })
 
-  const renderScene = ({ route }: SceneProp) => {
-    switch (route.key) {
-      case Menu.Confirmed:
-        return (
-          <OrderList
-            statusFilter={StatusFilter.Confirmed}
-            onItemClick={handleItemClick}
-            renderEmpty={renderEmptyList}
-          />
-        );
-      case Menu.Delivered:
-        return (
-          <OrderList
-            statusFilter={StatusFilter.Delivered}
-            onItemClick={handleItemClick}
-            renderEmpty={renderEmptyList}
-          />
-        );
-      case Menu.Canceled:
-        return (
-          <OrderList
-            statusFilter={StatusFilter.Canceled}
-            onItemClick={handleItemClick}
-            renderEmpty={renderEmptyList}
-          />
-        );
-    }
-  };
   return (
     <View style={styled.container}>
       <SafeAreaView style={styled.headerSafeArea}>
         <View style={styled.headerWraper}>
           <Text style={styled.headerText}>ประวัติการสั่งซื้อ</Text>
         </View>
+        <Search placeholder="ค้นหาเลขใบสั่งซื้อ, ร้านค้า..." />
       </SafeAreaView>
       <TabView
-        lazy
         navigationState={{ index, routes }}
         renderTabBar={renderTabBar}
         renderScene={renderScene}
         onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
       />
     </View>
   )
@@ -153,31 +123,21 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
 export default HistoryScreen
 
 const styled = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F8FAFF" },
+  container: { flex: 1, backgroundColor: '#F8FAFF' },
   headerSafeArea: {
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
     paddingTop: StatusBar.currentHeight,
   },
   headerWraper: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 10,
     marginBottom: 10,
   },
   headerText: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
-  activeTabLabel: { color: "#4C95FF", fontWeight: "bold" },
-  inactiveTabLabel: { color: "#616A7B", fontWeight: "bold" },
-  emptyImage: {
-    width: 200,
-    resizeMode: "contain",
-    alignSelf: "center",
-  },
-  emptyText: {
-    top: -160,
-    alignSelf: "center",
-    color: "#C2C6CE",
-  },
-});
+  activeTabLabel: { color: '#4C95FF', fontWeight: 'bold' },
+  inactiveTabLabel: { color: '#616A7B', fontWeight: 'bold' },
+})

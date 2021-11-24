@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FlatList, StyleSheet, TouchableOpacity, View, Text } from 'react-native'
-import { ShopEntity } from '../../entities/ShopEntity'
+import { ApiShopEntity, ShopEntity } from '../../entities/ShopEntity'
 import { ShopFacade } from '../../facade/Shopfacade'
 import _ from 'lodash'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -12,19 +12,27 @@ import { ShopDataSource } from '../../datasource/ShopDataSource'
 import CustomHeader from '../../components/CustomHeader'
 import Subheading2 from '../../components/Font/Subheading2'
 import Text1 from '../../components/Font/Text1'
+import { ResponseEntity } from '../../entities/ResponseEntity'
+import { UserLocalStorageService } from '../../services/UserLocalStorageService'
+import { UserDataContext } from '../../provider/UserDataProvider'
 
 type ShopListScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'ShopList'>
 
 const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({ navigation, route }) => {
-  const [] = useState(false)
   const [shopData, setShopData] = useState<ShopEntity[]>()
+  const userDataStore = useContext(UserDataContext)
+  const { userData,selectShop } = userDataStore
 
   const searchShop = (keywords: string) => {
-    ShopDataSource.getShop(route.params.territory, keywords).then((res) => setShopData(res.data))
+    ShopDataSource.getShop(userData.territory, keywords).then((res: ResponseEntity<ApiShopEntity>) =>
+      setShopData(res.responseData.items),
+    )
   }
 
   useEffect(() => {
-    ShopFacade.getShopListData(route.params.territory).then((res) => setShopData(res))
+    ShopDataSource.getShop(userData.territory).then((res) => {
+      setShopData(res.responseData.items)
+    })
   }, [])
 
   return (
@@ -33,11 +41,11 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({ navigation, route }
       <View style={{ backgroundColor: 'white' }}>
         <Search placeholder="ค้นหาร้านค้า" onChange={(e) => searchShop(e)} />
       </View>
-      {route.params != undefined && shopData != undefined && shopData.length > 0 ? (
+      {shopData !== undefined && shopData.length > 0 ? (
         <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
           <View>
             <View style={{ padding: 20, backgroundColor: '#F6F9FF' }}>
-              <Subheading2>{`ร้านค้าในเขต ${route.params.territory}`}</Subheading2>
+              <Subheading2>{`ร้านค้าในเขต ${userData.territory}`}</Subheading2>
             </View>
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -47,9 +55,10 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({ navigation, route }
                   style={{ paddingTop: 20, paddingLeft: 10 }}
                   key={item.id}
                   onPress={() => {
+                    selectShop(item.shop_no)
                     navigation.navigate('Brand', {
                       shop: item,
-                      company: route.params.company,
+                      company: userData.company,
                     })
                   }}
                 >

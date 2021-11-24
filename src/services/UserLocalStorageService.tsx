@@ -1,33 +1,47 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import CryptoES from 'crypto-es'
+import { NewUserEntity, UserApiEntity } from '../entities/userEntity'
 export class UserLocalStorageService {
-  static USER_LOCAL_STORAGE_KEY = "access_token";
+  static USER_LOCAL_STORAGE = 'user_profile'
+  static KEY_SELLCODA = '9d87f56b7137835eac2e9469f3b065c2'
 
-  static putAccessToken(accessToken: string): boolean {
-    const currentUser = AsyncStorage.getItem(this.USER_LOCAL_STORAGE_KEY);
-
-    if (!currentUser) {
-      AsyncStorage.setItem(this.USER_LOCAL_STORAGE_KEY, accessToken);
-      return true;
-    } else {
-      return false;
-    }
+  static putUserProfile(user_profile: NewUserEntity) {
+    const encrypted = CryptoES.AES.encrypt(JSON.stringify(user_profile), this.KEY_SELLCODA).toString()
+    AsyncStorage.setItem(this.USER_LOCAL_STORAGE, encrypted)
   }
 
   static async haveAccessToken(): Promise<boolean> {
-    const currentUser = await AsyncStorage.getItem(this.USER_LOCAL_STORAGE_KEY);
+    const currentUser = await AsyncStorage.getItem(this.USER_LOCAL_STORAGE)
     if (!currentUser) {
-      return false;
+      return false
     } else {
-      return true;
+      return true
     }
   }
 
-  static getAccessToken(): Promise<string | null> {
-    const currentUser = AsyncStorage.getItem(this.USER_LOCAL_STORAGE_KEY);
-    return currentUser;
+  static async getUserProfile(): Promise<UserApiEntity | null> {
+    const currentUser = await AsyncStorage.getItem(this.USER_LOCAL_STORAGE)
+    if (currentUser) {
+      const decrypted = CryptoES.AES.decrypt(currentUser, '9d87f56b7137835eac2e9469f3b065c2')
+      const user: UserApiEntity = JSON.parse(decrypted.toString(CryptoES.enc.Utf8))
+      return user
+    } else {
+      return null
+    }
+  }
+
+  static async getAccessToken(): Promise<string | null> {
+    const currentUser = await AsyncStorage.getItem(this.USER_LOCAL_STORAGE)
+    if (currentUser) {
+      const decrypted = CryptoES.AES.decrypt(currentUser, '9d87f56b7137835eac2e9469f3b065c2')
+      const user: UserApiEntity = JSON.parse(decrypted.toString(CryptoES.enc.Utf8))
+      return user.user_profile.secrets.totken
+    } else {
+      return null
+    }
   }
 
   static async deleteAccessToken(): Promise<void> {
-    return await AsyncStorage.removeItem(this.USER_LOCAL_STORAGE_KEY);
+    return await AsyncStorage.removeItem(this.USER_LOCAL_STORAGE)
   }
 }

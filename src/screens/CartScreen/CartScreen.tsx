@@ -11,7 +11,7 @@ import { ShopEntity } from '../../entities/ShopEntity'
 import Dash from 'react-native-dash'
 import { CartEntity, ItemCart } from '../../entities/CartEntity'
 import { OrderFacade } from '../../facade/OrderFacade'
-import { OrderEntity } from '../../entities/OrderEntity'
+import { OrderApiEntity, OrderEntity } from '../../entities/OrderEntity'
 import { currencyFormat } from '../../utilities/CurrencyFormat'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 import CartEmptyState from './CartEmptyState'
@@ -35,6 +35,8 @@ import Subheading2 from '../../components/Font/Subheading2'
 import Heading2 from '../../components/Font/Heading2'
 import Paragraph2 from '../../components/Font/Paragraph2'
 import Text2 from '../../components/Font/Text2'
+import { ResponseEntity } from '../../entities/ResponseEntity'
+import { OrderDataSource } from '../../datasource/OrderDataSource'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Cart'>
 
@@ -50,7 +52,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const [excludePromotion, setExcludePromotion] = useState<ExclusdePromotionModel[]>([])
   const isFocused = useIsFocused()
   const userDataStore = useContext(UserDataContext)
-  const { userData, permissions } = userDataStore
+  const { userData, permissions, shopNo, brand } = userDataStore
   const { dispatch } = useContext(CartContext)
 
   useEffect(() => {
@@ -76,34 +78,25 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   const getCart = async () => {
-    CartDataSource.getCartByShop(route.params.company, route.params.shop.id, route.params.productBrand).then(
-      (res: CartEntity) => {
-        setCart(res)
-        setRemark(res.sale_co_remark)
-        handlePayment(res.selected_payment?.id)
-        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-          res.received_discounts.filter((item) => item.item_id != null),
-        )
-        setSpecialRequest(discountSpecial)
-        setDiscoutPromo(discountProduct)
-        if (res.subsidize_discount !== 0) {
-          setUseSubsudize(true)
-        }
-        if (res?.available_payments && res?.available_payments.length <= 1) {
-          res?.available_payments.map((item) => {
-            setPayment(item.id)
-            CartDataSource.calculate(
-              route.params.company,
-              route.params.shop.id,
-              item.id,
-              useSubsidize,
-              route.params.productBrand,
-            ).then((res) => setCart(res))
-          })
-        }
-      },
-    )
+    CartDataSource.getCartByShop(shopNo, brand).then((res: ResponseEntity<CartEntity>) => {
+      setCart(res.responseData)
+      setRemark(res.responseData.sale_co_remark)
+      handlePayment(res.responseData.selected_payment?.id)
+      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.responseData.received_special_request_discounts)
+      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+        res.responseData.received_discounts.filter((item) => item.item_id != null),
+      )
+      setSpecialRequest(discountSpecial)
+      setDiscoutPromo(discountProduct)
+      if (res.responseData.subsidize_discount !== 0) {
+        setUseSubsudize(true)
+      }
+      if (res?.responseData.available_payments && res?.responseData.available_payments.length <= 1) {
+        res?.responseData.available_payments.map((item) => {
+          setPayment(item.id)
+        })
+      }
+    })
   }
 
   const increaseProduct = async (itemId: string, quantity: number) => {
@@ -112,65 +105,51 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       payload: {
         id: itemId,
         quantity: quantity + 1,
-        shopId: route.params.shop.id,
+        shopId: shopNo,
       },
     })
-    await CartDataSource.addToCartByShopId(
-      route.params.company,
-      route.params.shop.id,
-      itemId,
-      quantity + 1,
-      payment,
-      useSubsidize,
-      route.params.productBrand,
-    ).then((res: CartEntity) => {
-      setCart(res)
+    await CartDataSource.addToCartByShopId(shopNo, brand, itemId, quantity + 1).then(
+      (res: ResponseEntity<CartEntity>) => {
+        setCart(res.responseData)
 
-      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-        res.received_discounts.filter((item) => item.item_id != null),
-      )
-      setSpecialRequest(discountSpecial)
-      setDiscoutPromo(discountProduct)
-    })
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_special_request_discounts,
+        )
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_discounts.filter((item) => item.item_id != null),
+        )
+        setSpecialRequest(discountSpecial)
+        setDiscoutPromo(discountProduct)
+      },
+    )
   }
 
   const decreaseProduct = async (itemId: string, quantity: number) => {
-    await CartDataSource.addToCartByShopId(
-      route.params.company,
-      route.params.shop.id,
-      itemId,
-      quantity - 1,
-      payment,
-      useSubsidize,
-      route.params.productBrand,
-    ).then((res: CartEntity) => {
-      setCart(res)
-      let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-      let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-        res.received_discounts.filter((item) => item.item_id != null),
-      )
-      setSpecialRequest(discountSpecial)
-      setDiscoutPromo(discountProduct)
-    })
+    await CartDataSource.addToCartByShopId(shopNo, brand, itemId, quantity - 1).then(
+      (res: ResponseEntity<CartEntity>) => {
+        setCart(res.responseData)
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_special_request_discounts,
+        )
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_discounts.filter((item) => item.item_id != null),
+        )
+        setSpecialRequest(discountSpecial)
+        setDiscoutPromo(discountProduct)
+      },
+    )
   }
 
   const adjustProduct = async (itemId: string, quantity: number) => {
     const regexp = /^[0-9\b]+$/
     if (quantity.toString() === '' || regexp.test(quantity.toString())) {
-      CartDataSource.addToCartByShopId(
-        route.params.company,
-        route.params.shop.id,
-        itemId,
-        quantity,
-        payment,
-        useSubsidize,
-        route.params.productBrand,
-      ).then((res: CartEntity) => {
-        setCart(res)
-        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
+      CartDataSource.addToCartByShopId(shopNo, brand, itemId, quantity).then((res: ResponseEntity<CartEntity>) => {
+        setCart(res.responseData)
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_special_request_discounts,
+        )
         let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-          res.received_discounts.filter((item) => item.item_id != null),
+          res.responseData.received_discounts.filter((item) => item.item_id != null),
         )
         setSpecialRequest(discountSpecial)
         setDiscoutPromo(discountProduct)
@@ -180,9 +159,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     }
   }
   const handleRemark = (remark: string) => {
-    CartDataSource.addOrderRemark(remark, route.params.company, route.params.shop.id, route.params.productBrand)
-      .then((res: CartEntity) => {
-        setCart(res)
+    CartDataSource.addOrderRemark(remark, shopNo, brand)
+      .then((res: ResponseEntity<CartEntity>) => {
+        setCart(res.responseData)
       })
       .catch((err) => {
         alert('Something went wrong' + err)
@@ -205,18 +184,13 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
               shopId: route.params.shop.id,
             },
           })
-          CartDataSource.removeItem(
-            route.params.company,
-            route.params.shop.id,
-            itemId,
-            payment,
-            useSubsidize,
-            route.params.productBrand,
-          ).then((res: CartEntity) => {
-            setCart(res)
-            let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
+          CartDataSource.addToCartByShopId(shopNo, brand, itemId, 0).then((res: ResponseEntity<CartEntity>) => {
+            setCart(res.responseData)
+            let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+              res.responseData.received_special_request_discounts,
+            )
             let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-              res.received_discounts.filter((item) => item.item_id != null),
+              res.responseData.received_discounts.filter((item) => item.item_id != null),
             )
             setSpecialRequest(discountSpecial)
             setDiscoutPromo(discountProduct)
@@ -233,64 +207,39 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   const handlePayment = (p: string) => {
     if (p == 'cash') {
       setPayment('cash')
-      CartDataSource.updatePaymentMethods(
-        'cash',
-        route.params.company,
-        route.params.shop.id,
-        route.params.productBrand,
-      ).then((res: CartEntity) => {
-        CartDataSource.calculate(
-          route.params.company,
-          route.params.shop.id,
-          res.selected_payment.id,
-          useSubsidize,
-          route.params.productBrand,
-        ).then((res: CartEntity) => {
-          setCart(res)
-          let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-          let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-            res.received_discounts.filter((item) => item.item_id != null),
-          )
-          setPayment(res.selected_payment.id)
-          setSpecialRequest(discountSpecial)
-          setDiscoutPromo(discountProduct)
-        })
+      CartDataSource.updatePaymentMethods('cash', shopNo, brand).then((res: ResponseEntity<CartEntity>) => {
+        // CartDataSource.calculate(shopNo, res.selected_payment.id, brand).then((res: CartEntity) => {
+        setCart(res.responseData)
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_special_request_discounts,
+        )
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_discounts.filter((item) => item.item_id != null),
+        )
+        setPayment(res.responseData.selected_payment.id)
+        setSpecialRequest(discountSpecial)
+        setDiscoutPromo(discountProduct)
+        // })
       })
     } else {
       setPayment('credit')
-      CartDataSource.updatePaymentMethods(
-        'credit',
-        route.params.company,
-        route.params.shop.id,
-        route.params.productBrand,
-      ).then((res: CartEntity) => {
-        CartDataSource.calculate(
-          route.params.company,
-          route.params.shop.id,
-          res.selected_payment.id,
-          useSubsidize,
-          route.params.productBrand,
-        ).then((res: CartEntity) => {
-          setCart(res)
-          let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.received_special_request_discounts)
-          let discountProduct: AccrodionPriceModel[] = formatAccrodion(
-            res.received_discounts.filter((item) => item.item_id != null),
-          )
-          setPayment(res.selected_payment.id)
-          setSpecialRequest(discountSpecial)
-          setDiscoutPromo(discountProduct)
-        })
+      CartDataSource.updatePaymentMethods('credit', shopNo, brand).then((res: ResponseEntity<CartEntity>) => {
+        setCart(res.responseData)
+        let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_special_request_discounts,
+        )
+        let discountProduct: AccrodionPriceModel[] = formatAccrodion(
+          res.responseData.received_discounts.filter((item) => item.item_id != null),
+        )
+        setPayment(res.responseData.selected_payment.id)
+        setSpecialRequest(discountSpecial)
+        setDiscoutPromo(discountProduct)
       })
     }
   }
 
   const handleUseSubsidize = (b: boolean) => {
-    CartDataSource.updateSubidizeDiscount(
-      route.params.company,
-      route.params.shop.id,
-      b,
-      route.params.productBrand,
-    ).then((res: CartEntity) => {
+    CartDataSource.updateSubidizeDiscount(shopNo, brand).then((res: CartEntity) => {
       setCart(res)
       setUseSubsudize(b)
     })
@@ -310,16 +259,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         {
           text: 'ยืนยัน',
           onPress: () => {
-            OrderFacade.confirmOrder(
-              userData.company,
-              shop,
-              shipment,
-              cart,
-              cart.subsidize_discount,
-              route.params.productBrand,
-            ).then((res: OrderEntity) => {
-              CartDataSource.clearCart(route.params.company, shop.id, route.params.productBrand)
-              navigation.navigate('OrderSuccess', { data: res, cart })
+            OrderDataSource.comfirmOrder(shopNo, brand).then((res: ResponseEntity<OrderApiEntity>) => {
+              navigation.navigate('OrderSuccess', { orderId: res.responseData.order_id })
             })
           },
         },
@@ -345,12 +286,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     setExcludePromotion(newExcludePromotion)
     let arrUncheckPromotion: Array<string> = newExcludePromotion.filter((p) => !p.checked).map((p) => p.promotion_id)
 
-    CartDataSource.updateExcludePromotion(
-      arrUncheckPromotion,
-      route.params.company,
-      route.params.shop.id,
-      route.params.productBrand,
-    )
+    CartDataSource.updateExcludePromotion(arrUncheckPromotion, shopNo, brand)
       .then((res: CartEntity) => {
         setCart(res)
         filterExcludePromotion(res.available_promotions, res.applied_promotions)
@@ -373,12 +309,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     } else {
       promotionIdAll = []
     }
-    CartDataSource.updateExcludePromotion(
-      promotionIdAll,
-      route.params.company,
-      route.params.shop.id,
-      route.params.productBrand,
-    )
+    CartDataSource.updateExcludePromotion(promotionIdAll, shopNo, brand)
       .then((res: CartEntity) => {
         setCart(res)
         filterExcludePromotion(res.available_promotions, res.applied_promotions)
@@ -422,10 +353,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   <View style={styled.productContainer}>
                     <Heading3 style={styled.textProduct}>สินค้า</Heading3>
                     {cart.items.map((item: ItemCart, index: number) => {
-                      let discount = getPromoDiscountForItem(cart, item.id)
+                      let discount = getPromoDiscountForItem(cart, item.cart_item_id)
                       return (
                         <ProductCartCard
-                          key={item.id}
+                          key={item.cart_item_id}
                           title={item.title}
                           pricePerVolume={item.price_per_volume}
                           volumeUnit={item.volume_unit}
@@ -435,7 +366,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           saleUnit={item.sale_unit}
                           quantity={item.quantity}
                           priceTotal={item.total_price + discount}
-                          onDelete={() => removeItem(item.id)}
+                          onDelete={() => removeItem(item.cart_item_id)}
                           mode="cart"
                           discount={Math.abs(discount)}
                           originalPrice={item.total_price}
@@ -443,12 +374,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           <InputNumber
                             key={item.title}
                             value={item.quantity.toString()}
-                            onPlus={() => increaseProduct(item.id, item.quantity)}
-                            onMinus={() => decreaseProduct(item.id, item.quantity)}
+                            onPlus={() => increaseProduct(item.cart_item_id, item.quantity)}
+                            onMinus={() => decreaseProduct(item.cart_item_id, item.quantity)}
                             onChangeText={(e: any) => {
                               setQuantity((cart.items[index].quantity = e))
                             }}
-                            onBlur={() => adjustProduct(item.id, quantity)}
+                            onBlur={() => adjustProduct(item.cart_item_id, quantity)}
                           />
                         </ProductCartCard>
                       )
@@ -532,65 +463,67 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       multiline
                     />
                   </View>
-                  {specialRequest.length > 0 ? (
-                    <View style={styled.specialRequestContainer}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <Heading3>Special Request</Heading3>
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate('SpecialRequest', {
-                              cart: cart,
-                              shop: route.params.shop,
-                              item: specialRequest,
-                              productBrand: route.params.productBrand,
-                              company: route.params.company,
-                            })
-                          }
+                  {permissions.show_special_request ? (
+                    specialRequest.length > 0 ? (
+                      <View style={styled.specialRequestContainer}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
                         >
-                          <Paragraph2
-                            style={{
-                              color: '#4C95FF',
-                            }}
+                          <Heading3>Special Request</Heading3>
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate('SpecialRequest', {
+                                cart: cart,
+                                shop: route.params.shop,
+                                item: specialRequest,
+                                productBrand: route.params.productBrand,
+                                company: route.params.company,
+                              })
+                            }
                           >
-                            แก้ไข
-                          </Paragraph2>
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styled.line} />
-                      <AccrodingPrice
-                        title="ขอส่วนลดพิเศษเพิ่ม"
-                        total={cart.total_received_special_request_discount}
-                        detail={specialRequest}
-                        price_color={'#BB6BD9'}
-                      />
-                    </View>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('SpecialRequest', {
-                          cart: cart,
-                          shop: route.params.shop,
-                          item: specialRequest,
-                          productBrand: route.params.productBrand,
-                          company: route.params.company,
-                        })
-                      }
-                      style={styled.buttonSpecialRequestContainer}
-                    >
-                      <View style={styled.buttonSpecialRequest}>
-                        <Image
-                          style={{ width: 25, height: 25 }}
-                          source={require('../../../assets/special_request.png')}
+                            <Paragraph2
+                              style={{
+                                color: '#4C95FF',
+                              }}
+                            >
+                              แก้ไข
+                            </Paragraph2>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={styled.line} />
+                        <AccrodingPrice
+                          title="ขอส่วนลดพิเศษเพิ่ม"
+                          total={cart.total_received_special_request_discount}
+                          detail={specialRequest}
+                          price_color={'#BB6BD9'}
                         />
-                        <Heading3 style={styled.textButtonSpecialRequest}>Special Request</Heading3>
                       </View>
-                    </TouchableOpacity>
-                  )}
+                    ) : (
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('SpecialRequest', {
+                            cart: cart,
+                            shop: route.params.shop,
+                            item: specialRequest,
+                            productBrand: route.params.productBrand,
+                            company: route.params.company,
+                          })
+                        }
+                        style={styled.buttonSpecialRequestContainer}
+                      >
+                        <View style={styled.buttonSpecialRequest}>
+                          <Image
+                            style={{ width: 25, height: 25 }}
+                            source={require('../../../assets/special_request.png')}
+                          />
+                          <Heading3 style={styled.textButtonSpecialRequest}>Special Request</Heading3>
+                        </View>
+                      </TouchableOpacity>
+                    )
+                  ) : null}
 
                   {cart.special_request_remark ? (
                     <View

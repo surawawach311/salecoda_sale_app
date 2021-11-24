@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, FlatList, ActivityIndicator, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { OrderDataSource } from '../datasource/OrderDataSource'
@@ -6,6 +6,8 @@ import { accountStore } from '../stores/AccountStore'
 import { useIsFocused } from '@react-navigation/native'
 import OrderHistoryCard from './OrderHistoryCard'
 import { OrderEntity } from '../entities/OrderEntity'
+import { UserDataContext } from '../provider/UserDataProvider'
+import { ResponseEntity } from '../entities/ResponseEntity'
 
 export enum StatusFilter {
   WaitingConfirm = 'waiting_order_confirm',
@@ -15,8 +17,8 @@ export enum StatusFilter {
 }
 
 type OrderListProp = {
-  statusFilter: StatusFilter
-  onItemClick?: (order: OrderEntity) => void
+  statusFilter: string
+  onItemClick?: (orderId: string) => void
   renderEmpty?: () => JSX.Element
 }
 
@@ -35,54 +37,59 @@ const defaultPagination: Pagination = {
 const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderEmpty }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [data, setData] = useState<OrderEntity[]>([])
+  const [order, setOrder] = useState<OrderEntity[]>([])
   const [pager, setPager] = useState<Pagination>(defaultPagination)
   const isFocused = useIsFocused()
+  const userDataStore = useContext(UserDataContext)
+  const { userData } = userDataStore
 
-  const dataLoader = (status: StatusFilter, company: string, limit: number, offset: number, territory?: string) => {
-    return OrderDataSource.listOrder(status, company, limit, offset, territory)
+  const dataLoader = (status: string, limit: number, offset: number, territory?: string) => {
+    return OrderDataSource.listOrder(status, limit, offset, territory)
   }
 
   const loadData = (limit: number, offset: number) => {
-    const comp = accountStore.account?.company ? accountStore.account?.company : ''
-    const territory = accountStore.account?.territory
-    return dataLoader(statusFilter, comp, limit, offset, territory)
+    return dataLoader(statusFilter, limit, offset, userData.territory)
   }
 
   const handlePullToRefresh = () => {
     setIsRefreshing(true)
-    setData([])
-    loadData(defaultPagination.limit, defaultPagination.offset)
-      .then((data) => {
-        setData(data.orders)
-        setPager({ total: data.total, limit: defaultPagination.limit, offset: defaultPagination.offset })
-        setIsRefreshing(false)
+    setOrder([])
+    loadData(defaultPagination.limit, defaultPagination.offset).then((response: ResponseEntity<OrderEntity[]>) => {
+      setOrder(response.responseData)
+      setPager({
+        total: response.responseData.length,
+        limit: defaultPagination.limit,
+        offset: defaultPagination.offset,
       })
-      // .catch((err) => alert(err))
+      setIsRefreshing(false)
+    })
+    // .catch((err) => alert(err))
   }
 
   const handleLoadMore = () => {
-    if (isLoading || data.length >= pager.total) return
+    if (isLoading || order.length >= pager.total) return
     setIsLoading(true)
-    loadData(pager.limit, pager.offset + pager.limit)
-      .then((data) => {
-        setData((prev) => prev.concat(data.orders))
-        setPager({ total: data.total, limit: pager.limit, offset: pager.offset + pager.limit })
-        setIsLoading(false)
-      })
-      // .catch((err) => alert(err))
+    loadData(pager.limit, pager.offset + pager.limit).then((response: ResponseEntity<OrderEntity[]>) => {
+      setOrder((prev) => prev.concat(response.responseData))
+      setPager({ total: response.responseData.length, limit: pager.limit, offset: pager.offset + pager.limit })
+      setIsLoading(false)
+    })
+    // .catch((err) => alert(err))
   }
 
   useEffect(() => {
     setIsLoading(true)
-    setData([])
-    loadData(defaultPagination.limit, defaultPagination.offset)
-      .then((data) => {
-        setData(data.orders)
-        setPager({ total: data.total, limit: defaultPagination.limit, offset: defaultPagination.offset })
-        setIsLoading(false)
+    setOrder([])
+    loadData(defaultPagination.limit, defaultPagination.offset).then((response: ResponseEntity<OrderEntity[]>) => {
+      setOrder(response.responseData)
+      setPager({
+        total: response.responseData.length,
+        limit: defaultPagination.limit,
+        offset: defaultPagination.offset,
       })
-      // .catch((err) => alert(err))
+      setIsLoading(false)
+    })
+    // .catch((err) => alert(err))
   }, [isFocused])
 
   const isComplete = statusFilter !== StatusFilter.WaitingConfirm
@@ -98,7 +105,7 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
     if (isRefreshing) {
       return <View style={styles.emptySpace} />
     }
-    if (data.length === 0) {
+    if (order.length === 0) {
       return <View>{renderEmpty?.()}</View>
     }
     return <View style={styles.emptySpace} />
@@ -108,14 +115,14 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
     <View>
       <FlatList
         style={{ paddingTop: 20 }}
-        data={data}
+        data={order}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => onItemClick?.(item)}>
+          <TouchableOpacity onPress={() => onItemClick?.(item.id)}>
             <OrderHistoryCard
               orderNumber={item.order_no}
               createDatetime={item.created}
               quantity={item.items.length}
-              productIconList={item.items.map(i => i.cover)}
+              productIconList={item.items.map((i) => i.cover)}
               totalAmount={item.total_price}
               isComplete={isComplete}
               shopName={item.buyer.name}

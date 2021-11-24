@@ -6,8 +6,6 @@ import NotificationScreen from '../screens/NotificationScreen/NotificationScreen
 import OrderScreen from '../screens/OrderScreen/OrderScreen'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen'
 import HomeScreen from '../screens/HomeScreen/HomeSrceen'
-import { UserEntity } from '../entities/userEntity'
-import { UserDataProvider } from '../provider/UserDataProvider'
 
 export type HomeStackParamList = {
   Home: undefined

@@ -1,7 +1,4 @@
 export interface ShipmentEntity {
-    available_shipments: Shipment[]
-}
-export interface Shipment {
     addresses: ShipmentAddress[]
     shipping_method: string
 

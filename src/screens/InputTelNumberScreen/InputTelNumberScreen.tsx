@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -17,13 +17,14 @@ import { bypassTelephone } from '../../definitions/BypassDataTest'
 import Heading2 from '../../components/Font/Heading2'
 import Paragraph1 from '../../components/Font/Paragraph1'
 import Subheading2 from '../../components/Font/Subheading2'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 type InputOtpScreenNavigationProp = StackScreenProps<AppAuthParamList, 'InputTelNumber'>
 
 const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigation }) => {
   const [value, setValue] = React.useState<string>('')
   const [isError, setIsError] = React.useState(false)
-  const [isLogin, setIsLogin] = React.useState(false)
 
+  const [message, setMessage] = React.useState<string>('')
 
   const fillZero = (tel: string) => {
     if (tel.length < 10) {
@@ -39,15 +40,16 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
     } else {
       const telephoneNo = fillZero(tel)
       VerifiesDataSource.verifyPhoneNo(telephoneNo).then((res) => {
-        if (res == undefined) {
-          setIsError(true)
-        } else {
+        if (res.success) {
           setIsError(false)
-          if (bypassTelephone.includes(tel)) {
-            navigation.navigate('LoginSuccess', { userProfile: res })
-          } else {
-            navigation.navigate('InputOtp', { userProfile: res })
-          }
+          // if (bypassTelephone.includes(tel)) {
+          //   navigation.navigate('LoginSuccess', { userProfile: res })
+          // } else {
+          navigation.navigate('InputOtp', { telephoneNo: value })
+          // }
+        } else {
+          setIsError(true)
+          setMessage(res.userMessage)
         }
       })
     }
@@ -67,6 +69,7 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
               maxLength={10}
               autoFocus={true}
               onError={isError}
+              errorMessage={message}
             />
           </View>
           <View style={styles.btnContainer}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import { StackScreenProps } from '@react-navigation/stack'
 import { View, Text, Image, StyleSheet } from 'react-native'
@@ -6,24 +6,29 @@ import { ShopDataSource } from '../../datasource/ShopDataSource'
 import { BrandEntity } from '../../entities/ShopEntity'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import CustomHeader from '../../components/CustomHeader'
+import { ResponseEntity } from '../../entities/ResponseEntity'
+import { UserDataContext, UserDataProvider } from '../../provider/UserDataProvider'
 
 type BrandScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Brand'>
 
 const BrandScreen: React.FC<BrandScreenRouteProp> = ({ route, navigation }) => {
   const [brandList, setBrandList] = useState<BrandEntity[]>([])
-
+  const userProvider = useContext(UserDataContext)
+  const { selectBrand } = userProvider
   useEffect(() => {
-    ShopDataSource.getBrandByShopId(route.params.shop.id, route.params.company).then((res) => {
-      if (res.length <= 1) {
-        navigation.navigate('Shop', {
-          shop: route.params.shop,
-          company: route.params.company,
-          productBrand: undefined,
-        })
-      } else {
-        setBrandList(res)
-      }
-    })
+    ShopDataSource.getBrandByShopId(route.params.shop.id, route.params.company).then(
+      (res: ResponseEntity<BrandEntity[]>) => {
+        if (res.responseData.length <= 1) {
+          navigation.navigate('ProductList', {
+            shop: route.params.shop,
+            company: route.params.company,
+            productBrand: undefined,
+          })
+        } else {
+          setBrandList(res.responseData)
+        }
+      },
+    )
   }, [])
   return (
     <View style={{ flex: 1 }}>
@@ -34,7 +39,8 @@ const BrandScreen: React.FC<BrandScreenRouteProp> = ({ route, navigation }) => {
             key={item.product_brand}
             style={styled.brandCard}
             onPress={() => {
-              navigation.navigate('Shop', {
+              selectBrand(item.product_brand)
+              navigation.navigate('ProductList', {
                 shop: route.params.shop,
                 company: route.params.company,
                 productBrand: item.product_brand,

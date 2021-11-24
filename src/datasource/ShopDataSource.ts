@@ -1,35 +1,33 @@
-import { BASE_URL_SOHEE } from '../config/config'
-import { ProductEntity } from '../entities/ProductEntity'
-import { BrandEntity, ShopEntity } from '../entities/ShopEntity'
-import { ShopListEntity } from '../entities/ShopListEntity'
+import { API_NEW_URL, BASE_URL_SOHEE } from '../config/config'
+import { ProductApiEntity, ProductEntity } from '../entities/ProductEntity'
+import { ResponseEntity } from '../entities/ResponseEntity'
+import { ApiShopEntity, BrandEntity, ShopEntity } from '../entities/ShopEntity'
 import { httpClient } from '../services/HttpClient'
 export class ShopDataSource {
-  static getShop(territory: string, keywords?: string): Promise<ShopListEntity> {
+  static getShop(territory: string, keywords?: string): Promise<ResponseEntity<ApiShopEntity>> {
     if (keywords) {
       return httpClient
-        .get(`${BASE_URL_SOHEE}/v1/sellcoda/customers/dealers?territory=${territory}&keywords=${keywords}&limit=100`)
+        .get(`${API_NEW_URL}/api/v1/shops?territory=${territory}&search=${keywords}&limit=100`)
         .then((res) => res.data)
         .catch((error) => console.error(`error on CartDataSource.getShop`, error))
     } else {
       return httpClient
-        .get(`${BASE_URL_SOHEE}/v1/sellcoda/customers/dealers?territory=${territory}&limit=100`)
+        .get(`${API_NEW_URL}/api/v1/shops?territory=${territory}&limit=100`)
         .then((res) => res.data)
         .catch((error) => console.error(`error on CartDataSource.getShop`, error))
     }
   }
   static getProduct(shopId: string, company: string, product_brand?: string): Promise<ProductEntity[]> {
     return httpClient
-      .get(`${BASE_URL_SOHEE}/v1/sellcoda/shops/${shopId}/products/prices?limit=1000&company=${company}`)
+      .get(`${API_NEW_URL}/api/v1/products`)
       .then((res) => res.data.products)
       .catch((error) => console.error(`error on CartDataSource.getProduct`, error))
   }
 
-  static getProductWithBrand(shopId: string, company: string, product_brand?: string): Promise<ProductEntity[]> {
+  static getProductWithBrand(shopId: string, company: string, product_brand?: string): Promise<ResponseEntity<ProductApiEntity>> {
     return httpClient
-      .get(
-        `${BASE_URL_SOHEE}/v1/sellcoda/shops/${shopId}/products/prices?limit=1000&company=${company}&product_brand=${product_brand}`,
-      )
-      .then((res) => res.data.products)
+      .get(`${API_NEW_URL}/api/v1/products`)
+      .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getProductWithBrand`, error))
   }
   static getShopById(shopId: string): Promise<ShopEntity> {
@@ -39,10 +37,10 @@ export class ShopDataSource {
       .catch((error) => console.error(`error on CartDataSource.getShopById`, error))
   }
 
-  static getBrandByShopId(shopId: string, company: string): Promise<BrandEntity[]> {
+  static getBrandByShopId(shopId: string, company: string): Promise<ResponseEntity<BrandEntity[]>> {
     return httpClient
-      .get(`${BASE_URL_SOHEE}/v1/sellcoda/customers/dealers/${shopId}/product_brand?company=${company}`)
-      .then((res) => res.data.data)
+      .get(`${API_NEW_URL}/api/v1/product/brands`)
+      .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getBrandByShopId`, error))
   }
 }

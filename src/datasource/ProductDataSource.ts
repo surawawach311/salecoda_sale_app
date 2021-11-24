@@ -1,11 +1,17 @@
-import { BASE_URL_SOHEE } from '../config/config'
+import { API_NEW_URL, BASE_URL_SOHEE } from '../config/config'
 import { ProductEntity } from '../entities/ProductEntity'
+import { ResponseEntity } from '../entities/ResponseEntity'
 import { httpClient } from '../services/HttpClient'
 
 export class ProductDataSource {
-  static getNameProduct(shopId: string, productId: string): Promise<ProductEntity> {
+  static getNameProduct(brand: string, shopNo: string, productId: string): Promise<ResponseEntity<ProductEntity>> {
     return httpClient
-      .get(`${BASE_URL_SOHEE}/v1/sellcoda/shops/${shopId}/products/prices/${productId}`)
+      .get(`${API_NEW_URL}/api/v1/products/${productId}`, {
+        headers: {
+          "Brand-No": brand,
+          "Shop-No": shopNo
+        }
+      })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getNameProduct`, error))
   }

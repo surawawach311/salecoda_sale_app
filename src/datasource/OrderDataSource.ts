@@ -1,13 +1,23 @@
-import { BASE_URL_POPORING, BASE_URL_WHISPER } from '../config/config'
-import { OrderEntity } from '../entities/OrderEntity'
+import { API_NEW_URL, BASE_URL_POPORING, BASE_URL_WHISPER } from '../config/config'
+import { OrderApiEntity, OrderEntity } from '../entities/OrderEntity'
 import { OrderListEntity } from '../entities/OrderListEntity'
+import { ResponseEntity } from '../entities/ResponseEntity'
+import { ShopGroupOrderEntity } from '../entities/ShopGroupOrderEntity'
 import { OrderModel } from '../models/OrderModel'
 import { httpClient } from '../services/HttpClient'
 
 export class OrderDataSource {
-  static comfirmOrder(data: OrderModel): Promise<OrderEntity> {
+  static comfirmOrder(shopNo: string, brand: string | undefined): Promise<ResponseEntity<OrderApiEntity>> {
+    const data = {
+      action: 'checkout'
+    }
     return httpClient
-      .post(`${BASE_URL_WHISPER}/v1/orders/sellcoda`, data)
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, {
+        headers: {
+          "Brand-No": brand,
+          "Shop-No": shopNo
+        }
+      })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.comfirmOrder`, error))
   }
@@ -47,23 +57,53 @@ export class OrderDataSource {
     }
   }
 
-  static getOrderDetail(companyId: string, shopId: string, orderNo: string): Promise<OrderEntity> {
+  static getOrderDetail(orderId: string): Promise<ResponseEntity<OrderEntity>> {
     return httpClient
-      .get(`${BASE_URL_POPORING}/v4/orders/sellcoda/${orderNo}?company_id=${companyId}&dealer_id=${shopId}`)
+      .get(`${API_NEW_URL}/promotion-order/api/v1/orders/${orderId}`)
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getOrderDetail`, error))
   }
 
+  static getOrderStatus(): Promise<ResponseEntity<{ key: string; title: string }[]>> {
+    return httpClient
+      .get(`${API_NEW_URL}/promotion-order/api/v1/orders/status/saleapp`)
+      .then((res) => res.data)
+      .catch((error) => console.error(`error on CartDataSource.getOrderStatus`, error))
+  }
+
   static async listOrder(
     status: string,
-    company: string,
     limit: number = 10,
     offset = 0,
     territory?: string,
-  ): Promise<OrderListEntity> {
+  ): Promise<ResponseEntity<OrderEntity[]>> {
+    const params = {
+      order_status: status
+    }
     return httpClient
       .get(
-        `${BASE_URL_POPORING}/v4/orders/sellcoda/territory?company_id=${company}&territory=${territory}&status=${status}`,
+        `${API_NEW_URL}/promotion-order/api/v1/orders`, { params },
+      )
+      .then((res) => res.data)
+  }
+
+  static async GroupShopOrderList(
+    status: string,
+    limit: number = 10,
+    offset = 0,
+    territory?: string,
+    start_date?: string,
+    end_date?: string
+  ): Promise<ResponseEntity<ShopGroupOrderEntity[]>> {
+    const params = {
+      order_status: status,
+      territory: territory,
+      ...(start_date ? { "start_date": start_date } : {}),
+      ...(end_date ? { "end_date": end_date } : {}),
+    }
+    return httpClient
+      .get(
+        `${API_NEW_URL}/promotion-order/api/v1/orders/shops`, { params },
       )
       .then((res) => res.data)
   }

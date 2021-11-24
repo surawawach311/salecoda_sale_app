@@ -10,7 +10,7 @@ import { ShopEntity } from '../../entities/ShopEntity'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 import { AccrodionPriceModel } from '../../models/AccrodionPriceModel'
 import AccrodingPrice from '../../components/AccrodingPrice'
-import { DiscountOrderEntity } from '../../entities/OrderEntity'
+import { DiscountOrderEntity, OrderEntity } from '../../entities/OrderEntity'
 import TagStatus from '../../components/TagStatus'
 import Heading3 from '../../components/Font/Heading3'
 import Subheading1 from '../../components/Font/Subheading1'
@@ -19,17 +19,23 @@ import Subheading2 from '../../components/Font/Subheading2'
 import Text1 from '../../components/Font/Text1'
 import Heading2 from '../../components/Font/Heading2'
 import Heading4 from '../../components/Font/Heading4'
+import { OrderDataSource } from '../../datasource/OrderDataSource'
+import { ResponseEntity } from '../../entities/ResponseEntity'
 
 type OrderSuccessScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'OrderSuccess'>
 
 const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({ navigation, route }) => {
+  const [order, setOrder] = useState<OrderEntity>()
   const [shop, setShop] = useState<ShopEntity>()
   const [specialRequest, setSpecialRequest] = useState<AccrodionPriceModel[]>([])
   const [discoutPromo, setDiscoutPromo] = useState<AccrodionPriceModel[]>([])
 
   useEffect(() => {
+    getOrderDetail()
     initialData()
-    getShopInfo()
+  }, [])
+  useEffect(() => {
+    initialData()
   }, [])
 
   // TODO: don't use any type
@@ -48,221 +54,212 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({ navigation,
 
   const initialData = () => {
     let promo = formatAccrodion(
-      route.params.cart?.received_discounts.filter((item) => item.item_id != null && item.item_id != '') || [],
+      order?.discount_memo.filter((item) => item.item_id != null && item.item_id != '') || [],
     )
-    let request = formatAccrodion(route.params.cart?.received_special_request_discounts || [])
+    let request = formatAccrodion(order?.special_request_discounts || [])
     setDiscoutPromo(promo)
     setSpecialRequest(request)
   }
 
-  const getShopInfo = () => {
-    ShopDataSource.getShopById(route.params.data.buyer_id).then((res: ShopEntity) => setShop(res))
+  const getOrderDetail = () => {
+    OrderDataSource.getOrderDetail(route.params.orderId).then((res: ResponseEntity<OrderEntity>) =>
+      setOrder(res.responseData),
+    )
   }
-  const {
-    special_request_discounts,
-    discount_memo,
-    before_discount,
-    total_discount,
-    total_price,
-    order_no,
-    items,
-    premium_memo,
-    subsidize,
-  } = route.params.data
+
   return (
     <View style={styled.container}>
-      <View style={styled.headerWarp}>
-        <TouchableOpacity style={styled.iconCloseContainer} onPress={() => navigation.navigate('Shop', { shop: shop })}>
-          <Image style={styled.iconClose} source={require('../../../assets/cancle.png')} />
-        </TouchableOpacity>
-        <Heading3 style={{ color: '#FFFFFF' }}>รอยืนยันคำสั่งซื้อ</Heading3>
-      </View>
-      <ScrollView>
-        <View style={styled.bodyContainer}>
-          <View style={styled.shopNameWarp}>
-            {shop ? (
-              <Subheading1 style={{ color: '#4C95FF' }}>{shop?.name}</Subheading1>
-            ) : (
-              <SkeletonPlaceholder>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <View style={{ width: 120, height: 30, borderRadius: 4 }} />
-                </View>
-              </SkeletonPlaceholder>
-            )}
+      {order ? (
+        <>
+          <View style={styled.headerWarp}>
+            <TouchableOpacity
+              style={styled.iconCloseContainer}
+              onPress={() => navigation.navigate('Shop', { shop: shop })}
+            >
+              <Image style={styled.iconClose} source={require('../../../assets/cancle.png')} />
+            </TouchableOpacity>
+            <Heading3 style={{ color: '#FFFFFF' }}>รอยืนยันคำสั่งซื้อ</Heading3>
           </View>
-          <View style={styled.iconWaitWarp}>
-            <Image style={styled.iconWait} source={require('../../../assets/wait-Confirm.png')} />
-          </View>
-          <View style={styled.iconWaitWarp}>
-            <Text2 style={{ color: '#6B7995' }}>
-              {route.params.data.status == 'waiting_confirm' ? 'รอยืนยันคำสั่งซื้อ' : 'รออนุมัติคำสั่งซื้อ'}
-            </Text2>
-          </View>
-          <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
-          <View style={styled.orderNoWarp}>
-            <Image style={styled.iconInvoice} source={require('../../../assets/invoice.png')} />
-            <Subheading2 style={{ marginLeft: 5 }}>{order_no}</Subheading2>
-          </View>
-          <View style={styled.productHeaderWarp}>
-            <Subheading2>สินค้า</Subheading2>
-            <Subheading2>ราคารวม</Subheading2>
-          </View>
-
-          {items.map((item) => {
-            return (
-              <View key={item.id} style={styled.productTextWarp}>
-                <View style={{ width: '75%' }}>
-                  <Text1 style={{ color: '#333333' }}>
-                    {item.unit === 'ตัน'
-                      ? `${item.title} ${item.quantity}x${item.unit}`
-                      : `${item.title} ${item.quantity}x(${item.unit})`}
-                  </Text1>
-                </View>
-                <Text1 style={{ color: '#333333' }}>{currencyFormat(item.quantity * item.price)}</Text1>
+          <ScrollView>
+            <View style={styled.bodyContainer}>
+              <View style={styled.shopNameWarp}>
+                <Subheading1 style={{ color: '#4C95FF' }}>{order.buyer.name}</Subheading1>
               </View>
-            )
-          })}
-          <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
-          <View style={styled.productTextWarp}>
-            <Text1 style={{ color: '#6B7995' }}>ราคาก่อนลด</Text1>
-            <Text1 style={{ color: '#616A7B' }}>{currencyFormat(before_discount, 2)}</Text1>
-          </View>
-          {discount_memo.filter((item: DiscountOrderEntity) => item.item_id != '').length > 0 ? (
-            <AccrodingPrice
-              title="ส่วนลดรายการ"
-              total={discount_memo
-                .filter((item: DiscountOrderEntity) => item.item_id != '')
-                .reduce((sum, item) => sum + item.price * item.quantity, 0)}
-              detail={discoutPromo}
-              price_color={'#3AAE49'}
-            />
-          ) : null}
-          {special_request_discounts.length > 0 ? (
-            <AccrodingPrice
-              title="ขอส่วนลดพิเศษเพิ่ม"
-              total={special_request_discounts.reduce((sum, item) => sum + item.price * item.quantity, 0)}
-              detail={specialRequest}
-              price_color={'#BB6BD9'}
-            />
-          ) : null}
-          {subsidize != 0 ? (
-            <View style={styled.productTextWarp}>
-              <Text1 style={{ color: '#6B7995' }}>ส่วนลดดูแลราคา</Text1>
-              <Heading3 style={{ color: '#FF5D5D' }}>{currencyFormat(subsidize, 2)}</Heading3>
-            </View>
-          ) : null}
-          {discount_memo.length > 0
-            ? discount_memo
-                .filter((item) => item.id == 'cash')
-                .map((item) => {
-                  return (
-                    <View
-                      key={item.id}
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginVertical: 10,
-                      }}
-                    >
-                      <Text1 style={{ color: '#6B7995' }}>ส่วนลดเงินสด</Text1>
-                      <Heading3 style={{ color: '#4C95FF' }}>{currencyFormat(item.price, 2)}</Heading3>
+              <View style={styled.iconWaitWarp}>
+                <Image style={styled.iconWait} source={require('../../../assets/wait-Confirm.png')} />
+              </View>
+              <View style={styled.iconWaitWarp}>
+                <Text2 style={{ color: '#6B7995' }}>
+                  {order.status == 'waiting_confirm' ? 'รอยืนยันคำสั่งซื้อ' : 'รออนุมัติคำสั่งซื้อ'}
+                </Text2>
+              </View>
+              <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
+              <View style={styled.orderNoWarp}>
+                <Image style={styled.iconInvoice} source={require('../../../assets/invoice.png')} />
+                <Subheading2 style={{ marginLeft: 5 }}>{order.order_no}</Subheading2>
+              </View>
+              <View style={styled.productHeaderWarp}>
+                <Subheading2>สินค้า</Subheading2>
+                <Subheading2>ราคารวม</Subheading2>
+              </View>
+
+              {order.items.map((item) => {
+                return (
+                  <View key={item.id} style={styled.productTextWarp}>
+                    <View style={{ width: '75%' }}>
+                      <Text1 style={{ color: '#333333' }}>
+                        {item.unit === 'ตัน'
+                          ? `${item.title} ${item.quantity}x${item.unit}`
+                          : `${item.title} ${item.quantity}x(${item.unit})`}
+                      </Text1>
                     </View>
-                  )
-                })
-            : null}
-          <View style={styled.productTextWarp}>
-            <Text1 style={{ color: '#6B7995' }}>ส่วนลดรวม</Text1>
-            <Heading3 style={{ color: '#616A7B' }}>{currencyFormat(total_discount, 2)}</Heading3>
-          </View>
-          <View style={styled.productTextWarp}>
-            <Heading3>ราคารวม</Heading3>
-            <Heading2 style={{ color: '#4C95FF' }}>{currencyFormat(total_price, 2)}</Heading2>
-          </View>
-          <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
-          <View style={{ marginTop: 10 }}>
-            <Heading3>ของแถมที่ได้รับ</Heading3>
-            <View style={{ marginTop: 10 }}>
-              {premium_memo.length > 0 ? (
-                premium_memo.map((item) => {
-                  return (
-                    <View
-                      key={item.id}
-                      style={{
-                        borderRadius: 6,
-                        padding: 10,
-                        paddingLeft: 5,
-                        flexDirection: 'row',
-                        width: 299,
-                      }}
-                    >
+                    <Text1 style={{ color: '#333333' }}>{currencyFormat(item.quantity * item.price)}</Text1>
+                  </View>
+                )
+              })}
+              <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
+              <View style={styled.productTextWarp}>
+                <Text1 style={{ color: '#6B7995' }}>ราคาก่อนลด</Text1>
+                <Text1 style={{ color: '#616A7B' }}>{currencyFormat(order.before_discount, 2)}</Text1>
+              </View>
+              {order.discount_memo.filter((item: DiscountOrderEntity) => item.item_id != '').length > 0 ? (
+                <AccrodingPrice
+                  title="ส่วนลดรายการ"
+                  total={order.discount_memo
+                    .filter((item: DiscountOrderEntity) => item.item_id != '')
+                    .reduce((sum, item) => sum + item.price * item.quantity, 0)}
+                  detail={discoutPromo}
+                  price_color={'#3AAE49'}
+                />
+              ) : null}
+              {order.special_request_discounts.length > 0 ? (
+                <AccrodingPrice
+                  title="ขอส่วนลดพิเศษเพิ่ม"
+                  total={order.special_request_discounts.reduce((sum, item) => sum + item.price * item.quantity, 0)}
+                  detail={specialRequest}
+                  price_color={'#BB6BD9'}
+                />
+              ) : null}
+              {order.subsidize != 0 ? (
+                <View style={styled.productTextWarp}>
+                  <Text1 style={{ color: '#6B7995' }}>ส่วนลดดูแลราคา</Text1>
+                  <Heading3 style={{ color: '#FF5D5D' }}>{currencyFormat(order.subsidize, 2)}</Heading3>
+                </View>
+              ) : null}
+              {order.discount_memo.length > 0
+                ? order.discount_memo
+                    .filter((item) => item.id == 'cash')
+                    .map((item) => {
+                      return (
+                        <View
+                          key={item.id}
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginVertical: 10,
+                          }}
+                        >
+                          <Text1 style={{ color: '#6B7995' }}>ส่วนลดเงินสด</Text1>
+                          <Heading3 style={{ color: '#4C95FF' }}>{currencyFormat(item.price, 2)}</Heading3>
+                        </View>
+                      )
+                    })
+                : null}
+              <View style={styled.productTextWarp}>
+                <Text1 style={{ color: '#6B7995' }}>ส่วนลดรวม</Text1>
+                <Heading3 style={{ color: '#616A7B' }}>{currencyFormat(order.total_discount, 2)}</Heading3>
+              </View>
+              <View style={styled.productTextWarp}>
+                <Heading3>ราคารวม</Heading3>
+                <Heading2 style={{ color: '#4C95FF' }}>{currencyFormat(order.total_price, 2)}</Heading2>
+              </View>
+              <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
+              <View style={{ marginTop: 10 }}>
+                <Heading3>ของแถมที่ได้รับ</Heading3>
+                <View style={{ marginTop: 10 }}>
+                  {order.premium_memo.length > 0 ? (
+                    order.premium_memo.map((item) => {
+                      return (
+                        <View
+                          key={item.id}
+                          style={{
+                            borderRadius: 6,
+                            padding: 10,
+                            paddingLeft: 5,
+                            flexDirection: 'row',
+                            width: 299,
+                          }}
+                        >
+                          <Image
+                            style={{
+                              width: 60,
+                              height: 60,
+                              resizeMode: 'contain',
+                            }}
+                            source={{ uri: item.cover }}
+                          />
+                          <View
+                            style={{
+                              marginLeft: 5,
+                              justifyContent: 'space-around',
+                            }}
+                          >
+                            <Text1 numberOfLines={1} style={{ color: '#616A7B' }}>
+                              {item.name}
+                            </Text1>
+                            <Text1 style={{ color: '#616A7B' }}>{item.packing_size}</Text1>
+                            <Heading4>{`${item.quantity} ${item.unit}`}</Heading4>
+                          </View>
+                        </View>
+                      )
+                    })
+                  ) : (
+                    <>
                       <Image
                         style={{
-                          width: 60,
-                          height: 60,
+                          width: 52,
+                          height: 52,
+                          marginTop: 20,
                           resizeMode: 'contain',
+                          alignSelf: 'center',
                         }}
-                        source={{ uri: item.cover }}
+                        source={require('../../../assets/box-empty.png')}
                       />
-                      <View
-                        style={{
-                          marginLeft: 5,
-                          justifyContent: 'space-around',
-                        }}
-                      >
-                        <Text1 numberOfLines={1} style={{ color: '#616A7B' }}>
-                          {item.name}
-                        </Text1>
-                        <Text1 style={{ color: '#616A7B' }}>{item.packing_size}</Text1>
-                        <Heading4>{`${item.quantity} ${item.unit}`}</Heading4>
-                      </View>
-                    </View>
-                  )
-                })
-              ) : (
-                <>
-                  <Image
-                    style={{
-                      width: 52,
-                      height: 52,
-                      marginTop: 20,
-                      resizeMode: 'contain',
-                      alignSelf: 'center',
-                    }}
-                    source={require('../../../assets/box-empty.png')}
-                  />
-                  <Text1 style={{ alignSelf: 'center', color: '#C2C6CE' }}>ไม่มีของแถมที่ได้รับ</Text1>
-                </>
-              )}
+                      <Text1 style={{ alignSelf: 'center', color: '#C2C6CE' }}>ไม่มีของแถมที่ได้รับ</Text1>
+                    </>
+                  )}
+                </View>
+              </View>
+              <TouchableOpacity
+                style={{ marginTop: 30 }}
+                onPress={() => navigation.navigate('SuccessDetail', { orderId: route.params.orderId })}
+              >
+                <Text1 style={{ color: '#616A7B', alignSelf: 'center' }}>ดูรายละเอียดคำสั่งซื้อนี้</Text1>
+              </TouchableOpacity>
+              <View style={styled.deliveryButtonContainer}>
+                <TouchableOpacity
+                  style={styled.deliveryButton}
+                  onPress={() => {
+                    navigation.navigate('Order')
+                  }}
+                >
+                  <Heading3 style={styled.deliveryButtonText}>ดูคำสั่งซื้อทั้งหมด</Heading3>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          <TouchableOpacity
-            style={{ marginTop: 30 }}
-            onPress={() => navigation.navigate('SuccessDetail', { data: route.params.data })}
-          >
-            <Text1 style={{ color: '#616A7B', alignSelf: 'center' }}>ดูรายละเอียดคำสั่งซื้อนี้</Text1>
-          </TouchableOpacity>
-          <View style={styled.deliveryButtonContainer}>
-            <TouchableOpacity
-              style={styled.deliveryButton}
-              onPress={() => {
-                navigation.navigate('Order')
-              }}
-            >
-              <Heading3 style={styled.deliveryButtonText}>ดูคำสั่งซื้อทั้งหมด</Heading3>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{ marginHorizontal: 20 }}>
-          <Image
-            style={{
-              height: 23,
-              width: '100%',
-              resizeMode: 'cover',
-            }}
-            source={require('../../../assets/bill.png')}
-          />
-        </View>
-      </ScrollView>
+            <View style={{ marginHorizontal: 20 }}>
+              <Image
+                style={{
+                  height: 23,
+                  width: '100%',
+                  resizeMode: 'cover',
+                }}
+                source={require('../../../assets/bill.png')}
+              />
+            </View>
+          </ScrollView>
+        </>
+      ) : null}
     </View>
   )
 }
