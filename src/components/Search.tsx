@@ -1,12 +1,9 @@
 import React from 'react'
-import { TextInputChangeEventData } from 'react-native'
 import {
   StyleSheet,
   TextInput,
   Image,
   View,
-  NativeSegmentedControlIOSChangeEvent,
-  NativeSyntheticEvent,
 } from 'react-native'
 
 interface SearchProps {

@@ -2,6 +2,7 @@ import { API_NEW_URL, BASE_URL_POPORING, BASE_URL_WHISPER } from '../config/conf
 import { OrderApiEntity, OrderEntity } from '../entities/OrderEntity'
 import { OrderListEntity } from '../entities/OrderListEntity'
 import { ResponseEntity } from '../entities/ResponseEntity'
+import { ShopGroupOrderEntity } from '../entities/ShopGroupOrderEntity'
 import { OrderModel } from '../models/OrderModel'
 import { httpClient } from '../services/HttpClient'
 
@@ -63,16 +64,46 @@ export class OrderDataSource {
       .catch((error) => console.error(`error on CartDataSource.getOrderDetail`, error))
   }
 
+  static getOrderStatus(): Promise<ResponseEntity<{ key: string; title: string }[]>> {
+    return httpClient
+      .get(`${API_NEW_URL}/promotion-order/api/v1/orders/status/saleapp`)
+      .then((res) => res.data)
+      .catch((error) => console.error(`error on CartDataSource.getOrderStatus`, error))
+  }
+
   static async listOrder(
     status: string,
-    company: string,
     limit: number = 10,
     offset = 0,
     territory?: string,
-  ): Promise<OrderListEntity> {
+  ): Promise<ResponseEntity<OrderEntity[]>> {
+    const params = {
+      order_status: status
+    }
     return httpClient
       .get(
-        `${BASE_URL_POPORING}/v4/orders/sellcoda/territory?company_id=${company}&territory=${territory}&status=${status}`,
+        `${API_NEW_URL}/promotion-order/api/v1/orders`, { params },
+      )
+      .then((res) => res.data)
+  }
+
+  static async GroupShopOrderList(
+    status: string,
+    limit: number = 10,
+    offset = 0,
+    territory?: string,
+    start_date?: string,
+    end_date?: string
+  ): Promise<ResponseEntity<ShopGroupOrderEntity[]>> {
+    const params = {
+      order_status: status,
+      territory: territory,
+      ...(start_date ? { "start_date": start_date } : {}),
+      ...(end_date ? { "end_date": end_date } : {}),
+    }
+    return httpClient
+      .get(
+        `${API_NEW_URL}/promotion-order/api/v1/orders/shops`, { params },
       )
       .then((res) => res.data)
   }

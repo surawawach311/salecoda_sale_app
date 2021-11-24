@@ -17,6 +17,7 @@ export interface NewUserEntity {
     firstname: string
     lastname: string
     birth_day: string
+    territory: string
     user_type: string
     role: {
         id: string

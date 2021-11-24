@@ -353,10 +353,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   <View style={styled.productContainer}>
                     <Heading3 style={styled.textProduct}>สินค้า</Heading3>
                     {cart.items.map((item: ItemCart, index: number) => {
-                      let discount = getPromoDiscountForItem(cart, item.id)
+                      let discount = getPromoDiscountForItem(cart, item.cart_item_id)
                       return (
                         <ProductCartCard
-                          key={item.id}
+                          key={item.cart_item_id}
                           title={item.title}
                           pricePerVolume={item.price_per_volume}
                           volumeUnit={item.volume_unit}
@@ -366,7 +366,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           saleUnit={item.sale_unit}
                           quantity={item.quantity}
                           priceTotal={item.total_price + discount}
-                          onDelete={() => removeItem(item.id)}
+                          onDelete={() => removeItem(item.cart_item_id)}
                           mode="cart"
                           discount={Math.abs(discount)}
                           originalPrice={item.total_price}
@@ -374,12 +374,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           <InputNumber
                             key={item.title}
                             value={item.quantity.toString()}
-                            onPlus={() => increaseProduct(item.id, item.quantity)}
-                            onMinus={() => decreaseProduct(item.id, item.quantity)}
+                            onPlus={() => increaseProduct(item.cart_item_id, item.quantity)}
+                            onMinus={() => decreaseProduct(item.cart_item_id, item.quantity)}
                             onChangeText={(e: any) => {
                               setQuantity((cart.items[index].quantity = e))
                             }}
-                            onBlur={() => adjustProduct(item.id, quantity)}
+                            onBlur={() => adjustProduct(item.cart_item_id, quantity)}
                           />
                         </ProductCartCard>
                       )
