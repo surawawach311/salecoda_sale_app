@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, ImageBackground, StyleSheet } from 'react-native'
+import React, { useEffect } from 'react'
+import { View, Text, ImageBackground, StyleSheet, Platform } from 'react-native'
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useState } from 'react'
@@ -7,6 +7,7 @@ import { VerifiesDataSource } from '../../datasource/VerifiesDataSource'
 import { AppAuthParamList } from '../../navigations/AppAuthNavigator'
 import Heading2 from '../../components/Font/Heading2'
 import Paragraph1 from '../../components/Font/Paragraph1'
+import NotificationFacade from '../../facade/NotificationFacade'
 
 type InputOtpScreenRouteProp = StackScreenProps<AppAuthParamList, 'InputOtp'>
 
@@ -15,6 +16,7 @@ const InputOTPScreen = ({ navigation, route }: InputOtpScreenRouteProp) => {
   const [value, setValue] = useState('')
   const [isError, setIsError] = useState(false)
   const [message, setMessage] = useState<string>('')
+  const [fcmToken, setFcmToken] = useState<string|undefined>(undefined)
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT })
 
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -22,10 +24,20 @@ const InputOTPScreen = ({ navigation, route }: InputOtpScreenRouteProp) => {
     setValue,
   })
 
-  const onFufill = (value: string) => {
+  useEffect(() => {
+    NotificationFacade.bindToken().then((res)=> setFcmToken(res))
+  }, [])
+
+  const onFufill = async (value: string) => {
     setValue(value)
     if (value.length >= CELL_COUNT) {
-      VerifiesDataSource.verifyOtp(route.params.telephoneNo, value).then((response) => {
+      VerifiesDataSource.verifyOtp(
+        route.params.data.mobile,
+        value,
+        route.params.data.ref_no,
+        Platform.OS,
+        fcmToken,
+      ).then((response) => {
         if (response.success) {
           navigation.navigate('LoginSuccess', {
             userProfile: response.responseData,
@@ -44,7 +56,7 @@ const InputOTPScreen = ({ navigation, route }: InputOtpScreenRouteProp) => {
         <View style={styles.wrapText}>
           <Heading2 style={styles.title}>ใส่รหัส OTP</Heading2>
           <Paragraph1 style={styles.text}>
-            กรุณาใส่รหัสยืนยันตัวตนที่ถูกส่งไปยัง {'\n'}หมายเลข {route.params.telephoneNo}
+            กรุณาใส่รหัสยืนยันตัวตนที่ถูกส่งไปยัง {'\n'}หมายเลข {route.params.data.mobile}
           </Paragraph1>
           <CodeField
             ref={ref}
