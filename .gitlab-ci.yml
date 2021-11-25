@@ -7,7 +7,7 @@ deploy-develop:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "develop"'
   stage: deploy
-  image: node:alpine
+  image: node:14-alpine
   timeout: 20 minutes
   variables:
     APP_ENV: development
@@ -29,7 +29,7 @@ schedule-morroc:
   stage: schedule
   script:
     - apk add --no-cache curl
-    - echo "{\"content\":\"deploy success (development), open this link https://expo.io/@iconkaset/projects/morroc\",\"username\":\"boom bot\",\"avatar_url\":\"\"}" > body.json
+    - echo "{\"content\":\"deploy success (development), open this link https://expo.io/@iconkaset/projects/morroc\",\"username\":\"DevOps\",\"avatar_url\":\"\"}" > body.json
     - 'curl -X POST "https://discordapp.com/api/webhooks/761442941704208385/arkVNzk0r2bzyDEefZF4-QMeNiHgXZd7GSHkj0Ik7Qn_ISOrcS2Ec8eEtLRXz1mV8-fd" -H "Content-Type: application/json" -T body.json'
 
 #===== STAGING =====
@@ -37,7 +37,7 @@ deploy-staging:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "staging"'
   stage: deploy
-  image: node:alpine
+  image: node:14-alpine
   timeout: 20 minutes
   variables:
     APP_ENV: staging
@@ -67,7 +67,7 @@ deploy-production:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
   stage: deploy
-  image: node:alpine
+  image: node:14-alpine
   variables:
     APP_ENV: production
   cache:
