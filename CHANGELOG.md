@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Fix [v1.81.1] - 2020-05-26
+- fix notification facade
+- fix return error on HttpClient
+
 ## enhnace [v1.81.0] - 2020-11-25
 - apply new api login
 

@@ -12,22 +12,23 @@ export class VerifiesDataSource {
       .then((response) => {
         return response.data
       })
+      .catch(function (error) {
+        return error.response.data
+
+      })
       .catch((error) => { throw new Error(error.response) })
   }
 
   static verifyOtp(phone: string, otp: string, refNo: string, platform: string, fcmToken?: string): Promise<ResponseEntity<UserApiEntity>> {
-    console.log({ app_name: "saleapp", mobile: phone, ref_no: refNo, otp: otp, platform: platform, fcm_token: fcmToken });
-
     return httpClient
       .post(`${API_NEW_URL}/auth/api/v1/login/verify-otp`, { app_name: "saleapp", mobile: phone, ref_no: refNo, otp: otp, platform: platform, ...(fcmToken ? { fcm_token: fcmToken } : { fcm_token: "" }), })
       .then((response) => {
-        console.log(response);
-
         return response.data
       })
-      .catch((error) => {
-        console.log("erroe" + error);
+      .catch(function (error) {
+        return error.response.data
       })
+      .catch((error) => { throw new Error(error.response) })
 
   }
 
