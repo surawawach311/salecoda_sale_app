@@ -36,6 +36,7 @@ axios.interceptors.response.use(
         screen: "Unauthorize",
       })
     }
+    return Promise.reject(error);
   },
 )
 
