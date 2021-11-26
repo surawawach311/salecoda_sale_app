@@ -14,7 +14,6 @@ export default class NotificationFacade {
     const fcm_token = NotificationFacade.getInstance()
       .registerForPushNotificationsAsync()
       .then((token) => {
-        if (token) AppNotificationDataSource.bindingToken(token)
         if (token) {
           return token
         }
