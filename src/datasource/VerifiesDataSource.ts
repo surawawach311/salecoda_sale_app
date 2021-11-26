@@ -1,26 +1,35 @@
-import { NewUserEntity, UserEntity } from '../entities/userEntity'
+import { NewUserEntity, UserApiEntity, UserEntity } from '../entities/userEntity'
 import { BASE_URL_SOHEE, BASE_URL_KEY_OF_UNDERGROUND, API_NEW_URL } from '../config/config'
 import { TokenEntity } from '../entities/TokenEntity'
 import { httpClient } from '../services/HttpClient'
 import { ResponseEntity } from '../entities/ResponseEntity'
+import { OtpRequestEntity } from '../entities/OtpRequestEntity'
 
 export class VerifiesDataSource {
-  static verifyPhoneNo(tel: string): Promise<ResponseEntity<any>> {
+  static verifyPhoneNo(tel: string): Promise<ResponseEntity<OtpRequestEntity>> {
     return httpClient
       .post(`${API_NEW_URL}/auth/api/v1/login/request-otp`, { app_name: "saleapp", mobile: tel })
       .then((response) => {
         return response.data
       })
+      .catch(function (error) {
+        return error.response.data
+
+      })
       .catch((error) => { throw new Error(error.response) })
   }
 
-  static verifyOtp(phone: string, otp: string): Promise<ResponseEntity<NewUserEntity>> {
+  static verifyOtp(phone: string, otp: string, refNo: string, platform: string, fcmToken?: string): Promise<ResponseEntity<UserApiEntity>> {
     return httpClient
-      .post(`${API_NEW_URL}/auth/api/v1/login/verify-otp`, { app_name: "saleapp", mobile: phone, otp: otp })
+      .post(`${API_NEW_URL}/auth/api/v1/login/verify-otp`, { app_name: "saleapp", mobile: phone, ref_no: refNo, otp: otp, platform: platform, ...(fcmToken ? { fcm_token: fcmToken } : { fcm_token: "" }), })
       .then((response) => {
         return response.data
       })
+      .catch(function (error) {
+        return error.response.data
+      })
       .catch((error) => { throw new Error(error.response) })
+
   }
 
   static login(userProfile: UserEntity): Promise<TokenEntity> {
