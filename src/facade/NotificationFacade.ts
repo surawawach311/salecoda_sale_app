@@ -10,12 +10,15 @@ export default class NotificationFacade {
     return NotificationFacade.notification
   }
 
-  static bindToken = () => {
-    NotificationFacade.getInstance()
+  static bindToken = (): Promise<string | undefined> => {
+    const fcm_token = NotificationFacade.getInstance()
       .registerForPushNotificationsAsync()
       .then((token) => {
-        if (token) AppNotificationDataSource.bindingToken(token)
+        if (token) {
+          return token
+        }
       })
+    return fcm_token
   }
 
   static setOnResponse = (onResponse: Function) => {
@@ -24,7 +27,7 @@ export default class NotificationFacade {
 }
 
 class Notification {
-  onResponse: Function = () => {}
+  onResponse: Function = () => { }
 
   constructor() {
     Notifications.setNotificationHandler({
