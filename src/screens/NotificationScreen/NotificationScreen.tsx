@@ -47,9 +47,9 @@ const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation,
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    AppNotificationDataSource.feeds().then((feed: NotificationListEntity) => {
-      setFeed(feed.data)
-    })
+    // AppNotificationDataSource.feeds().then((feed: NotificationListEntity) => {
+    //   setFeed(feed.data)
+    // })
   }, [isFocused])
 
   type SceneProp = SceneRendererProps & {
@@ -151,10 +151,11 @@ const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation,
     switch (route.key) {
       case Menu.Orders:
         return (
-          <View style={{ paddingHorizontal: 5 }}>
+          <View style={{ paddingHorizontal: 5, flex: 1 }}>
             <FlatList
               style={{ paddingTop: 20 }}
               data={feed}
+              contentContainerStyle={{ flex: 1 }}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   key={item.id}
@@ -171,6 +172,15 @@ const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation,
                     isRead={item.is_read}
                   />
                 </TouchableOpacity>
+              )}
+              ListEmptyComponent={() => (
+                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                  <Image
+                    style={{ height: 100, resizeMode: 'contain' }}
+                    source={require('../../../assets/empty-state/notification.png')}
+                  />
+                  <Text1 style={{ color: '#C2C6CE' }}>ไม่มีรายการแจ้งเตือน</Text1>
+                </View>
               )}
               keyExtractor={(item) => item.id}
               onRefresh={handlePullToRefresh}

@@ -6,6 +6,7 @@ import NotificationScreen from '../screens/NotificationScreen/NotificationScreen
 import OrderScreen from '../screens/OrderScreen/OrderScreen'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen'
 import HomeScreen from '../screens/HomeScreen/HomeSrceen'
+import PurchaseNavigator from './PurchaseNavigator'
 
 export type HomeStackParamList = {
   Home: undefined
@@ -55,7 +56,7 @@ const HomeNavigator: React.FC = () => {
         />
         <Tab.Screen
           name="Order"
-          component={OrderScreen}
+          component={PurchaseNavigator}
           options={{
             tabBarIcon: ({ focused }) => (
               <Image

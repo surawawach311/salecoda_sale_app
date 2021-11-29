@@ -7,10 +7,11 @@ import AppNavigator from '../navigations/AppNavigator'
 import { NewUserEntity, UserEntity } from '../entities/userEntity'
 import InternalServerError from '../screens/HttpError/InternalServerError'
 import Unauthorized from '../screens/HttpError/Unauthorized'
+import { OtpRequestEntity } from '../entities/OtpRequestEntity'
 
 export type AppAuthParamList = {
   InputTelNumber: undefined
-  InputOtp: { telephoneNo: string }
+  InputOtp: { data: OtpRequestEntity }
   LoginSuccess: { userProfile: NewUserEntity }
   InternalServerError: undefined
   App: undefined

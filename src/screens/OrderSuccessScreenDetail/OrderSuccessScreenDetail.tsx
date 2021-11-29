@@ -241,10 +241,12 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                 <Heading3>จำนวนรวม</Heading3>
                 <Heading3>{`${totalQuantity} ${totalQuantityUnit()}`}</Heading3>
               </View>
-              <View style={{ marginVertical: 10 }}>
-                <Text1 style={styled.textGrayLabel}>หมายเหตุการขอส่วนลดพิเศษ</Text1>
-                <Text1>{order.special_request_remark ? order.special_request_remark.trim() : '-'}</Text1>
-              </View>
+              {order.special_request_remark ? (
+                <View style={{ marginVertical: 10 }}>
+                  <Text1 style={styled.textGrayLabel}>หมายเหตุการขอส่วนลดพิเศษ</Text1>
+                  <Text1>{order.special_request_remark.trim()}</Text1>
+                </View>
+              ) : null}
               <View style={{ marginVertical: 10 }}>
                 <Text1 style={styled.textGrayLabel}>หมายเหตุ(Sale Co.) </Text1>
                 <Text1>{order.sale_co_remark ? order.sale_co_remark.trim() : '-'}</Text1>

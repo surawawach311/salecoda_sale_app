@@ -18,6 +18,8 @@ import Heading2 from '../../components/Font/Heading2'
 import Paragraph1 from '../../components/Font/Paragraph1'
 import Subheading2 from '../../components/Font/Subheading2'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { ResponseEntity } from '../../entities/ResponseEntity'
+import { OtpRequestEntity } from '../../entities/OtpRequestEntity'
 type InputOtpScreenNavigationProp = StackScreenProps<AppAuthParamList, 'InputTelNumber'>
 
 const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigation }) => {
@@ -39,14 +41,14 @@ const InputTelNumberScreen: React.FC<InputOtpScreenNavigationProp> = ({ navigati
       alert('กรุณาใส่หมายเลขโทรศัพท์')
     } else {
       const telephoneNo = fillZero(tel)
-      VerifiesDataSource.verifyPhoneNo(telephoneNo).then((res) => {
+      VerifiesDataSource.verifyPhoneNo(telephoneNo).then((res: ResponseEntity<OtpRequestEntity>) => {
         if (res.success) {
           setIsError(false)
-          // if (bypassTelephone.includes(tel)) {
-          //   navigation.navigate('LoginSuccess', { userProfile: res })
-          // } else {
-          navigation.navigate('InputOtp', { telephoneNo: value })
-          // }
+          if (bypassTelephone.includes(tel)) {
+            navigation.navigate('LoginSuccess', { userProfile: res })
+          } else {
+            navigation.navigate('InputOtp', { data: res.responseData })
+          }
         } else {
           setIsError(true)
           setMessage(res.userMessage)

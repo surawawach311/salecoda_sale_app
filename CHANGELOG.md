@@ -2,6 +2,22 @@
 
 ## [Version - 1]
 
+## Fix [v1.81.3] - 2020-11-29
+- redirect order to purchase flow 
+
+## Fix [v1.81.2] - 2020-11-29
+- disconnect notification
+
+## Fix [v1.81.2] - 2020-11-26
+- fix notification facade call api
+
+## Fix [v1.81.1] - 2020-11-26
+- fix notification facade
+- fix return error on HttpClient
+
+## enhnace [v1.81.0] - 2020-11-25
+- apply new api login
+
 ## fix [v1.80.1] - 2020-09-30
 - add new auth token
 
