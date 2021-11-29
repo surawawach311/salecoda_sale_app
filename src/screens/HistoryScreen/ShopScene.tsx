@@ -6,7 +6,6 @@ import Subheading3 from '../../components/Font/Subheading3'
 import Text1 from '../../components/Font/Text1'
 import OrderList from '../../components/OrderList'
 import { OrderDataSource } from '../../datasource/OrderDataSource'
-import { OrderEntity } from '../../entities/OrderEntity'
 import { ResponseEntity } from '../../entities/ResponseEntity'
 import ShopOrderList from './ShopOrderList'
 import { useNavigation } from '@react-navigation/native'
@@ -26,7 +25,11 @@ type SceneProp = SceneRendererProps & {
   route: { key: string; title: string }
 }
 
-const ShopScene: React.FC = () => {
+export interface ShopSceneProps {
+  date: { startDate: string; endDate: string }
+}
+
+const ShopScene: React.FC<ShopSceneProps> = ({ date }) => {
   const [index, setIndex] = useState(0)
   const [routes, setRoutes] = useState<
     {
@@ -91,12 +94,6 @@ const ShopScene: React.FC = () => {
   }
   const handleShopItemClick = (shopName: string) => {
     setShopName(shopName)
-
-    // @ts-ignore
-    // navigation.navigate('Purchase', {
-    //   screen: 'SuccessDetail',
-    //   params: { orderId: orderId },
-    // })
   }
 
   const handleOrderItemClick = (orderId: string) => {
@@ -115,10 +112,24 @@ const ShopScene: React.FC = () => {
     )
   }
   const renderSceneShop = ({ route }: SceneProp) => {
-    return <ShopOrderList statusFilter={route.key} onItemClick={handleShopItemClick} renderEmpty={renderEmptyList} />
+    return (
+      <ShopOrderList
+        statusFilter={route.key}
+        date={date}
+        onItemClick={handleShopItemClick}
+        renderEmpty={renderEmptyList}
+      />
+    )
   }
   const renderSceneOrder = ({ route }: SceneProp) => {
-    return <OrderList statusFilter={route.key} onItemClick={handleOrderItemClick} renderEmpty={renderEmptyList} />
+    return (
+      <OrderList
+        statusFilter={route.key}
+        date={date}
+        onItemClick={handleOrderItemClick}
+        renderEmpty={renderEmptyList}
+      />
+    )
   }
 
   return (
@@ -139,29 +150,20 @@ const ShopScene: React.FC = () => {
           <Text1 style={{ color: '#6B7995' }}>{shopName}</Text1>
         )}
       </View>
-      {routes.length > 0 && shopName === undefined ? (
+      {routes.length > 0 ? (
         <View style={{ flex: 1 }}>
-        <TabView
-          lazy
-          style={{flex:1}}
-          navigationState={{ index, routes }}
-          renderTabBar={renderTabBar}
-          renderScene={renderSceneShop}
-          onIndexChange={setIndex}
-        />
-        </View>
-      ) : null}
-      {routes.length > 0 && shopName !== undefined ? (
-        <View style={{  flex: 1 }}>
           <TabView
             lazy
+            style={{ flex: 1 }}
             navigationState={{ index, routes }}
             renderTabBar={renderTabBar}
-            renderScene={renderSceneOrder}
+            renderScene={shopName === undefined ? renderSceneShop : renderSceneOrder}
             onIndexChange={setIndex}
           />
         </View>
-      ) : null}
+      ) : (
+        renderEmptyList()
+      )}
     </View>
   )
 }

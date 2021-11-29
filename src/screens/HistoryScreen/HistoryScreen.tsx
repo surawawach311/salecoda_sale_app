@@ -52,23 +52,21 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
   const [selectedEndDate, setSelectedEndDate] = useState<Date | undefined>(undefined)
   const [showCalendar, setShowCalendar] = useState<boolean>(false)
 
-  const startDate = selectedStartDate ? selectedStartDate.toString() : ''
-  const endDate = selectedEndDate ? selectedEndDate.toString() : ''
+  const startDate = selectedStartDate
+    ? new Date(selectedStartDate).toLocaleDateString('th-TH', {
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit',
+      })
+    : ''
 
-  // const startDate = selectedStartDate
-  //   ? selectedStartDate.toLocaleDateString('th-TH', {
-  //       year: '2-digit',
-  //       month: '2-digit',
-  //       day: '2-digit',
-  //     })
-  //   : ''
-  // const endDate = selectedEndDate
-  //   ? selectedEndDate.toLocaleDateString('th-TH', {
-  //       year: '2-digit',
-  //       month: '2-digit',
-  //       day: '2-digit',
-  //     })
-  //   : ''
+  const endDate = selectedEndDate
+    ? new Date(selectedEndDate).toLocaleDateString('th-TH', {
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit',
+      })
+    : ''
 
   const layout = useWindowDimensions()
 
@@ -102,20 +100,26 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
             borderColor: '#FFF',
           }}
         />
-        {startDate && startDate ? (
+        {startDate ? (
           <TouchableOpacity
             style={{
               height: 'auto',
               alignSelf: 'center',
+              alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'row',
               backgroundColor: '#4C95FF',
               borderRadius: 32,
-              padding: 4,
+              paddingHorizontal: 9,
+              paddingVertical: 6,
+              marginRight: 2,
             }}
             onPress={() => setShowCalendar(true)}
           >
-            <Text2 style={{ color: '#FFF' }}>{startDate + '-' + endDate}</Text2>
+            <Text2 style={{ color: '#FFF' }}>{startDate}</Text2>
+
+            <Text2 style={{ color: '#FFF' }}> {endDate ? `- ${endDate}` : null}</Text2>
+
             <EvilIcons name="calendar" size={24} color="#FFF" />
           </TouchableOpacity>
         ) : (
@@ -154,8 +158,8 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
     )
   }
 
-  const Territory = () => <TerritoryScene />
-  const Shop = () => <ShopScene />
+  const Territory = () => <TerritoryScene date={{ startDate, endDate }} />
+  const Shop = () => <ShopScene date={{ startDate, endDate }} />
 
   const renderScene = SceneMap({
     territory: Territory,
@@ -203,7 +207,6 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
             />
             <View>
               <CalendarPicker
-                startFromMonday={true}
                 allowRangeSelection={true}
                 todayBackgroundColor="#f2e6ff"
                 selectedDayColor="#7300e6"
@@ -235,7 +238,7 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
                     justifyContent: 'center',
                     borderRadius: 8,
                   }}
-                  // onPress={handleConfirm}
+                  onPress={() => setShowCalendar(false)}
                 >
                   <Heading3 style={{ color: '#FFF' }}>ตกลง</Heading3>
                 </TouchableOpacity>

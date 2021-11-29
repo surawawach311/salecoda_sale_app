@@ -185,6 +185,15 @@ const NotificationScreen: React.FC<NotificationScreenRouteProp> = ({ navigation,
               keyExtractor={(item) => item.id}
               onRefresh={handlePullToRefresh}
               refreshing={isRefreshing}
+              ListEmptyComponent={() => (
+                <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                  <Image
+                    style={{ height: 100, resizeMode: 'contain' }}
+                    source={require('../../../assets/empty-state/order.png')}
+                  />
+                  <Text1 style={{ color: '#C2C6CE' }}>ไม่มีประวัติการสั่งซื้อ</Text1>
+                </View>
+              )}
             />
           </View>
         )

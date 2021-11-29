@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { View, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Image, Text } from 'react-native'
 
 import { OrderDataSource } from '../../datasource/OrderDataSource'
-import { accountStore } from '../../stores/AccountStore'
 import { useIsFocused } from '@react-navigation/native'
 import { UserDataContext } from '../../provider/UserDataProvider'
 import { ResponseEntity } from '../../entities/ResponseEntity'
@@ -13,6 +12,7 @@ import Paragraph2 from '../../components/Font/Paragraph2'
 
 type OrderListProp = {
   statusFilter: string
+  date: { startDate: string; endDate: string }
   onItemClick?: (shopName: string) => void
   renderEmpty?: () => JSX.Element
 }
@@ -29,7 +29,7 @@ const defaultPagination: Pagination = {
   offset: 0,
 }
 
-const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderEmpty }) => {
+const OrderList: React.FC<OrderListProp> = ({ statusFilter, date, onItemClick, renderEmpty }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [order, setOrder] = useState<ShopGroupOrderEntity[]>([])
@@ -55,12 +55,19 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
     // .catch((err) => alert(err))
   }, [isFocused])
 
-  const dataLoader = (status: string, limit: number, offset: number, territory?: string) => {
-    return OrderDataSource.GroupShopOrderList(status, limit, offset, territory)
+  const dataLoader = (
+    status: string,
+    startDate: string,
+    endDate: string,
+    limit: number,
+    offset: number,
+    territory?: string,
+  ) => {
+    return OrderDataSource.GroupShopOrderList(status, startDate, endDate, limit, offset, territory)
   }
 
   const loadData = (limit: number, offset: number) => {
-    return dataLoader(statusFilter, limit, offset, userData.territory)
+    return dataLoader(statusFilter, date.startDate, date.endDate, limit, offset, userData.territory)
   }
 
   const handlePullToRefresh = () => {

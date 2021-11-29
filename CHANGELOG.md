@@ -2,6 +2,10 @@
 
 ## [Version - 1]
 
+## Enhance [v1.82.0] - 2020-11-29
+- filter history
+- new icon staging
+
 ## Fix [v1.81.3] - 2020-11-29
 - redirect order to purchase flow 
 
