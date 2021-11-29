@@ -8,6 +8,9 @@
 ## Fix [v1.81.2] - 2020-11-29
 - disconnect notification
 
+## Fix [v1.81.2] - 2020-11-26
+- fix notification facade call api
+
 ## Fix [v1.81.1] - 2020-11-26
 - fix notification facade
 - fix return error on HttpClient
