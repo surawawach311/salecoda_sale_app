@@ -27,7 +27,7 @@ export default class NotificationFacade {
 }
 
 class Notification {
-  onResponse: Function = () => {}
+  onResponse: Function = () => { }
 
   constructor() {
     Notifications.setNotificationHandler({

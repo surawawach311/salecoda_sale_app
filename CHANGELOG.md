@@ -2,6 +2,12 @@
 
 ## [Version - 1]
 
+## Fix [v1.81.3] - 2020-11-29
+- redirect order to purchase flow 
+
+## Fix [v1.81.2] - 2020-11-29
+- disconnect notification
+
 ## Fix [v1.81.2] - 2020-11-26
 - fix notification facade call api
 

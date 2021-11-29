@@ -9,7 +9,7 @@ import { OrderDataSource } from '../../datasource/OrderDataSource'
 import { OrderEntity } from '../../entities/OrderEntity'
 import { ResponseEntity } from '../../entities/ResponseEntity'
 import ShopOrderList from './ShopOrderList'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
 
 type TabBarProp = SceneRendererProps & {
   navigationState: NavigationState<{
@@ -35,8 +35,8 @@ const ShopScene: React.FC = () => {
     }[]
   >([])
   const [shopName, setShopName] = useState<string | undefined>(undefined)
-  const navigation = useNavigation();
-  
+  const navigation = useNavigation()
+
   useEffect(() => {
     OrderDataSource.getOrderStatus().then((response: ResponseEntity<{ key: string; title: string }[]>) => {
       setRoutes(response.responseData)
@@ -139,24 +139,28 @@ const ShopScene: React.FC = () => {
           <Text1 style={{ color: '#6B7995' }}>{shopName}</Text1>
         )}
       </View>
-      {console.log()}
-      {routes.length > 0 && shopName === undefined? (
+      {routes.length > 0 && shopName === undefined ? (
+        <View style={{ flex: 1 }}>
         <TabView
           lazy
+          style={{flex:1}}
           navigationState={{ index, routes }}
           renderTabBar={renderTabBar}
           renderScene={renderSceneShop}
           onIndexChange={setIndex}
         />
+        </View>
       ) : null}
       {routes.length > 0 && shopName !== undefined ? (
-        <TabView
-          lazy
-          navigationState={{ index, routes }}
-          renderTabBar={renderTabBar}
-          renderScene={renderSceneOrder}
-          onIndexChange={setIndex}
-        />
+        <View style={{  flex: 1 }}>
+          <TabView
+            lazy
+            navigationState={{ index, routes }}
+            renderTabBar={renderTabBar}
+            renderScene={renderSceneOrder}
+            onIndexChange={setIndex}
+          />
+        </View>
       ) : null}
     </View>
   )
