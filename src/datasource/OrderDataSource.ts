@@ -73,12 +73,17 @@ export class OrderDataSource {
 
   static async listOrder(
     status: string,
+    start_date?: string,
+    end_date?: string,
     limit: number = 10,
     offset = 0,
     territory?: string,
   ): Promise<ResponseEntity<OrderEntity[]>> {
     const params = {
-      order_status: status
+      order_status: status,
+      start_date: start_date,
+      end_date: end_date,
+      territory: territory
     }
     return httpClient
       .get(
@@ -89,11 +94,11 @@ export class OrderDataSource {
 
   static async GroupShopOrderList(
     status: string,
+    start_date: string | undefined,
+    end_date: string | undefined,
     limit: number = 10,
     offset = 0,
     territory?: string,
-    start_date?: string,
-    end_date?: string
   ): Promise<ResponseEntity<ShopGroupOrderEntity[]>> {
     const params = {
       order_status: status,

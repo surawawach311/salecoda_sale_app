@@ -6,7 +6,6 @@ import Subheading3 from '../../components/Font/Subheading3'
 import Text1 from '../../components/Font/Text1'
 import OrderList from '../../components/OrderList'
 import { OrderDataSource } from '../../datasource/OrderDataSource'
-import { OrderEntity } from '../../entities/OrderEntity'
 import { ResponseEntity } from '../../entities/ResponseEntity'
 
 type TabBarProp = SceneRendererProps & {
@@ -24,7 +23,11 @@ type SceneProp = SceneRendererProps & {
   route: { key: string; title: string }
 }
 
-const TerritoryScene: React.FC = () => {
+export interface TerritorySceneProps {
+  date: { startDate: string; endDate: string }
+}
+
+const TerritoryScene: React.FC<TerritorySceneProps> = ({ date }) => {
   const [index, setIndex] = React.useState(0)
   const [routes, setRoutes] = React.useState<
     {
@@ -32,8 +35,8 @@ const TerritoryScene: React.FC = () => {
       title: string
     }[]
   >([])
-  const navigation = useNavigation();
-  
+  const navigation = useNavigation()
+
   useEffect(() => {
     OrderDataSource.getOrderStatus().then((response: ResponseEntity<{ key: string; title: string }[]>) => {
       setRoutes(response.responseData)
@@ -41,29 +44,29 @@ const TerritoryScene: React.FC = () => {
   }, [])
 
   const renderIndicator = (props: TabBarIndicatorProp) => {
-    const { position, navigationState, getTabWidth } = props;
-    const inputRange = routes.map((_, i) => i);
+    const { position, navigationState, getTabWidth } = props
+    const inputRange = routes.map((_, i) => i)
     const translateX = position.interpolate({
       inputRange: inputRange,
       outputRange: routes.reduce<number[]>((acc, _, i) => {
-        if (i === 0) return [0];
-        return [...acc, acc[i - 1] + getTabWidth(i - 1)];
+        if (i === 0) return [0]
+        return [...acc, acc[i - 1] + getTabWidth(i - 1)]
       }, []),
-    });
+    })
 
     return (
       <Animated.View
         style={{
           flex: 1,
-          backgroundColor: "#E3F0FF",
+          backgroundColor: '#E3F0FF',
           borderRadius: 20,
           marginVertical: 8,
           width: getTabWidth(navigationState.index),
           transform: [{ translateX }],
         }}
       />
-    );
-  };
+    )
+  }
 
   const renderTabBar = (props: TabBarProp) => {
     return (
@@ -103,7 +106,9 @@ const TerritoryScene: React.FC = () => {
     )
   }
   const renderScene = ({ route }: SceneProp) => {
-    return <OrderList statusFilter={route.key} onItemClick={handleItemClick} renderEmpty={renderEmptyList} />
+    return (
+      <OrderList statusFilter={route.key} date={date} onItemClick={handleItemClick} renderEmpty={renderEmptyList} />
+    )
   }
 
   return (
@@ -116,7 +121,9 @@ const TerritoryScene: React.FC = () => {
           renderScene={renderScene}
           onIndexChange={setIndex}
         />
-      ) : null}
+      ) : (
+        renderEmptyList()
+      )}
     </View>
   )
 }

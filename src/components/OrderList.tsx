@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { View, FlatList, ActivityIndicator, StyleSheet } from 'react-native'
+import { View, FlatList, ActivityIndicator, StyleSheet, Image } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { OrderDataSource } from '../datasource/OrderDataSource'
 import { accountStore } from '../stores/AccountStore'
@@ -8,6 +8,7 @@ import OrderHistoryCard from './OrderHistoryCard'
 import { OrderEntity } from '../entities/OrderEntity'
 import { UserDataContext } from '../provider/UserDataProvider'
 import { ResponseEntity } from '../entities/ResponseEntity'
+import Text1 from './Font/Text1'
 
 export enum StatusFilter {
   WaitingConfirm = 'waiting_order_confirm',
@@ -18,6 +19,7 @@ export enum StatusFilter {
 
 type OrderListProp = {
   statusFilter: string
+  date?: { startDate: string; endDate: string }
   onItemClick?: (orderId: string) => void
   renderEmpty?: () => JSX.Element
 }
@@ -34,7 +36,7 @@ const defaultPagination: Pagination = {
   offset: 0,
 }
 
-const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderEmpty }) => {
+const OrderList: React.FC<OrderListProp> = ({ statusFilter, date, onItemClick, renderEmpty }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [order, setOrder] = useState<OrderEntity[]>([])
@@ -43,12 +45,19 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
   const userDataStore = useContext(UserDataContext)
   const { userData } = userDataStore
 
-  const dataLoader = (status: string, limit: number, offset: number, territory?: string) => {
-    return OrderDataSource.listOrder(status, limit, offset, territory)
+  const dataLoader = (
+    status: string,
+    startDate: string | undefined,
+    endDate: string | undefined,
+    limit: number,
+    offset: number,
+    territory?: string,
+  ) => {
+    return OrderDataSource.listOrder(status, startDate, endDate, limit, offset, territory)
   }
 
   const loadData = (limit: number, offset: number) => {
-    return dataLoader(statusFilter, limit, offset, userData.territory)
+    return dataLoader(statusFilter, date?.startDate, date?.endDate, limit, offset, userData.territory)
   }
 
   const handlePullToRefresh = () => {
@@ -134,6 +143,15 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, onItemClick, renderE
         onRefresh={handlePullToRefresh}
         refreshing={isRefreshing}
         onEndReached={handleLoadMore}
+        ListEmptyComponent={() => (
+          <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+            <Image
+              style={{ height: 100, resizeMode: 'contain' }}
+              source={require('../../assets/empty-state/order.png')}
+            />
+            <Text1 style={{ color: '#C2C6CE' }}>ไม่มีประวัติการสั่งซื้อ</Text1>
+          </View>
+        )}
       />
     </View>
   )
