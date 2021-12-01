@@ -28,7 +28,7 @@ type Props = {
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [profile, setProfile] = useState<NewUserEntity>()
   const userDataStore = useContext(UserDataContext)
-  const { userData, permissions, brand } = userDataStore
+  const { userData, config } = userDataStore
   useEffect(() => {
     getProfile()
   }, [])
@@ -78,30 +78,35 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.menuWarp}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Purchase', { screen: 'ShopList' })
-              }}
-            >
-              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/icon-shopping.png')} />
-              <Text1 style={styles.textMenu}>สั่งสินค้า</Text1>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('History')
-              }}
-            >
-              <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/IconHistory.png')} />
-              <Text1 style={styles.textMenu}>ประวัติ</Text1>
-            </TouchableOpacity>
-            <TouchableOpacity
+            {config.homePage.btnOrder ? (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Purchase', { screen: 'ShopList' })
+                }}
+              >
+                <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/icon-shopping.png')} />
+                <Text1 style={styles.textMenu}>สั่งสินค้า</Text1>
+              </TouchableOpacity>
+            ) : undefined}
+            {config.homePage.btnHistory ? (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('History')
+                }}
+              >
+                <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/IconHistory.png')} />
+                <Text1 style={styles.textMenu}>ประวัติ</Text1>
+              </TouchableOpacity>
+            ) : undefined}
+
+            {/* <TouchableOpacity
               onPress={() => {
                 navigation.navigate('Order')
               }}
             >
               <Image style={styles.menuIcon} source={require('../../../assets/menu-icon/IconConfirmOrder.png')} />
               <Text1 style={styles.textMenu}>ยืนยันคำสั่งซื้อ</Text1>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </>
       ) : (
@@ -157,7 +162,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FBFBFB',
     flexDirection: 'row',
     top: -20,
-    justifyContent: 'center',
+    paddingLeft: 33,
     paddingBottom: 10,
   },
   menuIcon: {
