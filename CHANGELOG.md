@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Enhance [v1.83.0] - 2020-12-01
+- apply permission home screen
+
 ## Enhance [v1.82.0] - 2020-11-29
 - filter history
 - new icon staging
