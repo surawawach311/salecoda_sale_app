@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## fix [v1.83.1] - 2020-12-01
+- cannot load config
+
 ## Enhance [v1.83.0] - 2020-12-01
 - apply permission home screen
 
