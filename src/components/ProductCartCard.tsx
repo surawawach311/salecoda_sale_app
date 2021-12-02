@@ -61,20 +61,19 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
         </View>
         {mode != 'show' ? (
           <Subheading3 style={{ color: '#181725' }}>
-            {pricePerVolume ? `${currencyFormat(pricePerVolume)}/${volumeUnit}` : null}
+            {pricePerVolume ? `${currencyFormat(Math.trunc(pricePerVolume))}/${volumeUnit}` : null}
           </Subheading3>
         ) : null}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Paragraph2 style={{ color: '#616A7B' }}>{`${packingSize} | ${currencyFormat(
-            pricePerUnit,
-          )}/${saleUnit}`}</Paragraph2>
+          <Paragraph2 style={{ color: '#616A7B' }}>{`${packingSize} | 
+          ${currencyFormat(Math.trunc(pricePerUnit))}/${saleUnit}`}</Paragraph2>
           {mode != 'show' ? null : <Paragraph2>{`${quantity}x(${saleUnit})`}</Paragraph2>}
         </View>
         {mode != 'show' ? (
           <Text>
-            <Paragraph3>{`${currencyFormat(pricePerUnit)} x ${quantity} ${saleUnit}`}</Paragraph3>
+            <Paragraph3>{`${currencyFormat(Math.trunc(pricePerUnit))} x ${quantity} ${saleUnit}`}</Paragraph3>
             {'  '}
-            <Paragraph3 style={{ color: '#3AAE49' }}>{discount ? `ส่วนลด ${currencyFormat(discount)}` : ''}</Paragraph3>
+            <Paragraph3 style={{ color: '#3AAE49' }}>{discount ? `ส่วนลด ${currencyFormat(Math.trunc(discount))}` : ''}</Paragraph3>
           </Text>
         ) : null}
 
@@ -82,9 +81,9 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
           {children}
           <View>
             {originalPrice && originalPrice !== priceTotal ? (
-              <Text2 style={styles.textOriginalPrice}>{currencyFormat(originalPrice)}</Text2>
+              <Text2 style={styles.textOriginalPrice}>{currencyFormat(Math.trunc(originalPrice))}</Text2>
             ) : null}
-            <Heading3 style={styles.textPriceTotal}>{currencyFormat(priceTotal)}</Heading3>
+            <Heading3 style={styles.textPriceTotal}>{currencyFormat(Math.trunc(priceTotal))}</Heading3>
           </View>
         </View>
       </View>

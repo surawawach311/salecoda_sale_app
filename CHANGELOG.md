@@ -2,6 +2,9 @@
 
 ## [Version - 1]
 
+## Enhance [v1.84.0] - 2020-12-02
+- fert product card and product detail
+
 ## fix [v1.83.1] - 2020-12-01
 - cannot load config
 

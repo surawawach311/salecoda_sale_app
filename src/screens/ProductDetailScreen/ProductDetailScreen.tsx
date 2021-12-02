@@ -40,7 +40,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
   const isFocused = useIsFocused()
   const [loading, setLoading] = useState(false)
   const profile = useContext(UserDataContext)
-  const { config, shopNo, brand } = profile
+  const { config, shopNo, brand, userData } = profile
 
   useEffect(() => {
     initialQuantity()
@@ -158,17 +158,29 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
                   )}
                 </View>
                 <View>
-                  <View style={styled.wrapTitlePrice}>
-                    <View style={{ width: '70%' }}>
-                      <Heading2>{product?.title}</Heading2>
+                  {userData.company === 'icpl' ? (
+                    <View style={styled.wrapTitlePrice}>
+                      <View style={{ width: '70%' }}>
+                        <Heading2>{product?.title}</Heading2>
+                      </View>
+                      <Heading2>{currencyFormat(Math.trunc(product?.price_per_volume), 0)}</Heading2>
                     </View>
-
-                    <Heading2>{currencyFormat(product?.price_per_volume, 0)}</Heading2>
-                  </View>
+                  ) : (
+                    <>
+                      <View style={styled.wrapTitlePrice}>
+                        <View>
+                          <Heading2>{product?.title}</Heading2>
+                        </View>
+                      </View>
+                      <Heading2 style={{ color: '#4C95FF' }}>
+                        {currencyFormat(Math.trunc(product?.price_per_volume), 0)}
+                      </Heading2>
+                    </>
+                  )}
                   <View>
                     <Paragraph1 style={styled.textCommon}>{product?.common_title}</Paragraph1>
                     <Paragraph1 style={styled.textSize}>{`${product.packing_size} | ${currencyFormat(
-                      product.price_per_sale_unit,
+                      Math.trunc(product.price_per_sale_unit),
                     )}/${product.sale_unit}`}</Paragraph1>
                   </View>
                 </View>
