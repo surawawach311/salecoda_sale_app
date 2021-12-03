@@ -15,6 +15,7 @@ import { CartDataSource } from '../../datasource/CartDataSource'
 import Heading3 from '../../components/Font/Heading3'
 import { UserDataContext } from '../../provider/UserDataProvider'
 import { ResponseEntity } from '../../entities/ResponseEntity'
+import FertProductCard from '../../components/FertProductCard'
 
 type ProductListScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'ProductList'>
 
@@ -22,7 +23,7 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
   const [productList, setProductList] = useState<ProductEntity[]>()
   const [totalItem, setTotalItem] = useState(0)
   const profile = useContext(UserDataContext)
-  const { config, brand, shopNo } = profile
+  const { config, brand, shopNo, userData } = profile
 
   useEffect(() => {
     getProductList()
@@ -164,16 +165,28 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
                 })
               }
             >
-              <ProductCard
-                thName={item.title}
-                enName={item.common_title}
-                productInfo={item.packing_size}
-                price={item.price_per_volume}
-                imagePath={item.image}
-                havePromo={item.is_have_promotion}
-                unit={item.sale_unit}
-                saleUnitPrice={item.price_per_sale_unit}
-              />
+              {userData.company === 'icpl' ? (
+                <ProductCard
+                  thName={item.title}
+                  enName={item.common_title}
+                  productInfo={item.packing_size}
+                  price={item.price_per_volume}
+                  imagePath={item.image}
+                  havePromo={item.is_have_promotion}
+                  unit={item.sale_unit}
+                  saleUnitPrice={item.price_per_sale_unit}
+                />
+              ) : (
+                <FertProductCard
+                  image={item.imgae}
+                  title={item.title}
+                  packing_size={item.packing_size}
+                  price={item.price_per_volume}
+                  havePromo={item.is_have_promotion}
+                  unit={item.sale_unit}
+                  saleUnitPrice={item.price_per_sale_unit}
+                />
+              )}
             </TouchableOpacity>
           )}
           keyExtractor={(item) => item.id}

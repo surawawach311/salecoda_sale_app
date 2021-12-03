@@ -1,8 +1,7 @@
 import React from 'react'
-import { View, StyleSheet, Image, Text, Platform } from 'react-native'
+import { View, StyleSheet, Image, Platform } from 'react-native'
 import PromoTag from '../../assets/svg/promotion-tag.svg'
 import { currencyFormat } from '../utilities/CurrencyFormat'
-import Heading2 from './Font/Heading2'
 import Heading3 from './Font/Heading3'
 import Paragraph2 from './Font/Paragraph2'
 
@@ -54,11 +53,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </Paragraph2>
           <Paragraph2 style={styleds.textEnName}>
             {productInfo}
-            {saleUnitPrice != price ? ' | ' + currencyFormat(saleUnitPrice) + '/' + unit : null}
+            {saleUnitPrice != price ? ' | ' + currencyFormat(Math.trunc(saleUnitPrice)) + '/' + unit : null}
           </Paragraph2>
         </View>
         <View style={styleds.warpPrice}>
-          <Heading3 style={styleds.textPrice}>{currencyFormat(price)}</Heading3>
+          <Heading3 style={styleds.textPrice}>{currencyFormat(Math.trunc(price))}</Heading3>
         </View>
       </View>
       {havePromo && (

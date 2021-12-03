@@ -138,7 +138,7 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, date, onItemClick, r
             />
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         ListFooterComponent={renderListIndicator}
         onRefresh={handlePullToRefresh}
         refreshing={isRefreshing}
