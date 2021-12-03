@@ -1,14 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Image, StyleSheet, FlatList, View } from 'react-native'
+import { Image, StyleSheet, FlatList, View, Dimensions, TouchableOpacity } from 'react-native'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import { StackScreenProps } from '@react-navigation/stack'
 import Search from '../../components/Search'
-import ButtonShop from '../../components/ButtonShop'
 import ProductCard from '../../components/ProductCard'
 import { ShopDataSource } from '../../datasource/ShopDataSource'
 import { ProductApiEntity, ProductEntity } from '../../entities/ProductEntity'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { ProductDataSource } from '../../datasource/ProductDataSource'
 import CustomHeader from '../../components/CustomHeader'
 import MiniCart from '../../components/MiniCart'
 import { CartDataSource } from '../../datasource/CartDataSource'
@@ -16,16 +13,45 @@ import Heading3 from '../../components/Font/Heading3'
 import { UserDataContext } from '../../provider/UserDataProvider'
 import { ResponseEntity } from '../../entities/ResponseEntity'
 import FertProductCard from '../../components/FertProductCard'
+import { ProductCategoryEntity } from '../../entities/ProductCategory'
+import Text2 from '../../components/Font/Text2'
+import TabSwitcher from '../../components/TabSwitcher'
+import Text1 from '../../components/Font/Text1'
 
 type ProductListScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'ProductList'>
+
+const SPACING = 8
+const WIDTH = (Dimensions.get('window').width - 4 * SPACING - (SPACING / 2) * 4) / 2
+const TABS = [
+  { id: 'PRODUCTS', title: 'สินค้า' },
+  { id: 'PROMOTIONS', title: 'โปรโมชั่น' },
+]
 
 const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, route }) => {
   const [productList, setProductList] = useState<ProductEntity[]>()
   const [totalItem, setTotalItem] = useState(0)
+  const [activeTab, setActiveTab] = useState('PRODUCTS')
+
+  const [category, setCategory] = useState<ProductCategoryEntity[] | undefined>([
+    {
+      company: 'All',
+      code: 'All',
+      name: 'กลุ่มทั้งหมด',
+      logo: null,
+      icon_regular: null,
+      icon_hover: null,
+      navision_updated: null,
+      is_active: true,
+      created_at: null,
+      updated_at: null,
+    },
+  ])
+  const [selectedCategory, setSelectedCategory] = useState<string>('All')
   const profile = useContext(UserDataContext)
   const { config, brand, shopNo, userData } = profile
 
   useEffect(() => {
+    getProductCategory()
     getProductList()
     initialQuantity()
   }, [])
@@ -37,6 +63,17 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
     return unsubscribe
   }, [navigation])
 
+  const handleTabChange = (id: string) => {
+    setActiveTab(id)
+  }
+
+  const getProductCategory = async () => {
+    const res = await ShopDataSource.getProductCategory(shopNo, brand).then((res) => res.responseData)
+    if (category?.length === 1) {
+      res.map((item: ProductCategoryEntity) => category?.push(item))
+    }
+  }
+
   const initialQuantity = async () => {
     try {
       const res = await CartDataSource.getCartByShop(shopNo, brand)
@@ -47,47 +84,17 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
   }
 
   const getProductList = async () => {
-    if (route.params.productBrand) {
-      await ShopDataSource.getProductWithBrand(
-        route.params.shop.id,
-        route.params.company,
-        route.params.productBrand,
-      ).then((res: ResponseEntity<ProductApiEntity>) => {
-        if (config.productPage.showProductPrice) {
-          setProductList(res.responseData.items)
-        } else {
-          let products = res.responseData.items.map((item) => {
-            item.is_have_promotion = false
-            item.promotions = []
-            return item
-          })
-          setProductList(products)
-        }
-      })
-    } else {
-      await ShopDataSource.getProduct(route.params.shop.id, route.params.company).then((res) => {
-        if (config.productPage.showProductPrice) {
-          setProductList(res)
-        } else {
-          let products = res.map((item) => {
-            item.is_have_promotion = false
-            return item
-          })
-          setProductList(products)
-        }
-      })
-    }
+    ShopDataSource.getProduct(shopNo, brand).then((res: ResponseEntity<ProductApiEntity>) => {
+      setProductList(res.responseData.items)
+    })
   }
 
   const searchProduct = (keywords: string) => {
-    ProductDataSource.getProductList(
-      route.params.shop.id,
-      route.params.company,
-      route.params.productBrand,
-      keywords,
-    ).then((res) => {
-      setProductList(res)
-    })
+    ShopDataSource.getProduct(shopNo, brand, selectedCategory, keywords).then(
+      (res: ResponseEntity<ProductApiEntity>) => {
+        setProductList(res.responseData.items)
+      },
+    )
   }
 
   const renderMiniCart = () => {
@@ -103,6 +110,119 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
         }
       />
     )
+  }
+
+  const renderListHeader = (title: string) => {
+    return (
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text1 style={{ fontSize: 20, fontWeight: 'bold' }}>{title}</Text1>
+        </View>
+      </View>
+    )
+  }
+
+  const renderPromotionList = () => {
+    return (
+      <FlatList
+        style={{ backgroundColor: '#FFFFFF' }}
+        numColumns={2}
+        data={[]}
+        columnWrapperStyle={{ paddingHorizontal: SPACING }}
+        renderItem={() => null}
+        ListEmptyComponent={() => (
+          <View style={{ alignItems: 'center', margin: 16 }}>
+            <Image
+              style={{ width: 85, height: 70, resizeMode: 'contain' }}
+              source={require('../../../assets/empty-product.png')}
+            />
+            <Text2 style={{ color: '#C2C6CE', marginTop: 5 }}>ไม่พบสินค้าที่คุณต้องการ</Text2>
+          </View>
+        )}
+        ListFooterComponent={() => <View style={{ height: 50 }}></View>}
+      />
+    )
+  }
+
+  const renderProductList = () => {
+    return (
+      <FlatList
+        style={{ backgroundColor: '#FFFFFF' }}
+        numColumns={2}
+        data={productList}
+        columnWrapperStyle={{ paddingHorizontal: SPACING }}
+        keyExtractor={(i) => i.id.toString()}
+        renderItem={({ item }) =>
+          renderProductCard(
+            item.id,
+            item.title,
+            item.common_title,
+            item.packing_size,
+            item.price_per_volume,
+            item.image,
+            item.sale_unit,
+            item.is_have_promotion,
+            item.price_per_sale_unit,
+          )
+        }
+        ListFooterComponent={() => <View style={{ height: 50 }}></View>}
+      />
+    )
+  }
+
+  const renderProductCard = (
+    id: string,
+    title: string,
+    common_title: string,
+    packing_size: string,
+    price_per_volume: number,
+    image: string,
+    sale_unit: string,
+    is_have_promotion: boolean,
+    price_per_sale_unit: number,
+  ) => {
+    return (
+      <TouchableOpacity
+        key={id.toString()}
+        onPress={() =>
+          navigation.navigate('ProductDetail', {
+            productId: id,
+          })
+        }
+      >
+        <View style={{ width: WIDTH, margin: SPACING }}>
+          {userData.company === 'icpl' ? (
+            <ProductCard
+              thName={title}
+              enName={common_title}
+              productInfo={packing_size}
+              price={price_per_volume}
+              imagePath={image}
+              havePromo={is_have_promotion}
+              unit={sale_unit}
+              saleUnitPrice={price_per_sale_unit}
+            />
+          ) : (
+            <FertProductCard
+              image={image}
+              title={title}
+              packing_size={packing_size}
+              price={price_per_volume}
+              havePromo={is_have_promotion}
+              unit={sale_unit}
+              saleUnitPrice={price_per_sale_unit}
+            />
+          )}
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
+  const handleProductCategory = (category: string) => {
+    setSelectedCategory(category)
+    ShopDataSource.getProduct(shopNo, brand, category).then((res: ResponseEntity<ProductApiEntity>) => {
+      setProductList(res.responseData.items)
+    })
   }
 
   return (
@@ -144,53 +264,38 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
           </View>
         </View>
       </View>
-      <View style={styles.warpChangeShop}>
-        <ButtonShop onPress={() => navigation.navigate('ShopList')} />
-      </View>
-      <View style={styles.wrapProduct}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={productList}
-          numColumns={2}
-          columnWrapperStyle={{ justifyContent: 'space-between' }}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              key={item.id}
-              onPress={() =>
-                navigation.navigate('ProductDetail', {
-                  product: item,
-                  shop: route.params.shop,
-                  productBrand: route.params.productBrand,
-                  company: route.params.company,
-                })
-              }
-            >
-              {userData.company === 'icpl' ? (
-                <ProductCard
-                  thName={item.title}
-                  enName={item.common_title}
-                  productInfo={item.packing_size}
-                  price={item.price_per_volume}
-                  imagePath={item.image}
-                  havePromo={item.is_have_promotion}
-                  unit={item.sale_unit}
-                  saleUnitPrice={item.price_per_sale_unit}
-                />
-              ) : (
-                <FertProductCard
-                  image={item.imgae}
-                  title={item.title}
-                  packing_size={item.packing_size}
-                  price={item.price_per_volume}
-                  havePromo={item.is_have_promotion}
-                  unit={item.sale_unit}
-                  saleUnitPrice={item.price_per_sale_unit}
-                />
+      <View style={{ flex: 1 }}>
+        <View style={{ paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#FFFFFF' }}>
+          <TabSwitcher style={{ top: -29 }} data={TABS} active={activeTab} onPress={handleTabChange} />
+          <View style={{ backgroundColor: '#FFF' }}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              style={{ backgroundColor: '#FFFFFF' }}
+              data={category}
+              contentContainerStyle={{ flexDirection: 'row' }}
+              keyExtractor={(i) => i.code.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  key={item.code}
+                  style={[styles.btnCate, selectedCategory === item.code ? { borderColor: '#314364' } : undefined]}
+                  onPress={() => handleProductCategory(item.code)}
+                >
+                  <Text2 style={{ color: '#314364' }}>{item.name}</Text2>
+                </TouchableOpacity>
               )}
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.id}
-        />
+              ListFooterComponent={() => <View style={{ height: 50 }}></View>}
+            />
+          </View>
+        </View>
+        <View style={{ paddingHorizontal: 13, paddingVertical: 5 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text1 style={{ fontSize: 20, fontWeight: 'bold' }}>
+              {activeTab === 'PRODUCTS' ? 'สินค้าทั้งหมด' : activeTab === 'PROMOTIONS' ? 'สินค้าโปรโมชั่น' : null}
+            </Text1>
+          </View>
+        </View>
+        {activeTab === 'PRODUCTS' ? renderProductList() : activeTab === 'PROMOTIONS' ? renderPromotionList() : null}
       </View>
     </View>
   )
@@ -251,6 +356,19 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 24,
     marginLeft: 10,
+  },
+  btnCate: {
+    borderColor: '#E1E7F6',
+    borderWidth: 1,
+    borderRadius: 6,
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    marginHorizontal: 2,
+    width: 106,
+    height: 40,
   },
 })
 

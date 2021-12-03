@@ -49,16 +49,16 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
 
   const initialQuantity = () => {
     CartDataSource.getCartByShop(shopNo, brand).then((res) => {
-      const itemQuantity = res.responseData.items.find((item) => item.id === route.params.product.id)
+      const itemQuantity = res.responseData.items.find((item) => item.cart_item_id === route.params.productId)
       setTotalItem(res.responseData.total_item)
       if (itemQuantity) {
         setQuantity(itemQuantity.quantity)
         dispatch({
           type: Types.Adjust,
           payload: {
-            id: route.params.product.id,
+            id: route.params.productId,
             quantity: itemQuantity.quantity,
-            shopId: route.params.shop.id,
+            shopId: shopNo,
           },
         })
       } else {
@@ -68,7 +68,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
   }
 
   const getProduct = async () => {
-    await ProductDataSource.getNameProduct(brand, shopNo, route.params.product.id).then(
+    await ProductDataSource.getProductDetail(brand, shopNo, route.params.productId).then(
       (res: ResponseEntity<ProductEntity>) => {
         if (config.productDetail.showPromotionLabel) {
           setProduct(res.responseData)
@@ -85,13 +85,13 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
     dispatch({
       type: Types.Adjust,
       payload: {
-        id: route.params.product.id,
+        id: route.params.productId,
         quantity: nextQuantity,
-        shopId: route.params.shop.id,
+        shopId: shopNo,
       },
     })
     setQuantity(nextQuantity)
-    const res = await CartDataSource.addToCartByShopId(shopNo, brand, route.params.product.id, nextQuantity)
+    const res = await CartDataSource.addToCartByShopId(shopNo, brand, route.params.productId, nextQuantity)
     if (res && action === 'plus') {
       if (!loading) {
         setLoading(true)
@@ -117,7 +117,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
   const adjustProduct = async (quantity: number) => {
     const regexp = /^[0-9\b]+$/
     if (quantity.toString() === '' || regexp.test(quantity.toString())) {
-      CartDataSource.addToCartByShopId(shopNo, brand, route.params.product.id, quantity)
+      CartDataSource.addToCartByShopId(shopNo, brand, route.params.productId, quantity)
     } else {
       alert('Number Only')
     }
@@ -151,7 +151,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
             <View>
               <View style={styled.wrapInfo}>
                 <View style={styled.imageInfo}>
-                  {route.params.product.image !== '' ? (
+                  {product.image !== '' ? (
                     <Image style={styled.image} source={{ uri: product?.image }} />
                   ) : (
                     <Image style={styled.image} source={require('../../../assets/empty-product.png')} />
