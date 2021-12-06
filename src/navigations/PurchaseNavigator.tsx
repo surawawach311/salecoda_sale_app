@@ -23,10 +23,7 @@ export type PurchaseStackParamList = {
   Brand: { shop: ShopEntity; company: string }
   ProductList: { shop: ShopEntity; company: string; productBrand?: string }
   ProductDetail: {
-    product: ProductEntity
-    shop: ShopEntity
-    productBrand?: string
-    company: string
+    productId: string
   }
   Cart: { shop: ShopEntity; productBrand?: string; company: string }
   OrderSuccess: { orderId: string }
@@ -98,10 +95,7 @@ const PurchaseNavigator: React.FC = () => {
         />
         <PurchaseStack.Screen name="Cart" component={CartScreen} options={{ title: 'ตะกร้าสินค้า' }} />
         <PurchaseStack.Screen name="OrderSuccess" component={OrderSuccessScreen} options={{ headerShown: false }} />
-        <PurchaseStack.Screen
-          name="SuccessDetail"
-          component={OrderSuccessDetail}
-        />
+        <PurchaseStack.Screen name="SuccessDetail" component={OrderSuccessDetail} />
         <PurchaseStack.Screen
           name="SpecialRequest"
           component={SpecialRequestScreen}

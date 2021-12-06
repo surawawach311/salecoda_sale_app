@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Version - 1]
+## Enhance [v1.85.0] - 2020-12-03
+-  product category
 
 ## Enhance [v1.84.0] - 2020-12-02
 - fert product card and product detail

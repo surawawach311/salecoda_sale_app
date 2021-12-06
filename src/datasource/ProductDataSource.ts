@@ -4,7 +4,7 @@ import { ResponseEntity } from '../entities/ResponseEntity'
 import { httpClient } from '../services/HttpClient'
 
 export class ProductDataSource {
-  static getNameProduct(brand: string, shopNo: string, productId: string): Promise<ResponseEntity<ProductEntity>> {
+  static getProductDetail(brand: string, shopNo: string, productId: string): Promise<ResponseEntity<ProductEntity>> {
     return httpClient
       .get(`${API_NEW_URL}/api/v1/products/${productId}`, {
         headers: {

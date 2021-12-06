@@ -1,4 +1,5 @@
 import { API_NEW_URL, BASE_URL_SOHEE } from '../config/config'
+import { ProductCategoryEntity } from '../entities/ProductCategory'
 import { ProductApiEntity, ProductEntity } from '../entities/ProductEntity'
 import { ResponseEntity } from '../entities/ResponseEntity'
 import { ApiShopEntity, BrandEntity, ShopEntity } from '../entities/ShopEntity'
@@ -17,10 +18,33 @@ export class ShopDataSource {
         .catch((error) => console.error(`error on CartDataSource.getShop`, error))
     }
   }
-  static getProduct(shopId: string, company: string, product_brand?: string): Promise<ProductEntity[]> {
+
+  static getProductCategory(shopNo: string, brand: string): Promise<ResponseEntity<ProductCategoryEntity[]>> {
+    const params = {
+      action: 'checkout'
+    }
+    const headers = {
+      "Brand-No": brand,
+      "Shop-No": shopNo
+    }
     return httpClient
-      .get(`${API_NEW_URL}/api/v1/products`)
-      .then((res) => res.data.products)
+      .get(`${API_NEW_URL}/api/v1/product-category`, { headers })
+      .then((res) => res.data)
+      .catch((error) => console.error(`error on CartDataSource.getProductCategory`, error))
+  }
+
+  static getProduct(shopNo: string, brand?: string, category?: string, search?: string): Promise<ResponseEntity<ProductApiEntity>> {
+    const params = {
+      ...(category !== "All" ? { "category_code": category } : {}),
+      ...(search ? { "search": search } : {}),
+    }
+    const headers = {
+      "Brand-No": brand,
+      "Shop-No": shopNo
+    }
+    return httpClient
+      .get(`${API_NEW_URL}/api/v1/products`, { params, headers })
+      .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getProduct`, error))
   }
 
