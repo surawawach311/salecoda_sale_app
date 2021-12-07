@@ -23,6 +23,7 @@ export interface CartEntity {
 }
 
 export interface ItemCart {
+  prod_id: string
   cart_item_id: string
   item_no: string
   title: string

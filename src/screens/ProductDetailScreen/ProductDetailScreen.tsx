@@ -49,7 +49,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
 
   const initialQuantity = () => {
     CartDataSource.getCartByShop(shopNo, brand).then((res) => {
-      const itemQuantity = res.responseData.items.find((item) => item.cart_item_id === route.params.productId)
+      const itemQuantity = res.responseData.items.find((item) => item.prod_id === route.params.productId)
       setTotalItem(res.responseData.total_item)
       if (itemQuantity) {
         setQuantity(itemQuantity.quantity)

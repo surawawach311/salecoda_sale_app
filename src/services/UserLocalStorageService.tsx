@@ -35,7 +35,7 @@ export class UserLocalStorageService {
     if (currentUser) {
       const decrypted = CryptoES.AES.decrypt(currentUser, '9d87f56b7137835eac2e9469f3b065c2')
       const user: UserApiEntity = JSON.parse(decrypted.toString(CryptoES.enc.Utf8))
-      return user.user_profile.secrets.totken
+      return user.user_profile.secrets.token
     } else {
       return null
     }

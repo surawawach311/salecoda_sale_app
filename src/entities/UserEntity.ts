@@ -24,7 +24,7 @@ export interface NewUserEntity {
         name: string
     }
     secrets: {
-        totken: string
+        token: string
         expried: string
     }
 }

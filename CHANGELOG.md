@@ -1,6 +1,10 @@
 # Changelog
 
 ## [Version - 1]
+
+## Fix [v1.85.1] - 2020-12-07
+- fixed error cart  shop name 
+
 ## Enhance [v1.85.0] - 2020-12-03
 -  product category
 

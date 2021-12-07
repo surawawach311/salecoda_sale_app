@@ -24,6 +24,7 @@ export type PurchaseStackParamList = {
   ProductList: { shop: ShopEntity; company: string; productBrand?: string }
   ProductDetail: {
     productId: string
+    shop: ShopEntity
   }
   Cart: { shop: ShopEntity; productBrand?: string; company: string }
   OrderSuccess: { orderId: string }

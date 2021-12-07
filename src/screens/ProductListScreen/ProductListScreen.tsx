@@ -187,6 +187,7 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
         onPress={() =>
           navigation.navigate('ProductDetail', {
             productId: id,
+            shop:route.params.shop
           })
         }
       >

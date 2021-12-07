@@ -353,10 +353,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   <View style={styled.productContainer}>
                     <Heading3 style={styled.textProduct}>สินค้า</Heading3>
                     {cart.items.map((item: ItemCart, index: number) => {
-                      let discount = getPromoDiscountForItem(cart, item.cart_item_id)
+                      let discount = getPromoDiscountForItem(cart, item.prod_id)
                       return (
                         <ProductCartCard
-                          key={item.cart_item_id}
+                          key={item.prod_id}
                           title={item.title}
                           pricePerVolume={item.price_per_volume}
                           volumeUnit={item.volume_unit}
@@ -366,7 +366,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           saleUnit={item.sale_unit}
                           quantity={item.quantity}
                           priceTotal={item.total_price + discount}
-                          onDelete={() => removeItem(item.cart_item_id)}
+                          onDelete={() => removeItem(item.prod_id)}
                           mode="cart"
                           discount={Math.abs(discount)}
                           originalPrice={item.total_price}
@@ -374,12 +374,12 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                           <InputNumber
                             key={item.title}
                             value={item.quantity.toString()}
-                            onPlus={() => increaseProduct(item.cart_item_id, item.quantity)}
-                            onMinus={() => decreaseProduct(item.cart_item_id, item.quantity)}
+                            onPlus={() => increaseProduct(item.prod_id, item.quantity)}
+                            onMinus={() => decreaseProduct(item.prod_id, item.quantity)}
                             onChangeText={(e: any) => {
                               setQuantity((cart.items[index].quantity = e))
                             }}
-                            onBlur={() => adjustProduct(item.cart_item_id, quantity)}
+                            onBlur={() => adjustProduct(item.prod_id, quantity)}
                           />
                         </ProductCartCard>
                       )
@@ -562,8 +562,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       <Heading3>ส่วนลดดูแลราคา</Heading3>
                       <Text2 style={{ color: '#616A7B' }}>
                         {useSubsidize
-                          ? currencyFormat(cart.available_subsidize - cart.usable_subsidize, 2)
-                          : currencyFormat(cart.available_subsidize, 2)}
+                          ? currencyFormat(Math.trunc(cart.available_subsidize - cart.usable_subsidize), 2)
+                          : currencyFormat(Math.trunc(cart.available_subsidize), 2)}
                       </Text2>
                     </View>
                     <View
@@ -610,7 +610,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   <View style={styled.totalPriceContainer}>
                     <View style={styled.warpPrice}>
                       <Text1 style={{ color: '#6B7995' }}>ราคาก่อนลด</Text1>
-                      <Text1 style={{ color: '#6B7995' }}>{currencyFormat(cart.before_discount, 2)}</Text1>
+                      <Text1 style={{ color: '#6B7995' }}>{currencyFormat(Math.trunc(cart.before_discount), 2)}</Text1>
                     </View>
 
                     {cart.received_discounts.filter((item) => item.item_id != null).length > 0 ? (
@@ -635,7 +635,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                       <View style={styled.warpPrice}>
                         <Text1 style={{ color: '#6B7995' }}>ส่วนลดดูแลราคา</Text1>
                         <Subheading2 style={{ color: '#FF5D5D' }}>
-                          {currencyFormat(cart.subsidize_discount, 2)}
+                          {currencyFormat(Math.trunc(cart.subsidize_discount), 2)}
                         </Subheading2>
                       </View>
                     ) : null}
@@ -647,7 +647,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                             color: '#FF8329',
                           }}
                         >
-                          {currencyFormat(getCashDiscount(cart), 2)}
+                          {currencyFormat(Math.trunc(getCashDiscount(cart)), 2)}
                         </Subheading2>
                       </View>
                     ) : null}
@@ -662,12 +662,14 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     >
                       <Text1 style={{ color: '#6B7995' }}>ส่วนลดรวม</Text1>
                       <Subheading2 style={styled.textTotalDiscount}>
-                        {currencyFormat(cart.total_discount, 2)}
+                        {currencyFormat(Math.trunc(cart.total_discount), 2)}
                       </Subheading2>
                     </View>
                     <View style={styled.warpPrice}>
                       <Heading3 style={{ color: '#616A7B' }}>ราคารวม</Heading3>
-                      <Heading2 style={{ color: '#4C95FF' }}>{currencyFormat(cart.total_price, 2)}</Heading2>
+                      <Heading2 style={{ color: '#4C95FF' }}>
+                        {currencyFormat(Math.trunc(cart.total_price), 2)}
+                      </Heading2>
                     </View>
                   </View>
                   <View style={styled.warpDelivery}>
