@@ -20,7 +20,7 @@ const CustomHeader: React.FC<Prop> = ({ style, title, showBackBtn, onPressBack, 
             <TouchableOpacity style={{ flex: 1, padding: 16 }} onPress={onPressBack}>
               <Image
                 style={{ width: 10, height: 18, resizeMode: 'contain' }}
-                source={require('../../assets/left.png')}
+                source={require('../../assets/left-black.png')}
               />
             </TouchableOpacity>
           )}
