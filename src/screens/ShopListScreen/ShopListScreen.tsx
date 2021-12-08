@@ -40,6 +40,7 @@ const ShopListScreen: React.FC<ShopListScreenRouteProp> = ({ navigation, route }
       <CustomHeader title={'เลือกร้านค้า'} showBackBtn onPressBack={() => navigation.goBack()} />
       <View style={{ backgroundColor: 'white' }}>
         <Search placeholder="ค้นหาร้านค้า" onChange={(e) => searchShop(e)} />
+        <Search placeholder="ค้นหาร้านค้า..." onChange={(e) => searchShop(e)} />
       </View>
       {shopData !== undefined && shopData.length > 0 ? (
         <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
