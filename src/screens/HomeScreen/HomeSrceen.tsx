@@ -59,12 +59,11 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {profile ? (
-        <>
+        <View style={{ flex: 1, backgroundColor: '#FFF' }}>
           <View style={styles.profileWarp}>
             <Image style={styles.bgImage} source={require('../../../assets/bgShop.png')} />
             <View style={styles.innerTextContainer}>
               <Heading2 style={styles.WelcomeHeader}>{`Hello, ${profile.firstname} ${profile.lastname}`}</Heading2>
-              <Text2 style={styles.positionText}>{userData.position}</Text2>
               <Text2 style={styles.positionText}>{userData.role.name}</Text2>
             </View>
             <View style={styles.innerImgContainer}>
@@ -109,7 +108,21 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
               <Text1 style={styles.textMenu}>ยืนยันคำสั่งซื้อ</Text1>
             </TouchableOpacity> */}
           </View>
-        </>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: '#FFFFFF',
+              top: -19,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderTopWidth: 1,
+              borderTopColor:"#E5E5E5"
+            }}
+          >
+            <Image style={styles.emptyImage} source={require('../../../assets/empty-state/home.png')} />
+            <Text1 style={styles.emptyText}>คุณจะได้รับข่าวสารเร็วๆนี้</Text1>
+          </View>
+        </View>
       ) : (
         <AppLoading />
       )}
@@ -160,7 +173,7 @@ const styles = StyleSheet.create({
   menuWarp: {
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    backgroundColor: '#FBFBFB',
+    backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     top: -20,
     paddingLeft: 33,
@@ -176,5 +189,13 @@ const styles = StyleSheet.create({
     color: '#616A7B',
     marginTop: -20,
     alignSelf: 'center',
+  },
+  emptyImage: {
+    width: '30%',
+    height: '30%',
+    resizeMode: 'contain',
+  },
+  emptyText: {
+    color: '#C2C6CE',
   },
 })
