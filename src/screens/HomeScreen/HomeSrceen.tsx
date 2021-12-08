@@ -65,6 +65,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
             <View style={styles.innerTextContainer}>
               <Heading2 style={styles.WelcomeHeader}>{`Hello, ${profile.firstname} ${profile.lastname}`}</Heading2>
               <Text2 style={styles.positionText}>{userData.position}</Text2>
+              <Text2 style={styles.positionText}>{userData.role.name}</Text2>
             </View>
             <View style={styles.innerImgContainer}>
               <Image
