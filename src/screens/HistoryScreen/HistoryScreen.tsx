@@ -9,6 +9,7 @@ import {
   Modal,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -26,6 +27,7 @@ import CustomHeader from '../../components/CustomHeader'
 import { AntDesign } from '@expo/vector-icons'
 import CalendarPicker from 'react-native-calendar-picker'
 import Heading3 from '../../components/Font/Heading3'
+import Subheading3 from '../../components/Font/Subheading3'
 
 type NotificationScreenRouteProp = StackScreenProps<HomeStackParamList, 'History'>
 
@@ -72,32 +74,53 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
 
   const renderTabBar = (props: TabBarProp) => {
     return (
-      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#FFF' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          backgroundColor: '#FFF',
+          justifyContent: 'space-between',
+          borderBottomWidth: 1,
+          borderColor: '#E5E5E5',
+        }}
+      >
         <TabBar
           scrollEnabled
           {...props}
           renderLabel={({ focused, route }) => (
-            <Subheading2 style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>
+            <Subheading3 style={[focused ? styled.activeTabLabel : styled.inactiveTabLabel]}>
               {route.key === 'territory' ? `${route.title} (${userData.territory})` : route.title}
-            </Subheading2>
+            </Subheading3>
           )}
           renderIndicator={renderIndicator}
-          renderIcon={({ route, focused, color }) => (
-            <Entypo
-              style={{ marginRight: 6 }}
-              name={route.key === 'territory' ? 'location' : 'shop'}
-              color={focused ? '#4C95FF' : '#616A7B'}
-              size={24}
-            />
-          )}
+          renderIcon={({ route, focused, color }) =>
+            route.key === 'territory' ? (
+              focused ? (
+                <Image
+                  style={{ width: 24, height: 24, resizeMode: 'contain' }}
+                  source={require('../../../assets/location2-active.png')}
+                />
+              ) : (
+                <Image
+                  style={{ width: 24, height: 24, resizeMode: 'contain' }}
+                  source={require('../../../assets/location2-inactive.png')}
+                />
+              )
+            ) : focused ? (
+              <Image
+                style={{ width: 24, height: 24, resizeMode: 'contain' }}
+                source={require('../../../assets/shop2-active.png')}
+              />
+            ) : (
+              <Image
+                style={{ width: 24, height: 24, resizeMode: 'contain' }}
+                source={require('../../../assets/shop2-inactive.png')}
+              />
+            )
+          }
           pressColor="transparent"
           tabStyle={{ width: 'auto', flexDirection: 'row' }}
-          contentContainerStyle={{ marginHorizontal: 16 }}
-          indicatorContainerStyle={{ marginHorizontal: 16 }}
           style={{
             backgroundColor: '#FFF',
-            borderBottomWidth: 4,
-            borderColor: '#FFF',
           }}
         />
         {startDate ? (
@@ -124,10 +147,10 @@ const HistoryScreen: React.FC<NotificationScreenRouteProp> = ({ navigation }) =>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            style={{ alignItems: 'center', flexDirection: 'row', marginRight: 7 }}
+            style={{ alignItems: 'center', flexDirection: 'row', marginRight: 7, backgroundColor: '#FFF' }}
             onPress={() => setShowCalendar(true)}
           >
-            <Text2 style={{ color: '#616A7B' }}>ค้นหาด้วยวันที่</Text2>
+            <Text2 style={{ color: '#616A7B' }}>วันที่ทั้งหมด</Text2>
             <EvilIcons name="calendar" size={24} color="#616A7B" />
           </TouchableOpacity>
         )}
