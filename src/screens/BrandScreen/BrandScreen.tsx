@@ -31,7 +31,7 @@ const BrandScreen: React.FC<BrandScreenRouteProp> = ({ route, navigation }) => {
     )
   }, [])
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#F8FAFF' }}>
       <CustomHeader title={'เลือกแบรนด์'} showBackBtn onPressBack={() => navigation.goBack()} />
       {brandList.map((item) => {
         return (
