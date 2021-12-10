@@ -9,7 +9,7 @@ export interface OrderEntity {
     order_no: string
     buyer_id: string
     seller_id: string
-    status: string
+    status: StatusBadge
     items: OrderItemEnitity[]
     before_discount: number
     total_discount: number
@@ -98,4 +98,13 @@ export interface SpecialOrderEntity {
     quantity: number
     special_request_id: string
     total: number
+}
+
+export interface StatusBadge {
+    key: string
+    title: string
+    color: {
+        bg_color: string
+        text_color: string
+    }
 }

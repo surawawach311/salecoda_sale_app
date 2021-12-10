@@ -134,7 +134,8 @@ const OrderList: React.FC<OrderListProp> = ({ statusFilter, date, onItemClick, r
               productIconList={item.items.map((i) => i.cover)}
               totalAmount={item.total_price}
               isComplete={isComplete}
-              shopName={item.buyer.name}
+              shop={item.buyer}
+              status={item.status}
             />
           </TouchableOpacity>
         )}

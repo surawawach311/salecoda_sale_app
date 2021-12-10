@@ -1,10 +1,14 @@
 import React from 'react'
 import { View, Image, Text, StyleSheet, Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { OrderItemEnitity } from '../entities/OrderEntity'
+import { OrderItemEnitity, StatusBadge } from '../entities/OrderEntity'
+import { ShopEntity } from '../entities/ShopEntity'
 import { currencyFormat } from '../utilities/CurrencyFormat'
 import { ThaiDateFormat, ThaiTimeFormat } from '../utilities/ThaiDateFormat'
+import Subheading4 from './Font/Subheading4'
+import Text3 from './Font/Text3'
 import OrderCardStatus from './OrderCardStatus'
+import TagStatus from './TagStatus'
 
 interface OrderHistoryCardProps {
   orderNumber: string
@@ -13,7 +17,8 @@ interface OrderHistoryCardProps {
   productIconList: string[]
   totalAmount: number
   isComplete: boolean
-  shopName: string
+  shop: ShopEntity
+  status: StatusBadge
 }
 
 const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
@@ -23,32 +28,34 @@ const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
   productIconList,
   totalAmount,
   isComplete,
-  shopName,
+  shop,
+  status,
 }) => {
   return (
     <View style={styled.orderCard}>
       <View style={styled.headerCard}>
         <View style={styled.innerheaderLeftCard}>
-          <Image style={styled.iconInvoice} source={require('../../assets/invoice.png')} />
-          <Text style={styled.textOrderNumber}>{orderNumber}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styled.iconInvoice} source={require('../../assets/invoice.png')} />
+            <Text style={styled.textOrderNumber}>{orderNumber}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image style={styled.iconPackage} source={require('../../assets/package.png')} />
+            <Text style={styled.itemQuantity}>{`${quantity} รายการ`}</Text>
+          </View>
         </View>
         <View style={styled.innerheaderRightCard}>
           <Text style={styled.detail}>ดูรายละเอียด</Text>
-          <Text style={styled.textDate}>{`${ThaiDateFormat(createDatetime)} ${ThaiTimeFormat(createDatetime)}`}</Text>
-          <View />
+          <Text style={styled.textDate}>{`${ThaiDateFormat(createDatetime)}, ${ThaiTimeFormat(createDatetime)}`}</Text>
         </View>
       </View>
-      <View style={styled.breakLine} />
       <View>
-        <View style={styled.bodyCard}>
-          <Image style={styled.iconPackage} source={require('../../assets/package.png')} />
-          <Text style={styled.itemQuantity}>{`${quantity} รายการ`}</Text>
-        </View>
+        <View style={styled.breakLine} />
         <ScrollView style={styled.productList} horizontal>
-          {productIconList.map((p) =>
+          {productIconList.map((p, index) =>
             p ? (
               <Image
-                key={p}
+                key={index}
                 style={styled.iconProduct}
                 source={{
                   uri: p,
@@ -60,10 +67,33 @@ const OrderHistoryCard: React.FC<OrderHistoryCardProps> = ({
         </ScrollView>
         <View style={styled.statusContainer}>
           <View style={styled.cardFooter}>
-            <Image style={styled.imageCardFooter} source={require('../../assets/location3.png')} />
-            <Text style={styled.textCardFooter}>{shopName}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'baseline',
+                alignContent: 'flex-start',
+              }}
+            >
+              <View>
+                <Image style={styled.imageCardFooter} source={require('../../assets/location3.png')} />
+              </View>
+              <View style={{ alignItems: 'flex-start', marginLeft: 1, marginRight: 34 }}>
+                <Text3 style={styled.textCardFooter}>{shop.name}</Text3>
+                <Subheading4
+                  style={{ color: '#6B7995' }}
+                >{`${shop.address} ${shop.sub_district} ${shop.district} ${shop.province} ${shop.post_code}`}</Subheading4>
+              </View>
+            </View>
           </View>
           <View style={styled.cardFooter}>{!isComplete && <OrderCardStatus isComplete={isComplete} />}</View>
+          <View style={{ width: '50%',marginTop:5 }}>
+            <TagStatus
+              name={status.title}
+              fontColor={status.color.text_color}
+              backgroundColor={status.color.bg_color}
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -102,13 +132,16 @@ const styled = StyleSheet.create({
     borderColor: '#EFF3FD',
     marginVertical: 10,
   },
-  innerheaderLeftCard: { flexDirection: 'row' },
-  innerheaderRightCard: { alignItems: 'flex-end' },
+  innerheaderLeftCard: {},
+  innerheaderRightCard: {
+    alignItems: 'flex-end',
+  },
   textDate: { color: '#6B7995', fontWeight: 'bold', fontSize: 12 },
   bodyCard: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    justifyContent: 'space-between',
   },
   iconPackage: { height: 13, width: 14, resizeMode: 'contain' },
   itemQuantity: { color: '#6B7995', marginLeft: 5 },
@@ -125,17 +158,20 @@ const styled = StyleSheet.create({
   },
   textCompanyAddress: { color: '#6B7995', marginLeft: 5 },
   cardFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'flex-start',
+    // justifyContent: 'flex-start',
+    // alignContent:"flex-start",
+    // borderWidth: 1,
   },
-  statusContainer: { flexDirection: 'row', justifyContent: 'space-between' },
+  statusContainer: { justifyContent: 'space-between' },
   textCardFooter: {
-    color: '#6B7995',
-    marginLeft: 5,
+    color: '#314364',
+    fontSize: 12,
   },
   imageCardFooter: {
     width: 15,
     height: 15,
     resizeMode: 'contain',
+    marginRight: 5,
   },
 })
