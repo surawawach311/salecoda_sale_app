@@ -11,6 +11,7 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { HomeStackParamList } from "../../navigations/HomeNavigator";
 import { AppAuthParamList } from "../../navigations/AppAuthNavigator";
+import Text1 from "../../components/Font/Text1";
 
 type ProfileScreenRouteProp = RouteProp<HomeStackParamList, "Profile">;
 
@@ -26,7 +27,7 @@ type ProfileScreenProps = {
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ navigation, route }) => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>ProfileScreen</Text>
+      <Text1>คุณต้องการออกจากระบบใช่หรือไม่ ?</Text1>
       <TouchableOpacity
         style={styled.confirmOrderButton}
         onPress={() => {
