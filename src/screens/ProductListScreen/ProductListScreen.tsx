@@ -103,22 +103,10 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
         itemCount={totalItem}
         onPress={() =>
           navigation.navigate('Cart', {
-            shop: route.params.shop,
-            productBrand: route.params.productBrand,
-            company: route.params.company,
+            shop: route.params.shop
           })
         }
       />
-    )
-  }
-
-  const renderListHeader = (title: string) => {
-    return (
-      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Text1 style={{ fontSize: 20, fontWeight: 'bold' }}>{title}</Text1>
-        </View>
-      </View>
     )
   }
 

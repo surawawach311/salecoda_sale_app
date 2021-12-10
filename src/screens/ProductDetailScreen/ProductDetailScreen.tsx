@@ -130,8 +130,6 @@ const ProductDetailScreen: React.FC<ProductDetailScreenNavigationProp> = ({ navi
         onPress={() =>
           navigation.navigate('Cart', {
             shop: route.params.shop,
-            productBrand: route.params.productBrand,
-            company: route.params.company,
           })
         }
       />
