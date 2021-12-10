@@ -28,6 +28,7 @@ import Heading4 from '../../components/Font/Heading4'
 import { OrderDataSource } from '../../datasource/OrderDataSource'
 import { ResponseEntity } from '../../entities/ResponseEntity'
 import { OrderEntity } from '../../entities/OrderEntity'
+import Subheading4 from '../../components/Font/Subheading4'
 
 type OrderSuccessScreenDetailRouteProp = StackScreenProps<PurchaseStackParamList, 'SuccessDetail'>
 
@@ -45,9 +46,9 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
   }, [])
 
   const getOrderDetail = () => {
-    OrderDataSource.getOrderDetail(route.params.orderId).then((res: ResponseEntity<OrderEntity>) =>
-      setOrder(res.responseData),
-    )
+    OrderDataSource.getOrderDetail(route.params.orderId).then((res: ResponseEntity<OrderEntity>) => {
+      setOrder(res.responseData)
+    })
   }
 
   const sumTotal = () => {
@@ -142,9 +143,9 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
             onPressBack={() => navigation.navigate('Home')}
           />
           <ScrollView>
-            {order.status == 'sale_executive_rejected' ||
-            order.status == 'customer_canceled' ||
-            order.status == 'company_canceled' ? (
+            {order.status.key == 'sale_executive_rejected' ||
+            order.status.key == 'customer_canceled' ||
+            order.status.key == 'company_canceled' ? (
               <View style={{ paddingHorizontal: 20 }}>
                 <Image
                   style={{ alignSelf: 'center', width: 120, height: 120 }}
@@ -169,7 +170,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                     }}
                   >
                     เหตุผลที่ยกเลิก
-                    {cancelByWording(order.status)}
+                    {cancelByWording(order.status.key)}
                   </Heading3>
                   <Text1 style={{ color: '#6B7995', paddingBottom: 12 }}>{order.remark}</Text1>
                 </View>
@@ -182,8 +183,13 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                   <Image style={styled.iconInvoice} source={require('../../../assets/invoice.png')} />
                   <Text style={styled.textOrderNumber}>{order.order_no}</Text>
                 </View>
-                <TagStatus status={order.status} />
+                <TagStatus
+                  name={order.status.title}
+                  fontColor={order.status.color.text_color}
+                  backgroundColor={order.status.color.bg_color}
+                />
               </View>
+              <Subheading4 style={{ color: '#8F9EBC', marginLeft: 20, marginBottom: 10 }}>ส่งคำสั่งซื้อ</Subheading4>
               <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
               <View>
                 <Text1 style={styled.textGrayLabel}>ออเดอร์ของ</Text1>
@@ -211,7 +217,7 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               <Text1 style={styled.textGrayLabel}>การจัดส่ง</Text1>
               <Subheading1>{SHIPPING_METHOD_MAPPING[order.shipping_method]}</Subheading1>
               <View style={{ marginVertical: 10 }}>
-                <Paragraph1>{order.shipping_address.line_one + '\n' + order.shipping_address.line_two}</Paragraph1>
+                <Paragraph1>{`${order.shipping_address.address} ${order.shipping_address.sub_district} ${order.shipping_address.district} ${order.shipping_address.province} ${order.shipping_address.post_code}`}</Paragraph1>
               </View>
               <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
               <View style={{ marginVertical: 10 }}>
@@ -247,16 +253,22 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                   <Text1>{order.special_request_remark.trim()}</Text1>
                 </View>
               ) : null}
-              <View style={{ marginVertical: 10 }}>
-                <Text1 style={styled.textGrayLabel}>หมายเหตุ(Sale Co.) </Text1>
-                <Text1>{order.sale_co_remark ? order.sale_co_remark.trim() : '-'}</Text1>
-              </View>
+              {order.sale_co_remark ? (
+                <View style={{ marginVertical: 10 }}>
+                  <Text1 style={styled.textGrayLabel}>หมายเหตุ(สำหรับ Sale Co.) </Text1>
+                  <Text1>{order.sale_co_remark.trim()}</Text1>
+                </View>
+              ) : undefined}
+
               <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
               <Text1 style={styled.textGrayLabel}>วิธีชำระเงิน</Text1>
               <Text1>{order.payment_method == 'cash' ? PaymentMethod.cash : PaymentMethod.credit}</Text1>
+              <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
               <View style={styled.productTextWarp}>
                 <Text1 style={{ color: '#6B7995' }}>ราคาก่อนลด</Text1>
-                <Subheading2 style={{ color: '#616A7B' }}>{currencyFormat(order.before_discount, 2)}</Subheading2>
+                <Subheading2 style={{ color: '#314364' }}>
+                  {currencyFormat(Math.trunc(order.before_discount), 2)}
+                </Subheading2>
               </View>
 
               {order.discount_memo.filter((item) => item.item_id != null).length > 0 ? (
@@ -280,7 +292,9 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
               {order.subsidize != 0 ? (
                 <View style={styled.productTextWarp}>
                   <Text1 style={{ color: '#6B7995' }}>ส่วนลดดูแลราคา</Text1>
-                  <Subheading2 style={{ color: '#FF5D5D' }}>{currencyFormat(order.subsidize, 2)}</Subheading2>
+                  <Subheading2 style={{ color: '#FF5D5D' }}>
+                    {currencyFormat(Math.trunc(order.subsidize), 2)}
+                  </Subheading2>
                 </View>
               ) : null}
               {order.discount_memo.length > 0
@@ -298,23 +312,33 @@ const OrderSuccessScreenDetail: React.FC<OrderSuccessScreenDetailRouteProp> = ({
                           }}
                         >
                           <Text1 style={{ color: '#6B7995' }}>ส่วนลดเงินสด</Text1>
-                          <Subheading2 style={{ color: '#FF8329' }}>{currencyFormat(item.price, 2)}</Subheading2>
+                          <Subheading2 style={{ color: '#FF8329' }}>
+                            {currencyFormat(Math.trunc(item.price), 2)}
+                          </Subheading2>
                         </View>
                       )
                     })
                 : null}
               <View style={styled.productTextWarp}>
                 <Text1 style={{ color: '#6B7995' }}>ส่วนลดรวม</Text1>
-                <Subheading2 style={{ color: '#616A7B' }}>{currencyFormat(order.total_discount, 2)}</Subheading2>
+                <Subheading2 style={{ color: '#616A7B' }}>
+                  {currencyFormat(Math.trunc(order.total_discount), 2)}
+                </Subheading2>
               </View>
               <View style={{ borderWidth: 1, borderColor: '#EBEFF2' }} />
               <View style={styled.totalPrice}>
                 <Subheading2 style={{ color: '#616A7B' }}>ราคารวม</Subheading2>
-                <Heading2 style={{ color: '#4C95FF' }}>{currencyFormat(order.total_price, 2)}</Heading2>
+                <Heading2 style={{ color: '#4C95FF' }}>{currencyFormat(Math.trunc(order.total_price), 2)}</Heading2>
               </View>
               <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
               <View style={styled.emptyPremiumContainer}>
-                <Text1>ของแถมที่ได้รับ</Text1>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Text1>ของแถมที่ได้รับ</Text1>
+
+                  <Text2 style={{ color: '#8F9EBC' }}>
+                    {order.premium_memo.length > 0 ? `ทั้งหมด ${order.premium_memo.length} รายการ` : `ทั้งหมด 0 รายการ`}
+                  </Text2>
+                </View>
                 {order.premium_memo.length > 0 ? (
                   <View style={{ marginTop: 10 }}>
                     {order.premium_memo.map((item) => {
@@ -386,7 +410,6 @@ const styled = StyleSheet.create({
   innerUpperContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 10,
   },
   orderNumberContainer: {
     flexDirection: 'row',

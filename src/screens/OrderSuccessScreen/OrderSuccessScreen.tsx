@@ -53,9 +53,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({ navigation,
   }
 
   const initialData = () => {
-    let promo = formatAccrodion(
-      order?.discount_memo.filter((item) => item.item_id != null && item.item_id != '') || [],
-    )
+    let promo = formatAccrodion(order?.discount_memo.filter((item) => item.item_id != null && item.item_id != '') || [])
     let request = formatAccrodion(order?.special_request_discounts || [])
     setDiscoutPromo(promo)
     setSpecialRequest(request)
@@ -72,10 +70,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({ navigation,
       {order ? (
         <>
           <View style={styled.headerWarp}>
-            <TouchableOpacity
-              style={styled.iconCloseContainer}
-              onPress={() => navigation.navigate('Shop', { shop: shop })}
-            >
+            <TouchableOpacity style={styled.iconCloseContainer} onPress={() => navigation.navigate('Home')}>
               <Image style={styled.iconClose} source={require('../../../assets/cancle.png')} />
             </TouchableOpacity>
             <Heading3 style={{ color: '#FFFFFF' }}>รอยืนยันคำสั่งซื้อ</Heading3>
@@ -90,7 +85,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({ navigation,
               </View>
               <View style={styled.iconWaitWarp}>
                 <Text2 style={{ color: '#6B7995' }}>
-                  {order.status == 'waiting_confirm' ? 'รอยืนยันคำสั่งซื้อ' : 'รออนุมัติคำสั่งซื้อ'}
+                  {order.status.key == 'waiting_confirm' ? 'รอยืนยันคำสั่งซื้อ' : 'รออนุมัติคำสั่งซื้อ'}
                 </Text2>
               </View>
               <Dash dashGap={2} dashLength={4} dashThickness={1} style={styled.lineDash} dashColor="#C8CDD6" />
@@ -240,7 +235,7 @@ const OrderSuccessScreen: React.FC<OrderSuccessScreenRouteProp> = ({ navigation,
                 <TouchableOpacity
                   style={styled.deliveryButton}
                   onPress={() => {
-                    navigation.navigate('Order')
+                    navigation.navigate('History')
                   }}
                 >
                   <Heading3 style={styled.deliveryButtonText}>ดูคำสั่งซื้อทั้งหมด</Heading3>
