@@ -10,13 +10,13 @@ import Paragraph2 from '../../components/Font/Paragraph2'
 import Text1 from '../../components/Font/Text1'
 
 interface Props {
-  company: string
-  shopId: string
+  brand: string
+  shopNo: string
   onChange?: (value?: Shipment) => void
   withDefault?: boolean
 }
 
-const ShipmentSection: React.FC<Props> = ({ company, shopId, onChange, withDefault }) => {
+const ShipmentSection: React.FC<Props> = ({ brand, shopNo, onChange, withDefault }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState<Shipment[]>([])
   const [methods, setMethods] = useState<string[]>([])
@@ -24,8 +24,7 @@ const ShipmentSection: React.FC<Props> = ({ company, shopId, onChange, withDefau
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    CartDataSource.getShipment(company, shopId).then((response) => {
-      
+    CartDataSource.getShipment(shopNo, brand).then((response) => {      
       const availableMethods: string[] = response.responseData.map((item) => item.shipping_method)
       const availableShipments: Shipment[] = response.responseData.flatMap((item) => {
         return item.addresses.map((a, i) => ({

@@ -1,5 +1,5 @@
 import { API_NEW_URL, BASE_URL_SOHEE } from '../config/config'
-import { CartEntity } from '../entities/CartEntity'
+import { CartEntity, ShippingCartEntity } from '../entities/CartEntity'
 import { ResponseEntity } from '../entities/ResponseEntity'
 import { ShipmentEntity } from '../entities/ShipmentEntity'
 import { ItemSpecialRequest } from '../models/SpecialRequestModel'
@@ -178,9 +178,13 @@ export class CartDataSource {
       .catch((error) => console.error(`error on CartDataSource.clearCart`, error))
   }
 
-  static getShipment(company: string, shopNo: string): Promise<ResponseEntity<ShipmentEntity[]>> {
+  static getShipment(shopNo: string, Brand?: string): Promise<ResponseEntity<ShipmentEntity[]>> {
+    const headers = {
+      "Shop-No": shopNo,
+      ...(Brand ? { "Brand-No": Brand } : {})
+    }
     return httpClient
-      .get(`${API_NEW_URL}/api/v1/address/shipping-order`)
+      .get(`${API_NEW_URL}/api/v1/address/shipping-order`, { headers })
       .then((res) => res.data)
       .catch((error) => console.error(`error on CartDataSource.getShipment`, error))
   }
@@ -228,6 +232,24 @@ export class CartDataSource {
       "Shop-No": shopNo,
       ...(Brand ? { "Brand-No": Brand } : {}),
     }
+    return httpClient
+      .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, { headers })
+      .then((res) => res.data)
+      .catch((err: Error) => alert('Error:' + err.message))
+  }
+
+  static updateShipping = (shipping: ShippingCartEntity, shopNo: string, Brand?: string): Promise<ResponseEntity<CartEntity>> => {
+    const data = {
+      action: 'update_shipping_address',
+      shipping_method: shipping.method,
+      address: shipping.address
+    }
+    const headers = {
+      "Shop-No": shopNo,
+      ...(Brand ? { "Brand-No": Brand } : {}),
+    }
+    console.log(data);
+
     return httpClient
       .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, { headers })
       .then((res) => res.data)

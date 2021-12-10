@@ -1,3 +1,6 @@
+
+import { ShipmentAddress } from "./ShipmentEntity";
+
 export interface CartEntity {
   items: ItemCart[]
   total_item: number
@@ -20,6 +23,7 @@ export interface CartEntity {
   available_subsidize: number
   subsidize_discount: number
   sale_co_remark: string
+  shipping: ShippingCartEntity
 }
 
 export interface ItemCart {
@@ -68,7 +72,7 @@ export interface QuantityWithUnit {
 export interface paymentCartEntity {
   discount_rate: number | undefined
   due_date: number | undefined
-  id: string
+  method: string
   name: string
   remain_credit: number
 }
@@ -119,4 +123,14 @@ export interface SpecialRequestEnity {
   total: number
   packing_size: string
   sale_unit: string
+}
+export interface ShippingCartEntity {
+  method: string
+  fee: number
+  name: string
+  contact: string
+  address: ShipmentAddress
+  remark: string
+  // post_code:string
+  // telephone:string
 }

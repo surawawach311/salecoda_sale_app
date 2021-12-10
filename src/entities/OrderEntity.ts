@@ -50,8 +50,7 @@ export interface OrderItemEnitity {
 export interface ShippingAdressEntity {
     name: string
     telephone: string
-    line_one: string
-    line_two: string
+    address: string
     district: string
     sub_district: string
     province: string

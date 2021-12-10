@@ -12,7 +12,7 @@ interface InputNumberProps {
   onPlus: () => void;
   onMinus: () => void;
   onChangeText?: (e: string) => void;
-  onBlur: () => void;
+  onBlur?: () => void;
 }
 
 const InputNumber: React.FC<InputNumberProps> = ({

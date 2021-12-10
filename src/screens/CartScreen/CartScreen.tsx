@@ -9,9 +9,8 @@ import { CartDataSource } from '../../datasource/CartDataSource'
 import { FlatList, ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { ShopEntity } from '../../entities/ShopEntity'
 import Dash from 'react-native-dash'
-import { CartEntity, ItemCart } from '../../entities/CartEntity'
-import { OrderFacade } from '../../facade/OrderFacade'
-import { OrderApiEntity, OrderEntity } from '../../entities/OrderEntity'
+import { CartEntity, ItemCart, ShippingCartEntity } from '../../entities/CartEntity'
+import { OrderApiEntity } from '../../entities/OrderEntity'
 import { currencyFormat } from '../../utilities/CurrencyFormat'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 import CartEmptyState from './CartEmptyState'
@@ -37,6 +36,7 @@ import Paragraph2 from '../../components/Font/Paragraph2'
 import Text2 from '../../components/Font/Text2'
 import { ResponseEntity } from '../../entities/ResponseEntity'
 import { OrderDataSource } from '../../datasource/OrderDataSource'
+import { ShipmentAddress, ShipmentEntity } from '../../entities/ShipmentEntity'
 
 type ShopScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'Cart'>
 
@@ -57,11 +57,26 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
 
   useEffect(() => {
     getCart()
+    defaultShipment()
   }, [isFocused])
 
   useEffect(() => {
     filterExcludePromotion(cart?.available_promotions, cart?.applied_promotions)
   }, [cart])
+
+  const defaultShipment = () => {
+    CartDataSource.getShipment(shopNo, brand).then((response: ResponseEntity<ShipmentEntity[]>) => {
+      const shipping: ShippingCartEntity = {
+        method: response.responseData[0].shipping_method,
+        address: response.responseData[0].addresses[0],
+        fee: 0,
+        name: response.responseData[0].addresses[0].name,
+        contact: response.responseData[0].addresses[0].telephone,
+        remark: '',
+      }
+      CartDataSource.updateShipping(shipping, shopNo, brand).then((res) => setCart(res.responseData))
+    })
+  }
 
   // TODO: don't use any type
   const formatAccrodion = (data: any[]): AccrodionPriceModel[] => {
@@ -81,7 +96,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     CartDataSource.getCartByShop(shopNo, brand).then((res: ResponseEntity<CartEntity>) => {
       setCart(res.responseData)
       setRemark(res.responseData.sale_co_remark)
-      handlePayment(res.responseData.selected_payment?.id)
+      handlePayment(res.responseData.selected_payment?.method)
       let discountSpecial: AccrodionPriceModel[] = formatAccrodion(res.responseData.received_special_request_discounts)
       let discountProduct: AccrodionPriceModel[] = formatAccrodion(
         res.responseData.received_discounts.filter((item) => item.item_id != null),
@@ -93,7 +108,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
       }
       if (res?.responseData.available_payments && res?.responseData.available_payments.length <= 1) {
         res?.responseData.available_payments.map((item) => {
-          setPayment(item.id)
+          setPayment(item.method)
         })
       }
     })
@@ -201,6 +216,24 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
   }
 
   const handleShipmentChange = (s: Shipment) => {
+    const address: ShipmentAddress = {
+      address: s.address,
+      district: s.district,
+      name: s.name,
+      post_code: s.postCode,
+      province: s.province,
+      sub_district: s.subDistrict,
+      telephone: s.telephone,
+    }
+    const shipping: ShippingCartEntity = {
+      method: s.method,
+      address: address,
+      fee: 0,
+      name: s.name,
+      contact: s.telephone,
+      remark: '',
+    }
+    CartDataSource.updateShipping(shipping, shopNo, brand).then((res) => setCart(res.responseData))
     setShipment(s)
   }
 
@@ -208,7 +241,6 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
     if (p == 'cash') {
       setPayment('cash')
       CartDataSource.updatePaymentMethods('cash', shopNo, brand).then((res: ResponseEntity<CartEntity>) => {
-        // CartDataSource.calculate(shopNo, res.selected_payment.id, brand).then((res: CartEntity) => {
         setCart(res.responseData)
         let discountSpecial: AccrodionPriceModel[] = formatAccrodion(
           res.responseData.received_special_request_discounts,
@@ -216,10 +248,9 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         let discountProduct: AccrodionPriceModel[] = formatAccrodion(
           res.responseData.received_discounts.filter((item) => item.item_id != null),
         )
-        setPayment(res.responseData.selected_payment.id)
+        setPayment(res.responseData.selected_payment.method)
         setSpecialRequest(discountSpecial)
         setDiscoutPromo(discountProduct)
-        // })
       })
     } else {
       setPayment('credit')
@@ -231,7 +262,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
         let discountProduct: AccrodionPriceModel[] = formatAccrodion(
           res.responseData.received_discounts.filter((item) => item.item_id != null),
         )
-        setPayment(res.responseData.selected_payment.id)
+        setPayment(res.responseData.selected_payment.method)
         setSpecialRequest(discountSpecial)
         setDiscoutPromo(discountProduct)
       })
@@ -376,10 +407,10 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                             value={item.quantity.toString()}
                             onPlus={() => increaseProduct(item.prod_id, item.quantity)}
                             onMinus={() => decreaseProduct(item.prod_id, item.quantity)}
-                            onChangeText={(e: any) => {
-                              setQuantity((cart.items[index].quantity = e))
+                            onChangeText={(e: string) => {
+                              setQuantity((cart.items[index].quantity = Number(e)))
                             }}
-                            onBlur={() => adjustProduct(item.prod_id, quantity)}
+                            onBlur={() => adjustProduct(item.prod_id, Number(quantity))}
                           />
                         </ProductCartCard>
                       )
@@ -545,7 +576,7 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                     </View>
                   ) : null}
                   <PaymentSection
-                    selectPayment={cart.selected_payment?.id}
+                    selectPayment={cart.selected_payment?.method}
                     payments={cart.available_payments}
                     onChange={(e) => {
                       handlePayment(e)
@@ -674,8 +705,8 @@ const CartScreen: React.FC<ShopScreenRouteProp> = ({ navigation, route }) => {
                   </View>
                   <View style={styled.warpDelivery}>
                     <ShipmentSection
-                      company={route.params.company}
-                      shopId={route.params.shop.id}
+                      brand={brand}
+                      shopNo={shopNo}
                       onChange={(v) => {
                         if (v) handleShipmentChange(v)
                       }}
