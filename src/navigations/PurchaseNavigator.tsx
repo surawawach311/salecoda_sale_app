@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -17,6 +17,8 @@ import { CartEntity } from '../entities/CartEntity'
 import SpecialRequestScreen from '../screens/SpecialRequestScreen/SpecialRequestScreen'
 import BrandScreen from '../screens/BrandScreen/BrandScreen'
 import { CartProvider } from '../context/cartStore'
+import { CartContextProvider } from '../context/CartContext'
+import { CartDataSource } from '../datasource/CartDataSource'
 
 export type PurchaseStackParamList = {
   ShopList: undefined
@@ -41,71 +43,75 @@ export type PurchaseStackParamList = {
 const PurchaseNavigator: React.FC = () => {
   const PurchaseStack = createStackNavigator<PurchaseStackParamList>()
 
-  return (
-    <CartProvider>
-      <PurchaseStack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <PurchaseStack.Screen name="ShopList" component={ShopListScreen} options={{ title: 'เลือกร้านค้า' }} />
-        <PurchaseStack.Screen
-          name="ProductList"
-          component={ProductList}
-          options={({ navigation, route }) => ({
-            title: 'สั่งสินค้า',
-            headerRight: (props) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Cart', {
-                    shop: route.params.shop,
-                    productBrand: route.params.productBrand,
-                    company: route.params.company,
-                  })
-                }
-              >
-                <Image style={styled.cart} source={require('../../assets/shopping-cart.png')} />
-              </TouchableOpacity>
-            ),
-            headerLeft: (props) => (
-              <TouchableOpacity onPress={() => navigation.navigate('ShopList', { shop: route.params.shop })}>
-                <Image style={styled.cart} source={require('../../assets/left.png')} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <PurchaseStack.Screen
-          name="ProductDetail"
-          component={ProductDetailScreen}
-          options={({ navigation, route }) => ({
-            title: '',
-            headerRight: (props) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Cart', {
-                    shop: route.params.shop,
-                    productBrand: route.params.productBrand,
-                    company: route.params.company,
-                  })
-                }
-              >
-                <Image style={styled.cart} source={require('../../assets/shopping-cart.png')} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <PurchaseStack.Screen name="Cart" component={CartScreen} options={{ title: 'ตะกร้าสินค้า' }} />
-        <PurchaseStack.Screen name="OrderSuccess" component={OrderSuccessScreen} options={{ headerShown: false }} />
-        <PurchaseStack.Screen name="SuccessDetail" component={OrderSuccessDetail} />
-        <PurchaseStack.Screen
-          name="SpecialRequest"
-          component={SpecialRequestScreen}
-          options={{ title: 'ขอส่วนลดพิเศษ' }}
-        />
 
-        <PurchaseStack.Screen name="Brand" component={BrandScreen} options={{ title: 'เลือกแบรนด์' }} />
-      </PurchaseStack.Navigator>
-    </CartProvider>
+
+  return (
+    <CartContextProvider>
+      <CartProvider>
+        <PurchaseStack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <PurchaseStack.Screen name="ShopList" component={ShopListScreen} options={{ title: 'เลือกร้านค้า' }} />
+          <PurchaseStack.Screen
+            name="ProductList"
+            component={ProductList}
+            options={({ navigation, route }) => ({
+              title: 'สั่งสินค้า',
+              headerRight: (props) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Cart', {
+                      shop: route.params.shop,
+                      productBrand: route.params.productBrand,
+                      company: route.params.company,
+                    })
+                  }
+                >
+                  <Image style={styled.cart} source={require('../../assets/shopping-cart.png')} />
+                </TouchableOpacity>
+              ),
+              headerLeft: (props) => (
+                <TouchableOpacity onPress={() => navigation.navigate('ShopList', { shop: route.params.shop })}>
+                  <Image style={styled.cart} source={require('../../assets/left.png')} />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <PurchaseStack.Screen
+            name="ProductDetail"
+            component={ProductDetailScreen}
+            options={({ navigation, route }) => ({
+              title: '',
+              headerRight: (props) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Cart', {
+                      shop: route.params.shop,
+                      productBrand: route.params.productBrand,
+                      company: route.params.company,
+                    })
+                  }
+                >
+                  <Image style={styled.cart} source={require('../../assets/shopping-cart.png')} />
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <PurchaseStack.Screen name="Cart" component={CartScreen} options={{ title: 'ตะกร้าสินค้า' }} />
+          <PurchaseStack.Screen name="OrderSuccess" component={OrderSuccessScreen} options={{ headerShown: false }} />
+          <PurchaseStack.Screen name="SuccessDetail" component={OrderSuccessDetail} />
+          <PurchaseStack.Screen
+            name="SpecialRequest"
+            component={SpecialRequestScreen}
+            options={{ title: 'ขอส่วนลดพิเศษ' }}
+          />
+
+          <PurchaseStack.Screen name="Brand" component={BrandScreen} options={{ title: 'เลือกแบรนด์' }} />
+        </PurchaseStack.Navigator>
+      </CartProvider>
+    </CartContextProvider>
   )
 }
 

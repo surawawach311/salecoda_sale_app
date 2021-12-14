@@ -29,6 +29,7 @@ export class CartDataSource {
       prod_id: prod_id,
       quantity: quantity,
     }
+    console.log(data);
     return httpClient
       .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, {
         headers: {
@@ -248,8 +249,6 @@ export class CartDataSource {
       "Shop-No": shopNo,
       ...(Brand ? { "Brand-No": Brand } : {}),
     }
-    console.log(data);
-
     return httpClient
       .post(`${API_NEW_URL}/promotion-order/api/v1/cart/calculate`, data, { headers })
       .then((res) => res.data)

@@ -1,5 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Image, StyleSheet, FlatList, View, Dimensions, TouchableOpacity } from 'react-native'
+import {
+  Image,
+  StyleSheet,
+  FlatList,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native'
 import { PurchaseStackParamList } from '../../navigations/PurchaseNavigator'
 import { StackScreenProps } from '@react-navigation/stack'
 import Search from '../../components/Search'
@@ -18,6 +29,12 @@ import Text2 from '../../components/Font/Text2'
 import TabSwitcher from '../../components/TabSwitcher'
 import Text1 from '../../components/Font/Text1'
 
+// import { CartContext } from '../../context/cartStore'
+import { CartEntity } from '../../entities/CartEntity'
+import { Types } from '../../context/cartReducer'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { CartContext } from '../../context/CartContext'
+
 type ProductListScreenRouteProp = StackScreenProps<PurchaseStackParamList, 'ProductList'>
 
 const SPACING = 8
@@ -28,6 +45,7 @@ const TABS = [
 ]
 
 const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, route }) => {
+  const cart = useContext(CartContext)
   const [productList, setProductList] = useState<ProductEntity[]>()
   const [totalItem, setTotalItem] = useState(0)
   const [activeTab, setActiveTab] = useState('PRODUCTS')
@@ -78,9 +96,38 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
     try {
       const res = await CartDataSource.getCartByShop(shopNo, brand)
       setTotalItem(res.responseData.total_item)
+      res.responseData.items.map((item) => {
+        cart?.adjust(item.prod_id, item.quantity, shopNo)
+
+        // dispatch({
+        //   type: Types.Adjust,
+        //   payload: {
+        //     id: item.prod_id,
+        //     quantity: item.quantity,
+        //     shopId: shopNo,
+        //   },
+        // })
+      })
     } catch (error) {
       console.log(error)
     }
+  }
+  const addProduct = (itemId: string, quantity: number) => {
+    CartDataSource.addToCartByShopId(shopNo, brand, itemId, quantity + 5).then(() => {
+      cart?.add(itemId, quantity + 5, shopNo)
+    })
+  }
+
+  const increaseProduct = (itemId: string, quantity: number) => {
+    CartDataSource.addToCartByShopId(shopNo, brand, itemId, quantity + 5).then(() => {
+      cart?.adjust(itemId, quantity + 5, shopNo)
+    })
+  }
+
+  const dencreaseProduct = (itemId: string, quantity: number) => {
+    CartDataSource.addToCartByShopId(shopNo, brand, itemId, quantity - 5).then(() => {
+      cart?.adjust(itemId, quantity - 5, shopNo)
+    })
   }
 
   const getProductList = async () => {
@@ -100,10 +147,10 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
   const renderMiniCart = () => {
     return (
       <MiniCart
-        itemCount={totalItem}
+        itemCount={cart?.getItemCount()}
         onPress={() =>
           navigation.navigate('Cart', {
-            shop: route.params.shop
+            shop: route.params.shop,
           })
         }
       />
@@ -169,13 +216,15 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
     is_have_promotion: boolean,
     price_per_sale_unit: number,
   ) => {
+    const qty = Number(cart?.getQty(id, shopNo))
+
     return (
       <TouchableOpacity
         key={id.toString()}
         onPress={() =>
           navigation.navigate('ProductDetail', {
             productId: id,
-            shop:route.params.shop
+            shop: route.params.shop,
           })
         }
       >
@@ -200,6 +249,11 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
               havePromo={is_have_promotion}
               unit={sale_unit}
               saleUnitPrice={price_per_sale_unit}
+              quantity={qty}
+              onAdd={() => addProduct(id, qty)}
+              onIncrease={() => increaseProduct(id, qty)}
+              onDecrease={() => dencreaseProduct(id, qty)}
+              minQty={0}
             />
           )}
         </View>
@@ -215,78 +269,100 @@ const ProductListScreen: React.FC<ProductListScreenRouteProp> = ({ navigation, r
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-      <CustomHeader
-        title={'สั่งสินค้า'}
-        showBackBtn
-        onPressBack={() => navigation.popToTop()}
-        headerRight={renderMiniCart}
-      />
-      <View style={styles.wrapSearch}>
-        <Search
-          placeholder="ค้นหาสินค้า"
-          onChange={(value) => {
-            searchProduct(value)
-          }}
-        />
-      </View>
-      <View style={styles.warpShopHeader}>
-        <Image style={styles.bgImage} source={require('../../../assets/bgShop.png')} />
-        <View style={styles.shopInfo}>
-          <Heading3 style={{ color: '#FFFFFF' }}>{route.params.shop.name}</Heading3>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={0}
+      style={{ flex: 1, backgroundColor: '#FFFFFF' }}
+    >
+      <KeyboardAwareScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View
             style={{
-              borderWidth: 2,
-              borderColor: 'white',
-              borderRadius: 60,
-              backgroundColor: 'white',
-              padding: 5,
+              flex: 1,
+              backgroundColor: '#FFFFFF',
             }}
           >
-            <Image
-              style={{
-                width: 60,
-                height: 60,
-              }}
-              source={require('../../../assets/shop-empty.png')}
+            <CustomHeader
+              title={'สั่งสินค้า'}
+              showBackBtn
+              onPressBack={() => navigation.popToTop()}
+              headerRight={renderMiniCart}
             />
-          </View>
-        </View>
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={{ paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#FFFFFF' }}>
-          <TabSwitcher style={{ top: -29 }} data={TABS} active={activeTab} onPress={handleTabChange} />
-          <View style={{ backgroundColor: '#FFF' }}>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              horizontal={true}
-              style={{ backgroundColor: '#FFFFFF' }}
-              data={category}
-              contentContainerStyle={{ flexDirection: 'row' }}
-              keyExtractor={(i) => i.code.toString()}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  key={item.code}
-                  style={[styles.btnCate, selectedCategory === item.code ? { borderColor: '#314364' } : undefined]}
-                  onPress={() => handleProductCategory(item.code)}
+            <View style={styles.wrapSearch}>
+              <Search
+                placeholder="ค้นหาสินค้า"
+                onChange={(value) => {
+                  searchProduct(value)
+                }}
+              />
+            </View>
+            <View style={styles.warpShopHeader}>
+              <Image style={styles.bgImage} source={require('../../../assets/bgShop.png')} />
+              <View style={styles.shopInfo}>
+                <Heading3 style={{ color: '#FFFFFF' }}>{route.params.shop.name}</Heading3>
+                <View
+                  style={{
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius: 60,
+                    backgroundColor: 'white',
+                    padding: 5,
+                  }}
                 >
-                  <Text2 style={{ color: '#314364' }}>{item.name}</Text2>
-                </TouchableOpacity>
-              )}
-              ListFooterComponent={() => <View style={{ height: 50 }}></View>}
-            />
+                  <Image
+                    style={{
+                      width: 60,
+                      height: 60,
+                    }}
+                    source={require('../../../assets/shop-empty.png')}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ flex: 1 }}>
+              <View style={{ paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#FFFFFF' }}>
+                <TabSwitcher style={{ top: -29 }} data={TABS} active={activeTab} onPress={handleTabChange} />
+                <View style={{ backgroundColor: '#FFF' }}>
+                  <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    horizontal={true}
+                    style={{ backgroundColor: '#FFFFFF' }}
+                    data={category}
+                    contentContainerStyle={{ flexDirection: 'row' }}
+                    keyExtractor={(i) => i.code.toString()}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        key={item.code}
+                        style={[
+                          styles.btnCate,
+                          selectedCategory === item.code ? { borderColor: '#314364' } : undefined,
+                        ]}
+                        onPress={() => handleProductCategory(item.code)}
+                      >
+                        <Text2 style={{ color: '#314364' }}>{item.name}</Text2>
+                      </TouchableOpacity>
+                    )}
+                    ListFooterComponent={() => <View style={{ height: 50 }}></View>}
+                  />
+                </View>
+              </View>
+              <View style={{ paddingHorizontal: 13, paddingVertical: 5 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Text1 style={{ fontSize: 20, fontWeight: 'bold' }}>
+                    {activeTab === 'PRODUCTS' ? 'สินค้าทั้งหมด' : activeTab === 'PROMOTIONS' ? 'สินค้าโปรโมชั่น' : null}
+                  </Text1>
+                </View>
+              </View>
+              {activeTab === 'PRODUCTS'
+                ? renderProductList()
+                : activeTab === 'PROMOTIONS'
+                ? renderPromotionList()
+                : null}
+            </View>
           </View>
-        </View>
-        <View style={{ paddingHorizontal: 13, paddingVertical: 5 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text1 style={{ fontSize: 20, fontWeight: 'bold' }}>
-              {activeTab === 'PRODUCTS' ? 'สินค้าทั้งหมด' : activeTab === 'PROMOTIONS' ? 'สินค้าโปรโมชั่น' : null}
-            </Text1>
-          </View>
-        </View>
-        {activeTab === 'PRODUCTS' ? renderProductList() : activeTab === 'PROMOTIONS' ? renderPromotionList() : null}
-      </View>
-    </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAwareScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
